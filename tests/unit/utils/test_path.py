@@ -1,8 +1,26 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import Mock, patch
 
-from pandasx.utils.path import sanitize_path
+from pandasx.utils.path import human_file_size, sanitize_path
+
+#####################################
+#     Tests for human_file_size     #
+#####################################
+
+
+def test_human_file_size(tmp_path: Path) -> None:
+    assert isinstance(human_file_size(Path(__file__).resolve()), str)
+
+
+def test_human_file_size_2kb() -> None:
+    path = Mock(spec=Path, stat=Mock(return_value=Mock(st_size=2048)))
+    sanitize_mock = Mock(return_value=path)
+    with patch("pandasx.utils.path.sanitize_path", sanitize_mock):
+        assert human_file_size(path) == "2.00 KB"
+        sanitize_mock.assert_called_once_with(path)
+
 
 ###################################
 #     Tests for sanitize_path     #
