@@ -25,8 +25,8 @@ class NullValueSection(BaseSection):
         self, columns: Sequence[str], null_count: np.ndarray, total_count: np.ndarray
     ) -> None:
         self._columns = tuple(columns)
-        self._null_count = null_count.flatten()
-        self._total_count = total_count.flatten()
+        self._null_count = null_count.flatten().astype(int)
+        self._total_count = total_count.flatten().astype(int)
 
         if len(self._columns) != self._null_count.shape[0]:
             raise RuntimeError(

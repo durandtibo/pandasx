@@ -39,6 +39,7 @@ def test_null_value_analyzer_get_statistics_empty() -> None:
     section = NullValueAnalyzer().analyze(
         DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
     )
+    print(section.get_statistics())
     assert objects_are_equal(
         section.get_statistics(),
         {
