@@ -50,7 +50,6 @@ def test_csv_ingestor_ingest(df_path: Path) -> None:
 
 
 def test_csv_ingestor_ingest_with_kwargs(df_path: Path) -> None:
-    print(CsvIngestor(df_path, names=["col1", "col3"]).ingest())
     assert_frame_equal(
         CsvIngestor(df_path, usecols=["col1", "col3"]).ingest(),
         DataFrame(
