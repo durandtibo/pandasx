@@ -35,8 +35,8 @@ class NullValueSection(BaseSection):
             )
         if len(self._columns) != self._total_count.shape[0]:
             raise RuntimeError(
-                f"columns ({len(self._columns):,}) and total_count ({self._total_count.shape[0]:,}) "
-                "do not match"
+                f"columns ({len(self._columns):,}) and total_count "
+                f"({self._total_count.shape[0]:,}) do not match"
             )
 
     def get_statistics(self) -> dict:
