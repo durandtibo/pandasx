@@ -24,7 +24,7 @@ class NullValueSection(BaseSection):
     def __init__(
         self, columns: Sequence[str], null_count: np.ndarray, total_count: np.ndarray
     ) -> None:
-        self._columns = columns
+        self._columns = tuple(columns)
         self._null_count = null_count.flatten()
         self._total_count = total_count.flatten()
 
@@ -40,7 +40,11 @@ class NullValueSection(BaseSection):
             )
 
     def get_statistics(self) -> dict:
-        return {}
+        return {
+            "columns": self._columns,
+            "null_count": tuple(self._null_count.tolist()),
+            "total_count": tuple(self._total_count.tolist()),
+        }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         return ""
