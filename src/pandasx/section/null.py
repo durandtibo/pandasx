@@ -24,9 +24,9 @@ class NullValueSection(BaseSection):
     def __init__(
         self, columns: Sequence[str], null_count: np.ndarray, total_count: np.ndarray
     ) -> None:
-        self._columns = columns
-        self._null_count = null_count.flatten()
-        self._total_count = total_count.flatten()
+        self._columns = tuple(columns)
+        self._null_count = null_count.flatten().astype(int)
+        self._total_count = total_count.flatten().astype(int)
 
         if len(self._columns) != self._null_count.shape[0]:
             raise RuntimeError(
@@ -35,12 +35,16 @@ class NullValueSection(BaseSection):
             )
         if len(self._columns) != self._total_count.shape[0]:
             raise RuntimeError(
-                f"columns ({len(self._columns):,}) and total_count ({self._total_count.shape[0]:,}) "
-                "do not match"
+                f"columns ({len(self._columns):,}) and total_count "
+                f"({self._total_count.shape[0]:,}) do not match"
             )
 
     def get_statistics(self) -> dict:
-        return {}
+        return {
+            "columns": self._columns,
+            "null_count": tuple(self._null_count.tolist()),
+            "total_count": tuple(self._total_count.tolist()),
+        }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         return ""

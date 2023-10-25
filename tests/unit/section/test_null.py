@@ -36,16 +36,38 @@ def test_null_value_section_get_statistics() -> None:
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
-    assert objects_are_allclose(output.get_statistics(), {})
+    assert objects_are_allclose(
+        output.get_statistics(),
+        {
+            "columns": ("col1", "col2", "col3"),
+            "null_count": (0, 1, 2),
+            "total_count": (5, 5, 5),
+        },
+    )
 
 
-def test_null_value_section_get_statistics_empty() -> None:
+def test_null_value_section_get_statistics_empty_row() -> None:
     output = NullValueSection(
         columns=["col1", "col2", "col3"],
-        null_count=np.array([0, 1, 2]),
-        total_count=np.array([5, 5, 5]),
+        null_count=np.array([0, 0, 0]),
+        total_count=np.array([0, 0, 0]),
     )
-    assert objects_are_allclose(output.get_statistics(), {})
+    assert objects_are_allclose(
+        output.get_statistics(),
+        {
+            "columns": ("col1", "col2", "col3"),
+            "null_count": (0, 0, 0),
+            "total_count": (0, 0, 0),
+        },
+    )
+
+
+def test_null_value_section_get_statistics_empty_column() -> None:
+    output = NullValueSection(columns=[], null_count=np.array([]), total_count=np.array([]))
+    assert objects_are_allclose(
+        output.get_statistics(),
+        {"columns": (), "null_count": (), "total_count": ()},
+    )
 
 
 def test_null_value_section_render_html_body() -> None:
