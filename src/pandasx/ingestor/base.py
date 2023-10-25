@@ -4,15 +4,11 @@ __all__ = ["BaseIngestor"]
 
 import logging
 from abc import ABC
-from typing import TypeVar
 
 from objectory import AbstractFactory
 from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
-
-
-T = TypeVar("T")
 
 
 class BaseIngestor(ABC, metaclass=AbstractFactory):
@@ -24,7 +20,9 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
         >>> from pandasx.ingestor import ParquetIngestor
         >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
-        >>> df = ingestor.ingest()
+        >>> ingestor
+        ParquetIngestor(path=/path/to/df.parquet)
+        >>> df = ingestor.ingest()  # doctest: +SKIP
     """
 
     def ingest(self) -> DataFrame:
@@ -39,5 +37,5 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
             >>> from pandasx.ingestor import ParquetIngestor
             >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
-            >>> df = ingestor.ingest()
+            >>> df = ingestor.ingest()  # doctest: +SKIP
         """
