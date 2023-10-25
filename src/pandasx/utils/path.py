@@ -1,9 +1,35 @@
 from __future__ import annotations
 
-__all__ = ["sanitize_path"]
+__all__ = ["human_file_size", "sanitize_path"]
 
 from pathlib import Path
 from urllib.parse import unquote, urlparse
+
+from pandasx.utils.format import human_byte
+
+
+def human_file_size(path: Path | str, decimal: int = 2) -> str:
+    r"""Gets a human-readable representation of a file size.
+
+    Args:
+    ----
+        path (``pathlib.Path`` or str): Specifies the file.
+        decimal (int, optional): Specifies the number of decimal
+            digits. Default: ``2``
+
+    Returns:
+    -------
+        str: The file size in a human-readable format.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from pandasx.utils.path import human_file_size
+        >>> human_file_size("README.md")
+        '...B'
+    """
+    return human_byte(size=sanitize_path(path).stat().st_size, decimal=decimal)
 
 
 def sanitize_path(path: Path | str) -> Path:
