@@ -1,4 +1,4 @@
-from pandasx.section.utils import render_html_toc, tags2id, tags2title, valid_h_tag
+from flamme.section.utils import render_html_toc, tags2id, tags2title, valid_h_tag
 
 #############################
 #     Tests for tags2id     #

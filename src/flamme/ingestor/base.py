@@ -18,7 +18,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
     .. code-block:: pycon
 
-        >>> from pandasx.ingestor import ParquetIngestor
+        >>> from flamme.ingestor import ParquetIngestor
         >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
         >>> ingestor
         ParquetIngestor(path=/path/to/df.parquet)
@@ -35,7 +35,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
         .. code-block:: pycon
 
-            >>> from pandasx.ingestor import ParquetIngestor
+            >>> from flamme.ingestor import ParquetIngestor
             >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
             >>> df = ingestor.ingest()  # doctest: +SKIP
         """

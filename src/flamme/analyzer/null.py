@@ -5,8 +5,8 @@ __all__ = ["NullValueAnalyzer"]
 import numpy as np
 from pandas import DataFrame
 
-from pandasx.analyzer.base import BaseAnalyzer
-from pandasx.section.null import NullValueSection
+from flamme.analyzer.base import BaseAnalyzer
+from flamme.section.null import NullValueSection
 
 
 class NullValueAnalyzer(BaseAnalyzer):
@@ -18,7 +18,7 @@ class NullValueAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from pandasx.analyzer import NullValueAnalyzer
+        >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
         >>> analyzer
         NullValueAnalyzer()

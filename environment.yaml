@@ -1,4 +1,4 @@
-name: pandasx
+name: flamme
 channels:
   - conda-forge
 dependencies:

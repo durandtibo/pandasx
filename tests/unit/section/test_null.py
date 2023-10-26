@@ -5,7 +5,7 @@ from coola import objects_are_allclose
 from jinja2 import Template
 from pytest import raises
 
-from pandasx.section import NullValueSection
+from flamme.section import NullValueSection
 
 ######################################
 #     Tests for NullValueSection     #

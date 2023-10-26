@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "pandasx"
-version = "0.0.1a7"
+name = "flamme"
+version = "0.0.1a8"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
-homepage = "https://github.com/durandtibo/pandasx"
-repository = "https://github.com/durandtibo/pandasx"
+homepage = "https://github.com/durandtibo/flamme"
+repository = "https://github.com/durandtibo/flamme"
 keywords = ["pandas", "analysis", "report"]
 license = "BSD-3-Clause"
 
@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 packages = [
-    { include = "pandasx", from = "src" },
+    { include = "flamme", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -70,7 +70,7 @@ source = ["src", "*/site-packages"]
 
 [tool.coverage.run]
 branch = true
-source = ["pandasx"]
+source = ["flamme"]
 
 [tool.coverage.report]
 show_missing = true

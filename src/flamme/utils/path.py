@@ -5,7 +5,7 @@ __all__ = ["human_file_size", "sanitize_path"]
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from pandasx.utils.format import human_byte
+from flamme.utils.format import human_byte
 
 
 def human_file_size(path: Path | str, decimal: int = 2) -> str:
@@ -25,7 +25,7 @@ def human_file_size(path: Path | str, decimal: int = 2) -> str:
 
     .. code-block:: pycon
 
-        >>> from pandasx.utils.path import human_file_size
+        >>> from flamme.utils.path import human_file_size
         >>> human_file_size("README.md")
         '...B'
     """
@@ -49,7 +49,7 @@ def sanitize_path(path: Path | str) -> Path:
     .. code-block:: pycon
 
         >>> from pathlib import Path
-        >>> from pandasx.utils.path import sanitize_path
+        >>> from flamme.utils.path import sanitize_path
         >>> sanitize_path("something")
         PosixPath('.../something')
         >>> sanitize_path("")

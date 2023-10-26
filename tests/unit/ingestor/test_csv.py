@@ -6,7 +6,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pytest import TempPathFactory, fixture
 
-from pandasx.ingestor import CsvIngestor
+from flamme.ingestor import CsvIngestor
 
 
 @fixture(scope="module")

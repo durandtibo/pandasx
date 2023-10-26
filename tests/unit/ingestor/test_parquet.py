@@ -6,7 +6,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pytest import TempPathFactory, fixture
 
-from pandasx.ingestor import ParquetIngestor
+from flamme.ingestor import ParquetIngestor
 
 
 @fixture(scope="module")
