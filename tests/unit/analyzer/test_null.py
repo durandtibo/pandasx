@@ -4,7 +4,7 @@ import numpy as np
 from coola import objects_are_equal
 from pandas import DataFrame
 
-from pandasx.analyzer import NullValueAnalyzer
+from flamme.analyzer import NullValueAnalyzer
 
 #######################################
 #     Tests for NullValueAnalyzer     #

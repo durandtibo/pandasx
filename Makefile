@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-NAME=pandasx
+NAME=flamme
 SOURCE=src/$(NAME)
 TESTS=tests
 UNIT_TESTS=tests/unit

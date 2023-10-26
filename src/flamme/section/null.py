@@ -8,8 +8,8 @@ import numpy as np
 from jinja2 import Template
 from pandas import DataFrame
 
-from pandasx.section.base import BaseSection
-from pandasx.section.utils import (
+from flamme.section.base import BaseSection
+from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
     tags2id,

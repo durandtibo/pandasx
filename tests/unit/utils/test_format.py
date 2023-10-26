@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pytest import mark
 
-from pandasx.utils.format import human_byte
+from flamme.utils.format import human_byte
 
 ################################
 #     Tests for human_byte     #

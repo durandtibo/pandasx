@@ -20,7 +20,7 @@ def human_byte(size: float | int, decimal: int = 2) -> str:
 
     .. code-block:: pycon
 
-        >>> from pandasx.utils.format import human_byte
+        >>> from flamme.utils.format import human_byte
         >>> human_byte(2)
         '2.00 B'
         >>> human_byte(2048)

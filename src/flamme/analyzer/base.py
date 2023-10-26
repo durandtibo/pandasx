@@ -8,7 +8,7 @@ from abc import ABC
 from objectory import AbstractFactory
 from pandas import DataFrame
 
-from pandasx.section import BaseSection
+from flamme.section import BaseSection
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from pandasx.analyzer import NullValueAnalyzer
+        >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
         >>> analyzer
         NullValueAnalyzer()
@@ -48,7 +48,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
 
             >>> import numpy as np
             >>> import pandas as pd
-            >>> from pandasx.analyzer import NullValueAnalyzer
+            >>> from flamme.analyzer import NullValueAnalyzer
             >>> analyzer = NullValueAnalyzer()
             >>> df = pd.DataFrame(
             ...     {
