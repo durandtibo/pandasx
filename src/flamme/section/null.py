@@ -5,6 +5,8 @@ __all__ = ["NullValueSection"]
 from collections.abc import Sequence
 
 import numpy as np
+import plotly
+import plotly.express as px
 from jinja2 import Template
 from pandas import DataFrame
 
@@ -63,8 +65,9 @@ class NullValueSection(BaseSection):
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "table_alpha": self._create_table_alphabetical(),
-                "table_sort": self._create_table_sorted(),
+                "table_alpha": self._create_table(sort_by="column"),
+                "table_sort": self._create_table(sort_by="null"),
+                "bar_figure": self._create_bar_figure(),
             }
         )
 
@@ -84,6 +87,8 @@ This section analyzes the number/proportion of null values for each column.
 The color indicates the proportion of missing values.
 Dark blues indicates more missing values than light blues.
 
+{{bar_figure}}
+
 <div class="container-fluid">
     <div class="row align-items-start">
         <div class="col align-self-center">
@@ -102,22 +107,24 @@ Dark blues indicates more missing values than light blues.
 </div>
 """
 
-    def _create_table_alphabetical(self) -> str:
-        df = DataFrame(
-            {"column": self._columns, "null": self._null_count, "total": self._total_count}
-        ).sort_values(by="column")
-        return self._create_table(df)
+    def _create_bar_figure(self) -> str:
+        df = self._get_dataframe().sort_values(by="null")
+        fig = px.bar(
+            df,
+            x="column",
+            y="null",
+            title="number of null values per column",
+            labels={"column": "column", "null": "number of null values"},
+            text_auto=True,
+            template="seaborn",
+        )
+        return plotly.io.to_html(fig, full_html=False)
 
-    def _create_table_sorted(self) -> str:
-        df = DataFrame(
-            {"column": self._columns, "null": self._null_count, "total": self._total_count}
-        ).sort_values(by="null")
-        return self._create_table(df)
-
-    def _create_table(self, df: DataFrame) -> str:
+    def _create_table(self, sort_by: str) -> str:
+        df = self._get_dataframe().sort_values(by=sort_by)
         rows = "\n".join(
             [
-                create_row(column=column, null_count=null_count, total_count=total_count)
+                create_table_row(column=column, null_count=null_count, total_count=total_count)
                 for column, null_count, total_count in zip(
                     df["column"].to_numpy(), df["null"].to_numpy(), df["total"].to_numpy()
                 )
@@ -142,8 +149,25 @@ Dark blues indicates more missing values than light blues.
 """
         ).render({"rows": rows})
 
+    def _get_dataframe(self) -> DataFrame:
+        return DataFrame(
+            {"column": self._columns, "null": self._null_count, "total": self._total_count}
+        )
 
-def create_row(column: str, null_count: int, total_count: int) -> str:
+
+def create_table_row(column: str, null_count: int, total_count: int) -> str:
+    r"""Creates the HTML code of a new table row.
+
+    Args:
+    ----
+        column (str): Specifies the column name.
+        null_count (int): Specifies the number of null values.
+        total_count (int): Specifies the total number of rows.
+
+    Returns:
+    -------
+        str: The HTML code of a row.
+    """
     pct = null_count / total_count
     return Template(
         """<tr>
