@@ -81,6 +81,8 @@ class NullValueSection(BaseSection):
 
 <p style="margin-top: 1rem;">
 This section analyzes the number/proportion of null values for each column.
+The color indicates the proportion of missing values.
+Dark blues indicates more missing values than light blues.
 
 <div class="container-fluid">
     <div class="row align-items-start">
@@ -142,19 +144,20 @@ This section analyzes the number/proportion of null values for each column.
 
 
 def create_row(column: str, null_count: int, total_count: int) -> str:
+    pct = null_count / total_count
     return Template(
         """<tr>
-    <th>{{column}}</th>
+    <th style="background-color: rgba(64, 161, 255, {{null_pct}})">{{column}}</th>
     <td {{num_style}}>{{null_pct}}</td>
     <td {{num_style}}>{{null_count}}</td>
     <td {{num_style}}>{{total_count}}</td>
 </tr>"""
     ).render(
         {
-            "num_style": 'style="text-align: right"',
+            "num_style": f'style="text-align: right; background-color: rgba(64, 161, 255, {pct})"',
             "column": column,
             "null_count": f"{null_count:,}",
-            "null_pct": f"{null_count / total_count:.4f}",
+            "null_pct": f"{pct:.4f}",
             "total_count": f"{total_count:,}",
         }
     )
