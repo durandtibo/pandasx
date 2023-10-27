@@ -29,7 +29,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         ...         "str": np.array(["A", "B", None, np.nan]),
         ...     }
         ... )
-        >>> analyzer.analyze(df)
+        >>> section = analyzer.analyze(df)
     """
 
     def __repr__(self) -> str:
