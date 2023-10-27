@@ -827,6 +827,21 @@ docs = ["furo (>=2023.7.26)", "proselint (>=0.13)", "sphinx (>=7.1.1)", "sphinx-
 test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)"]
 
 [[package]]
+name = "plotly"
+version = "5.17.0"
+description = "An open-source, interactive data visualization library for Python"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "plotly-5.17.0-py2.py3-none-any.whl", hash = "sha256:7c84cdf11da162423da957bb093287134f2d6f170eb9a74f1459f825892247c3"},
+    {file = "plotly-5.17.0.tar.gz", hash = "sha256:290d796bf7bab87aad184fe24b86096234c4c95dcca6ecbca02d02bdf17d3d97"},
+]
+
+[package.dependencies]
+packaging = "*"
+tenacity = ">=6.2.0"
+
+[[package]]
 name = "pluggy"
 version = "1.3.0"
 description = "plugin and hook calling mechanisms for python"
@@ -1246,6 +1261,20 @@ files = [
 ]
 
 [[package]]
+name = "tenacity"
+version = "8.2.3"
+description = "Retry code until it succeeds"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tenacity-8.2.3-py3-none-any.whl", hash = "sha256:ce510e327a630c9e1beaf17d42e6ffacc88185044ad85cf74c0a8887c6a0f88c"},
+    {file = "tenacity-8.2.3.tar.gz", hash = "sha256:5398ef0d78e63f40007c1fb4c0bff96e1911394d2fa8d194f77619c05ff6cc8a"},
+]
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -1386,30 +1415,26 @@ watchmedo = ["PyYAML (>=3.10)"]
 
 [[package]]
 name = "xdoctest"
-version = "1.1.1"
+version = "1.1.2"
 description = "A rewrite of the builtin doctest module"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "xdoctest-1.1.1-py3-none-any.whl", hash = "sha256:d59d4ed91cb92e4430ef0ad1b134a2bef02adff7d2fb9c9f057547bee44081a2"},
-    {file = "xdoctest-1.1.1.tar.gz", hash = "sha256:2eac8131bdcdf2781b4e5a62d6de87f044b730cc8db8af142a51bb29c245e779"},
+    {file = "xdoctest-1.1.2-py3-none-any.whl", hash = "sha256:ebe133222534f09597cbe461f97cc5f95ad7b36e5d31f3437caffb9baaddbddb"},
+    {file = "xdoctest-1.1.2.tar.gz", hash = "sha256:267d3d4e362547fa917d3deabaf6888232bbf43c8d30298faeb957dbfa7e0ba3"},
 ]
 
-[package.dependencies]
-six = "*"
-
 [package.extras]
-all = ["IPython", "IPython", "Pygments", "Pygments", "attrs", "codecov", "colorama", "debugpy", "debugpy", "debugpy", "debugpy", "debugpy", "ipykernel", "ipykernel", "ipython-genutils", "jedi", "jinja2", "jupyter-client", "jupyter-client", "jupyter-core", "nbconvert", "pyflakes", "pytest", "pytest", "pytest", "pytest-cov", "six", "tomli", "typing"]
-all-strict = ["IPython (==7.10.0)", "IPython (==7.23.1)", "Pygments (==2.0.0)", "Pygments (==2.4.1)", "attrs (==19.2.0)", "codecov (==2.0.15)", "colorama (==0.4.1)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.3.0)", "debugpy (==1.6.0)", "ipykernel (==5.2.0)", "ipykernel (==6.0.0)", "ipython-genutils (==0.2.0)", "jedi (==0.16)", "jinja2 (==3.0.0)", "jupyter-client (==6.1.5)", "jupyter-client (==7.0.0)", "jupyter-core (==4.7.0)", "nbconvert (==6.0.0)", "pyflakes (==2.2.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "six (==1.11.0)", "tomli (==0.2.0)", "typing (==3.7.4)"]
+all = ["IPython (>=7.10.0)", "IPython (>=7.23.1)", "Pygments (>=2.0.0)", "Pygments (>=2.4.1)", "attrs (>=19.2.0)", "colorama (>=0.4.1)", "debugpy (>=1.0.0)", "debugpy (>=1.0.0)", "debugpy (>=1.0.0)", "debugpy (>=1.3.0)", "debugpy (>=1.6.0)", "ipykernel (>=5.2.0)", "ipykernel (>=6.0.0)", "ipykernel (>=6.11.0)", "ipython-genutils (>=0.2.0)", "jedi (>=0.16)", "jinja2 (>=3.0.0)", "jupyter-client (>=6.1.5)", "jupyter-client (>=7.0.0)", "jupyter-core (>=4.7.0)", "nbconvert (>=6.0.0)", "nbconvert (>=6.1.0)", "pyflakes (>=2.2.0)", "pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "tomli (>=0.2.0)", "typing (>=3.7.4)"]
+all-strict = ["IPython (==7.10.0)", "IPython (==7.23.1)", "Pygments (==2.0.0)", "Pygments (==2.4.1)", "attrs (==19.2.0)", "colorama (==0.4.1)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.3.0)", "debugpy (==1.6.0)", "ipykernel (==5.2.0)", "ipykernel (==6.0.0)", "ipykernel (==6.11.0)", "ipython-genutils (==0.2.0)", "jedi (==0.16)", "jinja2 (==3.0.0)", "jupyter-client (==6.1.5)", "jupyter-client (==7.0.0)", "jupyter-core (==4.7.0)", "nbconvert (==6.0.0)", "nbconvert (==6.1.0)", "pyflakes (==2.2.0)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "tomli (==0.2.0)", "typing (==3.7.4)"]
 colors = ["Pygments", "Pygments", "colorama"]
-jupyter = ["IPython", "IPython", "attrs", "debugpy", "debugpy", "debugpy", "debugpy", "debugpy", "ipykernel", "ipykernel", "ipython-genutils", "jedi", "jinja2", "jupyter-client", "jupyter-client", "jupyter-core", "nbconvert"]
-optional = ["IPython", "IPython", "Pygments", "Pygments", "attrs", "colorama", "debugpy", "debugpy", "debugpy", "debugpy", "debugpy", "ipykernel", "ipykernel", "ipython-genutils", "jedi", "jinja2", "jupyter-client", "jupyter-client", "jupyter-core", "nbconvert", "pyflakes", "tomli"]
-optional-strict = ["IPython (==7.10.0)", "IPython (==7.23.1)", "Pygments (==2.0.0)", "Pygments (==2.4.1)", "attrs (==19.2.0)", "colorama (==0.4.1)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.3.0)", "debugpy (==1.6.0)", "ipykernel (==5.2.0)", "ipykernel (==6.0.0)", "ipython-genutils (==0.2.0)", "jedi (==0.16)", "jinja2 (==3.0.0)", "jupyter-client (==6.1.5)", "jupyter-client (==7.0.0)", "jupyter-core (==4.7.0)", "nbconvert (==6.0.0)", "pyflakes (==2.2.0)", "tomli (==0.2.0)"]
-runtime-strict = ["six (==1.11.0)"]
-tests = ["codecov", "pytest", "pytest", "pytest", "pytest-cov", "typing"]
+jupyter = ["IPython", "IPython", "attrs", "debugpy", "debugpy", "debugpy", "debugpy", "debugpy", "ipykernel", "ipykernel", "ipykernel", "ipython-genutils", "jedi", "jinja2", "jupyter-client", "jupyter-client", "jupyter-core", "nbconvert", "nbconvert"]
+optional = ["IPython (>=7.10.0)", "IPython (>=7.23.1)", "Pygments (>=2.0.0)", "Pygments (>=2.4.1)", "attrs (>=19.2.0)", "colorama (>=0.4.1)", "debugpy (>=1.0.0)", "debugpy (>=1.0.0)", "debugpy (>=1.0.0)", "debugpy (>=1.3.0)", "debugpy (>=1.6.0)", "ipykernel (>=5.2.0)", "ipykernel (>=6.0.0)", "ipykernel (>=6.11.0)", "ipython-genutils (>=0.2.0)", "jedi (>=0.16)", "jinja2 (>=3.0.0)", "jupyter-client (>=6.1.5)", "jupyter-client (>=7.0.0)", "jupyter-core (>=4.7.0)", "nbconvert (>=6.0.0)", "nbconvert (>=6.1.0)", "pyflakes (>=2.2.0)", "tomli (>=0.2.0)"]
+optional-strict = ["IPython (==7.10.0)", "IPython (==7.23.1)", "Pygments (==2.0.0)", "Pygments (==2.4.1)", "attrs (==19.2.0)", "colorama (==0.4.1)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.0.0)", "debugpy (==1.3.0)", "debugpy (==1.6.0)", "ipykernel (==5.2.0)", "ipykernel (==6.0.0)", "ipykernel (==6.11.0)", "ipython-genutils (==0.2.0)", "jedi (==0.16)", "jinja2 (==3.0.0)", "jupyter-client (==6.1.5)", "jupyter-client (==7.0.0)", "jupyter-core (==4.7.0)", "nbconvert (==6.0.0)", "nbconvert (==6.1.0)", "pyflakes (==2.2.0)", "tomli (==0.2.0)"]
+tests = ["pytest (>=4.6.0)", "pytest (>=4.6.0)", "pytest (>=6.2.5)", "pytest-cov (>=3.0.0)", "typing (>=3.7.4)"]
 tests-binary = ["cmake", "cmake", "ninja", "ninja", "pybind11", "pybind11", "scikit-build", "scikit-build"]
 tests-binary-strict = ["cmake (==3.21.2)", "cmake (==3.25.0)", "ninja (==1.10.2)", "ninja (==1.11.1)", "pybind11 (==2.10.3)", "pybind11 (==2.7.1)", "scikit-build (==0.11.1)", "scikit-build (==0.16.1)"]
-tests-strict = ["codecov (==2.0.15)", "pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "typing (==3.7.4)"]
+tests-strict = ["pytest (==4.6.0)", "pytest (==4.6.0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "typing (==3.7.4)"]
 
 [[package]]
 name = "zipp"
@@ -1432,4 +1457,4 @@ all = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "c2c86ee29a22fb7a669bd0148475c1071776125fa283a23ec70498fa17601a50"
+content-hash = "923fb81ed19ba8031ba576d042b9a5a284b350c87ee579d24e4600a29e8b8a0b"
