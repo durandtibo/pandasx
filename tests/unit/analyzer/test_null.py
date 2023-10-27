@@ -5,6 +5,7 @@ from coola import objects_are_equal
 from pandas import DataFrame
 
 from flamme.analyzer import NullValueAnalyzer
+from flamme.section import NullValueSection
 
 #######################################
 #     Tests for NullValueAnalyzer     #
@@ -25,6 +26,7 @@ def test_null_value_analyzer_get_statistics() -> None:
             }
         )
     )
+    assert isinstance(section, NullValueSection)
     assert objects_are_equal(
         section.get_statistics(),
         {
@@ -39,7 +41,7 @@ def test_null_value_analyzer_get_statistics_empty() -> None:
     section = NullValueAnalyzer().analyze(
         DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
     )
-    print(section.get_statistics())
+    assert isinstance(section, NullValueSection)
     assert objects_are_equal(
         section.get_statistics(),
         {
@@ -52,6 +54,7 @@ def test_null_value_analyzer_get_statistics_empty() -> None:
 
 def test_null_value_analyzer_get_statistics_empty_no_column() -> None:
     section = NullValueAnalyzer().analyze(DataFrame({}))
+    assert isinstance(section, NullValueSection)
     assert objects_are_equal(
         section.get_statistics(),
         {"columns": (), "null_count": (), "total_count": ()},
