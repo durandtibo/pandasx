@@ -114,7 +114,12 @@ class ColumnTypeSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the type of the values in each column.
+This section analyzes the values types for each column.
+
+<ul>
+  <li> <b>data type</b>: is the pandas data type used to represent the column </li>
+  <li> <b>types</b>: are the real object types for the objects in the column </li>
+</ul>
 
 {{table}}
 """
