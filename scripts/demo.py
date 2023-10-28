@@ -63,6 +63,7 @@ def main_report() -> None:
             "column type": ColumnTypeAnalyzer(),
         }
     )
+    print(analyzer)
     section: BaseSection = analyzer.analyze(df)
     report = create_report(
         toc=section.render_html_toc(max_depth=6), body=section.render_html_body()

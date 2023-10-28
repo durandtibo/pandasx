@@ -2,7 +2,7 @@ from __future__ import annotations
 
 __all__ = ["FilteredAnalyzer"]
 
-from coola.utils import str_mapping
+from coola.utils import str_indent, str_mapping
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
@@ -20,10 +20,13 @@ class FilteredAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import FilteredAnalyzer
-        >>> analyzer = FilteredAnalyzer()
+        >>> from flamme.analyzer import FilteredAnalyzer, NanValueAnalyzer
+        >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NanValueAnalyzer())
         >>> analyzer
-        FilteredAnalyzer()
+        FilteredAnalyzer(
+          (query): float >= 2.0
+          (analyzer): NanValueAnalyzer()
+        )
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -39,8 +42,8 @@ class FilteredAnalyzer(BaseAnalyzer):
         self._analyzer = setup_object(analyzer)
 
     def __repr__(self) -> str:
-        args = str_mapping({"query": self._query, "analyzer": self._analyzer})
-        return f"{self.__class__.__qualname__}({args})"
+        args = str_indent(str_mapping({"query": self._query, "analyzer": self._analyzer}))
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, df: DataFrame) -> BaseSection:
         df = df.query(self._query)
