@@ -5,7 +5,13 @@ import pandas as pd
 from coola.utils import str_indent
 from gravitorch.utils.io import save_text
 
-from flamme.analyzer import NullValueAnalyzer
+from flamme.analyzer import (
+    ColumnDtypeAnalyzer,
+    ColumnTypeAnalyzer,
+    MappingAnalyzer,
+    NanValueAnalyzer,
+    NullValueAnalyzer,
+)
 from flamme.section import BaseSection
 
 
@@ -51,7 +57,14 @@ def create_report(toc: str, body: str) -> str:
 def main_report() -> None:
     df = create_dataframe()
 
-    analyzer = NullValueAnalyzer()
+    analyzer = MappingAnalyzer(
+        {
+            "null values": NullValueAnalyzer(),
+            "nan values": NanValueAnalyzer(),
+            "column data type": ColumnDtypeAnalyzer(),
+            "column type": ColumnTypeAnalyzer(),
+        }
+    )
     section: BaseSection = analyzer.analyze(df)
     report = create_report(
         toc=section.render_html_toc(max_depth=6), body=section.render_html_body()
