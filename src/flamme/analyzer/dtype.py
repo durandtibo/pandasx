@@ -6,6 +6,7 @@ from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnDtypeSection, ColumnTypeSection
+from flamme.utils.dtype import column_types
 
 
 class ColumnDtypeAnalyzer(BaseAnalyzer):
@@ -66,7 +67,4 @@ class ColumnTypeAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}()"
 
     def analyze(self, df: DataFrame) -> ColumnTypeSection:
-        types = {}
-        for col in df:
-            types[col] = {type(x) for x in df[col].tolist()}
-        return ColumnTypeSection(types)
+        return ColumnTypeSection(dtypes=df.dtypes.to_dict(), types=column_types(df))

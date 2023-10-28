@@ -5,6 +5,7 @@ __all__ = ["ColumnDtypeSection", "ColumnTypeSection"]
 import copy
 from collections.abc import Sequence
 
+import numpy as np
 from jinja2 import Template
 from pandas import Series
 
@@ -67,13 +68,24 @@ class ColumnTypeSection(BaseSection):
 
     Args:
     ----
+        dtypes (``dict``): Specifies the data type for each column.
         types (``dict``): Specifies the types of the values in each
             column. A column can contain multiple types. The keys are
             the column names.
     """
 
-    def __init__(self, types: dict[str, set]) -> None:
+    def __init__(self, dtypes: dict[str, np.dtype], types: dict[str, set]) -> None:
+        self._dtypes = dtypes
         self._types = types
+
+        dtkeys = set(self._dtypes.keys())
+        tkeys = set(self._types.keys())
+        if dtkeys != tkeys:
+            raise RuntimeError(
+                f"The keys of dtypes and types do not match:\n"
+                f"({len(dtkeys)}): {dtkeys}\n"
+                f"({len(tkeys)}): {tkeys}\n"
+            )
 
     def get_statistics(self) -> dict:
         return copy.deepcopy(self._types)
@@ -102,14 +114,23 @@ class ColumnTypeSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the type of the values in each column.
+This section analyzes the values types for each column.
+
+<ul>
+  <li> <b>data type</b>: is the pandas data type used to represent the column </li>
+  <li> <b>types</b>: are the real object types for the objects in the column </li>
+</ul>
 
 {{table}}
 """
 
     def _create_table(self) -> str:
+        columns = sorted(self._types.keys())
         rows = "\n".join(
-            [create_table_row(column=column, types=types) for column, types in self._types.items()]
+            [
+                create_table_row(column=col, types=self._types[col], dtype=self._dtypes[col])
+                for col in columns
+            ]
         )
         return Template(
             """
@@ -117,7 +138,8 @@ This section analyzes the type of the values in each column.
     <thead class="thead table-group-divider">
         <tr>
             <th>column</th>
-            <th>type</th>
+            <th>data type</th>
+            <th>types</th>
         </tr>
     </thead>
     <tbody class="tbody table-group-divider">
@@ -129,21 +151,24 @@ This section analyzes the type of the values in each column.
         ).render({"rows": rows})
 
 
-def create_table_row(column: str, types: set) -> str:
+def create_table_row(column: str, dtype: np.dtype, types: set) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
     ----
         column (str): Specifies the column name.
+        dtype (``numpy.ndtype``): Specifies the column data type.
         types (set): Specifies the types in th column.
 
     Returns:
     -------
         str: The HTML code of a row.
     """
+    types = sorted([str(t).replace("<", "&lt;").replace(">", "&gt;") for t in types])
     return Template(
         """<tr>
     <th>{{column}}</th>
-    <td >{{null_pct}}</td>
+    <td>{{dtype}}</td>
+    <td>{{types}}</td>
 </tr>"""
-    ).render({"column": column, "types": ", ".join(sorted([str(t) for t in types]))})
+    ).render({"column": column, "dtype": dtype, "types": ", ".join(types)})

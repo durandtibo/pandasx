@@ -6,7 +6,6 @@ from coola.utils import str_indent
 from gravitorch.utils.io import save_text
 
 from flamme.analyzer import (
-    ColumnDtypeAnalyzer,
     ColumnTypeAnalyzer,
     MappingAnalyzer,
     NanValueAnalyzer,
@@ -61,7 +60,6 @@ def main_report() -> None:
         {
             "null values": NullValueAnalyzer(),
             "nan values": NanValueAnalyzer(),
-            "column data type": ColumnDtypeAnalyzer(),
             "column type": ColumnTypeAnalyzer(),
         }
     )
