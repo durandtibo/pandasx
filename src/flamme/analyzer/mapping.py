@@ -5,11 +5,11 @@ __all__ = ["MappingAnalyzer"]
 from collections.abc import Mapping
 
 from coola.utils import str_indent, str_mapping
-from gravitorch.utils import setup_object
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import SectionDict
+from flamme.utils import setup_object
 
 
 class MappingAnalyzer(BaseAnalyzer):
