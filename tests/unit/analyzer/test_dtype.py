@@ -2,54 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 from coola import objects_are_equal
-from numpy import dtype
 from pandas import DataFrame
 
-from flamme.analyzer import ColumnDtypeAnalyzer, ColumnTypeAnalyzer
-from flamme.section import ColumnDtypeSection, ColumnTypeSection
-
-#########################################
-#     Tests for ColumnDtypeAnalyzer     #
-#########################################
-
-
-def test_column_dtype_analyzer_str() -> None:
-    assert str(ColumnDtypeAnalyzer()).startswith("ColumnDtypeAnalyzer(")
-
-
-def test_column_dtype_analyzer_get_statistics() -> None:
-    section = ColumnDtypeAnalyzer().analyze(
-        DataFrame(
-            {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-            }
-        )
-    )
-    assert isinstance(section, ColumnDtypeSection)
-    assert objects_are_equal(
-        section.get_statistics(),
-        {"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
-    )
-
-
-def test_column_dtype_analyzer_get_statistics_empty_row() -> None:
-    section = ColumnDtypeAnalyzer().analyze(
-        DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
-    )
-    assert isinstance(section, ColumnDtypeSection)
-    assert objects_are_equal(
-        section.get_statistics(),
-        {"float": dtype("float64"), "int": dtype("float64"), "str": dtype("float64")},
-    )
-
-
-def test_column_dtype_analyzer_get_statistics_empty_column() -> None:
-    section = ColumnDtypeAnalyzer().analyze(DataFrame({}))
-    assert isinstance(section, ColumnDtypeSection)
-    assert objects_are_equal(section.get_statistics(), {})
-
+from flamme.analyzer import ColumnTypeAnalyzer
+from flamme.section import ColumnTypeSection
 
 ########################################
 #     Tests for ColumnTypeAnalyzer     #
