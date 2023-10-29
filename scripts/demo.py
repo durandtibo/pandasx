@@ -3,7 +3,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from coola.utils import str_indent
-from gravitorch.utils.io import save_text
 
 from flamme.analyzer import (
     ColumnTypeAnalyzer,
@@ -12,6 +11,7 @@ from flamme.analyzer import (
     NullValueAnalyzer,
 )
 from flamme.section import BaseSection
+from flamme.utils.io import save_text
 
 
 def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
