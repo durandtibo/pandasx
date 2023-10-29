@@ -7,9 +7,11 @@ __all__ = [
     "MappingAnalyzer",
     "NanValueAnalyzer",
     "NullValueAnalyzer",
+    "is_analyzer_config",
+    "setup_analyzer",
 ]
 
-from flamme.analyzer.base import BaseAnalyzer
+from flamme.analyzer.base import BaseAnalyzer, is_analyzer_config, setup_analyzer
 from flamme.analyzer.dtype import ColumnTypeAnalyzer
 from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer

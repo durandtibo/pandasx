@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-__all__ = ["BaseAnalyzer"]
+__all__ = ["BaseAnalyzer", "setup_analyzer"]
 
 import logging
 from abc import ABC
 
 from objectory import AbstractFactory
+from objectory.utils import is_object_config
 from pandas import DataFrame
 
 from flamme.section import BaseSection
@@ -65,3 +66,66 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
             ... )
             >>> analyzer.analyze(df)
         """
+
+
+def is_analyzer_config(config: dict) -> bool:
+    r"""Indicates if the input configuration is a configuration for a
+    ``BaseAnalyzer``.
+
+    This function only checks if the value of the key  ``_target_``
+    is valid. It does not check the other values. If ``_target_``
+    indicates a function, the returned type hint is used to check
+    the class.
+
+    Args:
+    ----
+        config (dict): Specifies the configuration to check.
+
+    Returns:
+    -------
+        bool: ``True`` if the input configuration is a configuration
+            for a ``BaseAnalyzer`` object.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from flamme.analyzer import is_analyzer_config
+        >>> is_analyzer_config({"_target_": "flamme.analyzer.NanValueAnalyzer"})
+        True
+    """
+    return is_object_config(config, BaseAnalyzer)
+
+
+def setup_analyzer(
+    analyzer: BaseAnalyzer | dict,
+) -> BaseAnalyzer:
+    r"""Sets up an analyzer.
+
+    The analyzer is instantiated from its configuration
+    by using the ``BaseAnalyzer`` factory function.
+
+    Args:
+    ----
+        analyzer (``BaseAnalyzer`` or dict): Specifies an
+            analyzer or its configuration.
+
+    Returns:
+    -------
+        ``BaseAnalyzer``: An instantiated analyzer.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from flamme.analyzer import setup_analyzer
+        >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NanValueAnalyzer"})
+        >>> analyzer
+        NanValueAnalyzer()
+    """
+    if isinstance(analyzer, dict):
+        logger.info("Initializing an analyzer from its configuration... ")
+        analyzer = BaseAnalyzer.factory(**analyzer)
+    if not isinstance(analyzer, BaseAnalyzer):
+        logger.warning(f"analyzer is not a `BaseAnalyzer` (received: {type(analyzer)})")
+    return analyzer
