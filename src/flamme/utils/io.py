@@ -22,7 +22,7 @@ def save_text(to_save: str, path: Path) -> None:
     .. code-block:: pycon
 
         >>> from pathlib import Path
-        >>> from gravitorch.utils.io import save_text
+        >>> from flamme.utils.io import save_text
         >>> save_text("abc", Path("/path/to/data.txt"))  # xdoctest: +SKIP()
     """
     logger.debug(f"write data in a text file: {path}")
