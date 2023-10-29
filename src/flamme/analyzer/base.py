@@ -37,9 +37,15 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
     """
 
     def analyze(self, df: DataFrame) -> BaseSection:
-        r"""Ingests a DataFrame.
+        r"""Analyzes the data in a DataFrame.
+
+        Args:
+        ----
+            df (``pandas.DataFrame``): Specifies the DataFrame with
+                the data to analyze.
 
         Returns:
+        -------
             ``BaseSection``: The section report.
 
         Example usage:

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 import numpy as np
@@ -31,6 +33,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
     df = df.mask(mask)
+    df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     return df
 
 
