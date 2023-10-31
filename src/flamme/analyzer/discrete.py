@@ -4,7 +4,7 @@ __all__ = ["DiscreteDistributionAnalyzer"]
 
 from collections import Counter
 
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DiscreteDistributionSection
@@ -34,9 +34,12 @@ class DiscreteDistributionAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> DiscreteDistributionSection:
-        counter = Counter()
+        series = Series()
         if self._column in df:
-            counter.update(df[self._column].value_counts(dropna=self._dropna).to_dict())
+            series = df[self._column]
         return DiscreteDistributionSection(
-            counter=counter, column=self._column, max_rows=self._max_rows
+            counter=Counter(series.value_counts(dropna=self._dropna).to_dict()),
+            null_values=series.isnull().sum(),
+            column=self._column,
+            max_rows=self._max_rows,
         )
