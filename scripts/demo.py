@@ -8,6 +8,7 @@ from coola.utils import str_indent
 
 from flamme.analyzer import (
     ColumnTypeAnalyzer,
+    DiscreteDistributionAnalyzer,
     MappingAnalyzer,
     NanValueAnalyzer,
     NullValueAnalyzer,
@@ -64,6 +65,12 @@ def main_report() -> None:
             "null values": NullValueAnalyzer(),
             "nan values": NanValueAnalyzer(),
             "column type": ColumnTypeAnalyzer(),
+            "columns": MappingAnalyzer(
+                {
+                    "str": DiscreteDistributionAnalyzer(column="str"),
+                    "str2": DiscreteDistributionAnalyzer(column="str2"),
+                }
+            ),
         }
     )
     print(analyzer)
