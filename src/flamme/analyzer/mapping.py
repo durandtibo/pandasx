@@ -7,9 +7,8 @@ from collections.abc import Mapping
 from coola.utils import str_indent, str_mapping
 from pandas import DataFrame
 
-from flamme.analyzer.base import BaseAnalyzer
+from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section import SectionDict
-from flamme.utils import setup_object
 
 
 class MappingAnalyzer(BaseAnalyzer):
@@ -23,7 +22,7 @@ class MappingAnalyzer(BaseAnalyzer):
     """
 
     def __init__(self, analyzers: Mapping[str, BaseAnalyzer | dict]) -> None:
-        self._analyzers = {name: setup_object(analyzer) for name, analyzer in analyzers.items()}
+        self._analyzers = {name: setup_analyzer(analyzer) for name, analyzer in analyzers.items()}
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(\n  {str_indent(str_mapping(self._analyzers))}\n)"
