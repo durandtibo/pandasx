@@ -36,12 +36,14 @@ class DiscreteDistributionSection(BaseSection):
         self._column = column
         self._max_rows = int(max_rows)
 
+        self._total = sum(self._counter.values())
+
     def get_statistics(self) -> dict:
         most_common = [(col, count) for col, count in self._counter.most_common() if count > 0]
         return {
             "most_common": most_common,
             "nunique": len(most_common),
-            "total": sum(self._counter.values()),
+            "total": self._total,
         }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
@@ -83,6 +85,8 @@ This section analyzes the discrete distribution of values for column {{column}}.
 """
 
     def _create_table(self) -> str:
+        if self._total == 0:
+            return ""
         rows = "\n".join(
             [
                 create_table_row(column=col, count=count)
