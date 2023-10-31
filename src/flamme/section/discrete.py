@@ -41,7 +41,7 @@ class DiscreteDistributionSection(BaseSection):
         return {
             "most_common": most_common,
             "nunique": len(most_common),
-            "total": self._counter.total(),
+            "total": sum(self._counter.values()),
         }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
