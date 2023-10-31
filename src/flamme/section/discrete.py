@@ -5,7 +5,10 @@ __all__ = ["DiscreteDistributionSection"]
 from collections import Counter
 from collections.abc import Sequence
 
+import plotly
+import plotly.express as px
 from jinja2 import Template
+from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -25,21 +28,25 @@ class DiscreteDistributionSection(BaseSection):
     ----
         counter (``Counter``): Specifies the counter that represents
             the discrete distribution.
+        null_values (int): Specifies the number of null values.
         column (str, optional): Specifies the column name.
             Default: ``'N/A'``
         max_rows (int, optional): Specifies the maximum number of rows
             to show in the table. Default: ``20``
     """
 
-    def __init__(self, counter: Counter, column: str = "N/A", max_rows: int = 20) -> None:
+    def __init__(
+        self, counter: Counter, null_values: int = 0, column: str = "N/A", max_rows: int = 20
+    ) -> None:
         self._counter = counter
+        self._null_values = null_values
         self._column = column
         self._max_rows = int(max_rows)
 
         self._total = sum(self._counter.values())
 
     def get_statistics(self) -> dict:
-        most_common = [(col, count) for col, count in self._counter.most_common() if count > 0]
+        most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
         return {
             "most_common": most_common,
             "nunique": len(most_common),
@@ -48,6 +55,9 @@ class DiscreteDistributionSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         stats = self.get_statistics()
+        null_values_pct = (
+            f"{100 * self._null_values / stats['total']:.2f}" if stats["total"] > 0 else "N/A"
+        )
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -58,6 +68,9 @@ class DiscreteDistributionSection(BaseSection):
                 "column": self._column,
                 "total_values": f"{stats['total']:,}",
                 "unique_values": f"{stats['nunique']:,}",
+                "null_values": f"{self._null_values:,}",
+                "null_values_pct": null_values_pct,
+                "figure": self._create_figure(),
                 "table": self._create_table(),
             }
         )
@@ -78,11 +91,44 @@ This section analyzes the discrete distribution of values for column {{column}}.
 
 <ul>
   <li> total values: {{total_values}} </li>
-  <li> unique values: {{unique_values}} </li>
+  <li> number of unique values: {{unique_values}} </li>
+  <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
 </ul>
 
+{{figure}}
 {{table}}
 """
+
+    def _create_figure(self) -> str:
+        if self._total == 0:
+            return ""
+        most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
+        df = DataFrame(
+            {
+                "value": [str(value) for value, _ in most_common],
+                "count": [count for _, count in most_common],
+            }
+        )
+        fig = px.bar(
+            df,
+            x="value",
+            y="count",
+            title="Number of occurrences per value",
+            labels={"value": "value", "count": "number of occurrences"},
+            text_auto=True,
+            template="seaborn",
+            log_y=(most_common[0][1] / most_common[-1][1]) >= 20,
+        )
+        return Template(
+            r"""
+<p style="margin-top: 1rem;">
+<b>Distribution of values in column {{column}}</b>
+
+<p>The values in the figure below are sorted by decreasing order of number of occurrences.
+
+{{figure}}
+"""
+        ).render({"figure": plotly.io.to_html(fig, full_html=False), "column": self._column})
 
     def _create_table(self) -> str:
         if self._total == 0:

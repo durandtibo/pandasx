@@ -68,7 +68,8 @@ def main_report() -> None:
             "columns": MappingAnalyzer(
                 {
                     "str": DiscreteDistributionAnalyzer(column="str"),
-                    "str2": DiscreteDistributionAnalyzer(column="str2"),
+                    "int": DiscreteDistributionAnalyzer(column="int"),
+                    "missing": DiscreteDistributionAnalyzer(column="missing"),
                 }
             ),
         }
