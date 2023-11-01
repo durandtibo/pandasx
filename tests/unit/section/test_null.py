@@ -162,10 +162,7 @@ def test_monthly_null_value_section_get_statistics_only_datetime_column() -> Non
         ),
         dt_column="datetime",
     )
-    assert objects_are_allclose(
-        output.get_statistics(),
-        {},
-    )
+    assert objects_are_allclose(output.get_statistics(), {})
 
 
 def test_monthly_null_value_section_render_html_body() -> None:
