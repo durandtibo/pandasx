@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 from coola import objects_are_allclose
 from jinja2 import Template
+from pandas import DataFrame
 from pytest import raises
 
-from flamme.section import NullValueSection
+from flamme.section import MonthlyNullValueSection, NullValueSection
 
 ######################################
 #     Tests for NullValueSection     #
@@ -113,6 +115,133 @@ def test_null_value_section_render_html_toc_args() -> None:
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
+    )
+    assert isinstance(
+        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+#############################################
+#     Tests for MonthlyNullValueSection     #
+#############################################
+
+
+def test_monthly_null_value_section_get_statistics() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+    )
+    assert objects_are_allclose(output.get_statistics(), {})
+
+
+def test_monthly_null_value_section_get_statistics_empty_row() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        dt_column="datetime",
+    )
+    assert objects_are_allclose(output.get_statistics(), {})
+
+
+def test_monthly_null_value_section_get_statistics_only_datetime_column() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+    )
+    assert objects_are_allclose(
+        output.get_statistics(),
+        {},
+    )
+
+
+def test_monthly_null_value_section_render_html_body() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+    )
+    assert isinstance(Template(output.render_html_body()).render(), str)
+
+
+def test_monthly_null_value_section_render_html_body_args() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+    )
+    assert isinstance(
+        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+def test_monthly_null_value_section_render_html_body_empty() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        dt_column="datetime",
+    )
+    assert isinstance(Template(output.render_html_body()).render(), str)
+
+
+def test_monthly_null_value_section_render_html_toc() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+    )
+    assert isinstance(Template(output.render_html_toc()).render(), str)
+
+
+def test_monthly_null_value_section_render_html_toc_args() -> None:
+    output = MonthlyNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
     )
     assert isinstance(
         Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
