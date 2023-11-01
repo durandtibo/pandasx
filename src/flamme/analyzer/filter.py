@@ -20,12 +20,12 @@ class FilteredAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import FilteredAnalyzer, NanValueAnalyzer
-        >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NanValueAnalyzer())
+        >>> from flamme.analyzer import FilteredAnalyzer, NullValueAnalyzer
+        >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NullValueAnalyzer())
         >>> analyzer
         FilteredAnalyzer(
           (query): float >= 2.0
-          (analyzer): NanValueAnalyzer()
+          (analyzer): NullValueAnalyzer()
         )
         >>> df = pd.DataFrame(
         ...     {

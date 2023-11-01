@@ -91,7 +91,7 @@ def is_analyzer_config(config: dict) -> bool:
     .. code-block:: pycon
 
         >>> from flamme.analyzer import is_analyzer_config
-        >>> is_analyzer_config({"_target_": "flamme.analyzer.NanValueAnalyzer"})
+        >>> is_analyzer_config({"_target_": "flamme.analyzer.NullValueAnalyzer"})
         True
     """
     return is_object_config(config, BaseAnalyzer)
@@ -119,9 +119,9 @@ def setup_analyzer(
     .. code-block:: pycon
 
         >>> from flamme.analyzer import setup_analyzer
-        >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NanValueAnalyzer"})
+        >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NullValueAnalyzer"})
         >>> analyzer
-        NanValueAnalyzer()
+        NullValueAnalyzer()
     """
     if isinstance(analyzer, dict):
         logger.info("Initializing an analyzer from its configuration... ")
