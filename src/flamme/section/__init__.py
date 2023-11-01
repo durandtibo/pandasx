@@ -4,6 +4,7 @@ __all__ = [
     "BaseSection",
     "ColumnTypeSection",
     "DiscreteDistributionSection",
+    "EmptySection",
     "NanValueSection",
     "NullValueSection",
     "SectionDict",
@@ -12,6 +13,7 @@ __all__ = [
 from flamme.section.base import BaseSection
 from flamme.section.discrete import DiscreteDistributionSection
 from flamme.section.dtype import ColumnTypeSection
+from flamme.section.empty import EmptySection
 from flamme.section.mapping import SectionDict
 from flamme.section.nan import NanValueSection
 from flamme.section.null import NullValueSection
