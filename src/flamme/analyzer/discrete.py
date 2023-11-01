@@ -4,10 +4,10 @@ __all__ = ["DiscreteDistributionAnalyzer"]
 
 from collections import Counter
 
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import DiscreteDistributionSection
+from flamme.section import DiscreteDistributionSection, EmptySection
 
 
 class DiscreteDistributionAnalyzer(BaseAnalyzer):
@@ -33,13 +33,12 @@ class DiscreteDistributionAnalyzer(BaseAnalyzer):
             f"dropna={self._dropna}, max_rows={self._max_rows})"
         )
 
-    def analyze(self, df: DataFrame) -> DiscreteDistributionSection:
-        series = Series()
-        if self._column in df:
-            series = df[self._column]
+    def analyze(self, df: DataFrame) -> DiscreteDistributionSection | EmptySection:
+        if self._column not in df:
+            return EmptySection()
         return DiscreteDistributionSection(
-            counter=Counter(series.value_counts(dropna=self._dropna).to_dict()),
-            null_values=series.isnull().sum(),
+            counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
+            null_values=df[self._column].isnull().sum(),
             column=self._column,
             max_rows=self._max_rows,
         )
