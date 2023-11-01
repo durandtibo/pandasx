@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["NullValueSection"]
+__all__ = ["NullValueSection", "MonthlyNullValueSection"]
 
 from collections.abc import Sequence
 
@@ -185,3 +185,57 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
             "total_count": f"{total_count:,}",
         }
     )
+
+
+class MonthlyNullValueSection(BaseSection):
+    r"""Implements a section to analyze the monthly distribution of null
+    values.
+
+    Args:
+    ----
+        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the monthly distribution.
+    """
+
+    def __init__(self, df: DataFrame, dt_column: str) -> None:
+        self._df = df
+        self._dt_column = dt_column
+
+    def get_statistics(self) -> dict:
+        return {}
+
+    def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        return Template(self._create_template()).render(
+            {
+                "go_to_top": GO_TO_TOP,
+                "id": tags2id(tags),
+                "depth": valid_h_tag(depth + 1),
+                "title": tags2title(tags),
+                "section": number,
+                "column": self._dt_column,
+            }
+        )
+
+    def render_html_toc(
+        self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
+    ) -> str:
+        return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
+
+    def _create_template(self) -> str:
+        return """
+<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+{{go_to_top}}
+
+<p style="margin-top: 1rem;">
+This section analyzes the monthly distribution of null values.
+The column {{column}} is used to define the month of each row.
+
+<ul>
+  <li> <b>count</b>:  </li>
+  <li> <b>percentage</b>:  </li>
+</ul>
+
+{{table}}
+"""
