@@ -2,7 +2,7 @@ import numpy as np
 from coola import objects_are_allclose
 from pandas import DataFrame
 
-from flamme.analyzer import MappingAnalyzer, NanValueAnalyzer
+from flamme.analyzer import MappingAnalyzer, NullValueAnalyzer
 from flamme.section import SectionDict
 
 #####################################
@@ -17,8 +17,8 @@ def test_mapping_analyzer_str() -> None:
 def test_mapping_analyzer_get_statistics() -> None:
     section = MappingAnalyzer(
         {
-            "section1": NanValueAnalyzer(),
-            "section2": NanValueAnalyzer(),
+            "section1": NullValueAnalyzer(),
+            "section2": NullValueAnalyzer(),
         }
     ).analyze(
         DataFrame(
@@ -35,12 +35,12 @@ def test_mapping_analyzer_get_statistics() -> None:
         {
             "section1": {
                 "columns": ("float", "int", "str"),
-                "nan_count": (1, 1, 2),
+                "null_count": (1, 1, 2),
                 "total_count": (4, 4, 4),
             },
             "section2": {
                 "columns": ("float", "int", "str"),
-                "nan_count": (1, 1, 2),
+                "null_count": (1, 1, 2),
                 "total_count": (4, 4, 4),
             },
         },
@@ -50,8 +50,8 @@ def test_mapping_analyzer_get_statistics() -> None:
 def test_mapping_analyzer_get_statistics_empty() -> None:
     section = MappingAnalyzer(
         {
-            "section1": NanValueAnalyzer(),
-            "section2": NanValueAnalyzer(),
+            "section1": NullValueAnalyzer(),
+            "section2": NullValueAnalyzer(),
         }
     ).analyze(
         DataFrame(
@@ -68,12 +68,12 @@ def test_mapping_analyzer_get_statistics_empty() -> None:
         {
             "section1": {
                 "columns": ("float", "int", "str"),
-                "nan_count": (0, 0, 0),
+                "null_count": (0, 0, 0),
                 "total_count": (0, 0, 0),
             },
             "section2": {
                 "columns": ("float", "int", "str"),
-                "nan_count": (0, 0, 0),
+                "null_count": (0, 0, 0),
                 "total_count": (0, 0, 0),
             },
         },

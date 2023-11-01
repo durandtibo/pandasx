@@ -5,7 +5,7 @@ from coola import objects_are_equal
 from pandas import DataFrame
 
 from flamme.analyzer import DiscreteDistributionAnalyzer
-from flamme.section import DiscreteDistributionSection
+from flamme.section import DiscreteDistributionSection, EmptySection
 
 ##################################################
 #     Tests for DiscreteDistributionAnalyzer     #
@@ -63,7 +63,5 @@ def test_discrete_distribution_analyzer_get_statistics_empty_no_row() -> None:
 
 def test_discrete_distribution_analyzer_get_statistics_empty_no_column() -> None:
     section = DiscreteDistributionAnalyzer(column="col").analyze(DataFrame({}))
-    assert isinstance(section, DiscreteDistributionSection)
-    assert objects_are_equal(
-        section.get_statistics(), {"most_common": [], "nunique": 0, "total": 0}
-    )
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})

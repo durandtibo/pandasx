@@ -6,7 +6,7 @@ from collections import Counter
 from objectory import OBJECT_TARGET
 from pytest import LogCaptureFixture
 
-from flamme.analyzer import NanValueAnalyzer, is_analyzer_config, setup_analyzer
+from flamme.analyzer import NullValueAnalyzer, is_analyzer_config, setup_analyzer
 
 ########################################
 #     Tests for is_analyzer_config     #
@@ -14,7 +14,7 @@ from flamme.analyzer import NanValueAnalyzer, is_analyzer_config, setup_analyzer
 
 
 def test_is_analyzer_config_true() -> None:
-    assert is_analyzer_config({OBJECT_TARGET: "flamme.analyzer.NanValueAnalyzer"})
+    assert is_analyzer_config({OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"})
 
 
 def test_is_analyzer_config_false() -> None:
@@ -27,14 +27,14 @@ def test_is_analyzer_config_false() -> None:
 
 
 def test_setup_analyzer_object() -> None:
-    generator = NanValueAnalyzer()
+    generator = NullValueAnalyzer()
     assert setup_analyzer(generator) is generator
 
 
 def test_setup_analyzer_dict() -> None:
     assert isinstance(
-        setup_analyzer({OBJECT_TARGET: "flamme.analyzer.NanValueAnalyzer"}),
-        NanValueAnalyzer,
+        setup_analyzer({OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"}),
+        NullValueAnalyzer,
     )
 
 
