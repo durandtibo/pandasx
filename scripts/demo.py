@@ -10,7 +10,6 @@ from flamme.analyzer import (
     ColumnTypeAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
-    NanValueAnalyzer,
     NullValueAnalyzer,
 )
 from flamme.section import BaseSection
@@ -63,7 +62,6 @@ def main_report() -> None:
     analyzer = MappingAnalyzer(
         {
             "null values": NullValueAnalyzer(),
-            "nan values": NanValueAnalyzer(),
             "column type": ColumnTypeAnalyzer(),
             "columns": MappingAnalyzer(
                 {
