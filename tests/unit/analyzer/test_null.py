@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 from coola import objects_are_equal
 from pandas import DataFrame
 
-from flamme.analyzer import NullValueAnalyzer
-from flamme.section import NullValueSection
+from flamme.analyzer import MonthlyNullValueAnalyzer, NullValueAnalyzer
+from flamme.section import EmptySection, MonthlyNullValueSection, NullValueSection
 
 #######################################
 #     Tests for NullValueAnalyzer     #
@@ -59,3 +60,45 @@ def test_null_value_analyzer_get_statistics_empty_no_column() -> None:
         section.get_statistics(),
         {"columns": (), "null_count": (), "total_count": ()},
     )
+
+
+##############################################
+#     Tests for MonthlyNullValueAnalyzer     #
+##############################################
+
+
+def test_monthly_null_value_analyzer_str() -> None:
+    assert str(MonthlyNullValueAnalyzer(dt_column="datetime")).startswith(
+        "MonthlyNullValueAnalyzer("
+    )
+
+
+def test_monthly_null_value_analyzer_get_statistics() -> None:
+    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(
+        DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        )
+    )
+    assert isinstance(section, MonthlyNullValueSection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_monthly_null_value_analyzer_get_statistics_empty() -> None:
+    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(
+        DataFrame({"float": [], "int": [], "str": [], "datetime": []})
+    )
+    assert isinstance(section, MonthlyNullValueSection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_monthly_null_value_analyzer_get_statistics_missing_empty_column() -> None:
+    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(DataFrame({}))
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})
