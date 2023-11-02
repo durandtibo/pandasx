@@ -10,6 +10,7 @@ from flamme.analyzer import (
     ColumnTypeAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
+    MonthlyNullValueAnalyzer,
     NullValueAnalyzer,
 )
 from flamme.section import BaseSection
@@ -62,6 +63,7 @@ def main_report() -> None:
     analyzer = MappingAnalyzer(
         {
             "null values": NullValueAnalyzer(),
+            "monthly null values": MonthlyNullValueAnalyzer(dt_column="datetime"),
             "column type": ColumnTypeAnalyzer(),
             "columns": MappingAnalyzer(
                 {
