@@ -2,12 +2,15 @@ from __future__ import annotations
 
 __all__ = ["DiscreteDistributionAnalyzer"]
 
+import logging
 from collections import Counter
 
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DiscreteDistributionSection, EmptySection
+
+logger = logging.getLogger(__name__)
 
 
 class DiscreteDistributionAnalyzer(BaseAnalyzer):
@@ -35,6 +38,10 @@ class DiscreteDistributionAnalyzer(BaseAnalyzer):
 
     def analyze(self, df: DataFrame) -> DiscreteDistributionSection | EmptySection:
         if self._column not in df:
+            logger.info(
+                f"Skipping discrete distribution analysis of column {self._column} "
+                f"because the datetime column is not in the DataFrame: {sorted(df.columns)}"
+            )
             return EmptySection()
         return DiscreteDistributionSection(
             counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
