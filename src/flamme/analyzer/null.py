@@ -59,9 +59,9 @@ class MonthlyNullValueAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import MonthlyNullValueAnalyzer
-        >>> analyzer = MonthlyNullValueAnalyzer()
+        >>> analyzer = MonthlyNullValueAnalyzer("datetime")
         >>> analyzer
-        MonthlyNullValueAnalyzer()
+        MonthlyNullValueAnalyzer(dt_column=datetime)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
