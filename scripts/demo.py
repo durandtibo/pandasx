@@ -24,6 +24,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "float": np.random.randn(nrows) * 3 + 1,
             "int": np.random.randint(0, 10, (nrows,)),
             "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
+            # "discrete": np.random.randint(0, 1000, (nrows,)),
         }
     )
     rng = np.random.default_rng(42)
@@ -34,6 +35,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
     df = df.mask(mask)
+    df["discrete"] = np.random.randint(0, 1000, (nrows,))
     df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     return df
 
@@ -58,7 +60,7 @@ def create_report(toc: str, body: str) -> str:
 
 
 def main_report() -> None:
-    df = create_dataframe()
+    df = create_dataframe(nrows=10000)
 
     analyzer = MappingAnalyzer(
         {
@@ -69,6 +71,7 @@ def main_report() -> None:
                 {
                     "str": DiscreteDistributionAnalyzer(column="str"),
                     "int": DiscreteDistributionAnalyzer(column="int"),
+                    "discrete": DiscreteDistributionAnalyzer(column="discrete"),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
                 }
             ),

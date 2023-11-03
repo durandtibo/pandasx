@@ -2,13 +2,16 @@ from __future__ import annotations
 
 __all__ = ["NullValueSection", "MonthlyNullValueSection"]
 
+import math
 from collections.abc import Sequence
 
 import numpy as np
 import plotly
 import plotly.express as px
+import plotly.graph_objects as go
 from jinja2 import Template
 from pandas import DataFrame
+from plotly.subplots import make_subplots
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -171,14 +174,14 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
     pct = null_count / total_count
     return Template(
         """<tr>
-    <th style="background-color: rgba(64, 161, 255, {{null_pct}})">{{column}}</th>
+    <th style="background-color: rgba(0, 191, 255, {{null_pct}})">{{column}}</th>
     <td {{num_style}}>{{null_pct}}</td>
     <td {{num_style}}>{{null_count}}</td>
     <td {{num_style}}>{{total_count}}</td>
 </tr>"""
     ).render(
         {
-            "num_style": f'style="text-align: right; background-color: rgba(64, 161, 255, {pct})"',
+            "num_style": f'style="text-align: right; background-color: rgba(0, 191, 255, {pct})"',
             "column": column,
             "null_count": f"{null_count:,}",
             "null_pct": f"{pct:.4f}",
@@ -214,6 +217,7 @@ class MonthlyNullValueSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "column": self._dt_column,
+                "figure": create_monthly_null_figure(df=self._df, dt_column=self._dt_column),
             }
         )
 
@@ -232,10 +236,91 @@ class MonthlyNullValueSection(BaseSection):
 This section analyzes the monthly distribution of null values.
 The column {{column}} is used to define the month of each row.
 
-<ul>
-  <li> <b>count</b>:  </li>
-  <li> <b>percentage</b>:  </li>
-</ul>
-
-{{table}}
+{{figure}}
 """
+
+
+def create_monthly_null_figure(
+    df: DataFrame,
+    dt_column: str,
+    ncols: int = 2,
+    figsize: tuple[int, int] = (700, 300),
+) -> str:
+    r"""Creates a HTML representation of a figure with the monthly null
+    value distribution.
+
+    Args:
+    ----
+        df (``DataFrame``): Specifies the DataFrame to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the monthly distribution.
+        ncols (int, optional): Specifies the number of columns.
+            Default: ``2``
+        figsize (``tuple``, optional): Specifies the individual figure
+            size in pixels. The first dimension is the width and the
+            second is the height.  Default: ``(700, 300)``
+
+    Returns:
+    -------
+        str: The HTML representation of the figure.
+    """
+    if df.shape[0] == 0:
+        return ""
+    df = df.copy()
+    columns = sorted([col for col in df.columns if col != dt_column])
+    month_col = "__month__"
+    df[month_col] = df[dt_column].dt.to_period("M")
+
+    nrows = math.ceil(len(columns) / ncols)
+    fig = make_subplots(
+        rows=nrows,
+        cols=ncols,
+        subplot_titles=columns,
+        specs=[[{"secondary_y": True} for _ in range(ncols)] for _ in range(nrows)],
+        horizontal_spacing=0.13,
+        vertical_spacing=0.12,
+    )
+
+    for i, column in enumerate(columns):
+        null_col = f"__{column}_isnull__"
+        df2 = df[[column, month_col]].copy()
+        df2.loc[:, null_col] = df2.loc[:, column].isnull()
+
+        df_sum = df2.groupby(month_col)[null_col].sum().sort_index()
+        df_count = df2.groupby(month_col)[null_col].count().sort_index()
+        labels = [f"{dt.year}-{dt.month:02}" for dt in df_sum.index]
+
+        x, y = i // ncols, i % ncols
+        fig.add_trace(
+            go.Bar(
+                x=labels,
+                y=df_sum.to_numpy(),
+                name=column,
+                marker=dict(color="rgba(0, 191, 255, 0.9)"),
+            ),
+            row=x + 1,
+            col=y + 1,
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=labels,
+                y=df_sum.to_numpy() / df_count.to_numpy(),
+                name=column,
+                marker=dict(color="rgba(0, 49, 113, 0.9)"),
+            ),
+            row=x + 1,
+            col=y + 1,
+            secondary_y=True,
+        )
+
+    fig.update_yaxes(
+        title_text='<span style="color:RGB(0, 191, 255)">count</span>',
+        secondary_y=False,
+    )
+    fig.update_yaxes(
+        title_text='<span style="color:RGB(0, 49, 113)">percentage</span>',
+        secondary_y=True,
+    )
+    fig.update_layout(height=figsize[1] * nrows + 120, width=figsize[0] * ncols, showlegend=False)
+    return plotly.io.to_html(fig, full_html=False)
