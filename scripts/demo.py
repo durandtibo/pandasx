@@ -7,6 +7,7 @@ import pandas as pd
 from coola.utils import str_indent
 
 from flamme.analyzer import (
+    BaseAnalyzer,
     ColumnTypeAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
@@ -59,10 +60,8 @@ def create_report(toc: str, body: str) -> str:
 """
 
 
-def main_report() -> None:
-    df = create_dataframe(nrows=10000)
-
-    analyzer = MappingAnalyzer(
+def create_analyzer() -> BaseAnalyzer:
+    return MappingAnalyzer(
         {
             "null values": MappingAnalyzer(
                 {
@@ -82,6 +81,11 @@ def main_report() -> None:
             ),
         }
     )
+
+
+def main_report() -> None:
+    df = create_dataframe(nrows=10000)
+    analyzer = create_analyzer()
     print(analyzer)
     section: BaseSection = analyzer.analyze(df)
     report = create_report(

@@ -5,12 +5,14 @@ __all__ = [
     "ColumnTypeSection",
     "DiscreteDistributionSection",
     "EmptySection",
-    "TemporalNullValueSection",
     "NullValueSection",
     "SectionDict",
+    "TemporalContinuousDistributionSection",
+    "TemporalNullValueSection",
 ]
 
 from flamme.section.base import BaseSection
+from flamme.section.continuous import TemporalContinuousDistributionSection
 from flamme.section.discrete import DiscreteDistributionSection
 from flamme.section.dtype import ColumnTypeSection
 from flamme.section.empty import EmptySection
