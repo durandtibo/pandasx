@@ -61,7 +61,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import TemporalNullValueAnalyzer
         >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
         >>> analyzer
-        TemporalNullValueAnalyzer(dt_column=datetime)
+        TemporalNullValueAnalyzer(dt_column=datetime, period=M)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
