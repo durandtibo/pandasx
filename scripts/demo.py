@@ -10,8 +10,8 @@ from flamme.analyzer import (
     ColumnTypeAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
-    MonthlyNullValueAnalyzer,
     NullValueAnalyzer,
+    TemporalNullValueAnalyzer,
 )
 from flamme.section import BaseSection
 from flamme.utils.io import save_text
@@ -64,8 +64,13 @@ def main_report() -> None:
 
     analyzer = MappingAnalyzer(
         {
-            "null values": NullValueAnalyzer(),
-            "monthly null values": MonthlyNullValueAnalyzer(dt_column="datetime"),
+            "null values": MappingAnalyzer(
+                {
+                    "overall": NullValueAnalyzer(),
+                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+                    "daily": TemporalNullValueAnalyzer(dt_column="datetime", period="D"),
+                }
+            ),
             "column type": ColumnTypeAnalyzer(),
             "columns": MappingAnalyzer(
                 {

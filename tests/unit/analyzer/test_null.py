@@ -5,8 +5,8 @@ import pandas as pd
 from coola import objects_are_equal
 from pandas import DataFrame
 
-from flamme.analyzer import MonthlyNullValueAnalyzer, NullValueAnalyzer
-from flamme.section import EmptySection, MonthlyNullValueSection, NullValueSection
+from flamme.analyzer import NullValueAnalyzer, TemporalNullValueAnalyzer
+from flamme.section import EmptySection, NullValueSection, TemporalNullValueSection
 
 #######################################
 #     Tests for NullValueAnalyzer     #
@@ -62,19 +62,19 @@ def test_null_value_analyzer_get_statistics_empty_no_column() -> None:
     )
 
 
-##############################################
-#     Tests for MonthlyNullValueAnalyzer     #
-##############################################
+###############################################
+#     Tests for TemporalNullValueAnalyzer     #
+###############################################
 
 
 def test_monthly_null_value_analyzer_str() -> None:
-    assert str(MonthlyNullValueAnalyzer(dt_column="datetime")).startswith(
-        "MonthlyNullValueAnalyzer("
+    assert str(TemporalNullValueAnalyzer(dt_column="datetime", period="M")).startswith(
+        "TemporalNullValueAnalyzer("
     )
 
 
 def test_monthly_null_value_analyzer_get_statistics() -> None:
-    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(
+    section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
         DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -86,19 +86,19 @@ def test_monthly_null_value_analyzer_get_statistics() -> None:
             }
         )
     )
-    assert isinstance(section, MonthlyNullValueSection)
+    assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_monthly_null_value_analyzer_get_statistics_empty() -> None:
-    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(
+    section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
         DataFrame({"float": [], "int": [], "str": [], "datetime": []})
     )
-    assert isinstance(section, MonthlyNullValueSection)
+    assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_monthly_null_value_analyzer_get_statistics_missing_empty_column() -> None:
-    section = MonthlyNullValueAnalyzer(dt_column="datetime").analyze(DataFrame({}))
+    section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(DataFrame({}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})

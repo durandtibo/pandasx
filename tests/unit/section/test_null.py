@@ -7,7 +7,7 @@ from jinja2 import Template
 from pandas import DataFrame
 from pytest import raises
 
-from flamme.section import MonthlyNullValueSection, NullValueSection
+from flamme.section import NullValueSection, TemporalNullValueSection
 
 ######################################
 #     Tests for NullValueSection     #
@@ -121,13 +121,13 @@ def test_null_value_section_render_html_toc_args() -> None:
     )
 
 
-#############################################
-#     Tests for MonthlyNullValueSection     #
-#############################################
+##############################################
+#     Tests for TemporalNullValueSection     #
+##############################################
 
 
-def test_monthly_null_value_section_get_statistics() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_get_statistics() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -139,20 +139,22 @@ def test_monthly_null_value_section_get_statistics() -> None:
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert objects_are_allclose(output.get_statistics(), {})
 
 
-def test_monthly_null_value_section_get_statistics_empty_row() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_get_statistics_empty_row() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
+        period="M",
     )
     assert objects_are_allclose(output.get_statistics(), {})
 
 
-def test_monthly_null_value_section_get_statistics_only_datetime_column() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "datetime": pd.to_datetime(
@@ -161,12 +163,13 @@ def test_monthly_null_value_section_get_statistics_only_datetime_column() -> Non
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert objects_are_allclose(output.get_statistics(), {})
 
 
-def test_monthly_null_value_section_render_html_body() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_render_html_body() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -178,12 +181,13 @@ def test_monthly_null_value_section_render_html_body() -> None:
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert isinstance(Template(output.render_html_body()).render(), str)
 
 
-def test_monthly_null_value_section_render_html_body_args() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_render_html_body_args() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -195,22 +199,24 @@ def test_monthly_null_value_section_render_html_body_args() -> None:
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert isinstance(
         Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
-def test_monthly_null_value_section_render_html_body_empty() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_render_html_body_empty() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
+        period="M",
     )
     assert isinstance(Template(output.render_html_body()).render(), str)
 
 
-def test_monthly_null_value_section_render_html_toc() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_render_html_toc() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -222,12 +228,13 @@ def test_monthly_null_value_section_render_html_toc() -> None:
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert isinstance(Template(output.render_html_toc()).render(), str)
 
 
-def test_monthly_null_value_section_render_html_toc_args() -> None:
-    output = MonthlyNullValueSection(
+def test_temporal_null_value_section_render_html_toc_args() -> None:
+    output = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -239,6 +246,7 @@ def test_monthly_null_value_section_render_html_toc_args() -> None:
             }
         ),
         dt_column="datetime",
+        period="M",
     )
     assert isinstance(
         Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
