@@ -291,12 +291,22 @@ def create_monthly_null_figure(
         labels = [f"{dt.year}-{dt.month:02}" for dt in df_sum.index]
 
         x, y = i // ncols, i % ncols
+
+        fig.add_trace(
+            go.Bar(
+                x=labels,
+                y=df_count.to_numpy(),
+                marker=dict(color="rgba(0, 191, 255, 0.9)"),
+            ),
+            row=x + 1,
+            col=y + 1,
+            secondary_y=False,
+        )
         fig.add_trace(
             go.Bar(
                 x=labels,
                 y=df_sum.to_numpy(),
-                name=column,
-                marker=dict(color="rgba(0, 191, 255, 0.9)"),
+                marker=dict(color="rgba(255, 191, 0, 0.9)"),
             ),
             row=x + 1,
             col=y + 1,
@@ -306,8 +316,7 @@ def create_monthly_null_figure(
             go.Scatter(
                 x=labels,
                 y=df_sum.to_numpy() / df_count.to_numpy(),
-                name=column,
-                marker=dict(color="rgba(0, 49, 113, 0.9)"),
+                marker=dict(color="rgba(0, 71, 171, 0.9)"),
             ),
             row=x + 1,
             col=y + 1,
@@ -315,12 +324,20 @@ def create_monthly_null_figure(
         )
 
     fig.update_yaxes(
-        title_text='<span style="color:RGB(0, 191, 255)">count</span>',
+        title_text=(
+            '<span style="color:RGB(255, 191, 0)">null</span>/'
+            '<span style="color:RGB(0, 191, 255)">total</span>'
+        ),
         secondary_y=False,
     )
     fig.update_yaxes(
-        title_text='<span style="color:RGB(0, 49, 113)">percentage</span>',
+        title_text='<span style="color:RGB(0, 71, 171)">percentage</span>',
         secondary_y=True,
     )
-    fig.update_layout(height=figsize[1] * nrows + 120, width=figsize[0] * ncols, showlegend=False)
+    fig.update_layout(
+        height=figsize[1] * nrows + 120,
+        width=figsize[0] * ncols,
+        showlegend=False,
+        barmode="overlay",
+    )
     return plotly.io.to_html(fig, full_html=False)
