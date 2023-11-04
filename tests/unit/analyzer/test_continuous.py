@@ -6,7 +6,7 @@ from coola import objects_are_equal
 from pandas import DataFrame
 
 from flamme.analyzer import TemporalContinuousDistributionAnalyzer
-from flamme.section import EmptySection, TemporalNullValueSection
+from flamme.section import EmptySection, TemporalContinuousDistributionSection
 
 ############################################################
 #     Tests for TemporalContinuousDistributionAnalyzer     #
@@ -34,7 +34,7 @@ def test_temporal_continuous_distribution_analyzer_get_statistics() -> None:
             }
         )
     )
-    assert isinstance(section, TemporalNullValueSection)
+    assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
@@ -42,7 +42,7 @@ def test_temporal_continuous_distribution_analyzer_get_statistics_empty() -> Non
     section = TemporalContinuousDistributionAnalyzer(
         column="float", dt_column="datetime", period="M"
     ).analyze(DataFrame({"float": [], "int": [], "str": [], "datetime": []}))
-    assert isinstance(section, TemporalNullValueSection)
+    assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 

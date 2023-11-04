@@ -7,8 +7,7 @@ import logging
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import EmptySection
-from flamme.section.null import TemporalNullValueSection
+from flamme.section import EmptySection, TemporalContinuousDistributionSection
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        TemporalNullValueAnalyzer(dt_column=datetime, period=M)
+        TemporalContinuousDistributionAnalyzer(column=float, dt_column=datetime, period=M)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -53,7 +52,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period})"
         )
 
-    def analyze(self, df: DataFrame) -> TemporalNullValueSection | EmptySection:
+    def analyze(self, df: DataFrame) -> TemporalContinuousDistributionSection | EmptySection:
         if self._column not in df:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
@@ -66,4 +65,6 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return TemporalNullValueSection(df=df, dt_column=self._dt_column, period=self._period)
+        return TemporalContinuousDistributionSection(
+            column=self._column, df=df, dt_column=self._dt_column, period=self._period
+        )
