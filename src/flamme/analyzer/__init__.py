@@ -6,13 +6,15 @@ __all__ = [
     "DiscreteDistributionAnalyzer",
     "FilteredAnalyzer",
     "MappingAnalyzer",
-    "TemporalNullValueAnalyzer",
     "NullValueAnalyzer",
+    "TemporalContinuousDistributionAnalyzer",
+    "TemporalNullValueAnalyzer",
     "is_analyzer_config",
     "setup_analyzer",
 ]
 
 from flamme.analyzer.base import BaseAnalyzer, is_analyzer_config, setup_analyzer
+from flamme.analyzer.continuous import TemporalContinuousDistributionAnalyzer
 from flamme.analyzer.discrete import DiscreteDistributionAnalyzer
 from flamme.analyzer.dtype import ColumnTypeAnalyzer
 from flamme.analyzer.filter import FilteredAnalyzer
