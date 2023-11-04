@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["MonthlyNullValueAnalyzer", "NullValueAnalyzer"]
+__all__ = ["TemporalNullValueAnalyzer", "NullValueAnalyzer"]
 
 import logging
 
@@ -9,7 +9,7 @@ from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection
-from flamme.section.null import MonthlyNullValueSection, NullValueSection
+from flamme.section.null import NullValueSection, TemporalNullValueSection
 
 logger = logging.getLogger(__name__)
 
@@ -48,8 +48,8 @@ class NullValueAnalyzer(BaseAnalyzer):
         )
 
 
-class MonthlyNullValueAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the monthly distribution of null
+class TemporalNullValueAnalyzer(BaseAnalyzer):
+    r"""Implements an analyzer to show the temporal distribution of null
     values.
 
     Example usage:
@@ -58,10 +58,10 @@ class MonthlyNullValueAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import MonthlyNullValueAnalyzer
-        >>> analyzer = MonthlyNullValueAnalyzer("datetime")
+        >>> from flamme.analyzer import TemporalNullValueAnalyzer
+        >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
         >>> analyzer
-        MonthlyNullValueAnalyzer(dt_column=datetime)
+        TemporalNullValueAnalyzer(dt_column=datetime)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -75,17 +75,18 @@ class MonthlyNullValueAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, dt_column: str) -> None:
+    def __init__(self, dt_column: str, period: str) -> None:
         self._dt_column = dt_column
+        self._period = period
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(dt_column={self._dt_column})"
+        return f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period})"
 
-    def analyze(self, df: DataFrame) -> MonthlyNullValueSection | EmptySection:
+    def analyze(self, df: DataFrame) -> TemporalNullValueSection | EmptySection:
         if self._dt_column not in df:
             logger.info(
                 "Skipping monthly null value analysis because the datetime column "
                 f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return MonthlyNullValueSection(df=df, dt_column=self._dt_column)
+        return TemporalNullValueSection(df=df, dt_column=self._dt_column, period=self._period)

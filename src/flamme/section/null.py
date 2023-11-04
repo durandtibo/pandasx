@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["NullValueSection", "MonthlyNullValueSection"]
+__all__ = ["NullValueSection", "TemporalNullValueSection"]
 
 import math
 from collections.abc import Sequence
@@ -190,20 +190,23 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
     )
 
 
-class MonthlyNullValueSection(BaseSection):
-    r"""Implements a section to analyze the monthly distribution of null
+class TemporalNullValueSection(BaseSection):
+    r"""Implements a section to analyze the temporal distribution of null
     values.
 
     Args:
     ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
-            the monthly distribution.
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
     """
 
-    def __init__(self, df: DataFrame, dt_column: str) -> None:
+    def __init__(self, df: DataFrame, dt_column: str, period: str) -> None:
         self._df = df
         self._dt_column = dt_column
+        self._period = period
 
     def get_statistics(self) -> dict:
         return {}
@@ -217,7 +220,9 @@ class MonthlyNullValueSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "column": self._dt_column,
-                "figure": create_monthly_null_figure(df=self._df, dt_column=self._dt_column),
+                "figure": create_temporal_null_figure(
+                    df=self._df, dt_column=self._dt_column, period=self._period
+                ),
             }
         )
 
@@ -240,20 +245,23 @@ The column {{column}} is used to define the month of each row.
 """
 
 
-def create_monthly_null_figure(
+def create_temporal_null_figure(
     df: DataFrame,
     dt_column: str,
+    period: str,
     ncols: int = 2,
     figsize: tuple[int, int] = (700, 300),
 ) -> str:
-    r"""Creates a HTML representation of a figure with the monthly null
+    r"""Creates a HTML representation of a figure with the temporal null
     value distribution.
 
     Args:
     ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
-            the monthly distribution.
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
         figsize (``tuple``, optional): Specifies the individual figure
@@ -268,8 +276,8 @@ def create_monthly_null_figure(
         return ""
     df = df.copy()
     columns = sorted([col for col in df.columns if col != dt_column])
-    month_col = "__month__"
-    df[month_col] = df[dt_column].dt.to_period("M")
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period)
 
     nrows = math.ceil(len(columns) / ncols)
     fig = make_subplots(
@@ -282,15 +290,14 @@ def create_monthly_null_figure(
     )
 
     for i, column in enumerate(columns):
+        x, y = i // ncols, i % ncols
         null_col = f"__{column}_isnull__"
-        df2 = df[[column, month_col]].copy()
+        df2 = df[[column, dt_col]].copy()
         df2.loc[:, null_col] = df2.loc[:, column].isnull()
 
-        df_sum = df2.groupby(month_col)[null_col].sum().sort_index()
-        df_count = df2.groupby(month_col)[null_col].count().sort_index()
-        labels = [f"{dt.year}-{dt.month:02}" for dt in df_sum.index]
-
-        x, y = i // ncols, i % ncols
+        df_sum = df2.groupby(dt_col)[null_col].sum().sort_index()
+        df_count = df2.groupby(dt_col)[null_col].count().sort_index()
+        labels = [str(dt) for dt in df_sum.index]
 
         fig.add_trace(
             go.Bar(
