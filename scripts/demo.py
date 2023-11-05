@@ -78,11 +78,18 @@ def create_analyzer() -> BaseAnalyzer:
                     "int": DiscreteDistributionAnalyzer(column="int"),
                     "discrete": DiscreteDistributionAnalyzer(column="discrete"),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
-                    "float": TemporalContinuousDistributionAnalyzer(
-                        column="float", dt_column="datetime", period="M"
-                    ),
-                    "float D": TemporalContinuousDistributionAnalyzer(
-                        column="float", dt_column="datetime", period="D"
+                    "float": MappingAnalyzer(
+                        {
+                            "monthly": TemporalContinuousDistributionAnalyzer(
+                                column="float", dt_column="datetime", period="M"
+                            ),
+                            "weekly": TemporalContinuousDistributionAnalyzer(
+                                column="float", dt_column="datetime", period="W"
+                            ),
+                            "daily": TemporalContinuousDistributionAnalyzer(
+                                column="float", dt_column="datetime", period="D"
+                            ),
+                        }
                     ),
                 }
             ),
