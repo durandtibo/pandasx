@@ -4,6 +4,8 @@ __all__ = ["TemporalContinuousDistributionSection"]
 
 from collections.abc import Sequence
 
+import plotly
+import plotly.express as px
 from jinja2 import Template
 from pandas import DataFrame
 
@@ -51,6 +53,12 @@ class TemporalContinuousDistributionSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "period": self._period,
+                "figure": create_temporal_figure(
+                    df=self._df,
+                    column=self._column,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                ),
             }
         )
 
@@ -68,4 +76,39 @@ class TemporalContinuousDistributionSection(BaseSection):
 <p style="margin-top: 1rem;">
 This section analyzes the temporal distribution of column {{column}} by using the column {{dt_column}}.
 
+{{figure}}
 """
+
+
+def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+    r"""Creates a HTML representation of a figure with the temporal null
+    value distribution.
+
+    Args:
+    ----
+        df (``DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+
+    Returns:
+    -------
+        str: The HTML representation of the figure.
+    """
+    if df.shape[0] == 0:
+        return ""
+    df = df[[column, dt_column]].copy()
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period).astype(str)
+
+    fig = px.box(
+        df,
+        x=dt_col,
+        y=column,
+        title=f"Distribution of values for column {column}",
+        labels={column: "value", dt_col: "time"},
+        points="outliers",
+    )
+    return plotly.io.to_html(fig, full_html=False)
