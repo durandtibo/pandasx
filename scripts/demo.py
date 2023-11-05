@@ -12,6 +12,7 @@ from flamme.analyzer import (
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
     NullValueAnalyzer,
+    TemporalContinuousDistributionAnalyzer,
     TemporalNullValueAnalyzer,
 )
 from flamme.section import BaseSection
@@ -77,6 +78,12 @@ def create_analyzer() -> BaseAnalyzer:
                     "int": DiscreteDistributionAnalyzer(column="int"),
                     "discrete": DiscreteDistributionAnalyzer(column="discrete"),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
+                    "float": TemporalContinuousDistributionAnalyzer(
+                        column="float", dt_column="datetime", period="M"
+                    ),
+                    "float D": TemporalContinuousDistributionAnalyzer(
+                        column="float", dt_column="datetime", period="D"
+                    ),
                 }
             ),
         }
