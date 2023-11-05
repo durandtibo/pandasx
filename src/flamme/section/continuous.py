@@ -4,6 +4,7 @@ __all__ = ["TemporalContinuousDistributionSection"]
 
 from collections.abc import Sequence
 
+import pandas as pd
 import plotly
 import plotly.express as px
 from jinja2 import Template
@@ -59,6 +60,12 @@ class TemporalContinuousDistributionSection(BaseSection):
                     dt_column=self._dt_column,
                     period=self._period,
                 ),
+                "table": create_temporal_table(
+                    df=self._df,
+                    column=self._column,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                ),
             }
         )
 
@@ -77,12 +84,14 @@ class TemporalContinuousDistributionSection(BaseSection):
 This section analyzes the temporal distribution of column {{column}} by using the column {{dt_column}}.
 
 {{figure}}
+
+{{table}}
 """
 
 
 def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Creates a HTML representation of a figure with the temporal null
-    value distribution.
+    r"""Creates a HTML representation of a figure with the temporal value
+    distribution.
 
     Args:
     ----
@@ -112,3 +121,131 @@ def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: s
         points="outliers",
     )
     return plotly.io.to_html(fig, full_html=False)
+
+
+def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+    r"""Creates a HTML representation of a table with some statistics
+    about the temporal value distribution.
+
+    Args:
+    ----
+        df (``DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+
+    Returns:
+    -------
+        str: The HTML representation of the table.
+    """
+    if df.shape[0] == 0:
+        return ""
+    df = df[[column, dt_column]].copy()
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period)
+    df_stats = (
+        df.groupby(dt_col)[column]
+        .agg(
+            [
+                "count",
+                "mean",
+                "median",
+                "min",
+                "max",
+                "std",
+                ("q01", lambda x: x.quantile(0.01)),
+                ("q10", lambda x: x.quantile(0.1)),
+                ("q25", lambda x: x.quantile(0.25)),
+                ("q75", lambda x: x.quantile(0.75)),
+                ("q90", lambda x: x.quantile(0.9)),
+                ("q99", lambda x: x.quantile(0.99)),
+            ]
+        )
+        .sort_index()
+    )
+
+    rows = []
+    for row in df_stats.itertuples():
+        rows.append(create_temporal_table_row(row))
+    return Template(
+        """
+<details>
+    <summary>Statistics per period</summary>
+
+    <p>The following table shows some statistics for each period of column {{column}}.
+
+    <table class="table table-hover table-responsive w-auto" >
+        <thead class="thead table-group-divider">
+            <tr>
+                <th>column</th>
+                <th>count</th>
+                <th>min</th>
+                <th>mean</th>
+                <th>max</th>
+                <th>std</th>
+                <th>quantile 1%</th>
+                <th>quantile 10%</th>
+                <th>quantile 25%</th>
+                <th>median</th>
+                <th>quantile 75%</th>
+                <th>quantile 90%</th>
+                <th>quantile 99%</th>
+            </tr>
+        </thead>
+        <tbody class="tbody table-group-divider">
+            {{rows}}
+            <tr class="table-group-divider"></tr>
+        </tbody>
+    </table>
+</details>
+"""
+    ).render({"rows": "\n".join(rows), "column": column, "period": period})
+
+
+def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
+    r"""Creates the HTML code of a new table row.
+
+    Args:
+    ----
+        row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
+
+    Returns:
+    -------
+        str: The HTML code of a row.
+    """
+    return Template(
+        """<tr>
+    <th>{{datetime}}</th>
+    <td {{num_style}}>{{count}}</td>
+    <td {{num_style}}>{{min}}</td>
+    <td {{num_style}}>{{mean}}</td>
+    <td {{num_style}}>{{max}}</td>
+    <td {{num_style}}>{{std}}</td>
+    <td {{num_style}}>{{q01}}</td>
+    <td {{num_style}}>{{q10}}</td>
+    <td {{num_style}}>{{q25}}</td>
+    <td {{num_style}}>{{median}}</td>
+    <td {{num_style}}>{{q75}}</td>
+    <td {{num_style}}>{{q90}}</td>
+    <td {{num_style}}>{{q99}}</td>
+</tr>"""
+    ).render(
+        {
+            "num_style": 'style="text-align: right;"',
+            "datetime": row.Index,
+            "count": f"{row.count:,}",
+            "mean": f"{row.mean:,.4f}",
+            "median": f"{row.median:,.4f}",
+            "min": f"{row.min:,.4f}",
+            "max": f"{row.max:,.4f}",
+            "std": f"{row.std:,.4f}",
+            "q01": f"{row.q01:,.4f}",
+            "q10": f"{row.q10:,.4f}",
+            "q25": f"{row.q25:,.4f}",
+            "q75": f"{row.q75:,.4f}",
+            "q90": f"{row.q90:,.4f}",
+            "q99": f"{row.q99:,.4f}",
+        }
+    )
