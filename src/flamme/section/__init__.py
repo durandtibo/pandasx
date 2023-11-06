@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 from flamme.section.base import BaseSection
-from flamme.section.continuous import TemporalContinuousDistributionSection
+from flamme.section.continuous_temporal import TemporalContinuousDistributionSection
 from flamme.section.discrete import DiscreteDistributionSection
 from flamme.section.dtype import ColumnTypeSection
 from flamme.section.empty import EmptySection
