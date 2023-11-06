@@ -86,6 +86,7 @@ This section analyzes the temporal distribution of column {{column}} by using th
 {{figure}}
 
 {{table}}
+<p style="margin-top: 1rem;">
 """
 
 
@@ -181,10 +182,9 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
             <tr>
                 <th>column</th>
                 <th>count</th>
-                <th>min</th>
                 <th>mean</th>
-                <th>max</th>
                 <th>std</th>
+                <th>min</th>
                 <th>quantile 1%</th>
                 <th>quantile 10%</th>
                 <th>quantile 25%</th>
@@ -192,6 +192,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
                 <th>quantile 75%</th>
                 <th>quantile 90%</th>
                 <th>quantile 99%</th>
+                <th>max</th>
             </tr>
         </thead>
         <tbody class="tbody table-group-divider">
@@ -219,10 +220,9 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
         """<tr>
     <th>{{datetime}}</th>
     <td {{num_style}}>{{count}}</td>
-    <td {{num_style}}>{{min}}</td>
     <td {{num_style}}>{{mean}}</td>
-    <td {{num_style}}>{{max}}</td>
     <td {{num_style}}>{{std}}</td>
+    <td {{num_style}}>{{min}}</td>
     <td {{num_style}}>{{q01}}</td>
     <td {{num_style}}>{{q10}}</td>
     <td {{num_style}}>{{q25}}</td>
@@ -230,6 +230,7 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
     <td {{num_style}}>{{q75}}</td>
     <td {{num_style}}>{{q90}}</td>
     <td {{num_style}}>{{q99}}</td>
+    <td {{num_style}}>{{max}}</td>
 </tr>"""
     ).render(
         {
