@@ -97,6 +97,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
 
 {{figure}}
 {{table}}
+<p style="margin-top: 1rem;">
 """
 
     def _create_figure(self) -> str:
@@ -133,30 +134,64 @@ This section analyzes the discrete distribution of values for column {{column}}.
     def _create_table(self) -> str:
         if self._total == 0:
             return ""
-        rows = "\n".join(
-            [
-                create_table_row(column=col, count=count)
-                for col, count in self._counter.most_common(self._max_rows)
-            ]
+
+        most_common = self._counter.most_common(self._max_rows)
+        rows_head = "\n".join(
+            [create_table_row(column=col, count=count) for col, count in most_common]
+        )
+        lest_common = self._counter.most_common()[-self._max_rows :][::-1]
+        rows_tail = "\n".join(
+            [create_table_row(column=col, count=count) for col, count in lest_common]
         )
         return Template(
-            """<p style="margin-top: 1rem;">
-<b>Most common values in column {{column}}</b>
+            """
+<details>
+    <summary>Show head and tail values</summary>
 
-<table class="table table-hover table-responsive w-auto" >
-    <thead class="thead table-group-divider">
-        <tr>
-            <th>column</th>
-            <th>count</th>
-        </tr>
-    </thead>
-    <tbody class="tbody table-group-divider">
-        {{rows}}
-        <tr class="table-group-divider"></tr>
-    </tbody>
-</table>
+    <div class="row">
+      <div class="col">
+        <p style="margin-top: 1rem;">
+        <b>Head: {{max_values}} most common values in column {{column}}</b>
+        <table class="table table-hover table-responsive w-auto" >
+            <thead class="thead table-group-divider">
+                <tr>
+                    <th>column</th>
+                    <th>count</th>
+                </tr>
+            </thead>
+            <tbody class="tbody table-group-divider">
+                {{rows_head}}
+                <tr class="table-group-divider"></tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p style="margin-top: 1rem;">
+        <b>Tail: {{max_values}} least common values in column {{column}}</b>
+        <table class="table table-hover table-responsive w-auto" >
+            <thead class="thead table-group-divider">
+                <tr>
+                    <th>column</th>
+                    <th>count</th>
+                </tr>
+            </thead>
+            <tbody class="tbody table-group-divider">
+                {{rows_tail}}
+                <tr class="table-group-divider"></tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+</details>
 """
-        ).render({"rows": rows, "column": self._column})
+        ).render(
+            {
+                "max_values": len(most_common),
+                "rows_head": rows_head,
+                "rows_tail": rows_tail,
+                "column": self._column,
+            }
+        )
 
 
 def create_table_row(column: str, count: int) -> str:
