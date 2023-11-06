@@ -134,18 +134,14 @@ This section analyzes the discrete distribution of values for column {{column}}.
     def _create_table(self) -> str:
         if self._total == 0:
             return ""
+
+        most_common = self._counter.most_common(self._max_rows)
         rows_head = "\n".join(
-            [
-                create_table_row(column=col, count=count)
-                for col, count in self._counter.most_common(self._max_rows)
-            ]
+            [create_table_row(column=col, count=count) for col, count in most_common]
         )
-        most_common = self._counter.most_common()
+        lest_common = self._counter.most_common()[-self._max_rows :][::-1]
         rows_tail = "\n".join(
-            [
-                create_table_row(column=col, count=count)
-                for col, count in most_common[-self._max_rows :][::-1]
-            ]
+            [create_table_row(column=col, count=count) for col, count in lest_common]
         )
         return Template(
             """
@@ -155,7 +151,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
     <div class="row">
       <div class="col">
         <p style="margin-top: 1rem;">
-        <b>Head: most common values in column {{column}}</b>
+        <b>Head: {{max_values}} most common values in column {{column}}</b>
         <table class="table table-hover table-responsive w-auto" >
             <thead class="thead table-group-divider">
                 <tr>
@@ -171,7 +167,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
       </div>
       <div class="col">
         <p style="margin-top: 1rem;">
-        <b>Tail: least common values in column {{column}}</b>
+        <b>Tail: {{max_values}} least common values in column {{column}}</b>
         <table class="table table-hover table-responsive w-auto" >
             <thead class="thead table-group-divider">
                 <tr>
@@ -188,7 +184,14 @@ This section analyzes the discrete distribution of values for column {{column}}.
     </div>
 </details>
 """
-        ).render({"rows_head": rows_head, "rows_tail": rows_tail, "column": self._column})
+        ).render(
+            {
+                "max_values": len(most_common),
+                "rows_head": rows_head,
+                "rows_tail": rows_tail,
+                "column": self._column,
+            }
+        )
 
 
 def create_table_row(column: str, count: int) -> str:
