@@ -64,14 +64,15 @@ def create_report(toc: str, body: str) -> str:
 def create_analyzer() -> BaseAnalyzer:
     return MappingAnalyzer(
         {
+            "column type": ColumnTypeAnalyzer(),
             "null values": MappingAnalyzer(
                 {
                     "overall": NullValueAnalyzer(),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+                    "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W"),
                     "daily": TemporalNullValueAnalyzer(dt_column="datetime", period="D"),
                 }
             ),
-            "column type": ColumnTypeAnalyzer(),
             "columns": MappingAnalyzer(
                 {
                     "str": DiscreteDistributionAnalyzer(column="str"),

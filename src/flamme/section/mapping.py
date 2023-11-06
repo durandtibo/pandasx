@@ -38,6 +38,7 @@ class SectionDict(BaseSection):
                 f"{tags2title(tags)} </h{valid_h_tag(depth+1)}>"
             )
             report.append(GO_TO_TOP)
+            report.append('<p style="margin-top: 1rem;">')
         for i, (name, section) in enumerate(self._sections.items()):
             report.append(
                 section.render_html_body(
