@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = [
     "BaseSection",
     "ColumnTypeSection",
+    "ContinuousDistributionSection",
     "DiscreteDistributionSection",
     "EmptySection",
     "NullValueSection",
@@ -12,6 +13,7 @@ __all__ = [
 ]
 
 from flamme.section.base import BaseSection
+from flamme.section.continuous import ContinuousDistributionSection
 from flamme.section.continuous_temporal import TemporalContinuousDistributionSection
 from flamme.section.discrete import DiscreteDistributionSection
 from flamme.section.dtype import ColumnTypeSection
