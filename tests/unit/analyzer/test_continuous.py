@@ -5,8 +5,50 @@ import pandas as pd
 from coola import objects_are_equal
 from pandas import DataFrame
 
-from flamme.analyzer import TemporalContinuousDistributionAnalyzer
-from flamme.section import EmptySection, TemporalContinuousDistributionSection
+from flamme.analyzer import (
+    ContinuousDistributionAnalyzer,
+    TemporalContinuousDistributionAnalyzer,
+)
+from flamme.section import (
+    ContinuousDistributionSection,
+    EmptySection,
+    TemporalContinuousDistributionSection,
+)
+
+####################################################
+#     Tests for ContinuousDistributionAnalyzer     #
+####################################################
+
+
+def test_continuous_distribution_analyzer_str() -> None:
+    assert str(ContinuousDistributionAnalyzer(column="float")).startswith(
+        "ContinuousDistributionAnalyzer("
+    )
+
+
+def test_continuous_distribution_analyzer_get_statistics() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame(
+            {
+                "col": np.array([1.2, 4.2, np.nan, 2.2]),
+            }
+        )
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_continuous_distribution_analyzer_get_statistics_empty() -> None:
+    section = ContinuousDistributionAnalyzer(column="float").analyze(DataFrame({"float": []}))
+    assert isinstance(section, ContinuousDistributionSection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_continuous_distribution_analyzer_get_statistics_missing_column() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(DataFrame({"datetime": []}))
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})
+
 
 ############################################################
 #     Tests for TemporalContinuousDistributionAnalyzer     #
