@@ -5,6 +5,7 @@ __all__ = ["ContinuousDistributionSection"]
 from collections.abc import Sequence
 
 from jinja2 import Template
+from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -22,9 +23,12 @@ class ContinuousDistributionSection(BaseSection):
 
     Args:
     ----
+        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column of the DataFrame to analyze.
     """
 
-    def __init__(self, column: str = "N/A") -> None:
+    def __init__(self, df: DataFrame, column: str = "N/A") -> None:
+        self._df = df
         self._column = column
 
     def get_statistics(self) -> dict:
