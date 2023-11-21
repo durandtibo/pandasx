@@ -7,7 +7,7 @@ import pandas as pd
 from coola import objects_are_allclose, objects_are_equal
 from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
-from pytest import mark
+from pytest import fixture, mark
 
 from flamme.analyzer import (
     ContinuousDistributionAnalyzer,
@@ -26,7 +26,7 @@ from tests.unit.section.test_continous import STATS_KEYS
 
 
 def test_continuous_distribution_analyzer_str() -> None:
-    assert str(ContinuousDistributionAnalyzer(column="float")).startswith(
+    assert str(ContinuousDistributionAnalyzer(column="col")).startswith(
         "ContinuousDistributionAnalyzer("
     )
 
@@ -134,42 +134,82 @@ def test_continuous_distribution_analyzer_get_statistics_missing_column() -> Non
 ############################################################
 
 
+@fixture
+def dataframe() -> DataFrame:
+    return DataFrame(
+        {
+            "col": np.array([1.2, 4.2, np.nan, 2.2]),
+            "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
+        }
+    )
+
+
 def test_temporal_continuous_distribution_analyzer_str() -> None:
     assert str(
-        TemporalContinuousDistributionAnalyzer(column="float", dt_column="datetime", period="M")
+        TemporalContinuousDistributionAnalyzer(column="col", dt_column="datetime", period="M")
     ).startswith("TemporalContinuousDistributionAnalyzer(")
 
 
-def test_temporal_continuous_distribution_analyzer_get_statistics() -> None:
+def test_temporal_continuous_distribution_analyzer_column(dataframe: DataFrame) -> None:
     section = TemporalContinuousDistributionAnalyzer(
-        column="float", dt_column="datetime", period="M"
-    ).analyze(
-        DataFrame(
-            {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-                "datetime": pd.to_datetime(
-                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                ),
-            }
-        )
-    )
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, TemporalContinuousDistributionSection)
+    assert section.column == "col"
+
+
+def test_temporal_continuous_distribution_analyzer_dt_column(dataframe: DataFrame) -> None:
+    section = TemporalContinuousDistributionAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, TemporalContinuousDistributionSection)
+    assert section.dt_column == "datetime"
+
+
+def test_temporal_continuous_distribution_analyzer_period(dataframe: DataFrame) -> None:
+    section = TemporalContinuousDistributionAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, TemporalContinuousDistributionSection)
+    assert section.period == "M"
+
+
+def test_temporal_continuous_distribution_analyzer_log_y_default(dataframe: DataFrame) -> None:
+    section = TemporalContinuousDistributionAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, TemporalContinuousDistributionSection)
+    assert not section.log_y
+
+
+@mark.parametrize("log_y", (True, False))
+def test_temporal_continuous_distribution_analyzer_log_y(dataframe: DataFrame, log_y: bool) -> None:
+    section = TemporalContinuousDistributionAnalyzer(
+        column="col", dt_column="datetime", period="M", log_y=log_y
+    ).analyze(dataframe)
+    assert isinstance(section, TemporalContinuousDistributionSection)
+    assert section.log_y == log_y
+
+
+def test_temporal_continuous_distribution_analyzer_get_statistics(dataframe: DataFrame) -> None:
+    section = TemporalContinuousDistributionAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_temporal_continuous_distribution_analyzer_get_statistics_empty() -> None:
     section = TemporalContinuousDistributionAnalyzer(
-        column="float", dt_column="datetime", period="M"
-    ).analyze(DataFrame({"float": [], "int": [], "str": [], "datetime": []}))
+        column="col", dt_column="datetime", period="M"
+    ).analyze(DataFrame({"col": [], "int": [], "str": [], "datetime": []}))
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_temporal_continuous_distribution_analyzer_get_statistics_missing_column() -> None:
     section = TemporalContinuousDistributionAnalyzer(
-        column="float", dt_column="datetime", period="M"
+        column="col", dt_column="datetime", period="M"
     ).analyze(DataFrame({"datetime": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -177,7 +217,7 @@ def test_temporal_continuous_distribution_analyzer_get_statistics_missing_column
 
 def test_temporal_continuous_distribution_analyzer_get_statistics_missing_dt_column() -> None:
     section = TemporalContinuousDistributionAnalyzer(
-        column="float", dt_column="datetime", period="M"
-    ).analyze(DataFrame({"float": []}))
+        column="col", dt_column="datetime", period="M"
+    ).analyze(DataFrame({"col": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
