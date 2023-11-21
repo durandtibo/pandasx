@@ -33,7 +33,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ContinuousDistributionAnalyzer
         >>> analyzer = ContinuousDistributionAnalyzer(column="float")
         >>> analyzer
-        ContinuousDistributionAnalyzer(column=float)
+        ContinuousDistributionAnalyzer(column=float, nbins=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -44,11 +44,12 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str) -> None:
+    def __init__(self, column: str, nbins: int | None = None) -> None:
         self._column = column
+        self._nbins = nbins
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(column={self._column})"
+        return f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins})"
 
     def analyze(self, df: DataFrame) -> ContinuousDistributionSection | EmptySection:
         if self._column not in df:
@@ -57,7 +58,9 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
                 f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return ContinuousDistributionSection(column=self._column, series=df[self._column])
+        return ContinuousDistributionSection(
+            column=self._column, series=df[self._column], nbins=self._nbins
+        )
 
 
 class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
