@@ -29,8 +29,6 @@ class TemporalDiscreteDistributionSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
     """
 
     def __init__(
@@ -39,13 +37,11 @@ class TemporalDiscreteDistributionSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        log_y: bool = False,
     ) -> None:
         self._df = df
         self._column = column
         self._dt_column = dt_column
         self._period = period
-        self._log_y = log_y
 
     @property
     def column(self) -> str:
@@ -54,10 +50,6 @@ class TemporalDiscreteDistributionSection(BaseSection):
     @property
     def dt_column(self) -> str:
         return self._dt_column
-
-    @property
-    def log_y(self) -> bool:
-        return self._log_y
 
     @property
     def period(self) -> str:

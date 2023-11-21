@@ -14,6 +14,7 @@ from flamme.analyzer import (
     MappingAnalyzer,
     NullValueAnalyzer,
     TemporalContinuousDistributionAnalyzer,
+    TemporalDiscreteDistributionAnalyzer,
     TemporalNullValueAnalyzer,
 )
 from flamme.section import BaseSection
@@ -78,7 +79,20 @@ def create_analyzer() -> BaseAnalyzer:
             "columns": MappingAnalyzer(
                 {
                     "str": DiscreteDistributionAnalyzer(column="str"),
-                    "int": DiscreteDistributionAnalyzer(column="int"),
+                    "int": MappingAnalyzer(
+                        {
+                            "overall": DiscreteDistributionAnalyzer(column="int"),
+                            "monthly": TemporalDiscreteDistributionAnalyzer(
+                                column="int", dt_column="datetime", period="M"
+                            ),
+                            "weekly": TemporalDiscreteDistributionAnalyzer(
+                                column="int", dt_column="datetime", period="W"
+                            ),
+                            "daily": TemporalDiscreteDistributionAnalyzer(
+                                column="int", dt_column="datetime", period="D"
+                            ),
+                        }
+                    ),
                     "discrete": DiscreteDistributionAnalyzer(column="discrete"),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
                     "float": MappingAnalyzer(
