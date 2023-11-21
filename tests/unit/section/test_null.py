@@ -33,13 +33,13 @@ def test_null_value_section_incorrect_total_count_size() -> None:
 
 
 def test_null_value_section_get_statistics() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
     assert objects_are_allclose(
-        output.get_statistics(),
+        section.get_statistics(),
         {
             "columns": ("col1", "col2", "col3"),
             "null_count": (0, 1, 2),
@@ -49,13 +49,13 @@ def test_null_value_section_get_statistics() -> None:
 
 
 def test_null_value_section_get_statistics_empty_row() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 0, 0]),
         total_count=np.array([0, 0, 0]),
     )
     assert objects_are_allclose(
-        output.get_statistics(),
+        section.get_statistics(),
         {
             "columns": ("col1", "col2", "col3"),
             "null_count": (0, 0, 0),
@@ -65,59 +65,59 @@ def test_null_value_section_get_statistics_empty_row() -> None:
 
 
 def test_null_value_section_get_statistics_empty_column() -> None:
-    output = NullValueSection(columns=[], null_count=np.array([]), total_count=np.array([]))
+    section = NullValueSection(columns=[], null_count=np.array([]), total_count=np.array([]))
     assert objects_are_allclose(
-        output.get_statistics(),
+        section.get_statistics(),
         {"columns": (), "null_count": (), "total_count": ()},
     )
 
 
 def test_null_value_section_render_html_body() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_null_value_section_render_html_body_args() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_null_value_section_render_html_body_empty() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=[],
         null_count=np.array([]),
         total_count=np.array([]),
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_null_value_section_render_html_toc() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_null_value_section_render_html_toc_args() -> None:
-    output = NullValueSection(
+    section = NullValueSection(
         columns=["col1", "col2", "col3"],
         null_count=np.array([0, 1, 2]),
         total_count=np.array([5, 5, 5]),
     )
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
@@ -127,7 +127,7 @@ def test_null_value_section_render_html_toc_args() -> None:
 
 
 def test_temporal_null_value_section_get_statistics() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -141,20 +141,20 @@ def test_temporal_null_value_section_get_statistics() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_allclose(output.get_statistics(), {})
+    assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_temporal_null_value_section_get_statistics_empty_row() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_allclose(output.get_statistics(), {})
+    assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "datetime": pd.to_datetime(
@@ -165,11 +165,11 @@ def test_temporal_null_value_section_get_statistics_only_datetime_column() -> No
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_allclose(output.get_statistics(), {})
+    assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_temporal_null_value_section_render_html_body() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -183,11 +183,11 @@ def test_temporal_null_value_section_render_html_body() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_temporal_null_value_section_render_html_body_args() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -202,21 +202,21 @@ def test_temporal_null_value_section_render_html_body_args() -> None:
         period="M",
     )
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_temporal_null_value_section_render_html_body_empty() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_temporal_null_value_section_render_html_toc() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -230,11 +230,11 @@ def test_temporal_null_value_section_render_html_toc() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_temporal_null_value_section_render_html_toc_args() -> None:
-    output = TemporalNullValueSection(
+    section = TemporalNullValueSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -249,5 +249,5 @@ def test_temporal_null_value_section_render_html_toc_args() -> None:
         period="M",
     )
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
