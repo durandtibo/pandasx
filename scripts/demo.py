@@ -9,6 +9,7 @@ from coola.utils import str_indent
 from flamme.analyzer import (
     BaseAnalyzer,
     ColumnTypeAnalyzer,
+    ContinuousDistributionAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
     NullValueAnalyzer,
@@ -81,6 +82,7 @@ def create_analyzer() -> BaseAnalyzer:
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
                     "float": MappingAnalyzer(
                         {
+                            "overall": ContinuousDistributionAnalyzer(column="float"),
                             "monthly": TemporalContinuousDistributionAnalyzer(
                                 column="float", dt_column="datetime", period="M"
                             ),
