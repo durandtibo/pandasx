@@ -9,7 +9,7 @@ from pandas import Series
 from pytest import fixture, mark
 
 from flamme.section import ContinuousDistributionSection
-from flamme.section.continuous import create_stats_table
+from flamme.section.continuous import create_histogram_figure, create_stats_table
 
 STATS_KEYS = [
     "mean",
@@ -134,6 +134,20 @@ def test_continuous_distribution_section_render_html_toc_args(series: Series) ->
     assert isinstance(
         Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+############################################
+#    Tests for create_histogram_figure     #
+############################################
+
+
+def test_create_histogram_figure(series: Series) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col"), str)
+
+
+@mark.parametrize("nbins", (1, 2, 4))
+def test_create_histogram_figure_nbins(series: Series, nbins: int) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col", nbins=nbins), str)
 
 
 #######################################
