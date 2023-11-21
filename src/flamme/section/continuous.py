@@ -4,8 +4,10 @@ __all__ = ["ContinuousDistributionSection"]
 
 from collections.abc import Sequence
 
+import plotly
+import plotly.express as px
 from jinja2 import Template
-from pandas import DataFrame, Series
+from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -23,25 +25,40 @@ class ContinuousDistributionSection(BaseSection):
 
     Args:
     ----
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column of the DataFrame to analyze.
+        series (``pandas.Series``): Specifies the series/column to
+            analyze.
+        column (str): Specifies the column name.
+        nbins (int or None, optional): Specifies the number of bins in
+            the histogram. Default: ``None``
     """
 
-    def __init__(self, df: DataFrame, column: str = "N/A") -> None:
-        self._df = df
+    def __init__(self, series: Series, column: str, nbins: int | None = None) -> None:
+        self._series = series
         self._column = column
+        self._nbins = nbins
+
+    @property
+    def column(self) -> str:
+        return self._column
+
+    @property
+    def nbins(self) -> int | None:
+        return self._nbins
+
+    @property
+    def series(self) -> Series:
+        return self._series
 
     def get_statistics(self) -> dict:
-        series = self._df[self._column] if self._column in self._df else Series([])
         stats = {
-            "count": int(series.shape[0]),
-            "num_nulls": int(series.isnull().sum()),
-            "nunique": series.nunique(dropna=False),
+            "count": int(self._series.shape[0]),
+            "num_nulls": int(self._series.isnull().sum()),
+            "nunique": self._series.nunique(dropna=False),
         }
         stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
         if stats["num_non_nulls"] > 0:
             stats |= (
-                series.dropna()
+                self._series.dropna()
                 .agg(
                     {
                         "mean": "mean",
@@ -80,6 +97,10 @@ class ContinuousDistributionSection(BaseSection):
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        stats = self.get_statistics()
+        null_values_pct = (
+            f"{100 * stats['num_nulls'] / stats['count']:.2f}" if stats["count"] > 0 else "N/A"
+        )
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -88,6 +109,14 @@ class ContinuousDistributionSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "column": self._column,
+                "table": create_stats_table(stats=stats, column=self._column),
+                "total_values": f"{stats['count']:,}",
+                "unique_values": f"{stats['nunique']:,}",
+                "null_values": f"{stats['num_nulls']:,}",
+                "null_values_pct": null_values_pct,
+                "figure": create_histogram_figure(
+                    series=self._series, column=self._column, nbins=self._nbins
+                ),
             }
         )
 
@@ -115,3 +144,97 @@ This section analyzes the discrete distribution of values for column {{column}}.
 {{table}}
 <p style="margin-top: 1rem;">
 """
+
+
+def create_histogram_figure(
+    series: Series,
+    column: str,
+    nbins: int | None = None,
+) -> str:
+    r"""Creates the HTML code of a figure.
+
+    Args:
+    ----
+        row (``pandas.Series``): Specifies the series of data.
+        column (str): Specifies the column name.
+        nbins (int or None, optional): Specifies the number of bins in
+            the histogram. Default: ``None``
+
+    Returns:
+    -------
+        str: The HTML code of the figure.
+    """
+    fig = px.histogram(
+        series.array,
+        marginal="box",
+        nbins=nbins,
+        title=f"Distribution of values for column {column}",
+        labels={"x": "value", "y": "count"},
+    )
+    fig.update_layout(showlegend=False)
+    return plotly.io.to_html(fig, full_html=False)
+
+
+def create_stats_table(stats: dict, column: str) -> str:
+    r"""Creates the HTML code of the table with statistics.
+
+    Args:
+    ----
+        stats (dict): Specifies a dictionary with the statistics.
+        column (str): Specifies the column name.
+
+    Returns:
+    -------
+        str: The HTML code of the table.
+    """
+    return Template(
+        """
+<details>
+    <summary>Statistics</summary>
+
+    <p>The following table shows some statistics about the distribution for column {{column}}.
+
+    <table class="table table-hover table-responsive w-auto" >
+        <thead class="thead table-group-divider">
+            <tr><th>stat</th><th>value</th></tr>
+        </thead>
+        <tbody class="tbody table-group-divider">
+            <tr><th>count</th><td {{num_style}}>{{count}}</td></tr>
+            <tr><th>mean</th><td {{num_style}}>{{mean}}</td></tr>
+            <tr><th>std</th><td {{num_style}}>{{std}}</td></tr>
+            <tr><th>min</th><td {{num_style}}>{{min}}</td></tr>
+            <tr><th>quantile 1%</th><td {{num_style}}>{{q01}}</td></tr>
+            <tr><th>quantile 5%</th><td {{num_style}}>{{q05}}</td></tr>
+            <tr><th>quantile 10%</th><td {{num_style}}>{{q10}}</td></tr>
+            <tr><th>quantile 25%</th><td {{num_style}}>{{q25}}</td></tr>
+            <tr><th>median</th><td {{num_style}}>{{median}}</td></tr>
+            <tr><th>quantile 75%</th><td {{num_style}}>{{q75}}</td></tr>
+            <tr><th>quantile 90%</th><td {{num_style}}>{{q90}}</td></tr>
+            <tr><th>quantile 95%</th><td {{num_style}}>{{q95}}</td></tr>
+            <tr><th>quantile 99%</th><td {{num_style}}>{{q99}}</td></tr>
+            <tr><th>max</th><td {{num_style}}>{{max}}</td></tr>
+            <tr class="table-group-divider"></tr>
+        </tbody>
+    </table>
+</details>
+"""
+    ).render(
+        {
+            "column": column,
+            "num_style": 'style="text-align: right;"',
+            "count": f"{stats['count']:,}",
+            "mean": f"{stats['mean']:,.4f}",
+            "median": f"{stats['median']:,.4f}",
+            "min": f"{stats['min']:,.4f}",
+            "max": f"{stats['max']:,.4f}",
+            "std": f"{stats['std']:,.4f}",
+            "q01": f"{stats['q01']:,.4f}",
+            "q05": f"{stats['q05']:,.4f}",
+            "q10": f"{stats['q10']:,.4f}",
+            "q25": f"{stats['q25']:,.4f}",
+            "q75": f"{stats['q75']:,.4f}",
+            "q90": f"{stats['q90']:,.4f}",
+            "q95": f"{stats['q95']:,.4f}",
+            "q99": f"{stats['q99']:,.4f}",
+        }
+    )
