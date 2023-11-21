@@ -5,7 +5,7 @@ __all__ = ["ContinuousDistributionSection"]
 from collections.abc import Sequence
 
 from jinja2 import Template
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -32,7 +32,52 @@ class ContinuousDistributionSection(BaseSection):
         self._column = column
 
     def get_statistics(self) -> dict:
-        return {}
+        series = self._df[self._column] if self._column in self._df else Series([])
+        stats = {
+            "count": int(series.shape[0]),
+            "num_nulls": int(series.isnull().sum()),
+            "nunique": series.nunique(dropna=False),
+        }
+        stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
+        if stats["num_non_nulls"] > 0:
+            stats |= (
+                series.dropna()
+                .agg(
+                    {
+                        "mean": "mean",
+                        "median": "median",
+                        "min": "min",
+                        "max": "max",
+                        "std": "std",
+                        "q01": lambda x: x.quantile(0.01),
+                        "q05": lambda x: x.quantile(0.05),
+                        "q10": lambda x: x.quantile(0.1),
+                        "q25": lambda x: x.quantile(0.25),
+                        "q75": lambda x: x.quantile(0.75),
+                        "q90": lambda x: x.quantile(0.9),
+                        "q95": lambda x: x.quantile(0.95),
+                        "q99": lambda x: x.quantile(0.99),
+                    }
+                )
+                .to_dict()
+            )
+        else:
+            stats |= {
+                "mean": float("nan"),
+                "median": float("nan"),
+                "min": float("nan"),
+                "max": float("nan"),
+                "std": float("nan"),
+                "q01": float("nan"),
+                "q05": float("nan"),
+                "q10": float("nan"),
+                "q25": float("nan"),
+                "q75": float("nan"),
+                "q90": float("nan"),
+                "q95": float("nan"),
+                "q99": float("nan"),
+            }
+        return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         return Template(self._create_template()).render(
