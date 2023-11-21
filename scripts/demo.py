@@ -29,7 +29,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "int": np.random.randint(0, 10, (nrows,)),
             "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
             # "discrete": np.random.randint(0, 1000, (nrows,)),
-            "float_exp": np.abs(rng.standard_cauchy(size=(nrows,))),
+            "cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
     mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
@@ -95,17 +95,17 @@ def create_analyzer() -> BaseAnalyzer:
                             ),
                         }
                     ),
-                    "float_exp": MappingAnalyzer(
+                    "cauchy": MappingAnalyzer(
                         {
-                            "overall": ContinuousDistributionAnalyzer(column="float_exp"),
+                            "overall": ContinuousDistributionAnalyzer(column="cauchy", log_y=True),
                             "monthly": TemporalContinuousDistributionAnalyzer(
-                                column="float_exp", dt_column="datetime", period="M"
+                                column="cauchy", dt_column="datetime", period="M"
                             ),
                             "weekly": TemporalContinuousDistributionAnalyzer(
-                                column="float_exp", dt_column="datetime", period="W"
+                                column="cauchy", dt_column="datetime", period="W"
                             ),
                             "daily": TemporalContinuousDistributionAnalyzer(
-                                column="float_exp", dt_column="datetime", period="D"
+                                column="cauchy", dt_column="datetime", period="D"
                             ),
                         }
                     ),

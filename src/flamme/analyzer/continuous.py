@@ -23,6 +23,10 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
     Args:
     ----
         column (str): Specifies the column to analyze.
+        nbins (int or None, optional): Specifies the number of bins in
+            the histogram. Default: ``None``
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
 
     Example usage:
 
@@ -44,9 +48,10 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, nbins: int | None = None) -> None:
+    def __init__(self, column: str, nbins: int | None = None, log_y: bool = False) -> None:
         self._column = column
         self._nbins = nbins
+        self._log_y = log_y
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins})"
@@ -59,7 +64,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
             )
             return EmptySection()
         return ContinuousDistributionSection(
-            column=self._column, series=df[self._column], nbins=self._nbins
+            column=self._column, series=df[self._column], nbins=self._nbins, log_y=self._log_y
         )
 
 

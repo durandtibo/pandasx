@@ -30,16 +30,25 @@ class ContinuousDistributionSection(BaseSection):
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
     """
 
-    def __init__(self, series: Series, column: str, nbins: int | None = None) -> None:
+    def __init__(
+        self, series: Series, column: str, nbins: int | None = None, log_y: bool = False
+    ) -> None:
         self._series = series
         self._column = column
         self._nbins = nbins
+        self._log_y = log_y
 
     @property
     def column(self) -> str:
         return self._column
+
+    @property
+    def log_y(self) -> bool:
+        return self._log_y
 
     @property
     def nbins(self) -> int | None:
@@ -115,7 +124,7 @@ class ContinuousDistributionSection(BaseSection):
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
                 "figure": create_histogram_figure(
-                    series=self._series, column=self._column, nbins=self._nbins
+                    series=self._series, column=self._column, nbins=self._nbins, log_y=self._log_y
                 ),
             }
         )
@@ -150,6 +159,7 @@ def create_histogram_figure(
     series: Series,
     column: str,
     nbins: int | None = None,
+    log_y: bool = False,
 ) -> str:
     r"""Creates the HTML code of a figure.
 
@@ -159,6 +169,8 @@ def create_histogram_figure(
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
 
     Returns:
     -------
@@ -170,6 +182,7 @@ def create_histogram_figure(
         nbins=nbins,
         title=f"Distribution of values for column {column}",
         labels={"x": "value", "y": "count"},
+        log_y=log_y,
     )
     fig.update_layout(showlegend=False)
     return plotly.io.to_html(fig, full_html=False)
