@@ -5,7 +5,9 @@ import math
 import numpy as np
 import pandas as pd
 from coola import objects_are_allclose, objects_are_equal
-from pandas import DataFrame
+from pandas import DataFrame, Series
+from pandas.testing import assert_series_equal
+from pytest import mark
 
 from flamme.analyzer import (
     ContinuousDistributionAnalyzer,
@@ -27,6 +29,39 @@ def test_continuous_distribution_analyzer_str() -> None:
     assert str(ContinuousDistributionAnalyzer(column="float")).startswith(
         "ContinuousDistributionAnalyzer("
     )
+
+
+def test_continuous_distribution_analyzer_series() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert_series_equal(section.series, Series([np.nan] + list(range(101)) + [np.nan], name="col"))
+
+
+def test_continuous_distribution_analyzer_column() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.column == "col"
+
+
+def test_continuous_distribution_analyzer_nbins_default() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.nbins is None
+
+
+@mark.parametrize("nbins", (1, 2, 4))
+def test_continuous_distribution_analyzer_nbins(nbins: int) -> None:
+    section = ContinuousDistributionAnalyzer(column="col", nbins=nbins).analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.nbins == nbins
 
 
 def test_continuous_distribution_analyzer_get_statistics() -> None:
