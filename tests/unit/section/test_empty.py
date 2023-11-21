@@ -11,29 +11,29 @@ from flamme.section import EmptySection
 
 
 def test_column_type_section_get_statistics() -> None:
-    output = EmptySection()
-    assert objects_are_allclose(output.get_statistics(), {})
+    section = EmptySection()
+    assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_column_type_section_render_html_body() -> None:
-    output = EmptySection()
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    section = EmptySection()
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_column_type_section_render_html_body_args() -> None:
-    output = EmptySection()
+    section = EmptySection()
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_column_type_section_render_html_toc() -> None:
-    output = EmptySection()
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    section = EmptySection()
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_column_type_section_render_html_toc_args() -> None:
-    output = EmptySection()
+    section = EmptySection()
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )

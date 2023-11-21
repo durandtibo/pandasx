@@ -56,9 +56,9 @@ def test_continuous_distribution_section_nbins(series: Series, nbins: int) -> No
 
 
 def test_continuous_distribution_section_get_statistics(series: Series) -> None:
-    output = ContinuousDistributionSection(series=series, column="col")
+    section = ContinuousDistributionSection(series=series, column="col")
     assert objects_are_allclose(
-        output.get_statistics(),
+        section.get_statistics(),
         {
             "count": 103,
             "num_nulls": 2,
@@ -82,8 +82,8 @@ def test_continuous_distribution_section_get_statistics(series: Series) -> None:
 
 
 def test_continuous_distribution_section_get_statistics_empty_row() -> None:
-    output = ContinuousDistributionSection(series=Series([]), column="col")
-    stats = output.get_statistics()
+    section = ContinuousDistributionSection(series=Series([]), column="col")
+    stats = section.get_statistics()
     assert len(stats) == 17
     assert stats["count"] == 0
     assert stats["num_nulls"] == 0
@@ -94,10 +94,10 @@ def test_continuous_distribution_section_get_statistics_empty_row() -> None:
 
 
 def test_continuous_distribution_section_get_statistics_only_nans() -> None:
-    output = ContinuousDistributionSection(
+    section = ContinuousDistributionSection(
         series=Series([np.nan, np.nan, np.nan, np.nan]), column="col"
     )
-    stats = output.get_statistics()
+    stats = section.get_statistics()
     assert len(stats) == 17
     assert stats["count"] == 4
     assert stats["num_nulls"] == 4
@@ -108,31 +108,31 @@ def test_continuous_distribution_section_get_statistics_only_nans() -> None:
 
 
 def test_continuous_distribution_section_render_html_body(series: Series) -> None:
-    output = ContinuousDistributionSection(series=series, column="col")
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    section = ContinuousDistributionSection(series=series, column="col")
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_continuous_distribution_section_render_html_body_args(series: Series) -> None:
-    output = ContinuousDistributionSection(series=series, column="col")
+    section = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_continuous_distribution_section_render_html_body_empty() -> None:
-    output = ContinuousDistributionSection(series=Series([]), column="col")
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    section = ContinuousDistributionSection(series=Series([]), column="col")
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_continuous_distribution_section_render_html_toc(series: Series) -> None:
-    output = ContinuousDistributionSection(series=series, column="col")
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    section = ContinuousDistributionSection(series=series, column="col")
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_continuous_distribution_section_render_html_toc_args(series: Series) -> None:
-    output = ContinuousDistributionSection(series=series, column="col")
+    section = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 

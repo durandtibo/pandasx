@@ -14,7 +14,7 @@ from flamme.section import TemporalContinuousDistributionSection
 
 
 def test_temporal_continuous_distribution_section_get_statistics() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -27,31 +27,31 @@ def test_temporal_continuous_distribution_section_get_statistics() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_equal(output.get_statistics(), {})
+    assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_temporal_continuous_distribution_section_get_statistics_empty_row() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame({"float": [], "datetime": []}),
         column="float",
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_equal(output.get_statistics(), {})
+    assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_temporal_continuous_distribution_section_get_statistics_empty_column() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame({}),
         column="float",
         dt_column="datetime",
         period="M",
     )
-    assert objects_are_equal(output.get_statistics(), {})
+    assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_temporal_continuous_distribution_section_render_html_body() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -64,31 +64,31 @@ def test_temporal_continuous_distribution_section_render_html_body() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_temporal_continuous_distribution_section_render_html_body_empty_row() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame({"float": [], "datetime": []}),
         column="float",
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_temporal_continuous_distribution_section_render_html_body_empty_column() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame({}),
         column="float",
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_temporal_continuous_distribution_section_render_html_body_args() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -102,12 +102,12 @@ def test_temporal_continuous_distribution_section_render_html_body_args() -> Non
         period="M",
     )
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_temporal_continuous_distribution_section_render_html_toc() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -120,11 +120,11 @@ def test_temporal_continuous_distribution_section_render_html_toc() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_temporal_continuous_distribution_section_render_html_toc_args() -> None:
-    output = TemporalContinuousDistributionSection(
+    section = TemporalContinuousDistributionSection(
         df=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -138,5 +138,5 @@ def test_temporal_continuous_distribution_section_render_html_toc_args() -> None
         period="M",
     )
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )

@@ -29,57 +29,57 @@ def test_column_type_section_incorrect_missing_key() -> None:
 
 
 def test_column_type_section_get_statistics() -> None:
-    output = ColumnTypeSection(
+    section = ColumnTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str, type(None)}},
     )
     assert objects_are_allclose(
-        output.get_statistics(),
+        section.get_statistics(),
         {"float": {float}, "int": {int}, "str": {str, type(None)}},
     )
 
 
 def test_column_type_section_get_statistics_empty() -> None:
-    output = ColumnTypeSection(dtypes={}, types={})
-    assert objects_are_allclose(output.get_statistics(), {})
+    section = ColumnTypeSection(dtypes={}, types={})
+    assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_column_type_section_render_html_body() -> None:
-    output = ColumnTypeSection(
+    section = ColumnTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
     )
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_column_type_section_render_html_body_args() -> None:
-    output = ColumnTypeSection(
+    section = ColumnTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
     )
     assert isinstance(
-        Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_column_type_section_render_html_body_empty() -> None:
-    output = ColumnTypeSection(dtypes={}, types={})
-    assert isinstance(Template(output.render_html_body()).render(), str)
+    section = ColumnTypeSection(dtypes={}, types={})
+    assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_column_type_section_render_html_toc() -> None:
-    output = ColumnTypeSection(
+    section = ColumnTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
     )
-    assert isinstance(Template(output.render_html_toc()).render(), str)
+    assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_column_type_section_render_html_toc_args() -> None:
-    output = ColumnTypeSection(
+    section = ColumnTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
     )
     assert isinstance(
-        Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+        Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
