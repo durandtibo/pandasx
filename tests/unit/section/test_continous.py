@@ -5,10 +5,11 @@ import math
 import numpy as np
 from coola import objects_are_allclose
 from jinja2 import Template
-from pandas import DataFrame
-from pytest import fixture
+from pandas import Series
+from pytest import fixture, mark
 
 from flamme.section import ContinuousDistributionSection
+from flamme.section.continuous import create_stats_table
 
 STATS_KEYS = [
     "mean",
@@ -28,8 +29,8 @@ STATS_KEYS = [
 
 
 @fixture
-def dataframe() -> DataFrame:
-    return DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+def series() -> Series:
+    return Series([np.nan] + list(range(101)) + [np.nan])
 
 
 ###################################################
@@ -37,8 +38,25 @@ def dataframe() -> DataFrame:
 ###################################################
 
 
-def test_continuous_distribution_section_get_statistics(dataframe: DataFrame) -> None:
-    output = ContinuousDistributionSection(df=dataframe, column="col")
+def test_continuous_distribution_section_series(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col").series.equals(series)
+
+
+def test_continuous_distribution_section_column(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col").column == "col"
+
+
+def test_continuous_distribution_section_nbins_default(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col").nbins is None
+
+
+@mark.parametrize("nbins", (1, 2, 4))
+def test_continuous_distribution_section_nbins(series: Series, nbins: int) -> None:
+    assert ContinuousDistributionSection(series=series, column="col", nbins=nbins).nbins == nbins
+
+
+def test_continuous_distribution_section_get_statistics(series: Series) -> None:
+    output = ContinuousDistributionSection(series=series, column="col")
     assert objects_are_allclose(
         output.get_statistics(),
         {
@@ -64,19 +82,7 @@ def test_continuous_distribution_section_get_statistics(dataframe: DataFrame) ->
 
 
 def test_continuous_distribution_section_get_statistics_empty_row() -> None:
-    output = ContinuousDistributionSection(df=DataFrame({"col": []}), column="col")
-    stats = output.get_statistics()
-    assert len(stats) == 17
-    assert stats["count"] == 0
-    assert stats["num_nulls"] == 0
-    assert stats["num_non_nulls"] == 0
-    assert stats["nunique"] == 0
-    for key in STATS_KEYS:
-        assert math.isnan(stats[key])
-
-
-def test_continuous_distribution_section_get_statistics_empty_column() -> None:
-    output = ContinuousDistributionSection(df=DataFrame({}), column="col")
+    output = ContinuousDistributionSection(series=Series([]), column="col")
     stats = output.get_statistics()
     assert len(stats) == 17
     assert stats["count"] == 0
@@ -89,7 +95,7 @@ def test_continuous_distribution_section_get_statistics_empty_column() -> None:
 
 def test_continuous_distribution_section_get_statistics_only_nans() -> None:
     output = ContinuousDistributionSection(
-        df=DataFrame({"col": [np.nan, np.nan, np.nan, np.nan]}), column="col"
+        series=Series([np.nan, np.nan, np.nan, np.nan]), column="col"
     )
     stats = output.get_statistics()
     assert len(stats) == 17
@@ -101,30 +107,60 @@ def test_continuous_distribution_section_get_statistics_only_nans() -> None:
         assert math.isnan(stats[key])
 
 
-def test_continuous_distribution_section_render_html_body(dataframe: DataFrame) -> None:
-    output = ContinuousDistributionSection(df=dataframe, column="col")
+def test_continuous_distribution_section_render_html_body(series: Series) -> None:
+    output = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(Template(output.render_html_body()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_body_args(dataframe: DataFrame) -> None:
-    output = ContinuousDistributionSection(df=dataframe, column="col")
+def test_continuous_distribution_section_render_html_body_args(series: Series) -> None:
+    output = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(
         Template(output.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_continuous_distribution_section_render_html_body_empty() -> None:
-    output = ContinuousDistributionSection(df=DataFrame({"float": []}), column="col")
+    output = ContinuousDistributionSection(series=Series([]), column="col")
     assert isinstance(Template(output.render_html_body()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_toc(dataframe: DataFrame) -> None:
-    output = ContinuousDistributionSection(df=dataframe, column="col")
+def test_continuous_distribution_section_render_html_toc(series: Series) -> None:
+    output = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(Template(output.render_html_toc()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_toc_args(dataframe: DataFrame) -> None:
-    output = ContinuousDistributionSection(df=dataframe, column="col")
+def test_continuous_distribution_section_render_html_toc_args(series: Series) -> None:
+    output = ContinuousDistributionSection(series=series, column="col")
     assert isinstance(
         Template(output.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+#######################################
+#    Tests for create_stats_table     #
+#######################################
+
+
+def test_create_stats_table() -> None:
+    assert isinstance(
+        create_stats_table(
+            stats={
+                "count": 103,
+                "mean": 50.0,
+                "median": 50.0,
+                "min": 0.0,
+                "max": 100.0,
+                "std": 29.300170647967224,
+                "q01": 1.0,
+                "q05": 5.0,
+                "q10": 10.0,
+                "q25": 25.0,
+                "q75": 75.0,
+                "q90": 90.0,
+                "q95": 95.0,
+                "q99": 99.0,
+            },
+            column="col",
+        ),
+        str,
     )

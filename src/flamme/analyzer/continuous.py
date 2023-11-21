@@ -57,7 +57,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
                 f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return ContinuousDistributionSection(column=self._column, df=df)
+        return ContinuousDistributionSection(column=self._column, series=df[self._column])
 
 
 class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):

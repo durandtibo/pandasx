@@ -21,6 +21,7 @@ from flamme.utils.io import save_text
 
 
 def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
+    rng = np.random.default_rng(42)
     df = pd.DataFrame(
         {
             "bool": np.random.randint(0, 2, (nrows,), dtype=bool),
@@ -28,9 +29,9 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "int": np.random.randint(0, 10, (nrows,)),
             "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
             # "discrete": np.random.randint(0, 1000, (nrows,)),
+            "float_exp": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
-    rng = np.random.default_rng(42)
     mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
     mask[:, 0] = rng.choice([True, False], size=(mask.shape[0]), p=[0.4, 0.6])
     mask[:, 1] = rng.choice([True, False], size=(mask.shape[0]), p=[0.8, 0.2])
@@ -91,6 +92,20 @@ def create_analyzer() -> BaseAnalyzer:
                             ),
                             "daily": TemporalContinuousDistributionAnalyzer(
                                 column="float", dt_column="datetime", period="D"
+                            ),
+                        }
+                    ),
+                    "float_exp": MappingAnalyzer(
+                        {
+                            "overall": ContinuousDistributionAnalyzer(column="float_exp"),
+                            "monthly": TemporalContinuousDistributionAnalyzer(
+                                column="float_exp", dt_column="datetime", period="M"
+                            ),
+                            "weekly": TemporalContinuousDistributionAnalyzer(
+                                column="float_exp", dt_column="datetime", period="W"
+                            ),
+                            "daily": TemporalContinuousDistributionAnalyzer(
+                                column="float_exp", dt_column="datetime", period="D"
                             ),
                         }
                     ),
