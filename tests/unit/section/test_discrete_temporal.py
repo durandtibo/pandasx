@@ -45,25 +45,6 @@ def test_temporal_discrete_distribution_section_dt_column(dataframe: DataFrame) 
     assert section.dt_column == "datetime"
 
 
-def test_temporal_discrete_distribution_section_log_y_default(dataframe: DataFrame) -> None:
-    assert not TemporalDiscreteDistributionSection(
-        df=dataframe,
-        column="col",
-        dt_column="datetime",
-        period="M",
-    ).log_y
-
-
-def test_temporal_discrete_distribution_section_log_y(dataframe: DataFrame) -> None:
-    assert TemporalDiscreteDistributionSection(
-        df=dataframe,
-        column="col",
-        dt_column="datetime",
-        period="M",
-        log_y=True,
-    ).log_y
-
-
 def test_temporal_discrete_distribution_section_period(dataframe: DataFrame) -> None:
     section = TemporalDiscreteDistributionSection(
         df=dataframe,
