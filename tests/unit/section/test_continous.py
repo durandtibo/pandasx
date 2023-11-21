@@ -46,6 +46,14 @@ def test_continuous_distribution_section_column(series: Series) -> None:
     assert ContinuousDistributionSection(series=series, column="col").column == "col"
 
 
+def test_continuous_distribution_section_log_y_default(series: Series) -> None:
+    assert not ContinuousDistributionSection(series=series, column="col").log_y
+
+
+def test_continuous_distribution_section_log_y(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col", log_y=True).log_y
+
+
 def test_continuous_distribution_section_nbins_default(series: Series) -> None:
     assert ContinuousDistributionSection(series=series, column="col").nbins is None
 
@@ -148,6 +156,11 @@ def test_create_histogram_figure(series: Series) -> None:
 @mark.parametrize("nbins", (1, 2, 4))
 def test_create_histogram_figure_nbins(series: Series, nbins: int) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", nbins=nbins), str)
+
+
+@mark.parametrize("log_y", (True, False))
+def test_create_histogram_figure_log_y(series: Series, log_y: int) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col", nbins=log_y), str)
 
 
 #######################################

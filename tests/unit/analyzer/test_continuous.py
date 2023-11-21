@@ -64,6 +64,23 @@ def test_continuous_distribution_analyzer_nbins(nbins: int) -> None:
     assert section.nbins == nbins
 
 
+def test_continuous_distribution_analyzer_log_y_default() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert not section.log_y
+
+
+@mark.parametrize("log_y", (True, False))
+def test_continuous_distribution_analyzer_log_y(log_y: bool) -> None:
+    section = ContinuousDistributionAnalyzer(column="col", log_y=log_y).analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.log_y == log_y
+
+
 def test_continuous_distribution_analyzer_get_statistics() -> None:
     section = ContinuousDistributionAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
