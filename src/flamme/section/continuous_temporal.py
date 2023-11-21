@@ -32,13 +32,39 @@ class TemporalContinuousDistributionSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
     """
 
-    def __init__(self, df: DataFrame, column: str, dt_column: str, period: str) -> None:
+    def __init__(
+        self,
+        df: DataFrame,
+        column: str,
+        dt_column: str,
+        period: str,
+        log_y: bool = False,
+    ) -> None:
         self._df = df
         self._column = column
         self._dt_column = dt_column
         self._period = period
+        self._log_y = log_y
+
+    @property
+    def column(self) -> str:
+        return self._column
+
+    @property
+    def dt_column(self) -> str:
+        return self._dt_column
+
+    @property
+    def log_y(self) -> bool:
+        return self._log_y
+
+    @property
+    def period(self) -> str:
+        return self._period
 
     def get_statistics(self) -> dict:
         return {}
@@ -59,6 +85,7 @@ class TemporalContinuousDistributionSection(BaseSection):
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
+                    log_y=self._log_y,
                 ),
                 "table": create_temporal_table(
                     df=self._df,
@@ -90,7 +117,9 @@ This section analyzes the temporal distribution of column {{column}} by using th
 """
 
 
-def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+def create_temporal_figure(
+    df: DataFrame, column: str, dt_column: str, period: str, log_y: bool = False
+) -> str:
     r"""Creates a HTML representation of a figure with the temporal value
     distribution.
 
@@ -102,6 +131,8 @@ def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: s
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
 
     Returns:
     -------
@@ -120,6 +151,7 @@ def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: s
         title=f"Distribution of values for column {column}",
         labels={column: "value", dt_col: "time"},
         points="outliers",
+        log_y=log_y,
     )
     return plotly.io.to_html(fig, full_html=False)
 

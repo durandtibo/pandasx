@@ -99,13 +99,13 @@ def create_analyzer() -> BaseAnalyzer:
                         {
                             "overall": ContinuousDistributionAnalyzer(column="cauchy", log_y=True),
                             "monthly": TemporalContinuousDistributionAnalyzer(
-                                column="cauchy", dt_column="datetime", period="M"
+                                column="cauchy", dt_column="datetime", period="M", log_y=True
                             ),
                             "weekly": TemporalContinuousDistributionAnalyzer(
-                                column="cauchy", dt_column="datetime", period="W"
+                                column="cauchy", dt_column="datetime", period="W", log_y=True
                             ),
                             "daily": TemporalContinuousDistributionAnalyzer(
-                                column="cauchy", dt_column="datetime", period="D"
+                                column="cauchy", dt_column="datetime", period="D", log_y=True
                             ),
                         }
                     ),

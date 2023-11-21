@@ -37,7 +37,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ContinuousDistributionAnalyzer
         >>> analyzer = ContinuousDistributionAnalyzer(column="float")
         >>> analyzer
-        ContinuousDistributionAnalyzer(column=float, nbins=None)
+        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -54,7 +54,10 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         self._log_y = log_y
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins})"
+        return (
+            f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins}, "
+            f"log_y={self._log_y})"
+        )
 
     def analyze(self, df: DataFrame) -> ContinuousDistributionSection | EmptySection:
         if self._column not in df:
@@ -64,7 +67,10 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
             )
             return EmptySection()
         return ContinuousDistributionSection(
-            column=self._column, series=df[self._column], nbins=self._nbins, log_y=self._log_y
+            column=self._column,
+            series=df[self._column],
+            nbins=self._nbins,
+            log_y=self._log_y,
         )
 
 
@@ -79,6 +85,8 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
 
     Example usage:
 
@@ -91,7 +99,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        TemporalContinuousDistributionAnalyzer(column=float, dt_column=datetime, period=M)
+        TemporalContinuousDistributionAnalyzer(column=float, dt_column=datetime, period=M, log_y=False)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -105,15 +113,16 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, dt_column: str, period: str) -> None:
+    def __init__(self, column: str, dt_column: str, period: str, log_y: bool = False) -> None:
         self._column = column
         self._dt_column = dt_column
         self._period = period
+        self._log_y = log_y
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dt_column={self._dt_column}, period={self._period})"
+            f"dt_column={self._dt_column}, period={self._period}, log_y={self._log_y})"
         )
 
     def analyze(self, df: DataFrame) -> TemporalContinuousDistributionSection | EmptySection:
@@ -130,5 +139,9 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
             )
             return EmptySection()
         return TemporalContinuousDistributionSection(
-            column=self._column, df=df, dt_column=self._dt_column, period=self._period
+            column=self._column,
+            df=df,
+            dt_column=self._dt_column,
+            period=self._period,
+            log_y=self._log_y,
         )
