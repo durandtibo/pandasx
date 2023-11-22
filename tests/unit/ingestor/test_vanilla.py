@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
