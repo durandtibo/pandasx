@@ -17,7 +17,13 @@ from flamme.analyzer import (
     TemporalDiscreteDistributionAnalyzer,
     TemporalNullValueAnalyzer,
 )
-from flamme.section import BaseSection
+from flamme.preprocessor import (
+    BasePreprocessor,
+    SequentialPreprocessor,
+    StripStrPreprocessor,
+    ToDatetimePreprocessor,
+    ToNumericPreprocessor,
+)
 from flamme.utils.io import save_text
 
 
@@ -142,11 +148,24 @@ def create_analyzer() -> BaseAnalyzer:
     )
 
 
+def create_preprocessor() -> BasePreprocessor:
+    return SequentialPreprocessor(
+        [
+            StripStrPreprocessor(columns=["str"]),
+            ToNumericPreprocessor(columns=["float", "int", "cauchy"]),
+            ToDatetimePreprocessor(columns=["datetime"]),
+        ]
+    )
+
+
 def main_report() -> None:
     df = create_dataframe(nrows=10000)
+    preprocessor = create_preprocessor()
+    print(preprocessor)
+    df = preprocessor.preprocess(df)
     analyzer = create_analyzer()
     print(analyzer)
-    section: BaseSection = analyzer.analyze(df)
+    section = analyzer.analyze(df)
     report = create_report(
         toc=section.render_html_toc(max_depth=6), body=section.render_html_body()
     )

@@ -36,8 +36,8 @@ def test_is_preprocessor_config_false() -> None:
 
 
 def test_setup_preprocessor_object() -> None:
-    generator = ToNumericPreprocessor(columns=["col1", "col3"])
-    assert setup_preprocessor(generator) is generator
+    preprocessor = ToNumericPreprocessor(columns=["col1", "col3"])
+    assert setup_preprocessor(preprocessor) is preprocessor
 
 
 def test_setup_preprocessor_dict() -> None:
