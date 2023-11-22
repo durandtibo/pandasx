@@ -42,7 +42,6 @@ class StripStrPreprocessor(BasePreprocessor):
         3     4    4      d      d
         4     5    5      e      e
         >>> df = preprocessor.preprocess(df)
-        >>> print(df)
         >>> df
            col1 col2 col3   col4
         0     1    1    a     a
