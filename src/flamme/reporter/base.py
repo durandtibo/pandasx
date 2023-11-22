@@ -28,6 +28,12 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         ...     analyzer=NullValueAnalyzer(),
         ...     report_path="/path/to/report.html",
         ... )
+        >>> reporter
+        Reporter(
+          (ingestor): ParquetIngestor(path=/path/to/data.parquet)
+          (preprocessor): SequentialPreprocessor()
+          (analyzer): NullValueAnalyzer()
+        )
         >>> report = reporter.compute()  # doctest: +SKIP
     """
 
@@ -38,30 +44,17 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
         .. code-block:: pycon
 
-            >>> import pandas as pd
-            >>> from flamme.reporter import ToNumericPreprocessor
-            >>> reporter = ToNumericPreprocessor(columns=["col1", "col3"])
-            >>> df = pd.DataFrame(
-            ...     {
-            ...         "col1": [1, 2, 3, 4, 5],
-            ...         "col2": ["1", "2", "3", "4", "5"],
-            ...         "col3": ["1", "2", "3", "4", "5"],
-            ...         "col4": ["a", "b", "c", "d", "e"],
-            ...     }
+            >>> from flamme.analyzer import NullValueAnalyzer
+            >>> from flamme.ingestor import ParquetIngestor
+            >>> from flamme.preprocessor import SequentialPreprocessor
+            >>> from flamme.reporter import Reporter
+            >>> reporter = Reporter(
+            ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
+            ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
+            ...     analyzer=NullValueAnalyzer(),
+            ...     report_path="/path/to/report.html",
             ... )
-            >>> df.dtypes
-            col1     int64
-            col2    object
-            col3    object
-            col4    object
-            dtype: object
-            >>> df = reporter.preprocess(df)
-            >>> df.dtypes
-            col1     int64
-            col2    object
-            col3     int64
-            col4    object
-            dtype: object
+            >>> report = reporter.compute()  # doctest: +SKIP
         """
 
 
@@ -90,8 +83,17 @@ def is_reporter_config(config: dict) -> bool:
         >>> from flamme.reporter import is_reporter_config
         >>> is_reporter_config(
         ...     {
-        ...         "_target_": "flamme.reporter.ToNumericPreprocessor",
-        ...         "columns": ["col1", "col3"],
+        ...         "_target_": "flamme.reporter.Reporter",
+        ...         "ingestor": {
+        ...             "_target_": "flamme.ingestor.CsvIngestor",
+        ...             "path": "/path/to/data.csv",
+        ...         },
+        ...         "preprocessor": {
+        ...             "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...             "columns": ["col1", "col3"],
+        ...         },
+        ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
+        ...         "report_path": "/path/to/report.html",
         ...     }
         ... )
         True
@@ -123,12 +125,25 @@ def setup_reporter(
         >>> from flamme.reporter import setup_reporter
         >>> reporter = setup_reporter(
         ...     {
-        ...         "_target_": "flamme.reporter.ToNumericPreprocessor",
-        ...         "columns": ["col1", "col3"],
+        ...         "_target_": "flamme.reporter.Reporter",
+        ...         "ingestor": {
+        ...             "_target_": "flamme.ingestor.CsvIngestor",
+        ...             "path": "/path/to/data.csv",
+        ...         },
+        ...         "preprocessor": {
+        ...             "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...             "columns": ["col1", "col3"],
+        ...         },
+        ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
+        ...         "report_path": "/path/to/report.html",
         ...     }
         ... )
         >>> reporter
-        ToNumericPreprocessor(columns=('col1', 'col3'))
+        Reporter(
+          (ingestor): CsvIngestor(path=/path/to/data.csv)
+          (preprocessor): ToNumericPreprocessor(columns=('col1', 'col3'))
+          (analyzer): NullValueAnalyzer()
+        )
     """
     if isinstance(reporter, dict):
         logger.info("Initializing an reporter from its configuration... ")
