@@ -63,6 +63,24 @@ def test_continuous_distribution_section_nbins(series: Series, nbins: int) -> No
     assert ContinuousDistributionSection(series=series, column="col", nbins=nbins).nbins == nbins
 
 
+def test_continuous_distribution_section_xmin_default(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col").xmin is None
+
+
+@mark.parametrize("xmin", (1.0, "q0.1"))
+def test_continuous_distribution_section_xmin(series: Series, xmin: float | str) -> None:
+    assert ContinuousDistributionSection(series=series, column="col", xmin=xmin).xmin == xmin
+
+
+def test_continuous_distribution_section_xmax_default(series: Series) -> None:
+    assert ContinuousDistributionSection(series=series, column="col").xmax is None
+
+
+@mark.parametrize("xmax", (5.0, "q0.9"))
+def test_continuous_distribution_section_xmax(series: Series, xmax: float | str) -> None:
+    assert ContinuousDistributionSection(series=series, column="col", xmax=xmax).xmax == xmax
+
+
 def test_continuous_distribution_section_get_statistics(series: Series) -> None:
     section = ContinuousDistributionSection(series=series, column="col")
     assert objects_are_allclose(
@@ -161,6 +179,16 @@ def test_create_histogram_figure_nbins(series: Series, nbins: int) -> None:
 @mark.parametrize("log_y", (True, False))
 def test_create_histogram_figure_log_y(series: Series, log_y: int) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", nbins=log_y), str)
+
+
+@mark.parametrize("xmin", (1.0, "q0.1", None))
+def test_create_histogram_figure_xmin(series: Series, xmin: float | str | None) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col", xmin=xmin), str)
+
+
+@mark.parametrize("xmax", (1.0, "q0.9", None))
+def test_create_histogram_figure_xmax(series: Series, xmax: float | str | None) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col", xmax=xmax), str)
 
 
 #######################################

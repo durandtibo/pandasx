@@ -17,6 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.range import find_range
 
 
 class ContinuousDistributionSection(BaseSection):
@@ -32,15 +33,31 @@ class ContinuousDistributionSection(BaseSection):
             the histogram. Default: ``None``
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
+        xmin (float or str or None, optional): Specifies the minimum
+            value of the range or its associated quantile.
+            ``q0.1`` means the 10% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
+        xmax (float or str or None, optional): Specifies the maximum
+            value of the range or its associated quantile.
+            ``q0.9`` means the 90% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
     """
 
     def __init__(
-        self, series: Series, column: str, nbins: int | None = None, log_y: bool = False
+        self,
+        series: Series,
+        column: str,
+        nbins: int | None = None,
+        log_y: bool = False,
+        xmin: float | str | None = None,
+        xmax: float | str | None = None,
     ) -> None:
         self._series = series
         self._column = column
         self._nbins = nbins
         self._log_y = log_y
+        self._xmin = xmin
+        self._xmax = xmax
 
     @property
     def column(self) -> str:
@@ -57,6 +74,14 @@ class ContinuousDistributionSection(BaseSection):
     @property
     def series(self) -> Series:
         return self._series
+
+    @property
+    def xmin(self) -> float | str | None:
+        return self._xmin
+
+    @property
+    def xmax(self) -> float | str | None:
+        return self._xmax
 
     def get_statistics(self) -> dict:
         stats = {
@@ -124,7 +149,12 @@ class ContinuousDistributionSection(BaseSection):
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
                 "figure": create_histogram_figure(
-                    series=self._series, column=self._column, nbins=self._nbins, log_y=self._log_y
+                    series=self._series,
+                    column=self._column,
+                    nbins=self._nbins,
+                    log_y=self._log_y,
+                    xmin=self._xmin,
+                    xmax=self._xmax,
                 ),
             }
         )
@@ -160,6 +190,8 @@ def create_histogram_figure(
     column: str,
     nbins: int | None = None,
     log_y: bool = False,
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
 ) -> str:
     r"""Creates the HTML code of a figure.
 
@@ -176,15 +208,19 @@ def create_histogram_figure(
     -------
         str: The HTML code of the figure.
     """
+    array = series.to_numpy()
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     fig = px.histogram(
-        series.array,
+        array,
         marginal="box",
         nbins=nbins,
         title=f"Distribution of values for column {column}",
         labels={"x": "value", "y": "count"},
         log_y=log_y,
+        range_x=[xmin, xmax],
     )
     fig.update_layout(showlegend=False)
+
     return plotly.io.to_html(fig, full_html=False)
 
 

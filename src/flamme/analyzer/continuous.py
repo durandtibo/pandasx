@@ -27,6 +27,14 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
             the histogram. Default: ``None``
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
+        xmin (float or str or None, optional): Specifies the minimum
+            value of the range or its associated quantile.
+            ``q0.1`` means the 10% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``q0``
+        xmax (float or str or None, optional): Specifies the maximum
+            value of the range or its associated quantile.
+            ``q0.9`` means the 90% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``q1``
 
     Example usage:
 
@@ -37,7 +45,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ContinuousDistributionAnalyzer
         >>> analyzer = ContinuousDistributionAnalyzer(column="float")
         >>> analyzer
-        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False)
+        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -48,15 +56,24 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, nbins: int | None = None, log_y: bool = False) -> None:
+    def __init__(
+        self,
+        column: str,
+        nbins: int | None = None,
+        log_y: bool = False,
+        xmin: float | str | None = "q0",
+        xmax: float | str | None = "q1",
+    ) -> None:
         self._column = column
         self._nbins = nbins
         self._log_y = log_y
+        self._xmin = xmin
+        self._xmax = xmax
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins}, "
-            f"log_y={self._log_y})"
+            f"log_y={self._log_y}, xmin={self._xmin}, xmax={self._xmax})"
         )
 
     def analyze(self, df: DataFrame) -> ContinuousDistributionSection | EmptySection:
@@ -71,6 +88,8 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
             series=df[self._column],
             nbins=self._nbins,
             log_y=self._log_y,
+            xmin=self._xmin,
+            xmax=self._xmax,
         )
 
 

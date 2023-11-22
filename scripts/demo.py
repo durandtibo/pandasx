@@ -130,7 +130,9 @@ def create_analyzer() -> BaseAnalyzer:
                     ),
                     "cauchy": MappingAnalyzer(
                         {
-                            "overall": ContinuousDistributionAnalyzer(column="cauchy", log_y=True),
+                            "overall": ContinuousDistributionAnalyzer(
+                                column="cauchy", log_y=True, xmax="q0.99"
+                            ),
                             "monthly": TemporalContinuousDistributionAnalyzer(
                                 column="cauchy", dt_column="datetime", period="M", log_y=True
                             ),

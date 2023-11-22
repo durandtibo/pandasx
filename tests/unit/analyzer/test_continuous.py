@@ -81,6 +81,40 @@ def test_continuous_distribution_analyzer_log_y(log_y: bool) -> None:
     assert section.log_y == log_y
 
 
+def test_continuous_distribution_analyzer_xmin_default() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.xmin == "q0"
+
+
+@mark.parametrize("xmin", (1.0, "q0.1", None))
+def test_continuous_distribution_analyzer_xmin(xmin: float | str | None) -> None:
+    section = ContinuousDistributionAnalyzer(column="col", xmin=xmin).analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.xmin == xmin
+
+
+def test_continuous_distribution_analyzer_xmax_default() -> None:
+    section = ContinuousDistributionAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.xmax == "q1"
+
+
+@mark.parametrize("xmax", (1.0, "q0.1", None))
+def test_continuous_distribution_analyzer_xmax(xmax: float | str | None) -> None:
+    section = ContinuousDistributionAnalyzer(column="col", xmax=xmax).analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ContinuousDistributionSection)
+    assert section.xmax == xmax
+
+
 def test_continuous_distribution_analyzer_get_statistics() -> None:
     section = ContinuousDistributionAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
