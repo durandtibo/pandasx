@@ -25,6 +25,10 @@ def test_sequential_preprocessor_str() -> None:
     ).startswith("SequentialPreprocessor(")
 
 
+def test_sequential_preprocessor_str_empty() -> None:
+    assert str(SequentialPreprocessor([])).startswith("SequentialPreprocessor()")
+
+
 def test_sequential_preprocessor_preprocess_1() -> None:
     df = pd.DataFrame(
         {
