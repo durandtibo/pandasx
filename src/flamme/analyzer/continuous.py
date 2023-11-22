@@ -30,11 +30,11 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
             ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
+            value and ``1`` is the maximum value. Default: ``q0``
         xmax (float or str or None, optional): Specifies the maximum
             value of the range or its associated quantile.
             ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
+            value and ``1`` is the maximum value. Default: ``q1``
 
     Example usage:
 
@@ -45,7 +45,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ContinuousDistributionAnalyzer
         >>> analyzer = ContinuousDistributionAnalyzer(column="float")
         >>> analyzer
-        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False, xmin=None, xmax=None)
+        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -61,8 +61,8 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         column: str,
         nbins: int | None = None,
         log_y: bool = False,
-        xmin: float | str | None = None,
-        xmax: float | str | None = None,
+        xmin: float | str | None = "q0",
+        xmax: float | str | None = "q1",
     ) -> None:
         self._column = column
         self._nbins = nbins

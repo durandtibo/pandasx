@@ -217,8 +217,9 @@ def create_histogram_figure(
         title=f"Distribution of values for column {column}",
         labels={"x": "value", "y": "count"},
         log_y=log_y,
+        range_x=[xmin, xmax],
     )
-    fig.update_layout(showlegend=False, xaxis={"range": [xmin, xmax]})
+    fig.update_layout(showlegend=False)
 
     return plotly.io.to_html(fig, full_html=False)
 

@@ -86,7 +86,7 @@ def test_continuous_distribution_analyzer_xmin_default() -> None:
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
-    assert section.xmin is None
+    assert section.xmin == "q0"
 
 
 @mark.parametrize("xmin", (1.0, "q0.1", None))
@@ -103,7 +103,7 @@ def test_continuous_distribution_analyzer_xmax_default() -> None:
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
-    assert section.xmax is None
+    assert section.xmax == "q1"
 
 
 @mark.parametrize("xmax", (1.0, "q0.1", None))
