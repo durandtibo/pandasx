@@ -19,11 +19,11 @@ def find_range(
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
             ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value.
+            value and ``1`` is the maximum value. Default: ``None``
         xmax (float or str or None, optional): Specifies the maximum
             value of the range or its associated quantile.
             ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value.
+            value and ``1`` is the maximum value. Default: ``None``
 
     Returns:
     -------
