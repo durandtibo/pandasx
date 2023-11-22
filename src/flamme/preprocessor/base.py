@@ -19,8 +19,32 @@ class BasePreprocessor(ABC, metaclass=AbstractFactory):
 
     .. code-block:: pycon
 
-        >>> import numpy as np
         >>> import pandas as pd
+        >>> from flamme.preprocessor import ToNumericPreprocessor
+        >>> preprocessor = ToNumericPreprocessor(columns=["col1", "col3"])
+        >>> preprocessor
+        ToNumericPreprocessor(columns=('col1', 'col3'))
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "col1": [1, 2, 3, 4, 5],
+        ...         "col2": ["1", "2", "3", "4", "5"],
+        ...         "col3": ["1", "2", "3", "4", "5"],
+        ...         "col4": ["a", "b", "c", "d", "e"],
+        ...     }
+        ... )
+        >>> df.dtypes
+        col1     int64
+        col2    object
+        col3    object
+        col4    object
+        dtype: object
+        >>> df = preprocessor.preprocess(df)
+        >>> df.dtypes
+        col1     int64
+        col2    object
+        col3     int64
+        col4    object
+        dtype: object
     """
 
     def preprocess(self, df: DataFrame) -> DataFrame:
@@ -39,8 +63,30 @@ class BasePreprocessor(ABC, metaclass=AbstractFactory):
 
         .. code-block:: pycon
 
-            >>> import numpy as np
             >>> import pandas as pd
+            >>> from flamme.preprocessor import ToNumericPreprocessor
+            >>> preprocessor = ToNumericPreprocessor(columns=["col1", "col3"])
+            >>> df = pd.DataFrame(
+            ...     {
+            ...         "col1": [1, 2, 3, 4, 5],
+            ...         "col2": ["1", "2", "3", "4", "5"],
+            ...         "col3": ["1", "2", "3", "4", "5"],
+            ...         "col4": ["a", "b", "c", "d", "e"],
+            ...     }
+            ... )
+            >>> df.dtypes
+            col1     int64
+            col2    object
+            col3    object
+            col4    object
+            dtype: object
+            >>> df = preprocessor.preprocess(df)
+            >>> df.dtypes
+            col1     int64
+            col2    object
+            col3     int64
+            col4    object
+            dtype: object
         """
 
 
@@ -67,7 +113,12 @@ def is_preprocessor_config(config: dict) -> bool:
     .. code-block:: pycon
 
         >>> from flamme.preprocessor import is_preprocessor_config
-        >>> is_preprocessor_config({"_target_": "flamme.preprocessor.NullValueAnalyzer"})
+        >>> is_preprocessor_config(
+        ...     {
+        ...         "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...         "columns": ["col1", "col3"],
+        ...     }
+        ... )
         True
     """
     return is_object_config(config, BasePreprocessor)
@@ -95,9 +146,14 @@ def setup_preprocessor(
     .. code-block:: pycon
 
         >>> from flamme.preprocessor import setup_preprocessor
-        >>> preprocessor = setup_preprocessor({"_target_": "flamme.preprocessor.NullValueAnalyzer"})
+        >>> preprocessor = setup_preprocessor(
+        ...     {
+        ...         "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...         "columns": ["col1", "col3"],
+        ...     }
+        ... )
         >>> preprocessor
-        NullValueAnalyzer()
+        ToNumericPreprocessor(columns=('col1', 'col3'))
     """
     if isinstance(preprocessor, dict):
         logger.info("Initializing an preprocessor from its configuration... ")
