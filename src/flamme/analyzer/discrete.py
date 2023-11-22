@@ -44,7 +44,7 @@ class DiscreteDistributionAnalyzer(BaseAnalyzer):
         if self._column not in df:
             logger.info(
                 f"Skipping discrete distribution analysis of column {self._column} "
-                f"because the datetime column is not in the DataFrame: {sorted(df.columns)}"
+                f"because it is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
         return DiscreteDistributionSection(

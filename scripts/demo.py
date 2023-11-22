@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import numpy as np
@@ -16,6 +17,7 @@ from flamme.analyzer import (
     TemporalDiscreteDistributionAnalyzer,
     TemporalNullValueAnalyzer,
 )
+from flamme.ingestor import Ingestor
 from flamme.preprocessor import (
     BasePreprocessor,
     SequentialPreprocessor,
@@ -23,8 +25,9 @@ from flamme.preprocessor import (
     ToDatetimePreprocessor,
     ToNumericPreprocessor,
 )
-from flamme.reporter.utils import create_html_report
-from flamme.utils.io import save_text
+from flamme.reporter import BaseReporter, Reporter
+
+logger = logging.getLogger(__name__)
 
 
 def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
@@ -141,23 +144,21 @@ def create_preprocessor() -> BasePreprocessor:
     )
 
 
-def main_report() -> None:
-    df = create_dataframe(nrows=10000)
-    preprocessor = create_preprocessor()
-    print(preprocessor)
-    df = preprocessor.preprocess(df)
-    analyzer = create_analyzer()
-    print(analyzer)
-    section = analyzer.analyze(df)
-    report = create_html_report(
-        toc=section.render_html_toc(max_depth=6), body=section.render_html_body()
+def create_reporter() -> BaseReporter:
+    return Reporter(
+        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
+        preprocessor=create_preprocessor(),
+        analyzer=create_analyzer(),
+        report_path=Path.cwd().joinpath("tmp/report.html"),
     )
 
-    path = Path.cwd().joinpath("tmp/report.html")
-    print(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    save_text(report, path)
+
+def main_report() -> None:
+    reporter = create_reporter()
+    logger.info(f"reporter:\n{reporter}")
+    reporter.compute()
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main_report()
