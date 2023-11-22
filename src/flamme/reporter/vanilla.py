@@ -57,8 +57,11 @@ class Reporter(BaseReporter):
         report_path: Path | str,
     ) -> None:
         self._ingestor = setup_ingestor(ingestor)
+        logger.info(f"ingestor:\n{ingestor}")
         self._preprocessor = setup_preprocessor(preprocessor)
+        logger.info(f"preprocessor:\n{preprocessor}")
         self._analyzer = setup_analyzer(analyzer)
+        logger.info(f"analyzer:\n{analyzer}")
         self._report_path = sanitize_path(report_path)
 
     def __repr__(self) -> str:
