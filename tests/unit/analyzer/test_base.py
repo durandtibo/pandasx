@@ -18,7 +18,7 @@ def test_is_analyzer_config_true() -> None:
 
 
 def test_is_analyzer_config_false() -> None:
-    assert not is_analyzer_config({OBJECT_TARGET: "torch.nn.Identity"})
+    assert not is_analyzer_config({OBJECT_TARGET: "collections.Counter"})
 
 
 ####################################
