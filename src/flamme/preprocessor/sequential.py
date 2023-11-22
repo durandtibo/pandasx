@@ -71,8 +71,10 @@ class SequentialPreprocessor(BasePreprocessor):
         )
 
     def __repr__(self) -> str:
-        args = str_indent(str_sequence(self._preprocessors))
-        return f"{self.__class__.__qualname__}(\n  {args}\n)"
+        args = ""
+        if self._preprocessors:
+            args = f"\n  {str_indent(str_sequence(self._preprocessors))}\n"
+        return f"{self.__class__.__qualname__}({args})"
 
     def preprocess(self, df: DataFrame) -> DataFrame:
         for preprocessor in self._preprocessors:
