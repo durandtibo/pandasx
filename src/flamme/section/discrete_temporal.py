@@ -4,6 +4,8 @@ __all__ = ["TemporalDiscreteDistributionSection"]
 
 from collections.abc import Sequence
 
+import plotly
+import plotly.express as px
 from jinja2 import Template
 from pandas import DataFrame
 
@@ -69,6 +71,12 @@ class TemporalDiscreteDistributionSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "period": self._period,
+                "figure": create_temporal_figure(
+                    df=self._df,
+                    column=self._column,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                ),
             }
         )
 
@@ -91,3 +99,42 @@ This section analyzes the temporal distribution of column {{column}} by using th
 {{table}}
 <p style="margin-top: 1rem;">
 """
+
+
+def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+    r"""Creates a HTML representation of a figure with the temporal value
+    distribution.
+
+    Args:
+    ----
+        df (``DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+        log_y (bool, optional): If ``True``, it represents the bars
+            with a log scale. Default: ``False``
+
+    Returns:
+    -------
+        str: The HTML representation of the figure.
+    """
+    if df.shape[0] == 0:
+        return ""
+    df = df[[column, dt_column]].copy()
+    col_dt, col_count = "__datetime__", "__count__"
+    df[col_dt] = df[dt_column].dt.to_period(period).astype(str)
+    # df = df[[column, col_dt]].groupby(by=col_dt, dropna=False).value_counts(dropna=False)
+    df = df[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
+    df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
+
+    fig = px.bar(
+        df,
+        x=col_dt,
+        y=col_count,
+        color=column,
+        barmode="group",
+        labels={col_count: "count", col_dt: "time", column: "value"},
+    )
+    return plotly.io.to_html(fig, full_html=False)

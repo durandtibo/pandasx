@@ -8,6 +8,7 @@ from pandas import DataFrame
 from pytest import fixture
 
 from flamme.section import TemporalDiscreteDistributionSection
+from flamme.section.discrete_temporal import create_temporal_figure
 
 
 @fixture
@@ -150,4 +151,21 @@ def test_temporal_discrete_distribution_section_render_html_toc_args(
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+###########################################
+#    Tests for create_temporal_figure     #
+###########################################
+
+
+def test_create_temporal_figure(dataframe: DataFrame) -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
     )
