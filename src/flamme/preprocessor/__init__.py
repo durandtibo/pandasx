@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = [
     "BasePreprocessor",
+    "SequentialPreprocessor",
     "StripStrPreprocessor",
     "ToDatetimePreprocessor",
     "ToNumericPreprocessor",
@@ -16,4 +17,5 @@ from flamme.preprocessor.base import (
 )
 from flamme.preprocessor.datetime import ToDatetimePreprocessor
 from flamme.preprocessor.numeric import ToNumericPreprocessor
+from flamme.preprocessor.sequential import SequentialPreprocessor
 from flamme.preprocessor.str import StripStrPreprocessor
