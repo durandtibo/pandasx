@@ -93,7 +93,20 @@ def create_analyzer() -> BaseAnalyzer:
                             ),
                         }
                     ),
-                    "discrete": DiscreteDistributionAnalyzer(column="discrete"),
+                    "discrete": MappingAnalyzer(
+                        {
+                            "overall": DiscreteDistributionAnalyzer(column="discrete"),
+                            "monthly": TemporalDiscreteDistributionAnalyzer(
+                                column="discrete", dt_column="datetime", period="M"
+                            ),
+                            "weekly": TemporalDiscreteDistributionAnalyzer(
+                                column="discrete", dt_column="datetime", period="W"
+                            ),
+                            "daily": TemporalDiscreteDistributionAnalyzer(
+                                column="discrete", dt_column="datetime", period="D"
+                            ),
+                        }
+                    ),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
                     "float": MappingAnalyzer(
                         {
