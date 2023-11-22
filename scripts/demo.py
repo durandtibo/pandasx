@@ -4,7 +4,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from coola.utils import str_indent
 
 from flamme.analyzer import (
     BaseAnalyzer,
@@ -24,6 +23,7 @@ from flamme.preprocessor import (
     ToDatetimePreprocessor,
     ToNumericPreprocessor,
 )
+from flamme.reporter.utils import create_html_report
 from flamme.utils.io import save_text
 
 
@@ -49,25 +49,6 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     df["discrete"] = np.random.randint(0, 1000, (nrows,))
     df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     return df
-
-
-def create_report(toc: str, body: str) -> str:
-    return f"""
-<!doctype html>
-<html>
-    <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"
-    </head>
-    <body style="margin: 1.5rem;">
-    <div id="toc_container">
-    <h2>Table of content</h2>
-    {str_indent(toc, num_spaces=4)}
-    </div>
-
-    \t{str_indent(body, num_spaces=8)}
-    </body>
-</html>
-"""
 
 
 def create_analyzer() -> BaseAnalyzer:
@@ -168,7 +149,7 @@ def main_report() -> None:
     analyzer = create_analyzer()
     print(analyzer)
     section = analyzer.analyze(df)
-    report = create_report(
+    report = create_html_report(
         toc=section.render_html_toc(max_depth=6), body=section.render_html_body()
     )
 

@@ -12,42 +12,27 @@ logger = logging.getLogger(__name__)
 
 
 class BaseReporter(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to preprocess a DataFrame.
+    r"""Defines the base class to compute a HTML report.
 
     Example usage:
 
     .. code-block:: pycon
 
-        >>> import pandas as pd
-        >>> from flamme.reporter import ToNumericPreprocessor
-        >>> reporter = ToNumericPreprocessor(columns=["col1", "col3"])
-        >>> reporter
-        ToNumericPreprocessor(columns=('col1', 'col3'))
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
-        ...     }
+        >>> from flamme.analyzer import NullValueAnalyzer
+        >>> from flamme.ingestor import ParquetIngestor
+        >>> from flamme.preprocessor import SequentialPreprocessor
+        >>> from flamme.reporter import Reporter
+        >>> reporter = Reporter(
+        ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
+        ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
+        ...     analyzer=NullValueAnalyzer(),
+        ...     report_path="/path/to/report.html",
         ... )
-        >>> df.dtypes
-        col1     int64
-        col2    object
-        col3    object
-        col4    object
-        dtype: object
-        >>> df = reporter.preprocess(df)
-        >>> df.dtypes
-        col1     int64
-        col2    object
-        col3     int64
-        col4    object
-        dtype: object
+        >>> report = reporter.compute()  # doctest: +SKIP
     """
 
     def compute(self) -> None:
-        r"""Computes the report.
+        r"""Computes a HTML report.
 
         Example usage:
 
