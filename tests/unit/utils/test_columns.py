@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+from decimal import Decimal
+
 import pandas as pd
 
-from flamme.utils.columns import find_columns_str, find_columns_type
+from flamme.utils.columns import (
+    find_columns_decimal,
+    find_columns_str,
+    find_columns_type,
+)
 
 #######################################
 #     Tests for find_columns_type     #
@@ -49,9 +55,30 @@ def test_find_columns_type_empty() -> None:
     assert find_columns_type(pd.DataFrame({}), str) == tuple()
 
 
-#######################################
+##########################################
+#     Tests for find_columns_decimal     #
+##########################################
+
+
+def test_find_columns_decimal() -> None:
+    df = pd.DataFrame(
+        {
+            "col1": [1, 2, 3, Decimal(4), Decimal(5)],
+            "col2": ["1", "2", "3", "4", "5"],
+            "col3": ["1", Decimal(2), "3", "4", "5"],
+            "col4": ["a", "b", "c", "d", "e"],
+        }
+    )
+    assert find_columns_decimal(df) == ("col1", "col3")
+
+
+def test_find_columns_decimal_empty() -> None:
+    assert find_columns_decimal(pd.DataFrame({})) == tuple()
+
+
+######################################
 #     Tests for find_columns_str     #
-#######################################
+######################################
 
 
 def test_find_columns_str() -> None:
