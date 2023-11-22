@@ -125,7 +125,8 @@ def create_temporal_figure(df: DataFrame, column: str, dt_column: str, period: s
     df = df[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
     df[col_dt] = df[dt_column].dt.to_period(period).astype(str)
-    df = df[[column, col_dt]].groupby(by=col_dt).value_counts(dropna=False)
+    # df = df[[column, col_dt]].groupby(by=col_dt, dropna=False).value_counts(dropna=False)
+    df = df[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
     df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
 
     fig = px.bar(
