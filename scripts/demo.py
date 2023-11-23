@@ -38,7 +38,6 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "float": np.random.randn(nrows) * 3 + 1,
             "int": np.random.randint(0, 10, (nrows,)),
             "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
-            # "discrete": np.random.randint(0, 1000, (nrows,)),
             "cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
@@ -49,12 +48,44 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
     df = df.mask(mask)
-    df["discrete"] = np.random.randint(0, 1000, (nrows,))
+    df["discrete"] = np.random.randint(0, 1001, (nrows,))
     df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     return df
 
 
 def create_analyzer() -> BaseAnalyzer:
+    def create_discrete_column(column: str) -> BaseAnalyzer:
+        return MappingAnalyzer(
+            {
+                "overall": DiscreteDistributionAnalyzer(column=column),
+                "monthly": TemporalDiscreteDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="M"
+                ),
+                "weekly": TemporalDiscreteDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="W"
+                ),
+                "daily": TemporalDiscreteDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="D"
+                ),
+            }
+        )
+
+    def create_continuous_column(column: str, log_y: bool = False) -> BaseAnalyzer:
+        return MappingAnalyzer(
+            {
+                "overall": ContinuousDistributionAnalyzer(column=column, log_y=log_y),
+                "monthly": TemporalContinuousDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="M", log_y=log_y
+                ),
+                "weekly": TemporalContinuousDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="W", log_y=log_y
+                ),
+                "daily": TemporalContinuousDistributionAnalyzer(
+                    column=column, dt_column="datetime", period="D", log_y=log_y
+                ),
+            }
+        )
+
     return MappingAnalyzer(
         {
             "column type": ColumnTypeAnalyzer(),
@@ -69,49 +100,10 @@ def create_analyzer() -> BaseAnalyzer:
             "columns": MappingAnalyzer(
                 {
                     "str": DiscreteDistributionAnalyzer(column="str"),
-                    "int": MappingAnalyzer(
-                        {
-                            "overall": DiscreteDistributionAnalyzer(column="int"),
-                            "monthly": TemporalDiscreteDistributionAnalyzer(
-                                column="int", dt_column="datetime", period="M"
-                            ),
-                            "weekly": TemporalDiscreteDistributionAnalyzer(
-                                column="int", dt_column="datetime", period="W"
-                            ),
-                            "daily": TemporalDiscreteDistributionAnalyzer(
-                                column="int", dt_column="datetime", period="D"
-                            ),
-                        }
-                    ),
-                    "discrete": MappingAnalyzer(
-                        {
-                            "overall": DiscreteDistributionAnalyzer(column="discrete"),
-                            "monthly": TemporalDiscreteDistributionAnalyzer(
-                                column="discrete", dt_column="datetime", period="M"
-                            ),
-                            "weekly": TemporalDiscreteDistributionAnalyzer(
-                                column="discrete", dt_column="datetime", period="W"
-                            ),
-                            "daily": TemporalDiscreteDistributionAnalyzer(
-                                column="discrete", dt_column="datetime", period="D"
-                            ),
-                        }
-                    ),
+                    "int": create_discrete_column(column="int"),
+                    "discrete": create_discrete_column(column="discrete"),
                     "missing": DiscreteDistributionAnalyzer(column="missing"),
-                    "float": MappingAnalyzer(
-                        {
-                            "overall": ContinuousDistributionAnalyzer(column="float"),
-                            "monthly": TemporalContinuousDistributionAnalyzer(
-                                column="float", dt_column="datetime", period="M"
-                            ),
-                            "weekly": TemporalContinuousDistributionAnalyzer(
-                                column="float", dt_column="datetime", period="W"
-                            ),
-                            "daily": TemporalContinuousDistributionAnalyzer(
-                                column="float", dt_column="datetime", period="D"
-                            ),
-                        }
-                    ),
+                    "float": create_continuous_column(column="float"),
                     "cauchy": MappingAnalyzer(
                         {
                             "overall": ContinuousDistributionAnalyzer(
