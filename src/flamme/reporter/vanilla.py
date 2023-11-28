@@ -79,9 +79,9 @@ class Reporter(BaseReporter):
     def compute(self) -> None:
         logger.info("Ingesting the DataFrame...")
         df = self._ingestor.ingest()
-        logger.info(f"Preprocessing the DataFrame ({df.shape})...")
+        logger.info(f"Preprocessing the DataFrame {df.shape}...")
         df = self._preprocessor.preprocess(df)
-        logger.info(f"Analyzing the DataFrame ({df.shape})...")
+        logger.info(f"Analyzing the DataFrame {df.shape}...")
         section = self._analyzer.analyze(df)
         logger.info("Creating the HTML report...")
         report = create_html_report(
