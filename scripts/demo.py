@@ -12,6 +12,7 @@ from flamme.analyzer import (
     ContinuousDistributionAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
+    MarkdownAnalyzer,
     NullValueAnalyzer,
     TemporalContinuousDistributionAnalyzer,
     TemporalDiscreteDistributionAnalyzer,
@@ -106,6 +107,13 @@ def create_analyzer() -> BaseAnalyzer:
                     "float": create_continuous_column(column="float"),
                     "cauchy": MappingAnalyzer(
                         {
+                            "description": MarkdownAnalyzer(
+                                desc="""
+- **Link:** URL
+- **Description:** blabla
+- **Valid values:** float values
+"""
+                            ),
                             "overall": ContinuousDistributionAnalyzer(
                                 column="cauchy", log_y=True, xmax="q0.99"
                             ),

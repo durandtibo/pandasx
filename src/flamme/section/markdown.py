@@ -26,7 +26,7 @@ class MarkdownSection(BaseSection):
     """
 
     def __init__(self, desc: str) -> None:
-        self._desc = desc
+        self._desc = str(desc)
 
     def get_statistics(self) -> dict:
         return {}
