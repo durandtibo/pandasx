@@ -6,6 +6,7 @@ __all__ = [
     "ContinuousDistributionSection",
     "DiscreteDistributionSection",
     "EmptySection",
+    "MarkdownSection",
     "NullValueSection",
     "SectionDict",
     "TemporalContinuousDistributionSection",
@@ -21,4 +22,5 @@ from flamme.section.discrete_temporal import TemporalDiscreteDistributionSection
 from flamme.section.dtype import ColumnTypeSection
 from flamme.section.empty import EmptySection
 from flamme.section.mapping import SectionDict
+from flamme.section.markdown import MarkdownSection
 from flamme.section.null import NullValueSection, TemporalNullValueSection
