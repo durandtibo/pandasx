@@ -54,6 +54,19 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     return df
 
 
+def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
+    ncols = 100
+    rng = np.random.default_rng(42)
+    df = pd.DataFrame(
+        rng.normal(size=(nrows, ncols)), columns=[f"feature{i}" for i in range(ncols)]
+    )
+    mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
+    mask[mask.all(1), -1] = 0
+    df = df.mask(mask)
+    df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
+    return df
+
+
 def create_analyzer() -> BaseAnalyzer:
     def create_discrete_column(column: str) -> BaseAnalyzer:
         return MappingAnalyzer(
@@ -142,6 +155,10 @@ def create_preprocessor() -> BasePreprocessor:
             ToDatetimePreprocessor(columns=["datetime"]),
         ]
     )
+
+
+def create_preprocessor2() -> BasePreprocessor:
+    return SequentialPreprocessor([])
 
 
 def create_reporter() -> BaseReporter:

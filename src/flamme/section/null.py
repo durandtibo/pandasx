@@ -285,8 +285,6 @@ def create_temporal_null_figure(
         cols=ncols,
         subplot_titles=columns,
         specs=[[{"secondary_y": True} for _ in range(ncols)] for _ in range(nrows)],
-        horizontal_spacing=0.13,
-        vertical_spacing=0.12,
     )
 
     for i, column in enumerate(columns):
