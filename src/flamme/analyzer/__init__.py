@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = [
     "BaseAnalyzer",
+    "ColumnSubsetAnalyzer",
     "ColumnTypeAnalyzer",
     "ContinuousDistributionAnalyzer",
     "DiscreteDistributionAnalyzer",
@@ -17,6 +18,7 @@ __all__ = [
 ]
 
 from flamme.analyzer.base import BaseAnalyzer, is_analyzer_config, setup_analyzer
+from flamme.analyzer.column import ColumnSubsetAnalyzer
 from flamme.analyzer.continuous import (
     ContinuousDistributionAnalyzer,
     TemporalContinuousDistributionAnalyzer,
