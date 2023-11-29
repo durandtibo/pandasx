@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 class ColumnSubsetAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to analyze only a subset of the columns.
 
+    Args:
+    ----
+        columns (``Sequence``): Soecifies the columns to select.
+        analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
+            or its configuration.
+
     Example usage:
 
     .. code-block:: pycon

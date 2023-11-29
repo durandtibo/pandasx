@@ -8,6 +8,7 @@ import pandas as pd
 
 from flamme.analyzer import (
     BaseAnalyzer,
+    ColumnSubsetAnalyzer,
     ColumnTypeAnalyzer,
     ContinuousDistributionAnalyzer,
     DiscreteDistributionAnalyzer,
@@ -142,6 +143,9 @@ def create_analyzer() -> BaseAnalyzer:
                         }
                     ),
                 }
+            ),
+            "subset": ColumnSubsetAnalyzer(
+                columns=["discrete", "str"], analyzer=NullValueAnalyzer()
             ),
         }
     )

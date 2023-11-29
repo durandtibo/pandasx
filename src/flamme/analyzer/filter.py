@@ -14,6 +14,12 @@ class FilteredAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to find all the value types in each
     column.
 
+    Args:
+    ----
+        query (``str``): Soecifies the query.
+        analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
+            or its configuration.
+
     Example usage:
 
     .. code-block:: pycon
