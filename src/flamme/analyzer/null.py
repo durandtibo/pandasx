@@ -52,6 +52,18 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of null
     values.
 
+    Args:
+    ----
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+        ncols (int, optional): Specifies the number of columns.
+            Default: ``2``
+        figsize (``tuple``, optional): Specifies the individual figure
+            size in pixels. The first dimension is the width and the
+            second is the height.  Default: ``(700, 300)``
+
     Example usage:
 
     .. code-block:: pycon
@@ -75,9 +87,17 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, dt_column: str, period: str) -> None:
+    def __init__(
+        self,
+        dt_column: str,
+        period: str,
+        ncols: int = 2,
+        figsize: tuple[int, int] = (700, 300),
+    ) -> None:
         self._dt_column = dt_column
         self._period = period
+        self._ncols = ncols
+        self._figsize = figsize
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period})"
@@ -89,4 +109,10 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return TemporalNullValueSection(df=df, dt_column=self._dt_column, period=self._period)
+        return TemporalNullValueSection(
+            df=df,
+            dt_column=self._dt_column,
+            period=self._period,
+            ncols=self._ncols,
+            figsize=self._figsize,
+        )
