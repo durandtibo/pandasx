@@ -107,7 +107,7 @@ def create_analyzer() -> BaseAnalyzer:
             "null values": MappingAnalyzer(
                 {
                     "overall": NullValueAnalyzer(),
-                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M", ncols=1),
                     "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W"),
                     "daily": TemporalNullValueAnalyzer(dt_column="datetime", period="D"),
                 }

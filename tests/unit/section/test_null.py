@@ -5,7 +5,8 @@ import pandas as pd
 from coola import objects_are_allclose
 from jinja2 import Template
 from pandas import DataFrame
-from pytest import raises
+from pandas.testing import assert_frame_equal
+from pytest import mark, raises
 
 from flamme.section import NullValueSection, TemporalNullValueSection
 
@@ -124,6 +125,114 @@ def test_null_value_section_render_html_toc_args() -> None:
 ##############################################
 #     Tests for TemporalNullValueSection     #
 ##############################################
+
+
+def test_temporal_null_value_section_df() -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+        period="M",
+    )
+    assert_frame_equal(
+        section.df,
+        DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+    )
+
+
+@mark.parametrize("dt_column", ("datetime", "str"))
+def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column=dt_column,
+        period="M",
+    )
+    assert section.dt_column == dt_column
+
+
+@mark.parametrize("period", ("M", "D"))
+def test_temporal_null_value_section_period(period: str) -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+        period=period,
+    )
+    assert section.period == period
+
+
+@mark.parametrize("ncols", (1, 2))
+def test_temporal_null_value_section_ncols(ncols: int) -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+        period="M",
+        ncols=ncols,
+    )
+    assert section.ncols == ncols
+
+
+@mark.parametrize("figsize", ((700, 300), (100, 100)))
+def test_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+        period="M",
+        figsize=figsize,
+    )
+    assert section.figsize == figsize
 
 
 def test_temporal_null_value_section_get_statistics() -> None:
