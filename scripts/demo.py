@@ -107,9 +107,13 @@ def create_analyzer() -> BaseAnalyzer:
             "null values": MappingAnalyzer(
                 {
                     "overall": NullValueAnalyzer(),
-                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M", ncols=1),
-                    "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W"),
-                    "daily": TemporalNullValueAnalyzer(dt_column="datetime", period="D"),
+                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+                    "weekly": TemporalNullValueAnalyzer(
+                        dt_column="datetime", period="W", figsize=(700, 500)
+                    ),
+                    "daily": TemporalNullValueAnalyzer(
+                        dt_column="datetime", period="D", ncols=1, figsize=(1400, 600)
+                    ),
                 }
             ),
             "columns": MappingAnalyzer(
@@ -167,7 +171,7 @@ def create_preprocessor2() -> BasePreprocessor:
 
 def create_reporter() -> BaseReporter:
     return Reporter(
-        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
+        ingestor=Ingestor(df=create_dataframe(nrows=50000)),
         preprocessor=create_preprocessor(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),

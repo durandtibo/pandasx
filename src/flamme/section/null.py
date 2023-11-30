@@ -237,22 +237,28 @@ class TemporalNullValueSection(BaseSection):
 
     @property
     def df(self) -> DataFrame:
+        r"""``pandas.DataFrame``: The DataFrame to analyze."""
         return self._df
 
     @property
     def dt_column(self) -> str:
+        r"""str: The datetime column."""
         return self._dt_column
 
     @property
     def period(self) -> str:
+        r"""str: The temporal period used to analyze the data."""
         return self._period
 
     @property
     def ncols(self) -> int:
+        r"""int: The number of columns to show the figures."""
         return self._ncols
 
     @property
     def figsize(self) -> tuple[int, int]:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
         return self._figsize
 
     def get_statistics(self) -> dict:
@@ -391,7 +397,7 @@ def create_temporal_null_figure(
         secondary_y=True,
     )
     fig.update_layout(
-        height=figsize[1] * nrows + 120,
+        height=figsize[1] * nrows,
         width=figsize[0] * ncols,
         showlegend=False,
         barmode="overlay",
