@@ -8,10 +8,12 @@ import pandas as pd
 
 from flamme.analyzer import (
     BaseAnalyzer,
+    ColumnSubsetAnalyzer,
     ColumnTypeAnalyzer,
     ContinuousDistributionAnalyzer,
     DiscreteDistributionAnalyzer,
     MappingAnalyzer,
+    MarkdownAnalyzer,
     NullValueAnalyzer,
     TemporalContinuousDistributionAnalyzer,
     TemporalDiscreteDistributionAnalyzer,
@@ -49,6 +51,19 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[mask.all(1), -1] = 0
     df = df.mask(mask)
     df["discrete"] = np.random.randint(0, 1001, (nrows,))
+    df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
+    return df
+
+
+def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
+    ncols = 100
+    rng = np.random.default_rng(42)
+    df = pd.DataFrame(
+        rng.normal(size=(nrows, ncols)), columns=[f"feature{i}" for i in range(ncols)]
+    )
+    mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
+    mask[mask.all(1), -1] = 0
+    df = df.mask(mask)
     df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     return df
 
@@ -93,8 +108,12 @@ def create_analyzer() -> BaseAnalyzer:
                 {
                     "overall": NullValueAnalyzer(),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
-                    "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W"),
-                    "daily": TemporalNullValueAnalyzer(dt_column="datetime", period="D"),
+                    "weekly": TemporalNullValueAnalyzer(
+                        dt_column="datetime", period="W", figsize=(700, 500)
+                    ),
+                    "daily": TemporalNullValueAnalyzer(
+                        dt_column="datetime", period="D", ncols=1, figsize=(1400, 600)
+                    ),
                 }
             ),
             "columns": MappingAnalyzer(
@@ -106,6 +125,13 @@ def create_analyzer() -> BaseAnalyzer:
                     "float": create_continuous_column(column="float"),
                     "cauchy": MappingAnalyzer(
                         {
+                            "description": MarkdownAnalyzer(
+                                desc="""
+- **Link:** URL
+- **Description:** blabla
+- **Valid values:** float values
+"""
+                            ),
                             "overall": ContinuousDistributionAnalyzer(
                                 column="cauchy", log_y=True, xmax="q0.99"
                             ),
@@ -122,6 +148,9 @@ def create_analyzer() -> BaseAnalyzer:
                     ),
                 }
             ),
+            "subset": ColumnSubsetAnalyzer(
+                columns=["discrete", "str"], analyzer=NullValueAnalyzer()
+            ),
         }
     )
 
@@ -136,9 +165,13 @@ def create_preprocessor() -> BasePreprocessor:
     )
 
 
+def create_preprocessor2() -> BasePreprocessor:
+    return SequentialPreprocessor([])
+
+
 def create_reporter() -> BaseReporter:
     return Reporter(
-        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
+        ingestor=Ingestor(df=create_dataframe(nrows=50000)),
         preprocessor=create_preprocessor(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),

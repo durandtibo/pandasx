@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-__all__ = ["FilteredAnalyzer"]
+__all__ = ["ColumnSubsetAnalyzer"]
+
+import logging
+from collections.abc import Sequence
 
 from coola.utils import str_indent, str_mapping
 from pandas import DataFrame
@@ -9,14 +12,15 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import BaseSection
 from flamme.utils import setup_object
 
+logger = logging.getLogger(__name__)
 
-class FilteredAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to find all the value types in each
-    column.
+
+class ColumnSubsetAnalyzer(BaseAnalyzer):
+    r"""Implements an analyzer to analyze only a subset of the columns.
 
     Args:
     ----
-        query (``str``): Soecifies the query.
+        columns (``Sequence``): Soecifies the columns to select.
         analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
             or its configuration.
 
@@ -26,11 +30,11 @@ class FilteredAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import FilteredAnalyzer, NullValueAnalyzer
-        >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NullValueAnalyzer())
+        >>> from flamme.analyzer import ColumnSubsetAnalyzer, NullValueAnalyzer
+        >>> analyzer = ColumnSubsetAnalyzer(columns=["int", "float"], analyzer=NullValueAnalyzer())
         >>> analyzer
-        FilteredAnalyzer(
-          (query): float >= 2.0
+        ColumnSubsetAnalyzer(
+          (columns): ['int', 'float']
           (analyzer): NullValueAnalyzer()
         )
         >>> df = pd.DataFrame(
@@ -43,14 +47,14 @@ class FilteredAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, query: str, analyzer: BaseAnalyzer | dict) -> None:
-        self._query = query
+    def __init__(self, columns: Sequence[str], analyzer: BaseAnalyzer | dict) -> None:
+        self._columns = list(columns)
         self._analyzer = setup_object(analyzer)
 
     def __repr__(self) -> str:
-        args = str_indent(str_mapping({"query": self._query, "analyzer": self._analyzer}))
+        args = str_indent(str_mapping({"columns": self._columns, "analyzer": self._analyzer}))
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, df: DataFrame) -> BaseSection:
-        df = df.query(self._query)
+        df = df[self._columns]
         return self._analyzer.analyze(df)

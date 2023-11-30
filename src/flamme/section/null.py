@@ -71,6 +71,7 @@ class NullValueSection(BaseSection):
                 "table_alpha": self._create_table(sort_by="column"),
                 "table_sort": self._create_table(sort_by="null"),
                 "bar_figure": self._create_bar_figure(),
+                "num_columns": f"{len(self._columns):,}",
             }
         )
 
@@ -86,28 +87,40 @@ class NullValueSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the number/proportion of null values for each column.
-The color indicates the proportion of missing values.
-Dark blues indicates more missing values than light blues.
+This section analyzes the number and proportion of null values for the {{num_columns}}
+columns.
+In the following histogram, the columns are sorted by ascending order of null values.
+
 
 {{bar_figure}}
 
-<div class="container-fluid">
-    <div class="row align-items-start">
-        <div class="col align-self-center">
-            <p><b>Columns sorted by alphabetical order</b></p>
+<details>
+    <summary>Show analysis per column</summary>
 
-            {{table_alpha}}
+    <p style="margin-top: 1rem;">
+    The following tables show the number and proportion of null values for the {{num_columns}}
+    columns.
+    The background color of the row indicates the proportion of missing values:
+    dark blues indicates more missing values than light blues.
 
-        </div>
-        <div class="col">
-            <p><b>Columns sorted by ascending order of missing values</b></p>
+    <div class="container-fluid">
+        <div class="row align-items-start">
+            <div class="col align-self-center">
+                <p><b>Columns sorted by alphabetical order</b></p>
 
-            {{table_sort}}
+                {{table_alpha}}
 
+            </div>
+            <div class="col">
+                <p><b>Columns sorted by ascending order of missing values</b></p>
+
+                {{table_sort}}
+
+            </div>
         </div>
     </div>
-</div>
+</details>
+<p style="margin-top: 1rem;">
 """
 
     def _create_bar_figure(self) -> str:
@@ -201,12 +214,52 @@ class TemporalNullValueSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
+        ncols (int, optional): Specifies the number of columns.
+            Default: ``2``
+        figsize (``tuple``, optional): Specifies the individual figure
+            size in pixels. The first dimension is the width and the
+            second is the height.  Default: ``(700, 300)``
     """
 
-    def __init__(self, df: DataFrame, dt_column: str, period: str) -> None:
+    def __init__(
+        self,
+        df: DataFrame,
+        dt_column: str,
+        period: str,
+        ncols: int = 2,
+        figsize: tuple[int, int] = (700, 300),
+    ) -> None:
         self._df = df
         self._dt_column = dt_column
         self._period = period
+        self._ncols = ncols
+        self._figsize = figsize
+
+    @property
+    def df(self) -> DataFrame:
+        r"""``pandas.DataFrame``: The DataFrame to analyze."""
+        return self._df
+
+    @property
+    def dt_column(self) -> str:
+        r"""str: The datetime column."""
+        return self._dt_column
+
+    @property
+    def period(self) -> str:
+        r"""str: The temporal period used to analyze the data."""
+        return self._period
+
+    @property
+    def ncols(self) -> int:
+        r"""int: The number of columns to show the figures."""
+        return self._ncols
+
+    @property
+    def figsize(self) -> tuple[int, int]:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         return {}
@@ -221,7 +274,11 @@ class TemporalNullValueSection(BaseSection):
                 "section": number,
                 "column": self._dt_column,
                 "figure": create_temporal_null_figure(
-                    df=self._df, dt_column=self._dt_column, period=self._period
+                    df=self._df,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                    ncols=self._ncols,
+                    figsize=self._figsize,
                 ),
             }
         )
@@ -285,8 +342,6 @@ def create_temporal_null_figure(
         cols=ncols,
         subplot_titles=columns,
         specs=[[{"secondary_y": True} for _ in range(ncols)] for _ in range(nrows)],
-        horizontal_spacing=0.13,
-        vertical_spacing=0.12,
     )
 
     for i, column in enumerate(columns):
@@ -342,7 +397,7 @@ def create_temporal_null_figure(
         secondary_y=True,
     )
     fig.update_layout(
-        height=figsize[1] * nrows + 120,
+        height=figsize[1] * nrows,
         width=figsize[0] * ncols,
         showlegend=False,
         barmode="overlay",
