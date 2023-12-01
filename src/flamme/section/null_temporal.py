@@ -114,7 +114,12 @@ class ColumnTemporalNullValueSection(BaseSection):
                     period=self._period,
                     figsize=self._figsize,
                 ),
-                "table": "",
+                "table": create_temporal_null_table(
+                    df=self._df,
+                    column=self._column,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                ),
             }
         )
 
@@ -134,6 +139,9 @@ This section analyzes the temporal distribution of null values in column <em>{{c
 The column <em>{{dt_column}}</em> is used as temporal column.
 
 {{figure}}
+
+{{table}}
+<p style="margin-top: 1rem;">
 """
 
 
@@ -215,6 +223,86 @@ def create_temporal_null_figure(
     return plotly.io.to_html(fig, full_html=False)
 
 
+def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+    r"""Creates a HTML representation of a table with the temporal
+    distribution of null values.
+
+    Args:
+    ----
+        df (``DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+
+    Returns:
+    -------
+        str: The HTML representation of the table.
+    """
+    if df.shape[0] == 0:
+        return ""
+    num_nulls, totals, labels = prepare_data(
+        df=df, column=column, dt_column=dt_column, period=period
+    )
+    rows = []
+    for label, num_null, total in zip(labels, num_nulls, totals):
+        rows.append(create_temporal_null_table_row(label=label, num_nulls=num_null, total=total))
+    return Template(
+        """
+<details>
+    <summary>Statistics per period</summary>
+
+    <p>The following table shows some statistics for each period of column {{column}}.
+
+    <table class="table table-hover table-responsive w-auto" >
+        <thead class="thead table-group-divider">
+            <tr>
+                <th>period</th>
+                <th>number of null values</th>
+                <th>total number of values</th>
+                <th>percentage of null values</th>
+            </tr>
+        </thead>
+        <tbody class="tbody table-group-divider">
+            {{rows}}
+            <tr class="table-group-divider"></tr>
+        </tbody>
+    </table>
+</details>
+"""
+    ).render({"rows": "\n".join(rows), "column": column, "period": period})
+
+
+def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> str:
+    r"""Creates the HTML code of a new table row.
+
+    Args:
+    ----
+        row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
+
+    Returns:
+    -------
+        str: The HTML code of a row.
+    """
+    return Template(
+        """<tr>
+    <th>{{label}}</th>
+    <td {{num_style}}>{{num_nulls}}</td>
+    <td {{num_style}}>{{total}}</td>
+    <td {{num_style}}>{{num_nulls_pct}}</td>
+</tr>"""
+    ).render(
+        {
+            "num_style": 'style="text-align: right;"',
+            "label": label,
+            "num_nulls": f"{num_nulls:,}",
+            "total": f"{total:,}",
+            "num_nulls_pct": f"{num_nulls / total:.4f}",
+        }
+    )
+
+
 def prepare_data(
     df: DataFrame,
     column: str,
@@ -276,4 +364,4 @@ def prepare_data(
     df_num_nulls = df.groupby(dt_col)[null_col].sum().sort_index()
     df_total = df.groupby(dt_col)[null_col].count().sort_index()
     labels = [str(dt) for dt in df_num_nulls.index]
-    return df_num_nulls.to_numpy(), df_total.to_numpy(), labels
+    return df_num_nulls.to_numpy().astype(int), df_total.to_numpy().astype(int), labels
