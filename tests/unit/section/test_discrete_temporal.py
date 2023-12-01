@@ -21,9 +21,9 @@ def dataframe() -> DataFrame:
     )
 
 
-#########################################################
-#     Tests for TemporalDiscreteDistributionSection     #
-#########################################################
+###################################################
+#     Tests for ColumnTemporalDiscreteSection     #
+###################################################
 
 
 def test_column_temporal_discrete_section_column(dataframe: DataFrame) -> None:

@@ -7,12 +7,12 @@ from pytest import raises
 
 from flamme.section import DataTypeSection
 
-#######################################
-#     Tests for ColumnTypeSection     #
-#######################################
+#####################################
+#     Tests for DataTypeSection     #
+#####################################
 
 
-def test_column_type_section_incorrect_different_key() -> None:
+def test_data_type_section_incorrect_different_key() -> None:
     with raises(RuntimeError, match="The keys of dtypes and types do not match:"):
         DataTypeSection(
             dtypes={"col": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
@@ -20,7 +20,7 @@ def test_column_type_section_incorrect_different_key() -> None:
         )
 
 
-def test_column_type_section_incorrect_missing_key() -> None:
+def test_data_type_section_incorrect_missing_key() -> None:
     with raises(RuntimeError, match="The keys of dtypes and types do not match:"):
         DataTypeSection(
             dtypes={"int": dtype("float64"), "str": dtype("O")},
@@ -28,7 +28,7 @@ def test_column_type_section_incorrect_missing_key() -> None:
         )
 
 
-def test_column_type_section_get_statistics() -> None:
+def test_data_type_section_get_statistics() -> None:
     section = DataTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str, type(None)}},
@@ -39,12 +39,12 @@ def test_column_type_section_get_statistics() -> None:
     )
 
 
-def test_column_type_section_get_statistics_empty() -> None:
+def test_data_type_section_get_statistics_empty() -> None:
     section = DataTypeSection(dtypes={}, types={})
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_type_section_render_html_body() -> None:
+def test_data_type_section_render_html_body() -> None:
     section = DataTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
@@ -52,7 +52,7 @@ def test_column_type_section_render_html_body() -> None:
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_type_section_render_html_body_args() -> None:
+def test_data_type_section_render_html_body_args() -> None:
     section = DataTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
@@ -62,12 +62,12 @@ def test_column_type_section_render_html_body_args() -> None:
     )
 
 
-def test_column_type_section_render_html_body_empty() -> None:
+def test_data_type_section_render_html_body_empty() -> None:
     section = DataTypeSection(dtypes={}, types={})
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_type_section_render_html_toc() -> None:
+def test_data_type_section_render_html_toc() -> None:
     section = DataTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
@@ -75,7 +75,7 @@ def test_column_type_section_render_html_toc() -> None:
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_column_type_section_render_html_toc_args() -> None:
+def test_data_type_section_render_html_toc_args() -> None:
     section = DataTypeSection(
         dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
         types={"float": {float}, "int": {int}, "str": {str}},
