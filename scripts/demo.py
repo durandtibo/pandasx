@@ -8,16 +8,16 @@ import pandas as pd
 
 from flamme.analyzer import (
     BaseAnalyzer,
+    ColumnContinuousAnalyzer,
+    ColumnDiscreteAnalyzer,
     ColumnSubsetAnalyzer,
+    ColumnTemporalContinuousAnalyzer,
+    ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
     ColumnTypeAnalyzer,
-    ContinuousDistributionAnalyzer,
-    DiscreteDistributionAnalyzer,
     MappingAnalyzer,
     MarkdownAnalyzer,
     NullValueAnalyzer,
-    TemporalContinuousDistributionAnalyzer,
-    TemporalDiscreteDistributionAnalyzer,
     TemporalNullValueAnalyzer,
 )
 from flamme.ingestor import Ingestor
@@ -73,14 +73,14 @@ def create_analyzer() -> BaseAnalyzer:
     def create_discrete_column(column: str) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": DiscreteDistributionAnalyzer(column=column),
-                "monthly": TemporalDiscreteDistributionAnalyzer(
+                "overall": ColumnDiscreteAnalyzer(column=column),
+                "monthly": ColumnTemporalDiscreteAnalyzer(
                     column=column, dt_column="datetime", period="M"
                 ),
-                "weekly": TemporalDiscreteDistributionAnalyzer(
+                "weekly": ColumnTemporalDiscreteAnalyzer(
                     column=column, dt_column="datetime", period="W"
                 ),
-                "daily": TemporalDiscreteDistributionAnalyzer(
+                "daily": ColumnTemporalDiscreteAnalyzer(
                     column=column, dt_column="datetime", period="D"
                 ),
                 "null monthly": ColumnTemporalNullValueAnalyzer(
@@ -92,14 +92,14 @@ def create_analyzer() -> BaseAnalyzer:
     def create_continuous_column(column: str, log_y: bool = False) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": ContinuousDistributionAnalyzer(column=column, log_y=log_y),
-                "monthly": TemporalContinuousDistributionAnalyzer(
+                "overall": ColumnContinuousAnalyzer(column=column, log_y=log_y),
+                "monthly": ColumnTemporalContinuousAnalyzer(
                     column=column, dt_column="datetime", period="M", log_y=log_y
                 ),
-                "weekly": TemporalContinuousDistributionAnalyzer(
+                "weekly": ColumnTemporalContinuousAnalyzer(
                     column=column, dt_column="datetime", period="W", log_y=log_y
                 ),
-                "daily": TemporalContinuousDistributionAnalyzer(
+                "daily": ColumnTemporalContinuousAnalyzer(
                     column=column, dt_column="datetime", period="D", log_y=log_y
                 ),
             }
@@ -122,10 +122,10 @@ def create_analyzer() -> BaseAnalyzer:
             ),
             "columns": MappingAnalyzer(
                 {
-                    "str": DiscreteDistributionAnalyzer(column="str"),
+                    "str": ColumnDiscreteAnalyzer(column="str"),
                     "int": create_discrete_column(column="int"),
                     "discrete": create_discrete_column(column="discrete"),
-                    "missing": DiscreteDistributionAnalyzer(column="missing"),
+                    "missing": ColumnDiscreteAnalyzer(column="missing"),
                     "float": create_continuous_column(column="float"),
                     "cauchy": MappingAnalyzer(
                         {
@@ -136,16 +136,16 @@ def create_analyzer() -> BaseAnalyzer:
 - **Valid values:** float values
 """
                             ),
-                            "overall": ContinuousDistributionAnalyzer(
+                            "overall": ColumnContinuousAnalyzer(
                                 column="cauchy", log_y=True, xmax="q0.99"
                             ),
-                            "monthly": TemporalContinuousDistributionAnalyzer(
+                            "monthly": ColumnTemporalContinuousAnalyzer(
                                 column="cauchy", dt_column="datetime", period="M", log_y=True
                             ),
-                            "weekly": TemporalContinuousDistributionAnalyzer(
+                            "weekly": ColumnTemporalContinuousAnalyzer(
                                 column="cauchy", dt_column="datetime", period="W", log_y=True
                             ),
-                            "daily": TemporalContinuousDistributionAnalyzer(
+                            "daily": ColumnTemporalContinuousAnalyzer(
                                 column="cauchy", dt_column="datetime", period="D", log_y=True
                             ),
                         }

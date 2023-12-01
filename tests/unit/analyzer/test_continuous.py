@@ -9,10 +9,7 @@ from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
 from pytest import fixture, mark
 
-from flamme.analyzer import (
-    ContinuousDistributionAnalyzer,
-    TemporalContinuousDistributionAnalyzer,
-)
+from flamme.analyzer import ColumnContinuousAnalyzer, ColumnTemporalContinuousAnalyzer
 from flamme.section import (
     ContinuousDistributionSection,
     EmptySection,
@@ -20,35 +17,33 @@ from flamme.section import (
 )
 from tests.unit.section.test_continous import STATS_KEYS
 
-####################################################
-#     Tests for ContinuousDistributionAnalyzer     #
-####################################################
+##############################################
+#     Tests for ColumnContinuousAnalyzer     #
+##############################################
 
 
-def test_continuous_distribution_analyzer_str() -> None:
-    assert str(ContinuousDistributionAnalyzer(column="col")).startswith(
-        "ContinuousDistributionAnalyzer("
-    )
+def test_column_continuous_analyzer_str() -> None:
+    assert str(ColumnContinuousAnalyzer(column="col")).startswith("ColumnContinuousAnalyzer(")
 
 
-def test_continuous_distribution_analyzer_series() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_series() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert_series_equal(section.series, Series([np.nan] + list(range(101)) + [np.nan], name="col"))
 
 
-def test_continuous_distribution_analyzer_column() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_column() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert section.column == "col"
 
 
-def test_continuous_distribution_analyzer_nbins_default() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_nbins_default() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
@@ -56,16 +51,16 @@ def test_continuous_distribution_analyzer_nbins_default() -> None:
 
 
 @mark.parametrize("nbins", (1, 2, 4))
-def test_continuous_distribution_analyzer_nbins(nbins: int) -> None:
-    section = ContinuousDistributionAnalyzer(column="col", nbins=nbins).analyze(
+def test_column_continuous_analyzer_nbins(nbins: int) -> None:
+    section = ColumnContinuousAnalyzer(column="col", nbins=nbins).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert section.nbins == nbins
 
 
-def test_continuous_distribution_analyzer_log_y_default() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_log_y_default() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
@@ -73,16 +68,16 @@ def test_continuous_distribution_analyzer_log_y_default() -> None:
 
 
 @mark.parametrize("log_y", (True, False))
-def test_continuous_distribution_analyzer_log_y(log_y: bool) -> None:
-    section = ContinuousDistributionAnalyzer(column="col", log_y=log_y).analyze(
+def test_column_continuous_analyzer_log_y(log_y: bool) -> None:
+    section = ColumnContinuousAnalyzer(column="col", log_y=log_y).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert section.log_y == log_y
 
 
-def test_continuous_distribution_analyzer_xmin_default() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_xmin_default() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
@@ -90,16 +85,16 @@ def test_continuous_distribution_analyzer_xmin_default() -> None:
 
 
 @mark.parametrize("xmin", (1.0, "q0.1", None))
-def test_continuous_distribution_analyzer_xmin(xmin: float | str | None) -> None:
-    section = ContinuousDistributionAnalyzer(column="col", xmin=xmin).analyze(
+def test_column_continuous_analyzer_xmin(xmin: float | str | None) -> None:
+    section = ColumnContinuousAnalyzer(column="col", xmin=xmin).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert section.xmin == xmin
 
 
-def test_continuous_distribution_analyzer_xmax_default() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_xmax_default() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
@@ -107,16 +102,16 @@ def test_continuous_distribution_analyzer_xmax_default() -> None:
 
 
 @mark.parametrize("xmax", (1.0, "q0.1", None))
-def test_continuous_distribution_analyzer_xmax(xmax: float | str | None) -> None:
-    section = ContinuousDistributionAnalyzer(column="col", xmax=xmax).analyze(
+def test_column_continuous_analyzer_xmax(xmax: float | str | None) -> None:
+    section = ColumnContinuousAnalyzer(column="col", xmax=xmax).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
     assert section.xmax == xmax
 
 
-def test_continuous_distribution_analyzer_get_statistics() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(
+def test_column_continuous_analyzer_get_statistics() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ContinuousDistributionSection)
@@ -144,8 +139,8 @@ def test_continuous_distribution_analyzer_get_statistics() -> None:
     )
 
 
-def test_continuous_distribution_analyzer_get_statistics_empty() -> None:
-    section = ContinuousDistributionAnalyzer(column="col").analyze(DataFrame({"col": []}))
+def test_column_continuous_analyzer_get_statistics_empty() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(DataFrame({"col": []}))
     assert isinstance(section, ContinuousDistributionSection)
     stats = section.get_statistics()
     assert len(stats) == 17
@@ -157,15 +152,15 @@ def test_continuous_distribution_analyzer_get_statistics_empty() -> None:
         assert math.isnan(stats[key])
 
 
-def test_continuous_distribution_analyzer_get_statistics_missing_column() -> None:
-    section = ContinuousDistributionAnalyzer(column="col2").analyze(DataFrame({"col": []}))
+def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
+    section = ColumnContinuousAnalyzer(column="col2").analyze(DataFrame({"col": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
-############################################################
-#     Tests for TemporalContinuousDistributionAnalyzer     #
-############################################################
+######################################################
+#     Tests for ColumnTemporalContinuousAnalyzer     #
+######################################################
 
 
 @fixture
@@ -178,38 +173,38 @@ def dataframe() -> DataFrame:
     )
 
 
-def test_temporal_continuous_distribution_analyzer_str() -> None:
+def test_column_temporal_continuous_analyzer_str() -> None:
     assert str(
-        TemporalContinuousDistributionAnalyzer(column="col", dt_column="datetime", period="M")
-    ).startswith("TemporalContinuousDistributionAnalyzer(")
+        ColumnTemporalContinuousAnalyzer(column="col", dt_column="datetime", period="M")
+    ).startswith("ColumnTemporalContinuousAnalyzer(")
 
 
-def test_temporal_continuous_distribution_analyzer_column(dataframe: DataFrame) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_column(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert section.column == "col"
 
 
-def test_temporal_continuous_distribution_analyzer_dt_column(dataframe: DataFrame) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_dt_column(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert section.dt_column == "datetime"
 
 
-def test_temporal_continuous_distribution_analyzer_period(dataframe: DataFrame) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_period(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert section.period == "M"
 
 
-def test_temporal_continuous_distribution_analyzer_log_y_default(dataframe: DataFrame) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_log_y_default(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
@@ -217,40 +212,40 @@ def test_temporal_continuous_distribution_analyzer_log_y_default(dataframe: Data
 
 
 @mark.parametrize("log_y", (True, False))
-def test_temporal_continuous_distribution_analyzer_log_y(dataframe: DataFrame, log_y: bool) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_log_y(dataframe: DataFrame, log_y: bool) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M", log_y=log_y
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert section.log_y == log_y
 
 
-def test_temporal_continuous_distribution_analyzer_get_statistics(dataframe: DataFrame) -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_get_statistics(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_temporal_continuous_distribution_analyzer_get_statistics_empty() -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_get_statistics_empty() -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(DataFrame({"col": [], "int": [], "str": [], "datetime": []}))
     assert isinstance(section, TemporalContinuousDistributionSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_temporal_continuous_distribution_analyzer_get_statistics_missing_column() -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_get_statistics_missing_column() -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(DataFrame({"datetime": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_temporal_continuous_distribution_analyzer_get_statistics_missing_dt_column() -> None:
-    section = TemporalContinuousDistributionAnalyzer(
+def test_column_temporal_continuous_analyzer_get_statistics_missing_dt_column() -> None:
+    section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(DataFrame({"col": []}))
     assert isinstance(section, EmptySection)

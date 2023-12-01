@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["DiscreteDistributionAnalyzer", "TemporalDiscreteDistributionAnalyzer"]
+__all__ = ["ColumnDiscreteAnalyzer", "ColumnTemporalDiscreteAnalyzer"]
 
 import logging
 from collections import Counter
@@ -17,7 +17,7 @@ from flamme.section import (
 logger = logging.getLogger(__name__)
 
 
-class DiscreteDistributionAnalyzer(BaseAnalyzer):
+class ColumnDiscreteAnalyzer(BaseAnalyzer):
     r"""Implements a discrete distribution analyzer.
 
     Args:
@@ -55,7 +55,7 @@ class DiscreteDistributionAnalyzer(BaseAnalyzer):
         )
 
 
-class TemporalDiscreteDistributionAnalyzer(BaseAnalyzer):
+class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of
     discrete values.
 
@@ -74,7 +74,7 @@ class TemporalDiscreteDistributionAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import TemporalNullValueAnalyzer
-        >>> analyzer = TemporalDiscreteDistributionAnalyzer(
+        >>> analyzer = ColumnTemporalDiscreteAnalyzer(
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer

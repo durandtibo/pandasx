@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["ContinuousDistributionAnalyzer", "TemporalContinuousDistributionAnalyzer"]
+__all__ = ["ColumnContinuousAnalyzer", "ColumnTemporalContinuousAnalyzer"]
 
 import logging
 
@@ -16,7 +16,7 @@ from flamme.section import (
 logger = logging.getLogger(__name__)
 
 
-class ContinuousDistributionAnalyzer(BaseAnalyzer):
+class ColumnContinuousAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of
     continuous values.
 
@@ -42,8 +42,8 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import ContinuousDistributionAnalyzer
-        >>> analyzer = ContinuousDistributionAnalyzer(column="float")
+        >>> from flamme.analyzer import ColumnContinuousAnalyzer
+        >>> analyzer = ColumnContinuousAnalyzer(column="float")
         >>> analyzer
         ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
         >>> df = pd.DataFrame(
@@ -93,7 +93,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         )
 
 
-class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
+class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of
     continuous values.
 
@@ -114,7 +114,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import TemporalNullValueAnalyzer
-        >>> analyzer = TemporalContinuousDistributionAnalyzer(
+        >>> analyzer = ColumnTemporalContinuousAnalyzer(
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
