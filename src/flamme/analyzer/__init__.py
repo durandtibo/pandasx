@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = [
     "BaseAnalyzer",
     "ColumnSubsetAnalyzer",
+    "ColumnTemporalNullValueAnalyzer",
     "ColumnTypeAnalyzer",
     "ContinuousDistributionAnalyzer",
     "DiscreteDistributionAnalyzer",
@@ -32,3 +33,4 @@ from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer, TemporalNullValueAnalyzer
+from flamme.analyzer.null_temporal import ColumnTemporalNullValueAnalyzer
