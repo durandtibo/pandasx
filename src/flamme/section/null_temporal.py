@@ -5,6 +5,7 @@ __all__ = ["ColumnTemporalNullValueSection"]
 import logging
 from collections.abc import Sequence
 
+import numpy as np
 import plotly
 import plotly.graph_objects as go
 from jinja2 import Template
@@ -164,22 +165,16 @@ def create_temporal_null_figure(
     """
     if df.shape[0] == 0:
         return ""
-    df = df[[column, dt_column]].copy()
-    dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
 
-    null_col = f"__{column}_isnull__"
-    df.loc[:, null_col] = df.loc[:, column].isnull()
-
-    df_sum = df.groupby(dt_col)[null_col].sum().sort_index()
-    df_count = df.groupby(dt_col)[null_col].count().sort_index()
-    labels = [str(dt) for dt in df_sum.index]
+    num_nulls, total, labels = prepare_data(
+        df=df, column=column, dt_column=dt_column, period=period
+    )
 
     fig = make_subplots(rows=1, cols=1, specs=[[{"secondary_y": True}]])
     fig.add_trace(
         go.Bar(
             x=labels,
-            y=df_count.to_numpy(),
+            y=total,
             marker=dict(color="rgba(0, 191, 255, 0.9)"),
         ),
         secondary_y=False,
@@ -187,7 +182,7 @@ def create_temporal_null_figure(
     fig.add_trace(
         go.Bar(
             x=labels,
-            y=df_sum.to_numpy(),
+            y=num_nulls,
             marker=dict(color="rgba(255, 191, 0, 0.9)"),
         ),
         secondary_y=False,
@@ -195,7 +190,7 @@ def create_temporal_null_figure(
     fig.add_trace(
         go.Scatter(
             x=labels,
-            y=df_sum.to_numpy() / df_count.to_numpy(),
+            y=num_nulls / total,
             marker=dict(color="rgba(0, 71, 171, 0.9)"),
         ),
         secondary_y=True,
@@ -218,3 +213,67 @@ def create_temporal_null_figure(
         barmode="overlay",
     )
     return plotly.io.to_html(fig, full_html=False)
+
+
+def prepare_data(
+    df: DataFrame,
+    column: str,
+    dt_column: str,
+    period: str,
+) -> tuple[np.ndarray, np.ndarray, list]:
+    r"""Prepares the data to create the figure and table.
+
+    Args:
+    ----
+        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+
+    Returns:
+    -------
+        tuple: A tuple with 3 values. The first value is a numpy NDArray
+            that contains the number of null values per period. The
+            second value is a numpy NDArray that contains the total
+            number of values. The third value is a list that contains
+            the label of each period.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> import pandas as pd
+        >>> from flamme.section.null_temporal import prepare_data
+        >>> num_nulls, total, labels = prepare_data(
+        ...     df=pd.DataFrame(
+        ...         {
+        ...             "col": np.array([np.nan, 1, 0, 1]),
+        ...             "datetime": pd.to_datetime(
+        ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+        ...             ),
+        ...         }
+        ...     ),
+        ...     column="col",
+        ...     dt_column="datetime",
+        ...     period="M",
+        ... )
+        >>> num_nulls
+        array([1, 0, 0, 0])
+        >>> total
+        array([1, 1, 1, 1])
+        >>> labels
+        ['2020-01', '2020-02', '2020-03', '2020-04']
+    """
+    df = df[[column, dt_column]].copy()
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period)
+
+    null_col = f"__{column}_isnull__"
+    df.loc[:, null_col] = df.loc[:, column].isnull()
+
+    df_num_nulls = df.groupby(dt_col)[null_col].sum().sort_index()
+    df_total = df.groupby(dt_col)[null_col].count().sort_index()
+    labels = [str(dt) for dt in df_num_nulls.index]
+    return df_num_nulls.to_numpy(), df_total.to_numpy(), labels
