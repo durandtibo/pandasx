@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["DiscreteDistributionSection"]
+__all__ = ["ColumnDiscreteSection"]
 
 from collections import Counter
 from collections.abc import Sequence
@@ -20,7 +20,7 @@ from flamme.section.utils import (
 )
 
 
-class DiscreteDistributionSection(BaseSection):
+class ColumnDiscreteSection(BaseSection):
     r"""Implements a section that analyzes a discrete distribution of
     values.
 

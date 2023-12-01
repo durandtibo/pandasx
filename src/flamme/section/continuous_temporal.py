@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["TemporalContinuousDistributionSection"]
+__all__ = ["ColumnTemporalContinuousSection"]
 
 from collections.abc import Sequence
 
@@ -20,7 +20,7 @@ from flamme.section.utils import (
 )
 
 
-class TemporalContinuousDistributionSection(BaseSection):
+class ColumnTemporalContinuousSection(BaseSection):
     r"""Implements a section that analyzes the temporal distribution of a
     column with continuous values.
 

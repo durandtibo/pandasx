@@ -8,7 +8,7 @@ from jinja2 import Template
 from pandas import Series
 from pytest import fixture, mark
 
-from flamme.section import ContinuousDistributionSection
+from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import create_histogram_figure, create_stats_table
 
 STATS_KEYS = [
@@ -33,56 +33,56 @@ def series() -> Series:
     return Series([np.nan] + list(range(101)) + [np.nan])
 
 
-###################################################
-#     Tests for ContinuousDistributionSection     #
-###################################################
+#############################################
+#     Tests for ColumnContinuousSection     #
+#############################################
 
 
-def test_continuous_distribution_section_series(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col").series.equals(series)
+def test_column_continuous_section_series(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").series.equals(series)
 
 
-def test_continuous_distribution_section_column(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col").column == "col"
+def test_column_continuous_section_column(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").column == "col"
 
 
-def test_continuous_distribution_section_log_y_default(series: Series) -> None:
-    assert not ContinuousDistributionSection(series=series, column="col").log_y
+def test_column_continuous_section_log_y_default(series: Series) -> None:
+    assert not ColumnContinuousSection(series=series, column="col").log_y
 
 
-def test_continuous_distribution_section_log_y(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col", log_y=True).log_y
+def test_column_continuous_section_log_y(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col", log_y=True).log_y
 
 
-def test_continuous_distribution_section_nbins_default(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col").nbins is None
+def test_column_continuous_section_nbins_default(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").nbins is None
 
 
 @mark.parametrize("nbins", (1, 2, 4))
-def test_continuous_distribution_section_nbins(series: Series, nbins: int) -> None:
-    assert ContinuousDistributionSection(series=series, column="col", nbins=nbins).nbins == nbins
+def test_column_continuous_section_nbins(series: Series, nbins: int) -> None:
+    assert ColumnContinuousSection(series=series, column="col", nbins=nbins).nbins == nbins
 
 
-def test_continuous_distribution_section_xmin_default(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col").xmin is None
+def test_column_continuous_section_xmin_default(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").xmin is None
 
 
 @mark.parametrize("xmin", (1.0, "q0.1"))
-def test_continuous_distribution_section_xmin(series: Series, xmin: float | str) -> None:
-    assert ContinuousDistributionSection(series=series, column="col", xmin=xmin).xmin == xmin
+def test_column_continuous_section_xmin(series: Series, xmin: float | str) -> None:
+    assert ColumnContinuousSection(series=series, column="col", xmin=xmin).xmin == xmin
 
 
-def test_continuous_distribution_section_xmax_default(series: Series) -> None:
-    assert ContinuousDistributionSection(series=series, column="col").xmax is None
+def test_column_continuous_section_xmax_default(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").xmax is None
 
 
 @mark.parametrize("xmax", (5.0, "q0.9"))
-def test_continuous_distribution_section_xmax(series: Series, xmax: float | str) -> None:
-    assert ContinuousDistributionSection(series=series, column="col", xmax=xmax).xmax == xmax
+def test_column_continuous_section_xmax(series: Series, xmax: float | str) -> None:
+    assert ColumnContinuousSection(series=series, column="col", xmax=xmax).xmax == xmax
 
 
-def test_continuous_distribution_section_get_statistics(series: Series) -> None:
-    section = ContinuousDistributionSection(series=series, column="col")
+def test_column_continuous_section_get_statistics(series: Series) -> None:
+    section = ColumnContinuousSection(series=series, column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -107,8 +107,8 @@ def test_continuous_distribution_section_get_statistics(series: Series) -> None:
     )
 
 
-def test_continuous_distribution_section_get_statistics_empty_row() -> None:
-    section = ContinuousDistributionSection(series=Series([]), column="col")
+def test_column_continuous_section_get_statistics_empty_row() -> None:
+    section = ColumnContinuousSection(series=Series([]), column="col")
     stats = section.get_statistics()
     assert len(stats) == 17
     assert stats["count"] == 0
@@ -119,10 +119,8 @@ def test_continuous_distribution_section_get_statistics_empty_row() -> None:
         assert math.isnan(stats[key])
 
 
-def test_continuous_distribution_section_get_statistics_only_nans() -> None:
-    section = ContinuousDistributionSection(
-        series=Series([np.nan, np.nan, np.nan, np.nan]), column="col"
-    )
+def test_column_continuous_section_get_statistics_only_nans() -> None:
+    section = ColumnContinuousSection(series=Series([np.nan, np.nan, np.nan, np.nan]), column="col")
     stats = section.get_statistics()
     assert len(stats) == 17
     assert stats["count"] == 4
@@ -133,30 +131,30 @@ def test_continuous_distribution_section_get_statistics_only_nans() -> None:
         assert math.isnan(stats[key])
 
 
-def test_continuous_distribution_section_render_html_body(series: Series) -> None:
-    section = ContinuousDistributionSection(series=series, column="col")
+def test_column_continuous_section_render_html_body(series: Series) -> None:
+    section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_body_args(series: Series) -> None:
-    section = ContinuousDistributionSection(series=series, column="col")
+def test_column_continuous_section_render_html_body_args(series: Series) -> None:
+    section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
-def test_continuous_distribution_section_render_html_body_empty() -> None:
-    section = ContinuousDistributionSection(series=Series([]), column="col")
+def test_column_continuous_section_render_html_body_empty() -> None:
+    section = ColumnContinuousSection(series=Series([]), column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_toc(series: Series) -> None:
-    section = ContinuousDistributionSection(series=series, column="col")
+def test_column_continuous_section_render_html_toc(series: Series) -> None:
+    section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_continuous_distribution_section_render_html_toc_args(series: Series) -> None:
-    section = ContinuousDistributionSection(series=series, column="col")
+def test_column_continuous_section_render_html_toc_args(series: Series) -> None:
+    section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )

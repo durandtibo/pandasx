@@ -8,9 +8,9 @@ from pytest import fixture
 
 from flamme.analyzer import ColumnDiscreteAnalyzer, ColumnTemporalDiscreteAnalyzer
 from flamme.section import (
-    DiscreteDistributionSection,
+    ColumnDiscreteSection,
+    ColumnTemporalDiscreteSection,
     EmptySection,
-    TemporalDiscreteDistributionSection,
 )
 
 ############################################
@@ -32,7 +32,7 @@ def test_column_discrete_analyzer_get_statistics() -> None:
             }
         )
     )
-    assert isinstance(section, DiscreteDistributionSection)
+    assert isinstance(section, ColumnDiscreteSection)
     stats = section.get_statistics()
     assert stats["nunique"] == 3
     assert stats["total"] == 4
@@ -48,7 +48,7 @@ def test_column_discrete_analyzer_get_statistics_dropna_true() -> None:
             }
         )
     )
-    assert isinstance(section, DiscreteDistributionSection)
+    assert isinstance(section, ColumnDiscreteSection)
     assert objects_are_equal(
         section.get_statistics(),
         {"most_common": [(1.0, 2), (0.0, 1)], "nunique": 2, "total": 3},
@@ -59,7 +59,7 @@ def test_column_discrete_analyzer_get_statistics_empty_no_row() -> None:
     section = ColumnDiscreteAnalyzer(column="int").analyze(
         DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
     )
-    assert isinstance(section, DiscreteDistributionSection)
+    assert isinstance(section, ColumnDiscreteSection)
     assert objects_are_equal(
         section.get_statistics(), {"most_common": [], "nunique": 0, "total": 0}
     )
@@ -96,7 +96,7 @@ def test_column_temporal_discrete_analyzer_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
-    assert isinstance(section, TemporalDiscreteDistributionSection)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
     assert section.column == "col"
 
 
@@ -104,7 +104,7 @@ def test_column_temporal_discrete_analyzer_dt_column(dataframe: DataFrame) -> No
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
-    assert isinstance(section, TemporalDiscreteDistributionSection)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
     assert section.dt_column == "datetime"
 
 
@@ -112,7 +112,7 @@ def test_column_temporal_discrete_analyzer_period(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
-    assert isinstance(section, TemporalDiscreteDistributionSection)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
     assert section.period == "M"
 
 
@@ -120,7 +120,7 @@ def test_column_temporal_discrete_analyzer_get_statistics(dataframe: DataFrame) 
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
-    assert isinstance(section, TemporalDiscreteDistributionSection)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
@@ -128,7 +128,7 @@ def test_column_temporal_discrete_analyzer_get_statistics_empty() -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(DataFrame({"col": [], "int": [], "str": [], "datetime": []}))
-    assert isinstance(section, TemporalDiscreteDistributionSection)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 

@@ -8,7 +8,7 @@ __all__ = [
     "ColumnTemporalContinuousAnalyzer",
     "ColumnTemporalDiscreteAnalyzer",
     "ColumnTemporalNullValueAnalyzer",
-    "ColumnTypeAnalyzer",
+    "DataTypeAnalyzer",
     "FilteredAnalyzer",
     "MappingAnalyzer",
     "MarkdownAnalyzer",
@@ -28,7 +28,7 @@ from flamme.analyzer.discrete import (
     ColumnDiscreteAnalyzer,
     ColumnTemporalDiscreteAnalyzer,
 )
-from flamme.analyzer.dtype import ColumnTypeAnalyzer
+from flamme.analyzer.dtype import DataTypeAnalyzer
 from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer

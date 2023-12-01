@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-__all__ = ["ColumnTypeAnalyzer"]
+__all__ = ["DataTypeAnalyzer"]
 
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import ColumnTypeSection
+from flamme.section import DataTypeSection
 from flamme.utils.dtype import column_types
 
 
-class ColumnTypeAnalyzer(BaseAnalyzer):
+class DataTypeAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to find all the value types in each
     column.
 
@@ -19,10 +19,10 @@ class ColumnTypeAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import ColumnTypeAnalyzer
-        >>> analyzer = ColumnTypeAnalyzer()
+        >>> from flamme.analyzer import DataTypeAnalyzer
+        >>> analyzer = DataTypeAnalyzer()
         >>> analyzer
-        ColumnTypeAnalyzer()
+        DataTypeAnalyzer()
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -36,5 +36,5 @@ class ColumnTypeAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, df: DataFrame) -> ColumnTypeSection:
-        return ColumnTypeSection(dtypes=df.dtypes.to_dict(), types=column_types(df))
+    def analyze(self, df: DataFrame) -> DataTypeSection:
+        return DataTypeSection(dtypes=df.dtypes.to_dict(), types=column_types(df))

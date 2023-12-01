@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["ColumnTypeSection"]
+__all__ = ["DataTypeSection"]
 
 import copy
 from collections.abc import Sequence
@@ -18,7 +18,7 @@ from flamme.section.utils import (
 )
 
 
-class ColumnTypeSection(BaseSection):
+class DataTypeSection(BaseSection):
     r"""Implements a section that analyzes the data type of each column.
 
     Args:

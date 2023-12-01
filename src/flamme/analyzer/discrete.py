@@ -9,9 +9,9 @@ from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import (
-    DiscreteDistributionSection,
+    ColumnDiscreteSection,
+    ColumnTemporalDiscreteSection,
     EmptySection,
-    TemporalDiscreteDistributionSection,
 )
 
 logger = logging.getLogger(__name__)
@@ -27,6 +27,25 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             included in the analysis. Default: ``False``
         max_rows (int, optional): Specifies the maximum number of rows
             to show in the table. Default: ``20``
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> import numpy as np
+        >>> import pandas as pd
+        >>> from flamme.analyzer import ColumnDiscreteAnalyzer
+        >>> analyzer = ColumnDiscreteAnalyzer(column="str")
+        >>> analyzer
+        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20)
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "int": np.array([np.nan, 1, 0, 1]),
+        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+        ...         "str": np.array(["A", "B", None, np.nan]),
+        ...     }
+        ... )
+        >>> section = analyzer.analyze(df)
     """
 
     def __init__(self, column: str, dropna: bool = False, max_rows: int = 20) -> None:
@@ -40,14 +59,14 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             f"dropna={self._dropna}, max_rows={self._max_rows})"
         )
 
-    def analyze(self, df: DataFrame) -> DiscreteDistributionSection | EmptySection:
+    def analyze(self, df: DataFrame) -> ColumnDiscreteSection | EmptySection:
         if self._column not in df:
             logger.info(
                 f"Skipping discrete distribution analysis of column {self._column} "
                 f"because it is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return DiscreteDistributionSection(
+        return ColumnDiscreteSection(
             counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
             null_values=df[self._column].isnull().sum(),
             column=self._column,
@@ -73,12 +92,12 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import TemporalNullValueAnalyzer
+        >>> from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
         >>> analyzer = ColumnTemporalDiscreteAnalyzer(
-        ...     column="float", dt_column="datetime", period="M"
+        ...     column="str", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        TemporalDiscreteDistributionAnalyzer(column=float, dt_column=datetime, period=M)
+        ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -103,7 +122,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period})"
         )
 
-    def analyze(self, df: DataFrame) -> TemporalDiscreteDistributionSection | EmptySection:
+    def analyze(self, df: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
         if self._column not in df:
             logger.info(
                 "Skipping temporal discrete distribution analysis because the column "
@@ -116,7 +135,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return TemporalDiscreteDistributionSection(
+        return ColumnTemporalDiscreteSection(
             column=self._column,
             df=df,
             dt_column=self._dt_column,
