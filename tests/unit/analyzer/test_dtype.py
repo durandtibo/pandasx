@@ -13,7 +13,7 @@ from flamme.section import DataTypeSection
 
 
 def test_column_type_analyzer_str() -> None:
-    assert str(DataTypeAnalyzer()).startswith("ColumnTypeAnalyzer(")
+    assert str(DataTypeAnalyzer()) == "DataTypeAnalyzer()"
 
 
 def test_column_type_analyzer_get_statistics() -> None:
