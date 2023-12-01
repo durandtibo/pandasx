@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["ContinuousDistributionSection"]
+__all__ = ["ColumnContinuousSection"]
 
 from collections.abc import Sequence
 
@@ -20,7 +20,7 @@ from flamme.section.utils import (
 from flamme.utils.range import find_range
 
 
-class ContinuousDistributionSection(BaseSection):
+class ColumnContinuousSection(BaseSection):
     r"""Implements a section that analyzes a continuous distribution of
     values.
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["TemporalDiscreteDistributionSection"]
+__all__ = ["ColumnTemporalDiscreteSection"]
 
 from collections.abc import Sequence
 
@@ -19,7 +19,7 @@ from flamme.section.utils import (
 )
 
 
-class TemporalDiscreteDistributionSection(BaseSection):
+class ColumnTemporalDiscreteSection(BaseSection):
     r"""Implements a section that analyzes the temporal distribution of a
     column with discrete values.
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["ContinuousDistributionAnalyzer", "TemporalContinuousDistributionAnalyzer"]
+__all__ = ["ColumnContinuousAnalyzer", "ColumnTemporalContinuousAnalyzer"]
 
 import logging
 
@@ -8,15 +8,15 @@ from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import (
-    ContinuousDistributionSection,
+    ColumnContinuousSection,
+    ColumnTemporalContinuousSection,
     EmptySection,
-    TemporalContinuousDistributionSection,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class ContinuousDistributionAnalyzer(BaseAnalyzer):
+class ColumnContinuousAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of
     continuous values.
 
@@ -42,10 +42,10 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import ContinuousDistributionAnalyzer
-        >>> analyzer = ContinuousDistributionAnalyzer(column="float")
+        >>> from flamme.analyzer import ColumnContinuousAnalyzer
+        >>> analyzer = ColumnContinuousAnalyzer(column="float")
         >>> analyzer
-        ContinuousDistributionAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
+        ColumnContinuousAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -76,14 +76,14 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
             f"log_y={self._log_y}, xmin={self._xmin}, xmax={self._xmax})"
         )
 
-    def analyze(self, df: DataFrame) -> ContinuousDistributionSection | EmptySection:
+    def analyze(self, df: DataFrame) -> ColumnContinuousSection | EmptySection:
         if self._column not in df:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
                 f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return ContinuousDistributionSection(
+        return ColumnContinuousSection(
             column=self._column,
             series=df[self._column],
             nbins=self._nbins,
@@ -93,7 +93,7 @@ class ContinuousDistributionAnalyzer(BaseAnalyzer):
         )
 
 
-class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
+class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the temporal distribution of
     continuous values.
 
@@ -114,11 +114,11 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import TemporalNullValueAnalyzer
-        >>> analyzer = TemporalContinuousDistributionAnalyzer(
+        >>> analyzer = ColumnTemporalContinuousAnalyzer(
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        TemporalContinuousDistributionAnalyzer(column=float, dt_column=datetime, period=M, log_y=False)
+        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, log_y=False)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -144,7 +144,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, log_y={self._log_y})"
         )
 
-    def analyze(self, df: DataFrame) -> TemporalContinuousDistributionSection | EmptySection:
+    def analyze(self, df: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
         if self._column not in df:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
@@ -157,7 +157,7 @@ class TemporalContinuousDistributionAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
             )
             return EmptySection()
-        return TemporalContinuousDistributionSection(
+        return ColumnTemporalContinuousSection(
             column=self._column,
             df=df,
             dt_column=self._dt_column,
