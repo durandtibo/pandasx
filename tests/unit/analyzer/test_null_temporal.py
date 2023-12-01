@@ -117,6 +117,22 @@ def test_column_temporal_null_value_analyzer_figsize(figsize: tuple[int, int]) -
     assert section.figsize == figsize
 
 
+def test_column_temporal_null_value_analyzer_figsize_default() -> None:
+    section = ColumnTemporalNullValueAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(
+        DataFrame(
+            {
+                "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        )
+    )
+    assert section.figsize == (None, None)
+
+
 def test_column_temporal_null_value_analyzer_get_statistics() -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column="col", dt_column="datetime", period="M"
