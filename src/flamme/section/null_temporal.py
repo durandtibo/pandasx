@@ -2,10 +2,14 @@ from __future__ import annotations
 
 __all__ = ["ColumnTemporalNullValueSection"]
 
+import logging
 from collections.abc import Sequence
 
+import plotly
+import plotly.graph_objects as go
 from jinja2 import Template
 from pandas import DataFrame
+from plotly.subplots import make_subplots
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -15,6 +19,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ColumnTemporalNullValueSection(BaseSection):
@@ -29,11 +35,9 @@ class ColumnTemporalNullValueSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        ncols (int, optional): Specifies the number of columns.
-            Default: ``2``
-        figsize (``tuple``, optional): Specifies the individual figure
+        figsize (``tuple`` or list , optional): Specifies the figure
             size in pixels. The first dimension is the width and the
-            second is the height.  Default: ``(700, 300)``
+            second is the height. Default: ``(None, None)``
     """
 
     def __init__(
@@ -42,7 +46,7 @@ class ColumnTemporalNullValueSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        figsize: tuple[int, int] | None = None,
+        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
     ) -> None:
         if column not in df:
             raise ValueError(
@@ -89,6 +93,10 @@ class ColumnTemporalNullValueSection(BaseSection):
         return {}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info(
+            f"Rendering the temporal distribution of null values for column {self._column} "
+            f"| datetime column: {self._dt_column} | period: {self._period}"
+        )
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -96,8 +104,15 @@ class ColumnTemporalNullValueSection(BaseSection):
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "column": self._dt_column,
-                "figure": "",
+                "column": self._column,
+                "dt_column": self._dt_column,
+                "figure": create_temporal_null_figure(
+                    df=self._df,
+                    column=self._column,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                    figsize=self._figsize,
+                ),
                 "table": "",
             }
         )
@@ -114,8 +129,92 @@ class ColumnTemporalNullValueSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the monthly distribution of null values.
-The column {{column}} is used to define the month of each row.
+This section analyzes the temporal distribution of null values in column <em>{{column}}</em>.
+The column <em>{{dt_column}}</em> is used as temporal column.
 
 {{figure}}
 """
+
+
+def create_temporal_null_figure(
+    df: DataFrame,
+    column: str,
+    dt_column: str,
+    period: str,
+    figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
+) -> str:
+    r"""Creates a HTML representation of a figure with the temporal null
+    value distribution.
+
+    Args:
+    ----
+        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+        figsize (``tuple`` or list , optional): Specifies the figure
+            size in pixels. The first dimension is the width and the
+            second is the height. Default: ``(None, None)``
+
+    Returns:
+    -------
+        str: The HTML representation of the figure.
+    """
+    if df.shape[0] == 0:
+        return ""
+    df = df[[column, dt_column]].copy()
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period)
+
+    null_col = f"__{column}_isnull__"
+    df.loc[:, null_col] = df.loc[:, column].isnull()
+
+    df_sum = df.groupby(dt_col)[null_col].sum().sort_index()
+    df_count = df.groupby(dt_col)[null_col].count().sort_index()
+    labels = [str(dt) for dt in df_sum.index]
+
+    fig = make_subplots(rows=1, cols=1, specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Bar(
+            x=labels,
+            y=df_count.to_numpy(),
+            marker=dict(color="rgba(0, 191, 255, 0.9)"),
+        ),
+        secondary_y=False,
+    )
+    fig.add_trace(
+        go.Bar(
+            x=labels,
+            y=df_sum.to_numpy(),
+            marker=dict(color="rgba(255, 191, 0, 0.9)"),
+        ),
+        secondary_y=False,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=labels,
+            y=df_sum.to_numpy() / df_count.to_numpy(),
+            marker=dict(color="rgba(0, 71, 171, 0.9)"),
+        ),
+        secondary_y=True,
+    )
+    fig.update_yaxes(
+        title_text=(
+            '<span style="color:RGB(255, 191, 0)">null</span>/'
+            '<span style="color:RGB(0, 191, 255)">total</span>'
+        ),
+        secondary_y=False,
+    )
+    fig.update_yaxes(
+        title_text='<span style="color:RGB(0, 71, 171)">percentage</span>',
+        secondary_y=True,
+    )
+    fig.update_layout(
+        height=figsize[1],
+        width=figsize[0],
+        showlegend=False,
+        barmode="overlay",
+    )
+    return plotly.io.to_html(fig, full_html=False)

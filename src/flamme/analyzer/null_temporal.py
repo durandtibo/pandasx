@@ -23,9 +23,9 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` or list or ``None``, optional): Specifies
-            the figure size in pixels. The first dimension is the
-            width and the second is the height. Default: ``None``
+        figsize (``tuple`` or list , optional): Specifies the figure
+            size in pixels. The first dimension is the width and the
+            second is the height. Default: ``(None, None)``
 
     Example usage:
 
@@ -38,7 +38,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
         ...     column="col", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        ColumnTemporalNullValueAnalyzer(column=col, dt_column=datetime, period=M, figsize=None)
+        ColumnTemporalNullValueAnalyzer(column=col, dt_column=datetime, period=M, figsize=(None, None))
         >>> df = pd.DataFrame(
         ...     {
         ...         "col": np.array([np.nan, 1, 0, 1]),
@@ -55,7 +55,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
         column: str,
         dt_column: str,
         period: str,
-        figsize: tuple[int, int] | list[int] | None = None,
+        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
     ) -> None:
         self._column = column
         self._dt_column = dt_column

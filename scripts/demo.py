@@ -9,6 +9,7 @@ import pandas as pd
 from flamme.analyzer import (
     BaseAnalyzer,
     ColumnSubsetAnalyzer,
+    ColumnTemporalNullValueAnalyzer,
     ColumnTypeAnalyzer,
     ContinuousDistributionAnalyzer,
     DiscreteDistributionAnalyzer,
@@ -81,6 +82,9 @@ def create_analyzer() -> BaseAnalyzer:
                 ),
                 "daily": TemporalDiscreteDistributionAnalyzer(
                     column=column, dt_column="datetime", period="D"
+                ),
+                "null monthly": ColumnTemporalNullValueAnalyzer(
+                    column=column, dt_column="datetime", period="M"
                 ),
             }
         )
@@ -171,7 +175,7 @@ def create_preprocessor2() -> BasePreprocessor:
 
 def create_reporter() -> BaseReporter:
     return Reporter(
-        ingestor=Ingestor(df=create_dataframe(nrows=50000)),
+        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
         preprocessor=create_preprocessor(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),

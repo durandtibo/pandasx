@@ -9,6 +9,7 @@ from pandas.testing import assert_frame_equal
 from pytest import mark, raises
 
 from flamme.section import ColumnTemporalNullValueSection
+from flamme.section.null_temporal import create_temporal_null_figure
 
 ####################################################
 #     Tests for ColumnTemporalNullValueSection     #
@@ -115,6 +116,23 @@ def test_column_temporal_null_value_section_figsize(figsize: tuple[int, int]) ->
         figsize=figsize,
     )
     assert section.figsize == figsize
+
+
+def test_column_temporal_null_value_section_figsize_default() -> None:
+    section = ColumnTemporalNullValueSection(
+        df=DataFrame(
+            {
+                "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        column="col",
+        dt_column="datetime",
+        period="M",
+    )
+    assert section.figsize == (None, None)
 
 
 def test_column_temporal_null_value_section_missing_column() -> None:
@@ -259,4 +277,28 @@ def test_column_temporal_null_value_section_render_html_toc_args() -> None:
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+################################################
+#    Tests for create_temporal_null_figure     #
+################################################
+
+
+def test_create_temporal_null_figure() -> None:
+    assert isinstance(
+        create_temporal_null_figure(
+            df=DataFrame(
+                {
+                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
     )
