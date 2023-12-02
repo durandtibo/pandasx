@@ -41,5 +41,5 @@ class DataTypeAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}()"
 
     def analyze(self, df: DataFrame) -> DataTypeSection:
-        logger.info("Analyzing the data types")
+        logger.info("Analyzing the data types...")
         return DataTypeSection(dtypes=df.dtypes.to_dict(), types=column_types(df))

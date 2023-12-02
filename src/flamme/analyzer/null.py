@@ -41,7 +41,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}()"
 
     def analyze(self, df: DataFrame) -> NullValueSection:
-        logger.info("Analyzing the null value distribution of all columns")
+        logger.info("Analyzing the null value distribution of all columns...")
         return NullValueSection(
             columns=list(df.columns),
             null_count=df.isnull().sum().to_frame("count")["count"].to_numpy(),

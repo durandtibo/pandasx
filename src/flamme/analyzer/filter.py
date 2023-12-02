@@ -56,6 +56,6 @@ class FilteredAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, df: DataFrame) -> BaseSection:
-        logger.info("Filtering the DataFrame")
+        logger.info("Filtering the DataFrame...")
         df = df.query(self._query)
         return self._analyzer.analyze(df)

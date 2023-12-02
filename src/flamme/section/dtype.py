@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = ["DataTypeSection"]
 
 import copy
+import logging
 from collections.abc import Sequence
 
 import numpy as np
@@ -16,6 +17,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class DataTypeSection(BaseSection):
@@ -60,6 +63,7 @@ class DataTypeSection(BaseSection):
     def render_html_toc(
         self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
     ) -> str:
+        logger.info("Rendering the data types report...")
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
