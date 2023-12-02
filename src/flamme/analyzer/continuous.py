@@ -77,6 +77,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> ColumnContinuousSection | EmptySection:
+        logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in df:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
@@ -145,6 +146,10 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
+        logger.info(
+            f"Analyzing the temporal continuous distribution of {self._column} | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         if self._column not in df:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "

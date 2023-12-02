@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = ["NullValueSection", "TemporalNullValueSection"]
 
+import logging
 import math
 from collections.abc import Sequence
 
@@ -21,6 +22,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class NullValueSection(BaseSection):
@@ -61,6 +64,7 @@ class NullValueSection(BaseSection):
         }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info("Rendering the null value distribution of all columns...")
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -265,6 +269,10 @@ class TemporalNullValueSection(BaseSection):
         return {}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info(
+            "Rendering the temporal null value distribution of all columns | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,

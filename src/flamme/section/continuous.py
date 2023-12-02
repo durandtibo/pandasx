@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = ["ColumnContinuousSection"]
 
+import logging
 from collections.abc import Sequence
 
 import plotly
@@ -18,6 +19,8 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.range import find_range
+
+logger = logging.getLogger(__name__)
 
 
 class ColumnContinuousSection(BaseSection):
@@ -131,6 +134,7 @@ class ColumnContinuousSection(BaseSection):
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info(f"Rendering the continuous distribution of {self._column}")
         stats = self.get_statistics()
         null_values_pct = (
             f"{100 * stats['num_nulls'] / stats['count']:.2f}" if stats["count"] > 0 else "N/A"

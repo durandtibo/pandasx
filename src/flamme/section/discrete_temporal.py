@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = ["ColumnTemporalDiscreteSection"]
 
+import logging
 from collections.abc import Sequence
 
 import plotly
@@ -17,6 +18,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ColumnTemporalDiscreteSection(BaseSection):
@@ -61,6 +64,10 @@ class ColumnTemporalDiscreteSection(BaseSection):
         return {}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info(
+            f"Analyzing the temporal discrete distribution of {self._column} | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,

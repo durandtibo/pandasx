@@ -69,6 +69,10 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
+        logger.info(
+            f"Analyzing the temporal null value distribution of {self._column} | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         if self._column not in df:
             logger.info(
                 "Skipping temporal null value analysis because the column "

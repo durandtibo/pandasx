@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = ["ColumnDiscreteSection"]
 
+import logging
 from collections import Counter
 from collections.abc import Sequence
 
@@ -18,6 +19,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ColumnDiscreteSection(BaseSection):
@@ -54,6 +57,7 @@ class ColumnDiscreteSection(BaseSection):
         }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info(f"Rendering the discrete distribution of {self._column}")
         stats = self.get_statistics()
         null_values_pct = (
             f"{100 * self._null_values / stats['total']:.2f}" if stats["total"] > 0 else "N/A"

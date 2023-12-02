@@ -2,12 +2,16 @@ from __future__ import annotations
 
 __all__ = ["FilteredAnalyzer"]
 
+import logging
+
 from coola.utils import str_indent, str_mapping
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import BaseSection
 from flamme.utils import setup_object
+
+logger = logging.getLogger(__name__)
 
 
 class FilteredAnalyzer(BaseAnalyzer):
@@ -52,5 +56,6 @@ class FilteredAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, df: DataFrame) -> BaseSection:
+        logger.info("Filtering the DataFrame...")
         df = df.query(self._query)
         return self._analyzer.analyze(df)
