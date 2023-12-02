@@ -29,7 +29,8 @@ def human_byte(size: float | int, decimal: int = 2) -> str:
         '2.00 MB'
     """
     for unit in ["B", "KB", "MB", "GB", "TB", "PB"]:
-        if size < 1024.0 or unit == "PB":
+        if size < 1024.0:
             break
-        size /= 1024.0
+        if unit != "PB":
+            size /= 1024.0
     return f"{size:,.{decimal}f} {unit}"
