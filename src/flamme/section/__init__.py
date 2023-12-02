@@ -9,6 +9,7 @@ __all__ = [
     "ColumnTemporalNullValueSection",
     "DataTypeSection",
     "EmptySection",
+    "GlobalTemporalNullValueSection",
     "MarkdownSection",
     "NullValueSection",
     "SectionDict",
@@ -25,4 +26,5 @@ from flamme.section.empty import EmptySection
 from flamme.section.mapping import SectionDict
 from flamme.section.markdown import MarkdownSection
 from flamme.section.null import NullValueSection, TemporalNullValueSection
+from flamme.section.null_temp_global import GlobalTemporalNullValueSection
 from flamme.section.null_temporal import ColumnTemporalNullValueSection
