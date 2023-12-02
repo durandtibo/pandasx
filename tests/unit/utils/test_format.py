@@ -19,6 +19,7 @@ from flamme.utils.format import human_byte
         (2147483648, "2.00 GB"),
         (2199023255552, "2.00 TB"),
         (2251799813685248, "2.00 PB"),
+        (2305843009213693952, "2,048.00 PB"),
     ],
 )
 def test_human_byte_decimal_2(size: int, output: str) -> None:
@@ -35,6 +36,7 @@ def test_human_byte_decimal_2(size: int, output: str) -> None:
         (2147483648, "2.000 GB"),
         (2199023255552, "2.000 TB"),
         (2251799813685248, "2.000 PB"),
+        (2305843009213693952, "2,048.000 PB"),
     ],
 )
 def test_human_byte_decimal_3(size: int, output: str) -> None:
