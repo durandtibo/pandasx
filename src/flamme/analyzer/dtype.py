@@ -2,11 +2,15 @@ from __future__ import annotations
 
 __all__ = ["DataTypeAnalyzer"]
 
+import logging
+
 from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
 from flamme.utils.dtype import column_types
+
+logger = logging.getLogger(__name__)
 
 
 class DataTypeAnalyzer(BaseAnalyzer):
@@ -37,4 +41,5 @@ class DataTypeAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}()"
 
     def analyze(self, df: DataFrame) -> DataTypeSection:
+        logger.info("Analyzing the data types")
         return DataTypeSection(dtypes=df.dtypes.to_dict(), types=column_types(df))

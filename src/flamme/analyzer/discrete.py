@@ -60,6 +60,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> ColumnDiscreteSection | EmptySection:
+        logger.info(f"Analyzing the discrete distribution of {self._column}")
         if self._column not in df:
             logger.info(
                 f"Skipping discrete distribution analysis of column {self._column} "
@@ -123,6 +124,10 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
+        logger.info(
+            f"Analyzing the temporal discrete distribution of {self._column} | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         if self._column not in df:
             logger.info(
                 "Skipping temporal discrete distribution analysis because the column "

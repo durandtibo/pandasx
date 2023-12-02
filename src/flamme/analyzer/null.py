@@ -41,6 +41,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}()"
 
     def analyze(self, df: DataFrame) -> NullValueSection:
+        logger.info("Analyzing the null value distribution of all columns")
         return NullValueSection(
             columns=list(df.columns),
             null_count=df.isnull().sum().to_frame("count")["count"].to_numpy(),
@@ -103,6 +104,10 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period})"
 
     def analyze(self, df: DataFrame) -> TemporalNullValueSection | EmptySection:
+        logger.info(
+            "Analyzing the temporal null value distribution of all columns | "
+            f"datetime column: {self._dt_column} | period: {self._period}"
+        )
         if self._dt_column not in df:
             logger.info(
                 "Skipping monthly null value analysis because the datetime column "
