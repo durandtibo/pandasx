@@ -260,8 +260,10 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
             <tr>
                 <th>period</th>
                 <th>number of null values</th>
+                <th>number of non-null values</th>
                 <th>total number of values</th>
                 <th>percentage of null values</th>
+                <th>percentage of non-null values</th>
             </tr>
         </thead>
         <tbody class="tbody table-group-divider">
@@ -285,20 +287,25 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     -------
         str: The HTML code of a row.
     """
+    num_non_nulls = total - num_nulls
     return Template(
         """<tr>
     <th>{{label}}</th>
     <td {{num_style}}>{{num_nulls}}</td>
+    <td {{num_style}}>{{num_non_nulls}}</td>
     <td {{num_style}}>{{total}}</td>
     <td {{num_style}}>{{num_nulls_pct}}</td>
+    <td {{num_style}}>{{num_non_nulls_pct}}</td>
 </tr>"""
     ).render(
         {
             "num_style": 'style="text-align: right;"',
             "label": label,
             "num_nulls": f"{num_nulls:,}",
+            "num_non_nulls": f"{num_non_nulls:,}",
             "total": f"{total:,}",
-            "num_nulls_pct": f"{num_nulls / total:.4f}",
+            "num_nulls_pct": f"{100 * num_nulls / total:.2f}%",
+            "num_non_nulls_pct": f"{100 * num_non_nulls / total:.2f}%",
         }
     )
 
