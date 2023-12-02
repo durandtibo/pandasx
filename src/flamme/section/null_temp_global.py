@@ -317,7 +317,7 @@ def prepare_data(
     .. code-block:: pycon
 
         >>> import pandas as pd
-        >>> from flamme.section.null_temporal_global import prepare_data
+        >>> from flamme.section.null_temp_global import prepare_data
         >>> num_nulls, total, labels = prepare_data(
         ...     df=pd.DataFrame(
         ...         {
@@ -334,7 +334,7 @@ def prepare_data(
         >>> num_nulls
         array([2, 0, 0, 1])
         >>> total
-        array([2, 2, 2, 2,])
+        array([2, 2, 2, 2])
         >>> labels
         ['2020-01', '2020-02', '2020-03', '2020-04']
     """
