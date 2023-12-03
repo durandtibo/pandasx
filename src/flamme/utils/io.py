@@ -1,11 +1,37 @@
 from __future__ import annotations
 
-__all__ = ["save_text"]
+__all__ = ["load_text", "save_text"]
 
 import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
+def load_text(path: Path) -> str:
+    r"""Reads the data from a given text file.
+
+    Args:
+    ----
+        path (``pathlib.Path``): Specifies the path where to the text
+            file.
+
+    Returns:
+    -------
+        The data from the text file.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from pathlib import Path
+        >>> from flamme.utils.io import load_text
+        >>> data = load_text(Path("/path/to/data.txt"))  # xdoctest: +SKIP()
+    """
+    logger.debug(f"read {path}")
+    with Path.open(path) as file:
+        data = file.read()
+    return data
 
 
 def save_text(to_save: str, path: Path) -> None:
