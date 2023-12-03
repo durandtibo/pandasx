@@ -15,6 +15,7 @@ from flamme.analyzer import (
     ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
     DataTypeAnalyzer,
+    GlobalTemporalNullValueAnalyzer,
     MappingAnalyzer,
     MarkdownAnalyzer,
     NullValueAnalyzer,
@@ -111,6 +112,7 @@ def create_analyzer() -> BaseAnalyzer:
             "null values": MappingAnalyzer(
                 {
                     "overall": NullValueAnalyzer(),
+                    "temporal": GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "weekly": TemporalNullValueAnalyzer(
                         dt_column="datetime", period="W", figsize=(700, 500)
