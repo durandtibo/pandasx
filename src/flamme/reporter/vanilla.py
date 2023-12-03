@@ -31,6 +31,10 @@ class Reporter(BaseReporter):
             or its configuration.
         report_path (``Path`` or str): Specifies the path where to
             save the HTML report.
+        overwrite (bool, optional): If ``True``, an existing report
+            will be overwriten by the new report. If ``False``, no
+            new report is generated and the reporter will only log
+            a warning message.
 
     Example usage:
 
@@ -55,6 +59,8 @@ class Reporter(BaseReporter):
         preprocessor: BasePreprocessor | dict,
         analyzer: BaseAnalyzer | dict,
         report_path: Path | str,
+        overwrite: bool = False,
+        max_toc_depth: int = 6,
     ) -> None:
         self._ingestor = setup_ingestor(ingestor)
         logger.info(f"ingestor:\n{ingestor}")
@@ -63,6 +69,8 @@ class Reporter(BaseReporter):
         self._analyzer = setup_analyzer(analyzer)
         logger.info(f"analyzer:\n{analyzer}")
         self._report_path = sanitize_path(report_path)
+        self._overwrite = bool(overwrite)
+        self._max_toc_depth = int(max_toc_depth)
 
     def __repr__(self) -> str:
         args = str_indent(
@@ -71,12 +79,20 @@ class Reporter(BaseReporter):
                     "ingestor": self._ingestor,
                     "preprocessor": self._preprocessor,
                     "analyzer": self._analyzer,
+                    "overwrite": self._overwrite,
+                    "max_toc_depth": self._max_toc_depth,
                 }
             )
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def compute(self) -> None:
+        if self._report_path.is_file() and not self._overwrite:
+            logger.warning(
+                f"The report ({self._report_path}) already exists. "
+                "You can set `overwrite=True` to overwrite it."
+            )
+            return
         logger.info("Ingesting the DataFrame...")
         df = self._ingestor.ingest()
         logger.info(f"Preprocessing the DataFrame {df.shape}...")
@@ -85,7 +101,7 @@ class Reporter(BaseReporter):
         section = self._analyzer.analyze(df)
         logger.info("Creating the HTML report...")
         report = create_html_report(
-            toc=section.render_html_toc(max_depth=6),
+            toc=section.render_html_toc(max_depth=self._max_toc_depth),
             body=section.render_html_body(),
         )
         logger.info(f"Saving HTML report at {self._report_path}...")
