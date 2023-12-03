@@ -9,7 +9,7 @@ from pandas.testing import assert_frame_equal
 from pytest import mark, raises
 
 from flamme.section import ColumnTemporalNullValueSection
-from flamme.section.null_temporal import (
+from flamme.section.null_temp_col import (
     create_temporal_null_figure,
     create_temporal_null_table,
     prepare_data,
