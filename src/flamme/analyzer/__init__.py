@@ -33,4 +33,4 @@ from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer, TemporalNullValueAnalyzer
-from flamme.analyzer.null_temporal import ColumnTemporalNullValueAnalyzer
+from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
