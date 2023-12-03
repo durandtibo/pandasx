@@ -340,7 +340,7 @@ def prepare_data(
     .. code-block:: pycon
 
         >>> import pandas as pd
-        >>> from flamme.section.null_temporal import prepare_data
+        >>> from flamme.section.null_temp_col import prepare_data
         >>> num_nulls, total, labels = prepare_data(
         ...     df=pd.DataFrame(
         ...         {
