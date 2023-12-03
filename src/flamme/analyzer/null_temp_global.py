@@ -33,9 +33,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import GlobalTemporalNullValueAnalyzer
-        >>> analyzer = GlobalTemporalNullValueAnalyzer(
-        ...     column="col", dt_column="datetime", period="M"
-        ... )
+        >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
         >>> analyzer
         GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=(None, None))
         >>> df = pd.DataFrame(
