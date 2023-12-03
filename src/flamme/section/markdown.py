@@ -35,7 +35,7 @@ class MarkdownSection(BaseSection):
         return {}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
-        logger.info("Filtering the markdown section...")
+        logger.info("Rendering the markdown section...")
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
