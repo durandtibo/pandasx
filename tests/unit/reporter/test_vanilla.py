@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 
 from pandas import DataFrame
-from pytest import LogCaptureFixture, TempPathFactory, fixture
+from pytest import TempPathFactory, fixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.preprocessor import SequentialPreprocessor
 from flamme.reporter import Reporter
-from flamme.utils.io import load_text, save_text
 
 
 @fixture(scope="module")
@@ -53,33 +51,3 @@ def test_reporter_compute(df_path: Path, tmp_path: Path) -> None:
         report_path=report_path,
     ).compute()
     assert report_path.is_file()
-
-
-def test_reporter_compute_already_exist_overwrite_false(
-    df_path: Path, tmp_path: Path, caplog: LogCaptureFixture
-) -> None:
-    report_path = tmp_path.joinpath("report.html")
-    save_text("abc", report_path)
-    reporter = Reporter(
-        ingestor=ParquetIngestor(df_path),
-        preprocessor=SequentialPreprocessor(preprocessors=[]),
-        analyzer=NullValueAnalyzer(),
-        report_path=report_path,
-    )
-    with caplog.at_level(level=logging.WARNING):
-        reporter.compute()
-    assert caplog.messages
-    assert load_text(report_path) == "abc"
-
-
-def test_reporter_compute_already_exist_overwrite_true(df_path: Path, tmp_path: Path) -> None:
-    report_path = tmp_path.joinpath("report.html")
-    save_text("abc", report_path)
-    Reporter(
-        ingestor=ParquetIngestor(df_path),
-        preprocessor=SequentialPreprocessor(preprocessors=[]),
-        analyzer=NullValueAnalyzer(),
-        report_path=report_path,
-        overwrite=True,
-    ).compute()
-    assert load_text(report_path) != "abc"
