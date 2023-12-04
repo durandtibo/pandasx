@@ -2,11 +2,14 @@ from __future__ import annotations
 
 __all__ = ["NullColumnPreprocessor"]
 
+import logging
 
 from pandas import DataFrame
 
 from flamme.preprocessor.base import BasePreprocessor
 from flamme.utils.null import compute_null_per_col
+
+logger = logging.getLogger(__name__)
 
 
 class NullColumnPreprocessor(BasePreprocessor):
@@ -56,6 +59,11 @@ class NullColumnPreprocessor(BasePreprocessor):
     def preprocess(self, df: DataFrame) -> DataFrame:
         if df.shape[0] == 0:
             return df
+        num_orig_cols = len(df.columns)
         df_null = compute_null_per_col(df)
         columns = df_null[df_null["null_pct"] < self._threshold]["column"].tolist()
+        logger.info(
+            f"Removing {len(columns) - num_orig_cols:,} columns because they have too "
+            f"many null values (threshold={self._threshold})..."
+        )
         return df[columns]
