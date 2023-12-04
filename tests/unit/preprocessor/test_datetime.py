@@ -59,7 +59,9 @@ def test_to_datetime_preprocessor_preprocess_kwargs() -> None:
             "col4": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"],
         }
     )
-    preprocessor = ToDatetimePreprocessor(columns=["col1", "col3"], errors="coerce")
+    preprocessor = ToDatetimePreprocessor(
+        columns=["col1", "col3"], errors="coerce", format="%Y-%m-%d"
+    )
     df = preprocessor.preprocess(df)
     assert_frame_equal(
         df,

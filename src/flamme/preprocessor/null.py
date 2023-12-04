@@ -66,4 +66,4 @@ class NullColumnPreprocessor(BasePreprocessor):
             f"Removing {len(columns) - num_orig_cols:,} columns because they have too "
             f"many null values (threshold={self._threshold})..."
         )
-        return df[columns]
+        return df[columns].copy()
