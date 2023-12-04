@@ -54,6 +54,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     df = df.mask(mask)
     df["discrete"] = np.random.randint(0, 1001, (nrows,))
     df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
+    df["datetime_str"] = pd.date_range("2018-01-01", periods=nrows, freq="H").astype(str)
     return df
 
 
@@ -166,7 +167,7 @@ def create_preprocessor() -> BasePreprocessor:
         [
             StripStrPreprocessor(columns=["str"]),
             ToNumericPreprocessor(columns=["float", "int", "cauchy"]),
-            ToDatetimePreprocessor(columns=["datetime"]),
+            ToDatetimePreprocessor(columns=["datetime", "datetime_str"]),
         ]
     )
 

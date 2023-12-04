@@ -54,4 +54,4 @@ class ColumnSelectionPreprocessor(BasePreprocessor):
                 raise RuntimeError(
                     f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
                 )
-        return df[self._columns]
+        return df[self._columns].copy()
