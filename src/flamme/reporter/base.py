@@ -33,7 +33,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
           (ingestor): ParquetIngestor(path=/path/to/data.parquet)
           (preprocessor): SequentialPreprocessor()
           (analyzer): NullValueAnalyzer()
-          (overwrite): False
+          (report_path): /path/to/report.html
           (max_toc_depth): 6
         )
         >>> report = reporter.compute()  # doctest: +SKIP
@@ -145,7 +145,7 @@ def setup_reporter(
           (ingestor): CsvIngestor(path=/path/to/data.csv)
           (preprocessor): ToNumericPreprocessor(columns=('col1', 'col3'))
           (analyzer): NullValueAnalyzer()
-          (overwrite): False
+          (report_path): /path/to/report.html
           (max_toc_depth): 6
         )
     """
