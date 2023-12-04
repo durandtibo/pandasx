@@ -79,5 +79,3 @@ def test_no_repeat_reporter_compute_already_exist(
         reporter.compute()
     assert caplog.messages
     assert load_text(report_path) == "abc"
-
-
