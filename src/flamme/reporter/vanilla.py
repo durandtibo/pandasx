@@ -89,7 +89,7 @@ class Reporter(BaseReporter):
     def compute(self) -> None:
         if self._report_path.is_file() and not self._overwrite:
             logger.warning(
-                f"The report ({self._report_path}) already exists. "
+                f"The report ({self._report_path}) already exists and it is not be computed. "
                 "You can set `overwrite=True` to overwrite it."
             )
             return
