@@ -8,6 +8,7 @@ from pandas.testing import assert_frame_equal
 from pytest import fixture
 
 from flamme.section import DuplicatedRowSection
+from flamme.section.duplicate import create_duplicate_table
 
 
 @fixture
@@ -99,3 +100,16 @@ def test_duplicated_rows_section_render_html_toc_args(
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+############################################
+#     Tests for create_duplicate_table     #
+############################################
+
+
+def test_create_duplicate_table() -> None:
+    assert isinstance(create_duplicate_table(10, 5), str)
+
+
+def test_create_duplicate_table_0() -> None:
+    assert isinstance(create_duplicate_table(0, 0), str)

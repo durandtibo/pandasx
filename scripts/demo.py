@@ -15,6 +15,7 @@ from flamme.analyzer import (
     ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
     DataTypeAnalyzer,
+    DuplicateRowAnalyzer,
     GlobalTemporalNullValueAnalyzer,
     MappingAnalyzer,
     MarkdownAnalyzer,
@@ -109,6 +110,7 @@ def create_analyzer() -> BaseAnalyzer:
 
     return MappingAnalyzer(
         {
+            "duplicate": DuplicateRowAnalyzer(),
             "column type": DataTypeAnalyzer(),
             "null values": MappingAnalyzer(
                 {
