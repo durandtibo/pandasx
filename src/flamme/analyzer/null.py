@@ -37,8 +37,13 @@ class NullValueAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
+    def __init__(
+        self, figsize: tuple[int | None, int | None] | list[int | None] = (None, None)
+    ) -> None:
+        self._figsize = figsize
+
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}()"
+        return f"{self.__class__.__qualname__}(figsize={self._figsize})"
 
     def analyze(self, df: DataFrame) -> NullValueSection:
         logger.info("Analyzing the null value distribution of all columns...")
@@ -46,6 +51,7 @@ class NullValueAnalyzer(BaseAnalyzer):
             columns=list(df.columns),
             null_count=df.isnull().sum().to_frame("count")["count"].to_numpy(),
             total_count=np.full((df.shape[1],), df.shape[0]),
+            figsize=self._figsize,
         )
 
 

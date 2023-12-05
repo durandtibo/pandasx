@@ -36,14 +36,22 @@ class NullValueSection(BaseSection):
             values for each column.
         total_count (``numpy.ndarray``): Specifies the total number
             of values for each column.
+        figsize (``tuple`` or list , optional): Specifies the figure
+            size in pixels. The first dimension is the width and the
+            second is the height. Default: ``(None, None)``
     """
 
     def __init__(
-        self, columns: Sequence[str], null_count: np.ndarray, total_count: np.ndarray
+        self,
+        columns: Sequence[str],
+        null_count: np.ndarray,
+        total_count: np.ndarray,
+        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
     ) -> None:
         self._columns = tuple(columns)
         self._null_count = null_count.flatten().astype(int)
         self._total_count = total_count.flatten().astype(int)
+        self._figsize = figsize
 
         if len(self._columns) != self._null_count.shape[0]:
             raise RuntimeError(
@@ -55,6 +63,29 @@ class NullValueSection(BaseSection):
                 f"columns ({len(self._columns):,}) and total_count "
                 f"({self._total_count.shape[0]:,}) do not match"
             )
+
+    @property
+    def columns(self) -> tuple[str, ...]:
+        r"""Tuple: The columns used to compute the duplicated rows."""
+        return self._columns
+
+    @property
+    def null_count(self) -> np.ndarray:
+        r"""``numpy.ndarray``: The number of null values for each
+        column."""
+        return self._null_count
+
+    @property
+    def total_count(self) -> np.ndarray:
+        r"""``numpy.ndarray``: The total number of values for each
+        column."""
+        return self._total_count
+
+    @property
+    def figsize(self) -> tuple[int | None, int | None]:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         return {
@@ -138,6 +169,7 @@ In the following histogram, the columns are sorted by ascending order of null va
             text_auto=True,
             template="seaborn",
         )
+        fig.update_layout(height=self._figsize[1], width=self._figsize[0])
         return plotly.io.to_html(fig, full_html=False)
 
     def _create_table(self, sort_by: str) -> str:
