@@ -5,7 +5,7 @@ from coola import objects_are_equal
 from pandas import DataFrame
 from pandas._testing import assert_frame_equal
 
-from flamme.analyzer import DuplicateRowAnalyzer
+from flamme.analyzer import DuplicatedRowAnalyzer
 from flamme.section import DuplicatedRowSection
 
 ##########################################
@@ -13,12 +13,12 @@ from flamme.section import DuplicatedRowSection
 ##########################################
 
 
-def test_duplicate_row_analyzer_str() -> None:
-    assert str(DuplicateRowAnalyzer()).startswith("DuplicateRowAnalyzer(")
+def test_duplicated_row_analyzer_str() -> None:
+    assert str(DuplicatedRowAnalyzer()).startswith("DuplicatedRowAnalyzer(")
 
 
-def test_duplicate_row_analyzer_df() -> None:
-    section = DuplicateRowAnalyzer().analyze(
+def test_duplicated_row_analyzer_df() -> None:
+    section = DuplicatedRowAnalyzer().analyze(
         DataFrame(
             {
                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
@@ -39,8 +39,8 @@ def test_duplicate_row_analyzer_df() -> None:
     )
 
 
-def test_duplicate_row_analyzer_columns() -> None:
-    section = DuplicateRowAnalyzer(columns=["col2", "col3"]).analyze(
+def test_duplicated_row_analyzer_columns() -> None:
+    section = DuplicatedRowAnalyzer(columns=["col2", "col3"]).analyze(
         DataFrame(
             {
                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
@@ -52,8 +52,8 @@ def test_duplicate_row_analyzer_columns() -> None:
     assert section.columns == ("col2", "col3")
 
 
-def test_duplicate_row_analyzer_get_statistics() -> None:
-    section = DuplicateRowAnalyzer().analyze(
+def test_duplicated_row_analyzer_get_statistics() -> None:
+    section = DuplicatedRowAnalyzer().analyze(
         DataFrame(
             {
                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
@@ -66,8 +66,8 @@ def test_duplicate_row_analyzer_get_statistics() -> None:
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 3})
 
 
-def test_duplicate_row_analyzer_get_statistics_columns() -> None:
-    section = DuplicateRowAnalyzer(columns=["col2", "col3"]).analyze(
+def test_duplicated_row_analyzer_get_statistics_columns() -> None:
+    section = DuplicatedRowAnalyzer(columns=["col2", "col3"]).analyze(
         DataFrame(
             {
                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
@@ -80,13 +80,13 @@ def test_duplicate_row_analyzer_get_statistics_columns() -> None:
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 2})
 
 
-def test_duplicate_row_analyzer_get_statistics_empty_rows() -> None:
-    section = DuplicateRowAnalyzer().analyze(DataFrame({"col1": [], "col2": []}))
+def test_duplicated_row_analyzer_get_statistics_empty_rows() -> None:
+    section = DuplicatedRowAnalyzer().analyze(DataFrame({"col1": [], "col2": []}))
     assert isinstance(section, DuplicatedRowSection)
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})
 
 
-def test_duplicate_row_analyzer_get_statistics_missing_column() -> None:
-    section = DuplicateRowAnalyzer().analyze(DataFrame({}))
+def test_duplicated_row_analyzer_get_statistics_missing_column() -> None:
+    section = DuplicatedRowAnalyzer().analyze(DataFrame({}))
     assert isinstance(section, DuplicatedRowSection)
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})

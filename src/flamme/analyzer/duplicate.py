@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["DuplicateRowAnalyzer"]
+__all__ = ["DuplicatedRowAnalyzer"]
 
 import logging
 from collections.abc import Sequence
@@ -13,7 +13,7 @@ from flamme.section import DuplicatedRowSection
 logger = logging.getLogger(__name__)
 
 
-class DuplicateRowAnalyzer(BaseAnalyzer):
+class DuplicatedRowAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the number of duplicated rows.
 
     Args:
@@ -28,10 +28,10 @@ class DuplicateRowAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import DuplicateRowAnalyzer
-        >>> analyzer = DuplicateRowAnalyzer()
+        >>> from flamme.analyzer import DuplicatedRowAnalyzer
+        >>> analyzer = DuplicatedRowAnalyzer()
         >>> analyzer
-        DuplicateRowAnalyzer(columns=None)
+        DuplicatedRowAnalyzer(columns=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "col1": np.array([0, 1, 0, 1]),
