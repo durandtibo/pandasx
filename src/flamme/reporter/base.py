@@ -25,14 +25,14 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         >>> reporter = Reporter(
         ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
         ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
-        ...     analyzer=NullValueAnalyzer(),
+        ...     analyzer=NullValueAnalyzer(figsize=(None, None)),
         ...     report_path="/path/to/report.html",
         ... )
         >>> reporter
         Reporter(
           (ingestor): ParquetIngestor(path=/path/to/data.parquet)
           (preprocessor): SequentialPreprocessor()
-          (analyzer): NullValueAnalyzer()
+          (analyzer): NullValueAnalyzer(figsize=(None, None))
           (report_path): /path/to/report.html
           (max_toc_depth): 6
         )
@@ -53,7 +53,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
             >>> reporter = Reporter(
             ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
             ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
-            ...     analyzer=NullValueAnalyzer(),
+            ...     analyzer=NullValueAnalyzer(figsize=(None, None)),
             ...     report_path="/path/to/report.html",
             ... )
             >>> report = reporter.compute()  # doctest: +SKIP
@@ -144,7 +144,7 @@ def setup_reporter(
         Reporter(
           (ingestor): CsvIngestor(path=/path/to/data.csv)
           (preprocessor): ToNumericPreprocessor(columns=('col1', 'col3'))
-          (analyzer): NullValueAnalyzer()
+          (analyzer): NullValueAnalyzer(figsize=(None, None))
           (report_path): /path/to/report.html
           (max_toc_depth): 6
         )

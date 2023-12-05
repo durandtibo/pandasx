@@ -24,9 +24,9 @@ class NullValueAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import NullValueAnalyzer
-        >>> analyzer = NullValueAnalyzer()
+        >>> analyzer = NullValueAnalyzer(figsize=(None, None))
         >>> analyzer
-        NullValueAnalyzer()
+        NullValueAnalyzer(figsize=(None, None))
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
