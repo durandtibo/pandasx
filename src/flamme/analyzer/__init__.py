@@ -9,6 +9,7 @@ __all__ = [
     "ColumnTemporalDiscreteAnalyzer",
     "ColumnTemporalNullValueAnalyzer",
     "DataTypeAnalyzer",
+    "DuplicateRowAnalyzer",
     "FilteredAnalyzer",
     "GlobalTemporalNullValueAnalyzer",
     "MappingAnalyzer",
@@ -30,6 +31,7 @@ from flamme.analyzer.discrete import (
     ColumnTemporalDiscreteAnalyzer,
 )
 from flamme.analyzer.dtype import DataTypeAnalyzer
+from flamme.analyzer.duplicate import DuplicateRowAnalyzer
 from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer
