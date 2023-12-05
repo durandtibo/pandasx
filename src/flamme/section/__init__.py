@@ -8,6 +8,7 @@ __all__ = [
     "ColumnTemporalDiscreteSection",
     "ColumnTemporalNullValueSection",
     "DataTypeSection",
+    "DuplicatedRowSection",
     "EmptySection",
     "GlobalTemporalNullValueSection",
     "MarkdownSection",
@@ -22,6 +23,7 @@ from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
 from flamme.section.discrete import ColumnDiscreteSection
 from flamme.section.discrete_temporal import ColumnTemporalDiscreteSection
 from flamme.section.dtype import DataTypeSection
+from flamme.section.duplicate import DuplicatedRowSection
 from flamme.section.empty import EmptySection
 from flamme.section.mapping import SectionDict
 from flamme.section.markdown import MarkdownSection
