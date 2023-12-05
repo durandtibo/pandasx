@@ -85,7 +85,7 @@ class ColumnTemporalNullValueSection(BaseSection):
         return self._period
 
     @property
-    def figsize(self) -> tuple[int, int]:
+    def figsize(self) -> tuple[int | None, int | None]:
         r"""tuple: The individual figure size in pixels. The first
         dimension is the width and the second is the height."""
         return self._figsize

@@ -26,7 +26,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
         >>> analyzer
-        NullValueAnalyzer()
+        NullValueAnalyzer(figsize=(None, None))
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -121,7 +121,7 @@ def setup_analyzer(
         >>> from flamme.analyzer import setup_analyzer
         >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NullValueAnalyzer"})
         >>> analyzer
-        NullValueAnalyzer()
+        NullValueAnalyzer(figsize=(None, None))
     """
     if isinstance(analyzer, dict):
         logger.info("Initializing an analyzer from its configuration... ")

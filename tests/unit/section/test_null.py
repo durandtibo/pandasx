@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from coola import objects_are_allclose
+from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
@@ -31,6 +31,53 @@ def test_null_value_section_incorrect_total_count_size() -> None:
             null_count=np.array([0, 1, 2]),
             total_count=np.array([5, 5]),
         )
+
+
+def test_null_value_section_columns() -> None:
+    assert NullValueSection(
+        columns=["col1", "col2", "col3"],
+        null_count=np.array([0, 1, 2]),
+        total_count=np.array([5, 5, 5]),
+    ).columns == ("col1", "col2", "col3")
+
+
+def test_null_value_section_null_count() -> None:
+    assert objects_are_equal(
+        NullValueSection(
+            columns=["col1", "col2", "col3"],
+            null_count=np.array([0, 1, 2]),
+            total_count=np.array([5, 5, 5]),
+        ).null_count,
+        np.array([0, 1, 2]),
+    )
+
+
+def test_null_value_section_total_count() -> None:
+    assert objects_are_equal(
+        NullValueSection(
+            columns=["col1", "col2", "col3"],
+            null_count=np.array([0, 1, 2]),
+            total_count=np.array([5, 5, 5]),
+        ).total_count,
+        np.array([5, 5, 5]),
+    )
+
+
+def test_null_value_section_figsize() -> None:
+    assert NullValueSection(
+        columns=["col1", "col2", "col3"],
+        null_count=np.array([0, 1, 2]),
+        total_count=np.array([5, 5, 5]),
+        figsize=(100, 200),
+    ).figsize == (100, 200)
+
+
+def test_null_value_section_figsize_default() -> None:
+    assert NullValueSection(
+        columns=["col1", "col2", "col3"],
+        null_count=np.array([0, 1, 2]),
+        total_count=np.array([5, 5, 5]),
+    ).figsize == (None, None)
 
 
 def test_null_value_section_get_statistics() -> None:

@@ -35,7 +35,7 @@ class FilteredAnalyzer(BaseAnalyzer):
         >>> analyzer
         FilteredAnalyzer(
           (query): float >= 2.0
-          (analyzer): NullValueAnalyzer()
+          (analyzer): NullValueAnalyzer(figsize=(None, None))
         )
         >>> df = pd.DataFrame(
         ...     {

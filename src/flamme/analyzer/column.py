@@ -35,7 +35,7 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         >>> analyzer
         ColumnSubsetAnalyzer(
           (columns): ['int', 'float']
-          (analyzer): NullValueAnalyzer()
+          (analyzer): NullValueAnalyzer(figsize=(None, None))
         )
         >>> df = pd.DataFrame(
         ...     {
