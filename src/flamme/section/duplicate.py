@@ -52,6 +52,7 @@ class DuplicatedRowSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the duplicated rows section using the columns: {self._columns}")
+        stats = self.get_statistics()
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -60,6 +61,9 @@ class DuplicatedRowSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "columns": self._columns,
+                "table": create_duplicate_table(
+                    num_rows=stats["num_rows"], num_unique_rows=stats["num_unique_rows"]
+                ),
             }
         )
 
@@ -80,3 +84,50 @@ This section shows the number of duplicated rows using the following columns <em
 {{table}}
 <p style="margin-top: 1rem;">
 """
+
+
+def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:
+    r"""Creates a table with information about duplicated rows.
+
+    Args:
+    ----
+        num_rows (int): Specifies the number of rows.
+        num_unique_rows (int): Specifies the number of unique rows.
+
+    Returns:
+    -------
+        str: The HTML representation of the table.
+    """
+    num_duplicated_rows = num_rows - num_unique_rows
+    pct_unique_rows = num_unique_rows / num_rows if num_rows else float("nan")
+    pct_duplicated_rows = 1.0 - pct_unique_rows
+    return Template(
+        """
+<table class="table table-hover table-responsive w-auto" >
+<thead class="thead table-group-divider">
+    <tr>
+        <th>number of rows</th>
+        <th>number of unique rows</th>
+        <th>number of duplicated rows</th>
+    </tr>
+</thead>
+<tbody class="tbody table-group-divider">
+    <tr>
+        <td {{num_style}}>{{num_rows}}</td>
+        <td {{num_style}}>{{num_unique_rows}} ({{pct_unique_rows}}%)</td>
+        <td {{num_style}}>{{num_duplicated_rows}} ({{pct_duplicated_rows}}%)</td>
+    </tr>
+    <tr class="table-group-divider"></tr>
+</tbody>
+</table>
+"""
+    ).render(
+        {
+            "num_style": 'style="text-align: right;"',
+            "num_rows": f"{num_rows:,}",
+            "num_unique_rows": f"{num_unique_rows:,}",
+            "num_duplicated_rows": f"{num_duplicated_rows:,}",
+            "pct_unique_rows": f"{100 * pct_unique_rows:.2f}",
+            "pct_duplicated_rows": f"{100 * pct_duplicated_rows:.2f}",
+        }
+    )
