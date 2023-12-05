@@ -42,7 +42,8 @@ class DuplicatedRowSection(BaseSection):
 
     @property
     def columns(self) -> tuple[str, ...] | None:
-        r"""str: The columns used to compute the duplicated rows."""
+        r"""Tuple or ``None``: The columns used to compute the
+        duplicated rows."""
         return self._columns
 
     def get_statistics(self) -> dict:
