@@ -29,7 +29,6 @@ def find_columns_type(df: DataFrame, cls: type) -> tuple[str, ...]:
 
     .. code-block:: pycon
 
-        >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.utils.columns import find_columns_type
         >>> df = pd.DataFrame(
@@ -62,7 +61,6 @@ def find_columns_decimal(df: DataFrame) -> tuple[str, ...]:
 
     .. code-block:: pycon
 
-        >>> import numpy as np
         >>> import pandas as pd
         >>> from decimal import Decimal
         >>> from flamme.utils.columns import find_columns_decimal

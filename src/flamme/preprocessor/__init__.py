@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = [
     "BasePreprocessor",
     "ColumnSelectionPreprocessor",
+    "DecimalToNumericPreprocessor",
     "NullColumnPreprocessor",
     "SequentialPreprocessor",
     "StripStrPreprocessor",
@@ -19,6 +20,7 @@ from flamme.preprocessor.base import (
 )
 from flamme.preprocessor.column import ColumnSelectionPreprocessor
 from flamme.preprocessor.datetime import ToDatetimePreprocessor
+from flamme.preprocessor.decimal import DecimalToNumericPreprocessor
 from flamme.preprocessor.null import NullColumnPreprocessor
 from flamme.preprocessor.numeric import ToNumericPreprocessor
 from flamme.preprocessor.sequential import SequentialPreprocessor
