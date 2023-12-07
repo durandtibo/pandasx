@@ -18,9 +18,9 @@ def test_to_datetime_series_transformer_str_kwargs() -> None:
     assert str(ToDatetime(errors="ignore")) == "ToDatetimeSeriesTransformer(errors=ignore)"
 
 
-def test_to_datetime_series_transformer_preprocess() -> None:
+def test_to_datetime_series_transformer_transform() -> None:
     transformer = ToDatetime()
-    series = transformer.preprocess(
+    series = transformer.transform(
         pd.Series(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"])
     )
     assert_series_equal(
@@ -31,9 +31,9 @@ def test_to_datetime_series_transformer_preprocess() -> None:
     )
 
 
-def test_to_datetime_series_transformer_preprocess_kwargs() -> None:
+def test_to_datetime_series_transformer_transform_kwargs() -> None:
     transformer = ToDatetime(errors="coerce")
-    series = transformer.preprocess(
+    series = transformer.transform(
         pd.Series(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "abc"])
     )
     assert_series_equal(

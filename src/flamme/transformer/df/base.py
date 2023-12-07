@@ -42,7 +42,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         col3    object
         col4    object
         dtype: object
-        >>> df = transformer.preprocess(df)
+        >>> df = transformer.transform(df)
         >>> df.dtypes
         col1     int64
         col2    object
@@ -51,7 +51,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         dtype: object
     """
 
-    def preprocess(self, df: DataFrame) -> DataFrame:
+    def transform(self, df: DataFrame) -> DataFrame:
         r"""Transforms the data in the ``pandas.DataFrame``.
 
         Args:
@@ -78,7 +78,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
             ...         "col4": ["a", "b", "c", "d", "e"],
             ...     }
             ... )
-            >>> df = transformer.preprocess(df)
+            >>> df = transformer.transform(df)
             >>> df.dtypes
             col1     int64
             col2    object
