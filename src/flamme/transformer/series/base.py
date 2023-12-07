@@ -24,27 +24,12 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         >>> transformer = ToNumeric()
         >>> transformer
         ToNumericSeriesTransformer()
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
-        ...     }
-        ... )
-        >>> df.dtypes
-        col1     int64
-        col2    object
-        col3    object
-        col4    object
-        dtype: object
-        >>> df = transformer.preprocess(df)
-        >>> df.dtypes
-        col1     int64
-        col2    object
-        col3     int64
-        col4    object
-        dtype: object
+        >>> series = pd.Series(["1", "2", "3", "4", "5"])
+        >>> series.dtype
+        dtype('O')
+        >>> series = transformer.preprocess(series)
+        >>> series.dtype
+        dtype('int64')
     """
 
     def preprocess(self, df: Series) -> Series:
@@ -64,29 +49,12 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         .. code-block:: pycon
 
             >>> import pandas as pd
-            >>> from flamme.transformer import ToNumeric
-            >>> transformer = ToNumeric(columns=["col1", "col3"])
-            >>> df = pd.DataFrame(
-            ...     {
-            ...         "col1": [1, 2, 3, 4, 5],
-            ...         "col2": ["1", "2", "3", "4", "5"],
-            ...         "col3": ["1", "2", "3", "4", "5"],
-            ...         "col4": ["a", "b", "c", "d", "e"],
-            ...     }
-            ... )
-            >>> df.dtypes
-            col1     int64
-            col2    object
-            col3    object
-            col4    object
-            dtype: object
-            >>> df = transformer.preprocess(df)
-            >>> df.dtypes
-            col1     int64
-            col2    object
-            col3     int64
-            col4    object
-            dtype: object
+            >>> from flamme.transformer.series import ToNumeric
+            >>> transformer = ToNumeric()
+            >>> series = pd.Series(["1", "2", "3", "4", "5"])
+            >>> series = transformer.preprocess(series)
+            >>> series.dtype
+            dtype('int64')
         """
 
 
