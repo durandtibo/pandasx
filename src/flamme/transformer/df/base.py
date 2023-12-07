@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to preprocess a ``pandas.DataFrame``.
+    r"""Defines the base class to transform a ``pandas.DataFrame``.
 
     Example usage:
 
@@ -37,16 +37,16 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     """
 
     def preprocess(self, df: DataFrame) -> DataFrame:
-        r"""Preprocesses the data in the DataFrame.
+        r"""Transforms the data in the ``pandas.DataFrame``.
 
         Args:
         ----
-            df (``pandas.DataFrame``): Specifies the DataFrame
-                to preprocess.
+            df (``pandas.DataFrame``): Specifies the
+                ``pandas.DataFrame`` to transform.
 
         Returns:
         -------
-            ``pandas.DataFrame``: The preprocessed DataFrame.
+            ``pandas.DataFrame``: The transformed DataFrame.
 
         Example usage:
 
