@@ -10,7 +10,7 @@ from decimal import Decimal
 
 from pandas import DataFrame
 
-from flamme.utils.dtype import column_types
+from flamme.utils.dtype import df_column_types
 
 
 def find_columns_type(df: DataFrame, cls: type) -> tuple[str, ...]:
@@ -42,7 +42,7 @@ def find_columns_type(df: DataFrame, cls: type) -> tuple[str, ...]:
         >>> find_columns_type(df, str)
         ('col2', 'col3', 'col4')
     """
-    types = column_types(df)
+    types = df_column_types(df)
     return tuple(col for col, tps in types.items() if cls in tps)
 
 
