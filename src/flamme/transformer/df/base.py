@@ -25,15 +25,30 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
 
         >>> import pandas as pd
         >>> from flamme.transformer.df import ToNumeric
-        >>> transformer = ToNumeric()
+        >>> transformer = ToNumeric(columns=["col1", "col3"])
         >>> transformer
-        ToNumericDataFrameTransformer()
-        >>> df = pd.DataFrame(["1", "2", "3", "4", "5"])
-        >>> df.dtype
-        dtype('O')
+        ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "col1": [1, 2, 3, 4, 5],
+        ...         "col2": ["1", "2", "3", "4", "5"],
+        ...         "col3": ["1", "2", "3", "4", "5"],
+        ...         "col4": ["a", "b", "c", "d", "e"],
+        ...     }
+        ... )
+        >>> df.dtypes
+        col1     int64
+        col2    object
+        col3    object
+        col4    object
+        dtype: object
         >>> df = transformer.preprocess(df)
-        >>> df.dtype
-        dtype('int64')
+        >>> df.dtypes
+        col1     int64
+        col2    object
+        col3     int64
+        col4    object
+        dtype: object
     """
 
     def preprocess(self, df: DataFrame) -> DataFrame:
@@ -54,11 +69,22 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
 
             >>> import pandas as pd
             >>> from flamme.transformer.df import ToNumeric
-            >>> transformer = ToNumeric()
-            >>> df = pd.DataFrame(["1", "2", "3", "4", "5"])
+            >>> transformer = ToNumeric(columns=["col1", "col3"])
+            >>> df = pd.DataFrame(
+            ...     {
+            ...         "col1": [1, 2, 3, 4, 5],
+            ...         "col2": ["1", "2", "3", "4", "5"],
+            ...         "col3": ["1", "2", "3", "4", "5"],
+            ...         "col4": ["a", "b", "c", "d", "e"],
+            ...     }
+            ... )
             >>> df = transformer.preprocess(df)
-            >>> df.dtype
-            dtype('int64')
+            >>> df.dtypes
+            col1     int64
+            col2    object
+            col3     int64
+            col4    object
+            dtype: object
         """
 
 
@@ -85,7 +111,9 @@ def is_dataframe_transformer_config(config: dict) -> bool:
     .. code-block:: pycon
 
         >>> from flamme.transformer.df import is_dataframe_transformer_config
-        >>> is_dataframe_transformer_config({"_target_": "flamme.transformer.df.ToNumeric"})
+        >>> is_dataframe_transformer_config(
+        ...     {"_target_": "flamme.transformer.df.ToNumeric", "columns": ["col1", "col3"]}
+        ... )
         True
     """
     return is_object_config(config, BaseDataFrameTransformer)
@@ -114,10 +142,10 @@ def setup_dataframe_transformer(
 
         >>> from flamme.transformer.df import setup_dataframe_transformer
         >>> transformer = setup_dataframe_transformer(
-        ...     {"_target_": "flamme.transformer.df.ToNumeric"}
+        ...     {"_target_": "flamme.transformer.df.ToNumeric", "columns": ["col1", "col3"]}
         ... )
         >>> transformer
-        ToNumericDataFrameTransformer()
+        ToNumericDataFrameTransformer(columns=('col1', 'col3'))
     """
     if isinstance(transformer, dict):
         logger.info("Initializing a DataFrame transformer from its configuration... ")
