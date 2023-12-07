@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to preprocess a ``pandas.Series``.
+    r"""Defines the base class to transform a ``pandas.Series``.
 
     Example usage:
 
@@ -27,22 +27,22 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         >>> series = pd.Series(["1", "2", "3", "4", "5"])
         >>> series.dtype
         dtype('O')
-        >>> series = transformer.preprocess(series)
+        >>> series = transformer.transform(series)
         >>> series.dtype
         dtype('int64')
     """
 
-    def preprocess(self, df: Series) -> Series:
-        r"""Preprocesses the data in the Series.
+    def transform(self, df: Series) -> Series:
+        r"""Transforms a ``pandas.Series``.
 
         Args:
         ----
-            df (``pandas.Series``): Specifies the Series
-                to preprocess.
+            df (``pandas.Series``): Specifies the ``pandas.Series``
+                to transform.
 
         Returns:
         -------
-            ``pandas.Series``: The preprocessed Series.
+            ``pandas.Series``: The transformed ``pandas.Series``.
 
         Example usage:
 
@@ -52,7 +52,7 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
             >>> from flamme.transformer.series import ToNumeric
             >>> transformer = ToNumeric()
             >>> series = pd.Series(["1", "2", "3", "4", "5"])
-            >>> series = transformer.preprocess(series)
+            >>> series = transformer.transform(series)
             >>> series.dtype
             dtype('int64')
         """

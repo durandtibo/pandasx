@@ -43,7 +43,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
         col3    object
         col4    object
         dtype: object
-        >>> df = transformer.preprocess(df)
+        >>> df = transformer.transform(df)
         >>> df.dtypes
         col1     int64
         col2    object
@@ -62,7 +62,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
             args = ", " + args
         return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
 
-    def preprocess(self, df: DataFrame) -> DataFrame:
+    def transform(self, df: DataFrame) -> DataFrame:
         for col in tqdm(self._columns, desc="Converting to numeric type"):
             df[col] = pd.to_numeric(df[col], **self._kwargs)
         return df

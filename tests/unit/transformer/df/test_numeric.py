@@ -34,7 +34,7 @@ def test_to_numeric_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ToNumeric(columns=["col1", "col3"])
-    df = transformer.preprocess(df)
+    df = transformer.transform(df)
     assert_frame_equal(
         df,
         pd.DataFrame(
@@ -58,7 +58,7 @@ def test_to_numeric_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = ToNumeric(columns=["col1", "col3"], errors="coerce")
-    df = transformer.preprocess(df)
+    df = transformer.transform(df)
     assert_frame_equal(
         df,
         pd.DataFrame(

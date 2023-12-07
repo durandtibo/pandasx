@@ -18,13 +18,13 @@ def test_to_numeric_series_transformer_str_kwargs() -> None:
     assert str(ToNumeric(errors="ignore")) == "ToNumericSeriesTransformer(errors=ignore)"
 
 
-def test_to_numeric_series_transformer_preprocess() -> None:
+def test_to_numeric_series_transformer_transform() -> None:
     transformer = ToNumeric()
-    series = transformer.preprocess(pd.Series(["1", "2", "3", "4", 5]))
+    series = transformer.transform(pd.Series(["1", "2", "3", "4", 5]))
     assert_series_equal(series, pd.Series([1, 2, 3, 4, 5]))
 
 
-def test_to_numeric_series_transformer_preprocess_kwargs() -> None:
+def test_to_numeric_series_transformer_transform_kwargs() -> None:
     transformer = ToNumeric(errors="coerce")
-    series = transformer.preprocess(pd.Series(["1", "2", "3", "4", "a5"]))
+    series = transformer.transform(pd.Series(["1", "2", "3", "4", "a5"]))
     assert_series_equal(series, pd.Series([1, 2, 3, 4, float("nan")]))

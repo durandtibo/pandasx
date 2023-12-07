@@ -30,7 +30,7 @@ class ToNumericSeriesTransformer(BaseSeriesTransformer):
         >>> series = pd.Series(["1", "2", "3", "4", "5"])
         >>> series.dtype
         dtype('O')
-        >>> series = transformer.preprocess(series)
+        >>> series = transformer.transform(series)
         >>> series.dtype
         dtype('int64')
     """
@@ -42,5 +42,5 @@ class ToNumericSeriesTransformer(BaseSeriesTransformer):
         args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
         return f"{self.__class__.__qualname__}({args})"
 
-    def preprocess(self, series: Series) -> Series:
+    def transform(self, series: Series) -> Series:
         return pd.to_numeric(series, **self._kwargs)
