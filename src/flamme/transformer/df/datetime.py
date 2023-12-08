@@ -26,29 +26,26 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
 
         >>> import pandas as pd
         >>> from flamme.transformer.df import ToDatetime
-        >>> transformer = ToDatetime(columns=["col1", "col3"])
+        >>> transformer = ToDatetime(columns=["col1"])
         >>> transformer
-        ToDatetimeDataFrameTransformer(columns=('col1', 'col3'))
+        ToDatetimeDataFrameTransformer(columns=('col1',))
         >>> df = pd.DataFrame(
         ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
+        ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"],
+        ...         "col2": [1, 2, 3, 4, 5],
+        ...         "col3": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
         >>> df.dtypes
-        col1     int64
-        col2    object
+        col1    object
+        col2     int64
         col3    object
-        col4    object
         dtype: object
         >>> df = transformer.transform(df)
         >>> df.dtypes
-        col1     int64
-        col2    object
-        col3     int64
-        col4    object
+        col1    datetime64[ns]
+        col2             int64
+        col3            object
         dtype: object
     """
 
