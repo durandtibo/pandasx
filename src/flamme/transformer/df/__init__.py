@@ -14,6 +14,8 @@ __all__ = [
     "ToNumericDataFrameTransformer",
     "is_dataframe_transformer_config",
     "setup_dataframe_transformer",
+    "SequentialDataFrameTransformer",
+    "Sequential",
 ]
 
 from flamme.transformer.df.base import (
@@ -30,6 +32,10 @@ from flamme.transformer.df.numeric import ToNumericDataFrameTransformer as ToNum
 from flamme.transformer.df.selection import ColumnSelectionDataFrameTransformer
 from flamme.transformer.df.selection import (
     ColumnSelectionDataFrameTransformer as ColumnSelection,
+)
+from flamme.transformer.df.sequential import SequentialDataFrameTransformer
+from flamme.transformer.df.sequential import (
+    SequentialDataFrameTransformer as Sequential,
 )
 from flamme.transformer.df.str import StripStrDataFrameTransformer
 from flamme.transformer.df.str import StripStrDataFrameTransformer as StripStr
