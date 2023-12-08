@@ -16,6 +16,8 @@ __all__ = [
     "setup_dataframe_transformer",
     "SequentialDataFrameTransformer",
     "Sequential",
+    "DecimalToNumericDataFrameTransformer",
+    "DecimalToNumeric",
 ]
 
 from flamme.transformer.df.base import (
@@ -25,6 +27,10 @@ from flamme.transformer.df.base import (
 )
 from flamme.transformer.df.datetime import ToDatetimeDataFrameTransformer
 from flamme.transformer.df.datetime import ToDatetimeDataFrameTransformer as ToDatetime
+from flamme.transformer.df.decimal import DecimalToNumericDataFrameTransformer
+from flamme.transformer.df.decimal import (
+    DecimalToNumericDataFrameTransformer as DecimalToNumeric,
+)
 from flamme.transformer.df.null import NullColumnDataFrameTransformer
 from flamme.transformer.df.null import NullColumnDataFrameTransformer as NullColumn
 from flamme.transformer.df.numeric import ToNumericDataFrameTransformer
