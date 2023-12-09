@@ -42,15 +42,21 @@ jobs:
       - name: check flamme.ingestor
         run: |
           poetry run python -c "from flamme import ingestor"
-      - name: check flamme.preprocessor
-        run: |
-          poetry run python -c "from flamme import preprocessor"
       - name: check flamme.reporter
         run: |
           poetry run python -c "from flamme import reporter"
       - name: check flamme.section
         run: |
           poetry run python -c "from flamme import section"
+      - name: check flamme.transformer
+        run: |
+          poetry run python -c "from flamme import transformer"
+      - name: check flamme.transformer.df
+        run: |
+          poetry run python -c "from flamme.transformer import df"
+      - name: check flamme.transformer.series
+        run: |
+          poetry run python -c "from flamme.transformer import series"
       - name: check flamme.utils
         run: |
           poetry run python -c "from flamme import utils"

@@ -20,18 +20,18 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> from flamme.ingestor import ParquetIngestor
-        >>> from flamme.preprocessor import SequentialPreprocessor
+        >>> from flamme.transformer.df import SequentialDataFrameTransformer
         >>> from flamme.reporter import Reporter
         >>> reporter = Reporter(
         ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-        ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
-        ...     analyzer=NullValueAnalyzer(figsize=(None, None)),
+        ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+        ...     analyzer=NullValueAnalyzer(),
         ...     report_path="/path/to/report.html",
         ... )
         >>> reporter
         Reporter(
           (ingestor): ParquetIngestor(path=/path/to/data.parquet)
-          (preprocessor): SequentialPreprocessor()
+          (transformer): SequentialDataFrameTransformer()
           (analyzer): NullValueAnalyzer(figsize=(None, None))
           (report_path): /path/to/report.html
           (max_toc_depth): 6
@@ -48,11 +48,11 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
             >>> from flamme.analyzer import NullValueAnalyzer
             >>> from flamme.ingestor import ParquetIngestor
-            >>> from flamme.preprocessor import SequentialPreprocessor
+            >>> from flamme.transformer.df import SequentialDataFrameTransformer
             >>> from flamme.reporter import Reporter
             >>> reporter = Reporter(
             ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-            ...     preprocessor=SequentialPreprocessor(preprocessors=[]),
+            ...     transformer=SequentialDataFrameTransformer(transformers=[]),
             ...     analyzer=NullValueAnalyzer(figsize=(None, None)),
             ...     report_path="/path/to/report.html",
             ... )
@@ -90,8 +90,8 @@ def is_reporter_config(config: dict) -> bool:
         ...             "_target_": "flamme.ingestor.CsvIngestor",
         ...             "path": "/path/to/data.csv",
         ...         },
-        ...         "preprocessor": {
-        ...             "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...         "transformer": {
+        ...             "_target_": "flamme.transformer.df.ToNumeric",
         ...             "columns": ["col1", "col3"],
         ...         },
         ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
@@ -132,8 +132,8 @@ def setup_reporter(
         ...             "_target_": "flamme.ingestor.CsvIngestor",
         ...             "path": "/path/to/data.csv",
         ...         },
-        ...         "preprocessor": {
-        ...             "_target_": "flamme.preprocessor.ToNumericPreprocessor",
+        ...         "transformer": {
+        ...             "_target_": "flamme.transformer.df.ToNumeric",
         ...             "columns": ["col1", "col3"],
         ...         },
         ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
@@ -143,7 +143,7 @@ def setup_reporter(
         >>> reporter
         Reporter(
           (ingestor): CsvIngestor(path=/path/to/data.csv)
-          (preprocessor): ToNumericPreprocessor(columns=('col1', 'col3'))
+          (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
           (analyzer): NullValueAnalyzer(figsize=(None, None))
           (report_path): /path/to/report.html
           (max_toc_depth): 6

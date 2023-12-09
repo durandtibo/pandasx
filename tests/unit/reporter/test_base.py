@@ -9,8 +9,8 @@ from pytest import LogCaptureFixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
-from flamme.preprocessor import SequentialPreprocessor
 from flamme.reporter import Reporter, is_reporter_config, setup_reporter
+from flamme.transformer.df import Sequential
 
 ########################################
 #     Tests for is_reporter_config     #
@@ -22,8 +22,8 @@ def test_is_reporter_config_true() -> None:
         {
             OBJECT_TARGET: "flamme.reporter.Reporter",
             "ingestor": {OBJECT_TARGET: "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"},
-            "preprocessor": {
-                OBJECT_TARGET: "flamme.preprocessor.ToNumericPreprocessor",
+            "transformer": {
+                OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
                 "columns": ["col1", "col3"],
             },
             "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},
@@ -44,7 +44,7 @@ def test_is_reporter_config_false() -> None:
 def test_setup_reporter_object(tmp_path: Path) -> None:
     reporter = Reporter(
         ingestor=ParquetIngestor(tmp_path.joinpath("data.parquet")),
-        preprocessor=SequentialPreprocessor(preprocessors=[]),
+        transformer=Sequential(transformers=[]),
         analyzer=NullValueAnalyzer(),
         report_path=tmp_path.joinpath("report.html"),
     )
@@ -60,8 +60,8 @@ def test_setup_reporter_dict() -> None:
                     OBJECT_TARGET: "flamme.ingestor.CsvIngestor",
                     "path": "/path/to/data.csv",
                 },
-                "preprocessor": {
-                    OBJECT_TARGET: "flamme.preprocessor.ToNumericPreprocessor",
+                "transformer": {
+                    OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
                     "columns": ["col1", "col3"],
                 },
                 "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},

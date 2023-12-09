@@ -7,8 +7,8 @@ from pytest import TempPathFactory, fixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
-from flamme.preprocessor import SequentialPreprocessor
 from flamme.reporter import Reporter
+from flamme.transformer.df import Sequential
 
 
 @fixture(scope="module")
@@ -35,7 +35,7 @@ def test_reporter_str(df_path: Path, tmp_path: Path) -> None:
     assert str(
         Reporter(
             ingestor=ParquetIngestor(df_path),
-            preprocessor=SequentialPreprocessor(preprocessors=[]),
+            transformer=Sequential(transformers=[]),
             analyzer=NullValueAnalyzer(),
             report_path=report_path,
         )
@@ -46,7 +46,7 @@ def test_reporter_compute(df_path: Path, tmp_path: Path) -> None:
     report_path = tmp_path.joinpath("report.html")
     Reporter(
         ingestor=ParquetIngestor(df_path),
-        preprocessor=SequentialPreprocessor(preprocessors=[]),
+        transformer=Sequential(transformers=[]),
         analyzer=NullValueAnalyzer(),
         report_path=report_path,
     ).compute()
