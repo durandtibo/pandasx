@@ -50,3 +50,29 @@
 </p>
 
 A library to generate custom reports of pandas DataFrames
+
+## Installation
+
+We highly recommend installing
+a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+`flamme` can be installed from pip using the following command:
+
+```shell
+pip install flamme
+```
+
+To make the package as slim as possible, only the minimal packages required to use `flamme` are
+installed.
+To include all the dependencies, you can use the following command:
+
+```shell
+pip install flamme[all]
+```
+
+Please check the [get started page](https://durandtibo.github.io/flamme/get_started) to see how to
+install only some specific dependencies or other alternatives to install the library.
+The following is the corresponding `flamme` versions and tested dependencies.
+
+| `flamme` | `coola`            | `jinja2`     | `markdown`   | `objectory`       | `pandas`     | `plotly`       | `pyarrow`      | `tqdm`         | `python`      |
+|----------|--------------------|--------------|--------------|-------------------|--------------|----------------|----------------|----------------|---------------|
+| `main`   | `>=0.0.20,<0.0.26` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=0.0.8,<0.0.10` | `>=1.3,<2.2` | `>=5.12,<5.18` | `>=10.0,<15.0` | `>=4.65,<4.67` | `>=3.9,<3.12` |
