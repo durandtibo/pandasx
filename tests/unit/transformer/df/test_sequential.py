@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from flamme.transformer.df import Sequential, StripStr, ToNumeric
+from flamme.transformer.df import Sequential, StripString, ToNumeric
 
 ####################################################
 #     Tests for SequentialDataFrameTransformer     #
@@ -14,7 +14,7 @@ def test_sequential_dataframe_transformer_str() -> None:
     assert str(
         Sequential(
             [
-                StripStr(columns=["col1", "col3"]),
+                StripString(columns=["col1", "col3"]),
                 ToNumeric(columns=["col1", "col2"]),
             ]
         )
@@ -60,7 +60,7 @@ def test_sequential_dataframe_transformer_transform_2() -> None:
     )
     transformer = Sequential(
         [
-            StripStr(columns=["col1", "col3"]),
+            StripString(columns=["col1", "col3"]),
             ToNumeric(columns=["col1", "col2"]),
         ]
     )

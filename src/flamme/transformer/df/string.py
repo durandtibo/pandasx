@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["StripStrDataFrameTransformer"]
+__all__ = ["StripStringDataFrameTransformer"]
 
 from collections.abc import Sequence
 
@@ -10,7 +10,7 @@ from tqdm import tqdm
 from flamme.transformer.df.base import BaseDataFrameTransformer
 
 
-class StripStrDataFrameTransformer(BaseDataFrameTransformer):
+class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implements a transformer to strip the strings of some columns.
 
     Args:
@@ -22,10 +22,10 @@ class StripStrDataFrameTransformer(BaseDataFrameTransformer):
     .. code-block:: pycon
 
         >>> import pandas as pd
-        >>> from flamme.transformer.df import StripStrDataFrameTransformer
-        >>> transformer = StripStrDataFrameTransformer(columns=["col1", "col3"])
+        >>> from flamme.transformer.df import StripString
+        >>> transformer = StripString(columns=["col1", "col3"])
         >>> transformer
-        StripStrDataFrameTransformer(columns=('col1', 'col3'))
+        StripStringDataFrameTransformer(columns=('col1', 'col3'))
         >>> df = pd.DataFrame(
         ...     {
         ...         "col1": [1, 2, 3, 4, 5],
