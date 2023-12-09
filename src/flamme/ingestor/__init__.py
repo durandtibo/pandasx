@@ -5,7 +5,7 @@ __all__ = [
     "CsvIngestor",
     "Ingestor",
     "ParquetIngestor",
-    "PreprocessorIngestor",
+    "TransformedIngestor",
     "is_ingestor_config",
     "setup_ingestor",
 ]
@@ -13,5 +13,5 @@ __all__ = [
 from flamme.ingestor.base import BaseIngestor, is_ingestor_config, setup_ingestor
 from flamme.ingestor.csv import CsvIngestor
 from flamme.ingestor.parquet import ParquetIngestor
-from flamme.ingestor.preprocessor import PreprocessorIngestor
+from flamme.ingestor.transform import TransformedIngestor
 from flamme.ingestor.vanilla import Ingestor

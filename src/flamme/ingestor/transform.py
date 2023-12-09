@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["PreprocessorIngestor"]
+__all__ = ["TransformedIngestor"]
 
 import logging
 
@@ -16,28 +16,28 @@ from flamme.transformer.df.base import (
 logger = logging.getLogger(__name__)
 
 
-class PreprocessorIngestor(BaseIngestor):
-    r"""Implements an ingestor that also preprocess the DataFrame.
+class TransformedIngestor(BaseIngestor):
+    r"""Implements an ingestor that also transforms the DataFrame.
 
     Args:
     ----
         path (``pathlib.Path`` or str): Specifies the path to the
             CSV file to ingest.
-        **kwargs: Additional keyword arguments for
-            ``pandas.read_csv``.
+        transformer (``BaseDataFrameTransformer`` or dict): Specifies
+            a ``pandas.DataFrame`` transformer or its configuration.
 
     Example usage:
 
     .. code-block:: pycon
 
-        >>> from flamme.ingestor import PreprocessorIngestor, ParquetIngestor
+        >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
         >>> from flamme.transformer.df import ToNumeric
-        >>> ingestor = PreprocessorIngestor(
+        >>> ingestor = TransformedIngestor(
         ...     ingestor=ParquetIngestor(path="/path/to/df.csv"),
         ...     transformer=ToNumeric(columns=["col1", "col3"]),
         ... )
         >>> ingestor
-        PreprocessorIngestor(
+        TransformedIngestor(
           (ingestor): ParquetIngestor(path=/path/to/df.csv)
           (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
         )
