@@ -23,14 +23,14 @@ from flamme.analyzer import (
     TemporalNullValueAnalyzer,
 )
 from flamme.ingestor import Ingestor
-from flamme.preprocessor import (
-    BasePreprocessor,
-    SequentialPreprocessor,
-    StripStrPreprocessor,
-    ToDatetimePreprocessor,
-    ToNumericPreprocessor,
-)
 from flamme.reporter import BaseReporter, Reporter
+from flamme.transformer.df import (
+    BaseDataFrameTransformer,
+    SequentialDataFrameTransformer,
+    StripStr,
+    ToDatetime,
+    ToNumeric,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -164,18 +164,18 @@ def create_analyzer() -> BaseAnalyzer:
     )
 
 
-def create_preprocessor() -> BasePreprocessor:
-    return SequentialPreprocessor(
+def create_preprocessor() -> BaseDataFrameTransformer:
+    return SequentialDataFrameTransformer(
         [
-            StripStrPreprocessor(columns=["str"]),
-            ToNumericPreprocessor(columns=["float", "int", "cauchy"]),
-            ToDatetimePreprocessor(columns=["datetime", "datetime_str"]),
+            StripStr(columns=["str"]),
+            ToNumeric(columns=["float", "int", "cauchy"]),
+            ToDatetime(columns=["datetime", "datetime_str"]),
         ]
     )
 
 
-def create_preprocessor2() -> BasePreprocessor:
-    return SequentialPreprocessor([])
+def create_preprocessor2() -> BaseDataFrameTransformer:
+    return SequentialDataFrameTransformer([])
 
 
 def create_reporter() -> BaseReporter:
