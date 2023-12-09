@@ -6,8 +6,8 @@ __all__ = [
     "ColumnSelectionDataFrameTransformer",
     "NullColumn",
     "NullColumnDataFrameTransformer",
-    "StripStr",
-    "StripStrDataFrameTransformer",
+    "StripString",
+    "StripStringDataFrameTransformer",
     "ToDatetime",
     "ToDatetimeDataFrameTransformer",
     "ToNumeric",
@@ -43,5 +43,5 @@ from flamme.transformer.df.sequential import SequentialDataFrameTransformer
 from flamme.transformer.df.sequential import (
     SequentialDataFrameTransformer as Sequential,
 )
-from flamme.transformer.df.string import StripStrDataFrameTransformer
-from flamme.transformer.df.string import StripStrDataFrameTransformer as StripStr
+from flamme.transformer.df.string import StripStringDataFrameTransformer
+from flamme.transformer.df.string import StripStringDataFrameTransformer as StripString

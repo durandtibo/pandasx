@@ -27,7 +27,7 @@ from flamme.reporter import BaseReporter, Reporter
 from flamme.transformer.df import (
     BaseDataFrameTransformer,
     SequentialDataFrameTransformer,
-    StripStr,
+    StripString,
     ToDatetime,
     ToNumeric,
 )
@@ -167,7 +167,7 @@ def create_analyzer() -> BaseAnalyzer:
 def create_transformer() -> BaseDataFrameTransformer:
     return SequentialDataFrameTransformer(
         [
-            StripStr(columns=["str"]),
+            StripString(columns=["str"]),
             ToNumeric(columns=["float", "int", "cauchy"]),
             ToDatetime(columns=["datetime", "datetime_str"]),
         ]
