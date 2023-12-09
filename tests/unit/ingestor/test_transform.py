@@ -6,7 +6,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 from pytest import TempPathFactory, fixture
 
-from flamme.ingestor import ParquetIngestor, PreprocessorIngestor
+from flamme.ingestor import ParquetIngestor, TransformedIngestor
 from flamme.transformer.df import ToNumeric
 
 
@@ -24,22 +24,22 @@ def df_path(tmp_path_factory: TempPathFactory) -> Path:
     return path
 
 
-##########################################
-#     Tests for PreprocessorIngestor     #
-##########################################
+#########################################
+#     Tests for TransformedIngestor     #
+#########################################
 
 
-def test_transformer_ingestor_str(df_path: Path) -> None:
+def test_transformed_ingestor_str(df_path: Path) -> None:
     assert str(
-        PreprocessorIngestor(
+        TransformedIngestor(
             ingestor=ParquetIngestor(path=df_path),
             transformer=ToNumeric(columns=["col1", "col3"]),
         )
-    ).startswith("PreprocessorIngestor(")
+    ).startswith("TransformedIngestor(")
 
 
-def test_transformer_ingestor_ingest(df_path: Path) -> None:
-    ingestor = PreprocessorIngestor(
+def test_transformed_ingestor_ingest(df_path: Path) -> None:
+    ingestor = TransformedIngestor(
         ingestor=ParquetIngestor(path=df_path),
         transformer=ToNumeric(columns=["col1", "col3"]),
     )

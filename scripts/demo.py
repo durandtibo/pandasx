@@ -164,7 +164,7 @@ def create_analyzer() -> BaseAnalyzer:
     )
 
 
-def create_preprocessor() -> BaseDataFrameTransformer:
+def create_transformer() -> BaseDataFrameTransformer:
     return SequentialDataFrameTransformer(
         [
             StripStr(columns=["str"]),
@@ -174,14 +174,14 @@ def create_preprocessor() -> BaseDataFrameTransformer:
     )
 
 
-def create_preprocessor2() -> BaseDataFrameTransformer:
+def create_transformer2() -> BaseDataFrameTransformer:
     return SequentialDataFrameTransformer([])
 
 
 def create_reporter() -> BaseReporter:
     return Reporter(
         ingestor=Ingestor(df=create_dataframe(nrows=10000)),
-        preprocessor=create_preprocessor(),
+        transformer=create_transformer(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),
     )
