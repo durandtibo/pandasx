@@ -29,18 +29,18 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
         >>> import pandas as pd
         >>> from flamme.transformer.df import (
         ...     Sequential,
-        ...     StripStr,
+        ...     StripString,
         ...     ToNumeric,
         ... )
         >>> transformer = Sequential(
         ...     [
-        ...         StripStr(columns=["col1", "col3"]),
+        ...         StripString(columns=["col1", "col3"]),
         ...         ToNumeric(columns=["col1", "col2"]),
         ...     ]
         ... )
         >>> transformer
         SequentialDataFrameTransformer(
-          (0): StripStrDataFrameTransformer(columns=('col1', 'col3'))
+          (0): StripStringDataFrameTransformer(columns=('col1', 'col3'))
           (1): ToNumericDataFrameTransformer(columns=('col1', 'col2'))
         )
         >>> df = pd.DataFrame(
