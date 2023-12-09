@@ -8,8 +8,8 @@ from pytest import LogCaptureFixture, TempPathFactory, fixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
-from flamme.preprocessor import SequentialPreprocessor
 from flamme.reporter import NoRepeatReporter, Reporter
+from flamme.transformer.df import Sequential
 from flamme.utils.io import load_text, save_text
 
 
@@ -38,7 +38,7 @@ def test_no_repeat_reporter_str(df_path: Path, tmp_path: Path) -> None:
         NoRepeatReporter(
             Reporter(
                 ingestor=ParquetIngestor(df_path),
-                preprocessor=SequentialPreprocessor(preprocessors=[]),
+                transformer=Sequential(transformers=[]),
                 analyzer=NullValueAnalyzer(),
                 report_path=report_path,
             ),
@@ -52,7 +52,7 @@ def test_no_repeat_reporter_compute(df_path: Path, tmp_path: Path) -> None:
     NoRepeatReporter(
         Reporter(
             ingestor=ParquetIngestor(df_path),
-            preprocessor=SequentialPreprocessor(preprocessors=[]),
+            transformer=Sequential(transformers=[]),
             analyzer=NullValueAnalyzer(),
             report_path=report_path,
         ),
@@ -69,7 +69,7 @@ def test_no_repeat_reporter_compute_already_exist(
     reporter = NoRepeatReporter(
         Reporter(
             ingestor=ParquetIngestor(df_path),
-            preprocessor=SequentialPreprocessor(preprocessors=[]),
+            transformer=Sequential(transformers=[]),
             analyzer=NullValueAnalyzer(),
             report_path=report_path,
         ),

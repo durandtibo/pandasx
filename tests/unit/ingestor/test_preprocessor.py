@@ -7,7 +7,7 @@ from pandas.testing import assert_frame_equal
 from pytest import TempPathFactory, fixture
 
 from flamme.ingestor import ParquetIngestor, PreprocessorIngestor
-from flamme.preprocessor import ToNumericPreprocessor
+from flamme.transformer.df import ToNumeric
 
 
 @fixture(scope="module")
@@ -29,19 +29,19 @@ def df_path(tmp_path_factory: TempPathFactory) -> Path:
 ##########################################
 
 
-def test_preprocessor_ingestor_str(df_path: Path) -> None:
+def test_transformer_ingestor_str(df_path: Path) -> None:
     assert str(
         PreprocessorIngestor(
             ingestor=ParquetIngestor(path=df_path),
-            preprocessor=ToNumericPreprocessor(columns=["col1", "col3"]),
+            transformer=ToNumeric(columns=["col1", "col3"]),
         )
     ).startswith("PreprocessorIngestor(")
 
 
-def test_preprocessor_ingestor_ingest(df_path: Path) -> None:
+def test_transformer_ingestor_ingest(df_path: Path) -> None:
     ingestor = PreprocessorIngestor(
         ingestor=ParquetIngestor(path=df_path),
-        preprocessor=ToNumericPreprocessor(columns=["col1", "col3"]),
+        transformer=ToNumeric(columns=["col1", "col3"]),
     )
     assert_frame_equal(
         ingestor.ingest(),
