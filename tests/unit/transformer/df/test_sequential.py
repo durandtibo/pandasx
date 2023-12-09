@@ -22,7 +22,7 @@ def test_sequential_dataframe_transformer_str() -> None:
 
 
 def test_sequential_dataframe_transformer_str_empty() -> None:
-    assert str(Sequential([])).startswith("SequentialDataFrameTransformer()")
+    assert str(Sequential([])) == "SequentialDataFrameTransformer()"
 
 
 def test_sequential_dataframe_transformer_transform_1() -> None:
