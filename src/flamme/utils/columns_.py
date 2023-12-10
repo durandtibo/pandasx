@@ -1,28 +1,29 @@
 from __future__ import annotations
 
-__all__ = [
-    "BaseColumn",
-    "Column",
-    "StringColumn",
-    "NumericColumn",
-    # "NumericDiscreteColumn",
-    # "NumericContinuousColumn",
-]
+__all__ = ["BaseColumn", "Column"]
 
 from abc import abstractmethod
 
 from coola.utils import str_indent, str_mapping
 
+from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.transformer.series.base import (
     BaseSeriesTransformer,
     setup_series_transformer,
 )
-from flamme.transformer.series.numeric import ToNumericSeriesTransformer
-from flamme.transformer.series.string import StripStringSeriesTransformer
 
 
 class BaseColumn:
     r"""Defines the column base class."""
+
+    @abstractmethod
+    def get_analyzer(self) -> BaseAnalyzer:
+        r"""Gets the column analyzer.
+
+        Returns:
+        -------
+            ``BaseAnalyzer``: The column analyzer.
+        """
 
     @abstractmethod
     def get_transformer(self) -> BaseSeriesTransformer:
@@ -41,15 +42,31 @@ class Column(BaseColumn):
     ----
         can_be_null (bool): ``True`` if the column can have null
             values, otherwise ``False``.
+        analyzer (``BaseAnalyzer`` or dict): Specifies the column
+            analyzer or its configuration.
+        transformer (``BaseSeriesTransformer`` or dict): Specifies
+            the column  transformer or its configuration.
     """
 
-    def __init__(self, can_be_null: bool, transformer: BaseSeriesTransformer | dict) -> None:
+    def __init__(
+        self,
+        can_be_null: bool,
+        analyzer: BaseAnalyzer | dict,
+        transformer: BaseSeriesTransformer | dict,
+    ) -> None:
         self._can_be_null = bool(can_be_null)
+        self._analyzer = setup_analyzer(analyzer)
         self._transformer = setup_series_transformer(transformer)
 
     def __repr__(self) -> str:
         args = str_indent(
-            str_mapping({"can_be_null": self._can_be_null, "transformer": self._transformer})
+            str_mapping(
+                {
+                    "can_be_null": self._can_be_null,
+                    "analyzer": self._analyzer,
+                    "transformer": self._transformer,
+                }
+            )
         )
         return f"{self.__class__.__qualname__}({args})"
 
@@ -58,57 +75,8 @@ class Column(BaseColumn):
         r"""bool: ``True`` if the column can have null values, otherwise ``False``"""
         return self._can_be_null
 
+    def get_analyzer(self) -> BaseAnalyzer:
+        return self._analyzer
+
     def get_transformer(self) -> BaseSeriesTransformer:
         return self._transformer
-
-
-class NumericColumn(Column):
-    r"""Defines a column with numeric values.
-
-    Args:
-    ----
-        can_be_null (bool): ``True`` if the column can have null
-            values, otherwise ``False``.
-        transformer (``BaseSeriesTransformer`` dict or ``None``,
-            optional): Specifies the transformer or its configuration.
-            Default: ``None``
-    """
-
-    def __init__(
-        self,
-        can_be_null: bool,
-        transformer: BaseSeriesTransformer | dict | None = None,
-    ) -> None:
-        if transformer is None:
-            transformer = ToNumericSeriesTransformer()
-        super().__init__(can_be_null=can_be_null, transformer=transformer)
-
-
-class StringColumn(Column):
-    r"""Defines a column with string values.
-
-    Args:
-    ----
-        can_be_null (bool): ``True`` if the column can have null
-            values, otherwise ``False``.
-        transformer (``BaseSeriesTransformer`` dict or ``None``,
-            optional): Specifies the transformer or its configuration.
-            Default: ``None``
-    """
-
-    def __init__(
-        self,
-        can_be_null: bool,
-        transformer: BaseSeriesTransformer | dict | None = None,
-    ) -> None:
-        if transformer is None:
-            transformer = StripStringSeriesTransformer()
-        super().__init__(can_be_null=can_be_null, transformer=transformer)
-
-
-# class NumericContinuousColumn(BaseColumn):
-#     pass
-#
-#
-# class NumericDiscreteColumn(BaseColumn):
-#     pass
