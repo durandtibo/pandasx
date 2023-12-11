@@ -14,7 +14,33 @@ from flamme.transformer.series.base import (
 
 
 class BaseColumn:
-    r"""Defines the column base class."""
+    r"""Defines the column base class.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from flamme.utils.columns import Column
+        >>> from flamme.analyzer import ColumnContinuousAnalyzer
+        >>> from flamme.transformer.series import ToNumeric
+        >>> column = Column(
+        ...     can_be_null=True,
+        ...     analyzer=ColumnContinuousAnalyzer(column="col"),
+        ...     transformer=ToNumeric(),
+        ... )
+        >>> column
+        Column(
+          (can_be_null): True
+          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+          (transformer): ToNumericSeriesTransformer()
+        )
+        >>> analyzer = column.get_analyzer()
+        >>> analyzer
+        ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+        >>> transformer = column.get_transformer()
+        >>> transformer
+        ToNumericSeriesTransformer()
+    """
 
     @abstractmethod
     def get_analyzer(self) -> BaseAnalyzer:
@@ -68,7 +94,7 @@ class Column(BaseColumn):
                 }
             )
         )
-        return f"{self.__class__.__qualname__}({args})"
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def can_be_null(self) -> bool:
