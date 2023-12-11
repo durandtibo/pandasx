@@ -1,110 +1,108 @@
 from __future__ import annotations
 
-__all__ = [
-    "find_columns_decimal",
-    "find_columns_str",
-    "find_columns_type",
-]
+__all__ = ["BaseColumn", "Column"]
 
-from decimal import Decimal
+from abc import abstractmethod
 
-from pandas import DataFrame
+from coola.utils import str_indent, str_mapping
 
-from flamme.utils.dtype import df_column_types
+from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
+from flamme.transformer.series.base import (
+    BaseSeriesTransformer,
+    setup_series_transformer,
+)
 
 
-def find_columns_type(df: DataFrame, cls: type) -> tuple[str, ...]:
-    r"""Finds the list of columns that contains a given type.
-
-    Args:
-    ----
-        df (``pandas.DataFrame``): Specifies the DataFrame.
-        cls: Specifies the type to find.
-
-    Returns:
-    -------
-        tuple: The tuple of columns with the given type.
+class BaseColumn:
+    r"""Defines the column base class.
 
     Example usage:
 
     .. code-block:: pycon
 
-        >>> import pandas as pd
-        >>> from flamme.utils.columns import find_columns_type
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
-        ...     }
+        >>> from flamme.utils.columns import Column
+        >>> from flamme.analyzer import ColumnContinuousAnalyzer
+        >>> from flamme.transformer.series import ToNumeric
+        >>> column = Column(
+        ...     can_be_null=True,
+        ...     analyzer=ColumnContinuousAnalyzer(column="col"),
+        ...     transformer=ToNumeric(),
         ... )
-        >>> find_columns_type(df, str)
-        ('col2', 'col3', 'col4')
+        >>> column
+        Column(
+          (can_be_null): True
+          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+          (transformer): ToNumericSeriesTransformer()
+        )
+        >>> analyzer = column.get_analyzer()
+        >>> analyzer
+        ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+        >>> transformer = column.get_transformer()
+        >>> transformer
+        ToNumericSeriesTransformer()
     """
-    types = df_column_types(df)
-    return tuple(col for col, tps in types.items() if cls in tps)
+
+    @abstractmethod
+    def get_analyzer(self) -> BaseAnalyzer:
+        r"""Gets the column analyzer.
+
+        Returns:
+        -------
+            ``BaseAnalyzer``: The column analyzer.
+        """
+
+    @abstractmethod
+    def get_transformer(self) -> BaseSeriesTransformer:
+        r"""Gets the column transformer.
+
+        Returns:
+        -------
+            ``BaseSeriesTransformer``: The column transformer.
+        """
 
 
-def find_columns_decimal(df: DataFrame) -> tuple[str, ...]:
-    r"""Finds the list of columns that contains the type string.
+class Column(BaseColumn):
+    r"""Defines the column base class.
 
     Args:
     ----
-        df (``pandas.DataFrame``): Specifies the DataFrame.
-
-    Returns:
-    -------
-        tuple: The tuple of columns with the type string.
-
-    Example usage:
-
-    .. code-block:: pycon
-
-        >>> import pandas as pd
-        >>> from decimal import Decimal
-        >>> from flamme.utils.columns import find_columns_decimal
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, Decimal(5)],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
-        ...     }
-        ... )
-        >>> find_columns_decimal(df)
-        ('col1',)
+        can_be_null (bool): ``True`` if the column can have null
+            values, otherwise ``False``.
+        analyzer (``BaseAnalyzer`` or dict): Specifies the column
+            analyzer or its configuration.
+        transformer (``BaseSeriesTransformer`` or dict): Specifies
+            the column  transformer or its configuration.
     """
-    return find_columns_type(df, Decimal)
 
+    def __init__(
+        self,
+        can_be_null: bool,
+        analyzer: BaseAnalyzer | dict,
+        transformer: BaseSeriesTransformer | dict,
+    ) -> None:
+        self._can_be_null = bool(can_be_null)
+        self._analyzer = setup_analyzer(analyzer)
+        self._transformer = setup_series_transformer(transformer)
 
-def find_columns_str(df: DataFrame) -> tuple[str, ...]:
-    r"""Finds the list of columns that contains the type string.
+    def __repr__(self) -> str:
+        args = str_indent(
+            str_mapping(
+                {
+                    "can_be_null": self._can_be_null,
+                    "analyzer": self._analyzer,
+                    "transformer": self._transformer,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    Args:
-    ----
-        df (``pandas.DataFrame``): Specifies the DataFrame.
+    @property
+    def can_be_null(self) -> bool:
+        r"""bool: ``True`` if the column can have null values, otherwise ``False``"""
+        return self._can_be_null
 
-    Returns:
-    -------
-        tuple: The tuple of columns with the type string.
+    def get_analyzer(self) -> BaseAnalyzer:
+        return self._analyzer
 
-    Example usage:
-
-    .. code-block:: pycon
-
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.utils.columns import find_columns_str
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
-        ...     }
-        ... )
-        >>> find_columns_str(df)
-        ('col2', 'col3', 'col4')
-    """
-    return find_columns_type(df, str)
+    def get_transformer(self) -> BaseSeriesTransformer:
+        return self._transformer
