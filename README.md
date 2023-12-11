@@ -73,6 +73,6 @@ Please check the [get started page](https://durandtibo.github.io/flamme/get_star
 install only some specific dependencies or other alternatives to install the library.
 The following is the corresponding `flamme` versions and tested dependencies.
 
-| `flamme` | `coola`            | `jinja2`     | `markdown`   | `objectory`       | `pandas`     | `plotly`       | `pyarrow`      | `tqdm`         | `python`      |
-|----------|--------------------|--------------|--------------|-------------------|--------------|----------------|----------------|----------------|---------------|
-| `main`   | `>=0.0.20,<0.0.26` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=0.0.8,<0.0.10` | `>=1.3,<2.2` | `>=5.12,<5.18` | `>=10.0,<15.0` | `>=4.65,<4.67` | `>=3.9,<3.12` |
+| `flamme` | `coola`           | `jinja2`     | `markdown`   | `objectory`      | `pandas`     | `plotly`       | `pyarrow`      | `tqdm`         | `python`      |
+|----------|-------------------|--------------|--------------|------------------|--------------|----------------|----------------|----------------|---------------|
+| `main`   | `>=0.0.20,<0.2.0` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=0.0.8,<0.2.0` | `>=1.3,<2.2` | `>=5.12,<5.18` | `>=10.0,<15.0` | `>=4.65,<4.67` | `>=3.9,<3.12` |
