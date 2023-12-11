@@ -8,7 +8,7 @@ jobs:
   cyclic-imports:
     uses: ./.github/workflows/cyclic-imports.yaml
 
-  all:
+  stable-all:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
@@ -36,7 +36,7 @@ jobs:
           python -m scripts.demo
 
 
-  min:
+  stable-min:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
@@ -58,6 +58,62 @@ jobs:
       - name: Install package
         run: |
           pip install flamme
+
+      - name: Tests
+        run: |
+          python -m scripts.demo
+
+
+  latest-all:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        python-version: [ '3.9', '3.10', '3.11' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          pip install --pre "flamme[all]"
+
+      - name: Tests
+        run: |
+          python -m scripts.demo
+
+
+  latest-min:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        python-version: [ '3.9', '3.10', '3.11' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          pip install --pre flamme
 
       - name: Tests
         run: |

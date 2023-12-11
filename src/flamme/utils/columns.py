@@ -72,6 +72,31 @@ class Column(BaseColumn):
             analyzer or its configuration.
         transformer (``BaseSeriesTransformer`` or dict): Specifies
             the column  transformer or its configuration.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from flamme.utils.columns import Column
+        >>> from flamme.analyzer import ColumnContinuousAnalyzer
+        >>> from flamme.transformer.series import ToNumeric
+        >>> column = Column(
+        ...     can_be_null=True,
+        ...     analyzer=ColumnContinuousAnalyzer(column="col"),
+        ...     transformer=ToNumeric(),
+        ... )
+        >>> column
+        Column(
+          (can_be_null): True
+          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+          (transformer): ToNumericSeriesTransformer()
+        )
+        >>> analyzer = column.get_analyzer()
+        >>> analyzer
+        ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1)
+        >>> transformer = column.get_transformer()
+        >>> transformer
+        ToNumericSeriesTransformer()
     """
 
     def __init__(
