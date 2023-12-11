@@ -1,97 +1,68 @@
 from __future__ import annotations
 
-from decimal import Decimal
+from objectory import OBJECT_TARGET
+from pytest import mark
 
-import pandas as pd
-
-from flamme.utils.columns import (
-    find_columns_decimal,
-    find_columns_str,
-    find_columns_type,
+from flamme.analyzer import (
+    BaseAnalyzer,
+    ColumnContinuousAnalyzer,
+    ColumnDiscreteAnalyzer,
 )
+from flamme.transformer.series import BaseSeriesTransformer, StripString, ToNumeric
+from flamme.utils.columns import Column
 
-#######################################
-#     Tests for find_columns_type     #
-#######################################
+############################
+#     Tests for Column     #
+############################
 
 
-def test_find_columns_type_str() -> None:
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3, 4, 5],
-            "col2": ["1", "2", "3", "4", "5"],
-            "col3": ["1", "2", "3", "4", "5"],
-            "col4": ["a", "b", "c", "d", "e"],
-        }
+def test_column_str() -> None:
+    assert str(
+        Column(
+            can_be_null=False,
+            analyzer=ColumnContinuousAnalyzer(column="col"),
+            transformer=ToNumeric(),
+        )
+    ).startswith("Column(")
+
+
+@mark.parametrize("can_be_null", (True, False))
+def test_column_can_be_null(can_be_null: bool) -> None:
+    assert (
+        Column(
+            can_be_null=can_be_null,
+            analyzer=ColumnContinuousAnalyzer(column="col"),
+            transformer=ToNumeric(),
+        ).can_be_null
+        == can_be_null
     )
-    assert find_columns_type(df, str) == ("col2", "col3", "col4")
 
 
-def test_find_columns_type_int() -> None:
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3, 4, 5],
-            "col2": ["1", "2", "3", "4", "5"],
-            "col3": ["1", "2", "3", "4", "5"],
-            "col4": ["a", "b", "c", "d", "e"],
-        }
+@mark.parametrize(
+    "analyzer",
+    (
+        ColumnContinuousAnalyzer(column="col"),
+        ColumnDiscreteAnalyzer(column="col"),
+        {OBJECT_TARGET: "flamme.analyzer.ColumnContinuousAnalyzer", "column": "col"},
+    ),
+)
+def test_column_get_analyzer(analyzer: BaseAnalyzer | dict) -> None:
+    assert isinstance(
+        Column(can_be_null=False, analyzer=analyzer, transformer=ToNumeric()).get_analyzer(),
+        BaseAnalyzer,
     )
-    assert find_columns_type(df, int) == ("col1",)
 
 
-def test_find_columns_type_float() -> None:
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3, 4, 5],
-            "col2": ["1", "2", "3", "4", "5"],
-            "col3": ["1", "2", "3", "4", "5"],
-            "col4": ["a", "b", "c", "d", "e"],
-        }
+@mark.parametrize(
+    "transformer",
+    (ToNumeric(), StripString(), {OBJECT_TARGET: "flamme.transformer.series.ToNumeric"}),
+)
+def test_column_get_transformer(transformer: BaseSeriesTransformer | dict) -> None:
+    assert isinstance(
+        Column(
+            can_be_null=False,
+            analyzer=ColumnContinuousAnalyzer(column="col"),
+            transformer=transformer,
+        ).get_transformer(),
+        BaseSeriesTransformer,
     )
-    assert find_columns_type(df, float) == tuple()
-
-
-def test_find_columns_type_empty() -> None:
-    assert find_columns_type(pd.DataFrame({}), str) == tuple()
-
-
-##########################################
-#     Tests for find_columns_decimal     #
-##########################################
-
-
-def test_find_columns_decimal() -> None:
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3, Decimal(4), Decimal(5)],
-            "col2": ["1", "2", "3", "4", "5"],
-            "col3": ["1", Decimal(2), "3", "4", "5"],
-            "col4": ["a", "b", "c", "d", "e"],
-        }
-    )
-    assert find_columns_decimal(df) == ("col1", "col3")
-
-
-def test_find_columns_decimal_empty() -> None:
-    assert find_columns_decimal(pd.DataFrame({})) == tuple()
-
-
-######################################
-#     Tests for find_columns_str     #
-######################################
-
-
-def test_find_columns_str() -> None:
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3, 4, 5],
-            "col2": ["1", "2", "3", "4", "5"],
-            "col3": ["1", "2", "3", "4", "5"],
-            "col4": ["a", "b", "c", "d", "e"],
-        }
-    )
-    assert find_columns_str(df) == ("col2", "col3", "col4")
-
-
-def test_find_columns_str_empty() -> None:
-    assert find_columns_str(pd.DataFrame({})) == tuple()

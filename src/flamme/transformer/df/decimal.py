@@ -8,7 +8,7 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
-from flamme.utils.columns import find_columns_decimal
+from flamme.utils.filtering import find_columns_decimal
 
 
 class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
