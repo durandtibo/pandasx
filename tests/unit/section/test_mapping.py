@@ -10,6 +10,19 @@ from flamme.section import BaseSection, SectionDict
 #################################
 
 
+def test_capacity_distribution_section_sections() -> None:
+    sections = SectionDict(
+        {
+            "metric1": Mock(spec=BaseSection, get_statistics=Mock(return_value={"acc": 42})),
+            "metric2": Mock(spec=BaseSection, get_statistics=Mock(return_value={"ap": 12})),
+        }
+    ).sections
+    assert isinstance(sections, dict)
+    assert len(sections) == 2
+    assert isinstance(sections["metric1"], BaseSection)
+    assert isinstance(sections["metric2"], BaseSection)
+
+
 def test_capacity_distribution_section_get_statistics() -> None:
     section = SectionDict(
         {

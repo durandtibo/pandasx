@@ -27,6 +27,10 @@ class SectionDict(BaseSection):
     def __init__(self, sections: dict[str, BaseSection]) -> None:
         self._sections = sections
 
+    @property
+    def sections(self) -> dict[str, BaseSection]:
+        return self._sections
+
     def get_statistics(self) -> dict:
         return {name: section.get_statistics() for name, section in self._sections.items()}
 
