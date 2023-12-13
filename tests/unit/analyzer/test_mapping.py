@@ -2,7 +2,7 @@ import numpy as np
 from coola import objects_are_allclose
 from pandas import DataFrame
 
-from flamme.analyzer import MappingAnalyzer, NullValueAnalyzer
+from flamme.analyzer import DuplicatedRowAnalyzer, MappingAnalyzer, NullValueAnalyzer
 from flamme.section import SectionDict
 
 #####################################
@@ -12,6 +12,19 @@ from flamme.section import SectionDict
 
 def test_mapping_analyzer_str() -> None:
     assert str(MappingAnalyzer({})).startswith("MappingAnalyzer(")
+
+
+def test_mapping_analyzer_analyzers() -> None:
+    analyzer = MappingAnalyzer(
+        {
+            "section1": NullValueAnalyzer(),
+            "section2": DuplicatedRowAnalyzer(),
+        }
+    )
+    assert isinstance(analyzer.analyzers, dict)
+    assert len(analyzer.analyzers) == 2
+    assert isinstance(analyzer.analyzers["section1"], NullValueAnalyzer)
+    assert isinstance(analyzer.analyzers["section2"], DuplicatedRowAnalyzer)
 
 
 def test_mapping_analyzer_get_statistics() -> None:

@@ -27,6 +27,10 @@ class MappingAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(\n  {str_indent(str_mapping(self._analyzers))}\n)"
 
+    @property
+    def analyzers(self) -> dict[str, BaseAnalyzer]:
+        return self._analyzers
+
     def analyze(self, df: DataFrame) -> SectionDict:
         return SectionDict(
             {name: analyzer.analyze(df) for name, analyzer in self._analyzers.items()}
