@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.7a0"
+version = "0.0.7"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -50,7 +50,7 @@ all = []
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-mkdocs-material = "^9.4"
+mkdocs-material = "^9.5"
 mkdocstrings = "^0.24"
 
 [tool.poetry.group.dev.dependencies]
@@ -62,7 +62,7 @@ pygments = "^2.17"
 pytest = "^7.4"
 pytest-cov = "^4.1"
 pytest-timeout = "^2.2"
-ruff = ">=0.1.7,<1.0"
+ruff = ">=0.1.8,<1.0"
 xdoctest = "^1.1"
 
 [build-system]
@@ -93,7 +93,7 @@ addopts = "--color yes --durations 10 -rf"
 
 [tool.black]
 line-length = 100
-target-version = ["py39", "py310"]
+target-version = ["py39", "py310", "py311"]
 include = '\.pyi?$'
 
 [tool.pylint.FORMAT]
