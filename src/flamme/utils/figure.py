@@ -23,4 +23,5 @@ def figure2html(fig: plt.Figure) -> str:
     img = io.BytesIO()
     fig.savefig(img, format="png", bbox_inches="tight")
     img.seek(0)
-    return base64.b64encode(img.getvalue()).decode("utf-8")
+    data = base64.b64encode(img.getvalue()).decode("utf-8")
+    return f'<img src="data:image/png;charset=utf-8;base64, {data}">'
