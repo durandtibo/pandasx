@@ -118,3 +118,32 @@ jobs:
       - name: Tests
         run: |
           python -m scripts.demo
+
+
+  coola:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        coola-version: [ 0.1.2, 0.1.1, 0.1.0 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat coola==${{ matrix.coola-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
