@@ -6,13 +6,12 @@ import logging
 from collections.abc import Sequence
 
 import numpy as np
-import plotly
-import plotly.graph_objects as go
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
-from plotly.subplots import make_subplots
 
 from flamme.section.base import BaseSection
+from flamme.section.null import plot_temporal_null_total
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -20,6 +19,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +36,9 @@ class ColumnTemporalNullValueSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` or list , optional): Specifies the figure
-            size in pixels. The first dimension is the width and the
-            second is the height. Default: ``(None, None)``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
     """
 
     def __init__(
@@ -47,7 +47,7 @@ class ColumnTemporalNullValueSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         if column not in df:
             raise ValueError(
@@ -85,9 +85,9 @@ class ColumnTemporalNullValueSection(BaseSection):
         return self._period
 
     @property
-    def figsize(self) -> tuple[int | None, int | None]:
-        r"""tuple: The individual figure size in pixels. The first
-        dimension is the width and the second is the height."""
+    def figsize(self) -> tuple[float, float]:
+        r"""tuple: The figure size in inches. The first dimension is
+        the width and the second is the height."""
         return self._figsize
 
     def get_statistics(self) -> dict:
@@ -150,7 +150,7 @@ def create_temporal_null_figure(
     column: str,
     dt_column: str,
     period: str,
-    figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates a HTML representation of a figure with the temporal null
     value distribution.
@@ -163,9 +163,9 @@ def create_temporal_null_figure(
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` or list , optional): Specifies the figure
-            size in pixels. The first dimension is the width and the
-            second is the height. Default: ``(None, None)``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Returns:
     -------
@@ -178,49 +178,10 @@ def create_temporal_null_figure(
         df=df, column=column, dt_column=dt_column, period=period
     )
 
-    fig = make_subplots(rows=1, cols=1, specs=[[{"secondary_y": True}]])
-    fig.add_trace(
-        go.Bar(
-            x=labels,
-            y=total,
-            marker=dict(color="rgba(0, 191, 255, 0.9)"),
-        ),
-        secondary_y=False,
-    )
-    fig.add_trace(
-        go.Bar(
-            x=labels,
-            y=num_nulls,
-            marker=dict(color="rgba(255, 191, 0, 0.9)"),
-        ),
-        secondary_y=False,
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=labels,
-            y=num_nulls / total,
-            marker=dict(color="rgba(0, 71, 171, 0.9)"),
-        ),
-        secondary_y=True,
-    )
-    fig.update_yaxes(
-        title_text=(
-            '<span style="color:RGB(255, 191, 0)">null</span>/'
-            '<span style="color:RGB(0, 191, 255)">total</span>'
-        ),
-        secondary_y=False,
-    )
-    fig.update_yaxes(
-        title_text='<span style="color:RGB(0, 71, 171)">percentage</span>',
-        secondary_y=True,
-    )
-    fig.update_layout(
-        height=figsize[1],
-        width=figsize[0],
-        showlegend=False,
-        barmode="overlay",
-    )
-    return plotly.io.to_html(fig, full_html=False)
+    fig, ax = plt.subplots(figsize=figsize)
+    plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
+    readable_xticklabels(ax, max_num_xticks=100)
+    return figure2html(fig)
 
 
 def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:

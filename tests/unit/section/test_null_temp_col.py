@@ -103,7 +103,7 @@ def test_column_temporal_null_value_section_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((700, 300), (100, 100)))
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
 def test_column_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
     section = ColumnTemporalNullValueSection(
         df=DataFrame(
@@ -136,7 +136,7 @@ def test_column_temporal_null_value_section_figsize_default() -> None:
         dt_column="datetime",
         period="M",
     )
-    assert section.figsize == (None, None)
+    assert section.figsize is None
 
 
 def test_column_temporal_null_value_section_missing_column() -> None:
