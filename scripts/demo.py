@@ -113,14 +113,14 @@ def create_analyzer() -> BaseAnalyzer:
             "column type": DataTypeAnalyzer(),
             "null values": MappingAnalyzer(
                 {
-                    "overall": NullValueAnalyzer(figsize=(16, 6)),
+                    "overall": NullValueAnalyzer(figsize=(14, 6)),
                     "temporal": GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "weekly": TemporalNullValueAnalyzer(
-                        dt_column="datetime", period="W", figsize=(700, 500)
+                        dt_column="datetime", period="W", figsize=(7, 5)
                     ),
                     "daily": TemporalNullValueAnalyzer(
-                        dt_column="datetime", period="D", ncols=1, figsize=(1400, 600)
+                        dt_column="datetime", period="D", ncols=1, figsize=(14, 6)
                     ),
                 }
             ),

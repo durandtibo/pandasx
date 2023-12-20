@@ -31,6 +31,7 @@ def figure2html(fig: plt.Figure) -> str:
         >>> fig, ax = plt.subplots()
         >>> string = figure2html(fig)
     """
+    fig.tight_layout()
     img = io.BytesIO()
     fig.savefig(img, format="png", bbox_inches="tight")
     img.seek(0)

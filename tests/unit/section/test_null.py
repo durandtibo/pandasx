@@ -9,6 +9,7 @@ from pandas.testing import assert_frame_equal
 from pytest import mark, raises
 
 from flamme.section import NullValueSection, TemporalNullValueSection
+from flamme.section.null import create_temporal_null_figure
 
 ######################################
 #     Tests for NullValueSection     #
@@ -63,13 +64,17 @@ def test_null_value_section_total_count() -> None:
     )
 
 
-def test_null_value_section_figsize() -> None:
-    assert NullValueSection(
-        columns=["col1", "col2", "col3"],
-        null_count=np.array([0, 1, 2]),
-        total_count=np.array([5, 5, 5]),
-        figsize=(100, 200),
-    ).figsize == (100, 200)
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_null_value_section_figsize(figsize: tuple[float, float]) -> None:
+    assert (
+        NullValueSection(
+            columns=["col1", "col2", "col3"],
+            null_count=np.array([0, 1, 2]),
+            total_count=np.array([5, 5, 5]),
+            figsize=figsize,
+        ).figsize
+        == figsize
+    )
 
 
 def test_null_value_section_figsize_default() -> None:
@@ -265,8 +270,8 @@ def test_temporal_null_value_section_ncols(ncols: int) -> None:
     assert section.ncols == ncols
 
 
-@mark.parametrize("figsize", ((700, 300), (100, 100)))
-def test_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_temporal_null_value_section_figsize(figsize: tuple[float, float]) -> None:
     section = TemporalNullValueSection(
         df=DataFrame(
             {
@@ -283,6 +288,24 @@ def test_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
         figsize=figsize,
     )
     assert section.figsize == figsize
+
+
+def test_temporal_null_value_section_figsize_default() -> None:
+    section = TemporalNullValueSection(
+        df=DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+                "datetime": pd.to_datetime(
+                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                ),
+            }
+        ),
+        dt_column="datetime",
+        period="M",
+    )
+    assert section.figsize == (7, 5)
 
 
 def test_temporal_null_value_section_get_statistics() -> None:
@@ -409,4 +432,51 @@ def test_temporal_null_value_section_render_html_toc_args() -> None:
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+#################################################
+#     Tests for create_temporal_null_figure     #
+#################################################
+
+
+def test_create_temporal_null_figure() -> None:
+    assert isinstance(
+        create_temporal_null_figure(
+            df=DataFrame(
+                {
+                    "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "int": np.array([np.nan, 1, 0, 1]),
+                    "str": np.array(["A", "B", None, np.nan]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+@mark.parametrize("ncols", (1, 2))
+def test_create_temporal_null_figure_ncols(ncols: int) -> None:
+    assert isinstance(
+        create_temporal_null_figure(
+            df=DataFrame(
+                {
+                    "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "int": np.array([np.nan, 1, 0, 1]),
+                    "str": np.array(["A", "B", None, np.nan]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            dt_column="datetime",
+            period="M",
+            ncols=ncols,
+        ),
+        str,
     )

@@ -7,12 +7,9 @@ import math
 from collections.abc import Sequence
 
 import numpy as np
-import plotly
-import plotly.graph_objects as go
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from pandas import DataFrame
-from plotly.subplots import make_subplots
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -37,7 +34,7 @@ class NullValueSection(BaseSection):
             values for each column.
         total_count (``numpy.ndarray``): Specifies the total number
             of values for each column.
-        figsize (``tuple`` or list , optional): Specifies the figure
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
             second is the height. Default: ``None``
     """
@@ -47,7 +44,7 @@ class NullValueSection(BaseSection):
         columns: Sequence[str],
         null_count: np.ndarray,
         total_count: np.ndarray,
-        figsize: tuple[int, int] | None = None,
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._columns = tuple(columns)
         self._null_count = null_count.flatten().astype(int)
@@ -164,8 +161,8 @@ In the following histogram, the columns are sorted by ascending order of null va
         fig, ax = plt.subplots(figsize=self._figsize)
         ax.bar(x=df["column"].tolist(), height=df["null"].to_numpy(), color="tab:blue")
         readable_xticklabels(ax, max_num_xticks=100)
-        ax.set_xlabel("number of null values")
-        ax.set_ylabel("column")
+        ax.set_xlabel("column")
+        ax.set_ylabel("number of null values")
         ax.set_title("number of null values per column")
         return figure2html(fig)
 
@@ -249,9 +246,9 @@ class TemporalNullValueSection(BaseSection):
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
-        figsize (``tuple``, optional): Specifies the individual figure
-            size in pixels. The first dimension is the width and the
-            second is the height.  Default: ``(700, 300)``
+        figsize (``tuple``, optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``(7, 5)``
     """
 
     def __init__(
@@ -260,7 +257,7 @@ class TemporalNullValueSection(BaseSection):
         dt_column: str,
         period: str,
         ncols: int = 2,
-        figsize: tuple[int, int] = (700, 300),
+        figsize: tuple[float, float] = (7, 5),
     ) -> None:
         self._df = df
         self._dt_column = dt_column
@@ -289,9 +286,11 @@ class TemporalNullValueSection(BaseSection):
         return self._ncols
 
     @property
-    def figsize(self) -> tuple[int, int]:
-        r"""tuple: The individual figure size in pixels. The first
-        dimension is the width and the second is the height."""
+    def figsize(self) -> tuple[float, float] | None:
+        r"""Tuple or ``None``: The individual figure size in pixels.
+
+        The first dimension is the width and the second is the height.
+        """
         return self._figsize
 
     def get_statistics(self) -> dict:
@@ -344,7 +343,7 @@ def create_temporal_null_figure(
     dt_column: str,
     period: str,
     ncols: int = 2,
-    figsize: tuple[int, int] = (700, 300),
+    figsize: tuple[float, float] = (7, 5),
 ) -> str:
     r"""Creates a HTML representation of a figure with the temporal null
     value distribution.
@@ -358,9 +357,9 @@ def create_temporal_null_figure(
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
-        figsize (``tuple``, optional): Specifies the individual figure
-            size in pixels. The first dimension is the width and the
-            second is the height.  Default: ``(700, 300)``
+        figsize (``tuple``, optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``(7, 5)``
 
     Returns:
     -------
@@ -374,69 +373,39 @@ def create_temporal_null_figure(
     df[dt_col] = df[dt_column].dt.to_period(period)
 
     nrows = math.ceil(len(columns) / ncols)
-    fig = make_subplots(
-        rows=nrows,
-        cols=ncols,
-        subplot_titles=columns,
-        specs=[[{"secondary_y": True} for _ in range(ncols)] for _ in range(nrows)],
-    )
+    if figsize:
+        figsize = (figsize[0] * ncols, figsize[1] * nrows)
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=figsize)
 
     for i, column in enumerate(columns):
-        x, y = i // ncols, i % ncols
+        if ncols > 1:
+            ax = axes[i // ncols, i % ncols]
+        else:
+            ax = axes[i]
+        ax.set_title(column)
+
         null_col = f"__{column}_isnull__"
         df2 = df[[column, dt_col]].copy()
         df2.loc[:, null_col] = df2.loc[:, column].isnull()
 
         df_sum = df2.groupby(dt_col)[null_col].sum().sort_index()
-        df_count = df2.groupby(dt_col)[null_col].count().sort_index()
+        total = df2.groupby(dt_col)[null_col].count().sort_index().to_numpy()
         labels = [str(dt) for dt in df_sum.index]
+        count = df_sum.to_numpy()
 
-        fig.add_trace(
-            go.Bar(
-                x=labels,
-                y=df_count.to_numpy(),
-                marker=dict(color="rgba(0, 191, 255, 0.9)"),
-            ),
-            row=x + 1,
-            col=y + 1,
-            secondary_y=False,
-        )
-        fig.add_trace(
-            go.Bar(
-                x=labels,
-                y=df_sum.to_numpy(),
-                marker=dict(color="rgba(255, 191, 0, 0.9)"),
-            ),
-            row=x + 1,
-            col=y + 1,
-            secondary_y=False,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=labels,
-                y=df_sum.to_numpy() / df_count.to_numpy(),
-                marker=dict(color="rgba(0, 71, 171, 0.9)"),
-            ),
-            row=x + 1,
-            col=y + 1,
-            secondary_y=True,
-        )
+        color = "tab:blue"
+        ax.set_ylabel("number of null/total values", color=color)
+        ax.tick_params(axis="y", labelcolor=color)
+        ax.bar(x=labels, height=total, color="tab:cyan", alpha=0.5, label="total")
+        ax.bar(x=labels, height=count, color=color, alpha=0.8, label="null")
+        ax.legend()
 
-    fig.update_yaxes(
-        title_text=(
-            '<span style="color:RGB(255, 191, 0)">null</span>/'
-            '<span style="color:RGB(0, 191, 255)">total</span>'
-        ),
-        secondary_y=False,
-    )
-    fig.update_yaxes(
-        title_text='<span style="color:RGB(0, 71, 171)">percentage</span>',
-        secondary_y=True,
-    )
-    fig.update_layout(
-        height=figsize[1] * nrows,
-        width=figsize[0] * ncols,
-        showlegend=False,
-        barmode="overlay",
-    )
-    return plotly.io.to_html(fig, full_html=False)
+        ax2 = ax.twinx()
+        color = "black"
+        ax2.set_ylabel("percentage", color=color)
+        ax2.tick_params(axis="y", labelcolor=color)
+        ax2.plot(labels, count / total, "o-", color=color)
+
+        readable_xticklabels(ax, max_num_xticks=50)
+
+    return figure2html(fig)
