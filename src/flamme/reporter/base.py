@@ -32,7 +32,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         Reporter(
           (ingestor): ParquetIngestor(path=/path/to/data.parquet)
           (transformer): SequentialDataFrameTransformer()
-          (analyzer): NullValueAnalyzer(figsize=(None, None))
+          (analyzer): NullValueAnalyzer(figsize=None)
           (report_path): /path/to/report.html
           (max_toc_depth): 6
         )
@@ -53,7 +53,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
             >>> reporter = Reporter(
             ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
             ...     transformer=SequentialDataFrameTransformer(transformers=[]),
-            ...     analyzer=NullValueAnalyzer(figsize=(None, None)),
+            ...     analyzer=NullValueAnalyzer(figsize=None),
             ...     report_path="/path/to/report.html",
             ... )
             >>> report = reporter.compute()  # doctest: +SKIP
@@ -144,7 +144,7 @@ def setup_reporter(
         Reporter(
           (ingestor): CsvIngestor(path=/path/to/data.csv)
           (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
-          (analyzer): NullValueAnalyzer(figsize=(None, None))
+          (analyzer): NullValueAnalyzer(figsize=None)
           (report_path): /path/to/report.html
           (max_toc_depth): 6
         )

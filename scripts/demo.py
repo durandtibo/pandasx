@@ -10,7 +10,6 @@ from flamme.analyzer import (
     BaseAnalyzer,
     ColumnContinuousAnalyzer,
     ColumnDiscreteAnalyzer,
-    ColumnSubsetAnalyzer,
     ColumnTemporalContinuousAnalyzer,
     ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
@@ -114,7 +113,7 @@ def create_analyzer() -> BaseAnalyzer:
             "column type": DataTypeAnalyzer(),
             "null values": MappingAnalyzer(
                 {
-                    "overall": NullValueAnalyzer(),
+                    "overall": NullValueAnalyzer(figsize=(16, 6)),
                     "temporal": GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "weekly": TemporalNullValueAnalyzer(
@@ -157,9 +156,9 @@ def create_analyzer() -> BaseAnalyzer:
                     ),
                 }
             ),
-            "subset": ColumnSubsetAnalyzer(
-                columns=["discrete", "str"], analyzer=NullValueAnalyzer()
-            ),
+            # "subset": ColumnSubsetAnalyzer(
+            #     columns=["discrete", "str"], analyzer=NullValueAnalyzer()
+            # ),
         }
     )
 

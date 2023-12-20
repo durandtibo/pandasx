@@ -17,6 +17,12 @@ logger = logging.getLogger(__name__)
 class NullValueAnalyzer(BaseAnalyzer):
     r"""Implements a null value analyzer.
 
+    Args:
+    ----
+    figsize (``tuple`` or list , optional): Specifies the figure
+        size in inches. The first dimension is the width and the
+        second is the height. Default: ``None``
+
     Example usage:
 
     .. code-block:: pycon
@@ -24,9 +30,9 @@ class NullValueAnalyzer(BaseAnalyzer):
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import NullValueAnalyzer
-        >>> analyzer = NullValueAnalyzer(figsize=(None, None))
+        >>> analyzer = NullValueAnalyzer()
         >>> analyzer
-        NullValueAnalyzer(figsize=(None, None))
+        NullValueAnalyzer(figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -37,9 +43,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(
-        self, figsize: tuple[int | None, int | None] | list[int | None] = (None, None)
-    ) -> None:
+    def __init__(self, figsize: tuple[int, int] | None = None) -> None:
         self._figsize = figsize
 
     def __repr__(self) -> str:
