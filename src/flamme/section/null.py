@@ -8,9 +8,9 @@ from collections.abc import Sequence
 
 import numpy as np
 import plotly
-import plotly.express as px
 import plotly.graph_objects as go
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 from plotly.subplots import make_subplots
 
@@ -22,6 +22,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,8 @@ class NullValueSection(BaseSection):
         total_count (``numpy.ndarray``): Specifies the total number
             of values for each column.
         figsize (``tuple`` or list , optional): Specifies the figure
-            size in pixels. The first dimension is the width and the
-            second is the height. Default: ``(None, None)``
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
     """
 
     def __init__(
@@ -46,7 +47,7 @@ class NullValueSection(BaseSection):
         columns: Sequence[str],
         null_count: np.ndarray,
         total_count: np.ndarray,
-        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
+        figsize: tuple[int, int] | None = None,
     ) -> None:
         self._columns = tuple(columns)
         self._null_count = null_count.flatten().astype(int)
@@ -160,17 +161,13 @@ In the following histogram, the columns are sorted by ascending order of null va
 
     def _create_bar_figure(self) -> str:
         df = self._get_dataframe().sort_values(by="null")
-        fig = px.bar(
-            df,
-            x="column",
-            y="null",
-            title="number of null values per column",
-            labels={"column": "column", "null": "number of null values"},
-            text_auto=True,
-            template="seaborn",
-        )
-        fig.update_layout(height=self._figsize[1], width=self._figsize[0])
-        return plotly.io.to_html(fig, full_html=False)
+        fig, ax = plt.subplots(figsize=self._figsize)
+        ax.bar(x=df["column"].tolist(), height=df["null"].to_numpy(), color="tab:blue")
+        readable_xticklabels(ax, max_num_xticks=100)
+        ax.set_xlabel("number of null values")
+        ax.set_ylabel("column")
+        ax.set_title("number of null values per column")
+        return figure2html(fig)
 
     def _create_table(self, sort_by: str) -> str:
         df = self._get_dataframe().sort_values(by=sort_by)
