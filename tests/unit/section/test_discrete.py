@@ -4,12 +4,30 @@ from collections import Counter
 
 from coola import objects_are_allclose
 from jinja2 import Template
+from pytest import mark
 
 from flamme.section import ColumnDiscreteSection
 
 ###########################################
 #     Tests for ColumnDiscreteSection     #
 ###########################################
+
+
+def test_column_discrete_section_figsize_default() -> None:
+    assert (
+        ColumnDiscreteSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col").figsize
+        is None
+    )
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_discrete_section_figsize(figsize: tuple[float, float]) -> None:
+    assert (
+        ColumnDiscreteSection(
+            counter=Counter({"a": 4, "b": 2, "c": 6}), column="col", figsize=figsize
+        ).figsize
+        == figsize
+    )
 
 
 def test_column_discrete_section_get_statistics() -> None:

@@ -5,7 +5,7 @@ import pandas as pd
 from coola import objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
-from pytest import fixture
+from pytest import fixture, mark
 
 from flamme.section import ColumnTemporalDiscreteSection
 from flamme.section.discrete_temporal import create_temporal_figure
@@ -54,6 +54,30 @@ def test_column_temporal_discrete_section_period(dataframe: DataFrame) -> None:
         period="M",
     )
     assert section.period == "M"
+
+
+def test_column_temporal_discrete_section_figsize_default(dataframe: DataFrame) -> None:
+    assert (
+        ColumnTemporalDiscreteSection(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ).figsize
+        is None
+    )
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_temporal_discrete_section_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    assert (
+        ColumnTemporalDiscreteSection(
+            df=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
+        ).figsize
+        == figsize
+    )
 
 
 def test_column_temporal_discrete_section_get_statistics(dataframe: DataFrame) -> None:
@@ -160,6 +184,19 @@ def test_column_temporal_discrete_section_render_html_toc_args(
 
 
 def test_create_temporal_figure(dataframe: DataFrame) -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
     assert isinstance(
         create_temporal_figure(
             df=dataframe,

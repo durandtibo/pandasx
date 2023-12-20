@@ -34,7 +34,7 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         >>> analyzer = ColumnSubsetAnalyzer(columns=["int", "float"], analyzer=NullValueAnalyzer())
         >>> analyzer
         ColumnSubsetAnalyzer(
-          (columns): ['int', 'float']
+          (columns): 2 ['int', 'float']
           (analyzer): NullValueAnalyzer(figsize=None)
         )
         >>> df = pd.DataFrame(
@@ -52,7 +52,11 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         self._analyzer = setup_object(analyzer)
 
     def __repr__(self) -> str:
-        args = str_indent(str_mapping({"columns": self._columns, "analyzer": self._analyzer}))
+        args = str_indent(
+            str_mapping(
+                {"columns": f"{len(self._columns)} {self._columns}", "analyzer": self._analyzer}
+            )
+        )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, df: DataFrame) -> BaseSection:

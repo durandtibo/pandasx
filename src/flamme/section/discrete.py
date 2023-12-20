@@ -36,17 +36,32 @@ class ColumnDiscreteSection(BaseSection):
             Default: ``'N/A'``
         max_rows (int, optional): Specifies the maximum number of rows
             to show in the table. Default: ``20``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
     """
 
     def __init__(
-        self, counter: Counter, null_values: int = 0, column: str = "N/A", max_rows: int = 20
+        self,
+        counter: Counter,
+        null_values: int = 0,
+        column: str = "N/A",
+        max_rows: int = 20,
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._counter = counter
         self._null_values = null_values
         self._column = column
         self._max_rows = int(max_rows)
+        self._figsize = figsize
 
         self._total = sum(self._counter.values())
+
+    @property
+    def figsize(self) -> tuple[float, float] | None:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]

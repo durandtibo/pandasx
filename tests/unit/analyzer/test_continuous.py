@@ -110,6 +110,23 @@ def test_column_continuous_analyzer_xmax(xmax: float | str | None) -> None:
     assert section.xmax == xmax
 
 
+def test_column_continuous_analyzer_figsize_default() -> None:
+    section = ColumnContinuousAnalyzer(column="col").analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ColumnContinuousSection)
+    assert section.figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> None:
+    section = ColumnContinuousAnalyzer(column="col", figsize=figsize).analyze(
+        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+    )
+    assert isinstance(section, ColumnContinuousSection)
+    assert section.figsize == figsize
+
+
 def test_column_continuous_analyzer_get_statistics() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -218,6 +235,27 @@ def test_column_temporal_continuous_analyzer_log_y(dataframe: DataFrame, log_y: 
     ).analyze(dataframe)
     assert isinstance(section, ColumnTemporalContinuousSection)
     assert section.log_y == log_y
+
+
+def test_column_temporal_continuous_analyzer_figsize_default(dataframe: DataFrame) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
+        column="col",
+        dt_column="datetime",
+        period="M",
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalContinuousSection)
+    assert section.figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_temporal_continuous_analyzer_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    section = ColumnTemporalContinuousAnalyzer(
+        column="col", dt_column="datetime", period="M", figsize=figsize
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalContinuousSection)
+    assert section.figsize == figsize
 
 
 def test_column_temporal_continuous_analyzer_get_statistics(dataframe: DataFrame) -> None:

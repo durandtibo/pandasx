@@ -27,6 +27,9 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             included in the analysis. Default: ``False``
         max_rows (int, optional): Specifies the maximum number of rows
             to show in the table. Default: ``20``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Example usage:
 
@@ -37,7 +40,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ColumnDiscreteAnalyzer
         >>> analyzer = ColumnDiscreteAnalyzer(column="str")
         >>> analyzer
-        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20)
+        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -48,15 +51,22 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, dropna: bool = False, max_rows: int = 20) -> None:
+    def __init__(
+        self,
+        column: str,
+        dropna: bool = False,
+        max_rows: int = 20,
+        figsize: tuple[float, float] | None = None,
+    ) -> None:
         self._column = column
         self._dropna = bool(dropna)
         self._max_rows = max_rows
+        self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dropna={self._dropna}, max_rows={self._max_rows})"
+            f"dropna={self._dropna}, max_rows={self._max_rows}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnDiscreteSection | EmptySection:
@@ -72,6 +82,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             null_values=df[self._column].isnull().sum(),
             column=self._column,
             max_rows=self._max_rows,
+            figsize=self._figsize,
         )
 
 
@@ -86,6 +97,9 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Example usage:
 
@@ -98,7 +112,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
         ...     column="str", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M)
+        ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -112,15 +126,22 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, dt_column: str, period: str) -> None:
+    def __init__(
+        self,
+        column: str,
+        dt_column: str,
+        period: str,
+        figsize: tuple[float, float] | None = None,
+    ) -> None:
         self._column = column
         self._dt_column = dt_column
         self._period = period
+        self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dt_column={self._dt_column}, period={self._period})"
+            f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
@@ -145,4 +166,5 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             df=df,
             dt_column=self._dt_column,
             period=self._period,
+            figsize=self._figsize,
         )
