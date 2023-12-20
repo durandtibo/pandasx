@@ -6,10 +6,8 @@ import logging
 from collections import Counter
 from collections.abc import Sequence
 
-import plotly
-import plotly.express as px
 from jinja2 import Template
-from pandas import DataFrame
+from matplotlib import pyplot as plt
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -19,6 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
 
 logger = logging.getLogger(__name__)
 
@@ -123,21 +122,11 @@ This section analyzes the discrete distribution of values for column {{column}}.
         if self._total == 0:
             return ""
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
-        df = DataFrame(
-            {
-                "value": [str(value) for value, _ in most_common],
-                "count": [count for _, count in most_common],
-            }
-        )
-        fig = px.bar(
-            df,
-            x="value",
-            y="count",
-            title="Number of occurrences per value",
-            labels={"value": "value", "count": "number of occurrences"},
-            text_auto=True,
-            template="seaborn",
-            log_y=(most_common[0][1] / most_common[-1][1]) >= 20,
+        fig = create_histogram(
+            column=self._column,
+            labels=[str(value) for value, _ in most_common],
+            counts=[count for _, count in most_common],
+            figsize=self._figsize,
         )
         return Template(
             r"""
@@ -148,7 +137,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
 
 {{figure}}
 """
-        ).render({"figure": plotly.io.to_html(fig, full_html=False), "column": self._column})
+        ).render({"figure": fig, "column": self._column})
 
     def _create_table(self) -> str:
         if self._total == 0:
@@ -211,6 +200,24 @@ This section analyzes the discrete distribution of values for column {{column}}.
                 "column": self._column,
             }
         )
+
+
+def create_histogram(
+    column: str, labels: list[str], counts: list[int], figsize: tuple[float, float] | None = None
+) -> str:
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.bar(
+        labels,
+        counts,
+        log=(counts[0] / counts[-1]) >= 20,
+        width=0.9 if len(labels) < 50 else 1,
+        color="tab:blue",
+    )
+    readable_xticklabels(ax, max_num_xticks=100)
+    ax.set_xlim(-0.5, len(labels) - 0.5)
+    ax.set_ylabel("count")
+    ax.set_title(f"Number of occurrences for each value of {column}")
+    return figure2html(fig)
 
 
 def create_table_row(column: str, count: int) -> str:

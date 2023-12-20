@@ -75,18 +75,18 @@ def create_analyzer() -> BaseAnalyzer:
     def create_discrete_column(column: str) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": ColumnDiscreteAnalyzer(column=column),
+                "overall": ColumnDiscreteAnalyzer(column=column, figsize=(14, 6)),
                 "monthly": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="M"
+                    column=column, dt_column="datetime", period="M", figsize=(14, 6)
                 ),
                 "weekly": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="W"
+                    column=column, dt_column="datetime", period="W", figsize=(14, 6)
                 ),
                 "daily": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="D"
+                    column=column, dt_column="datetime", period="D", figsize=(14, 6)
                 ),
                 "null monthly": ColumnTemporalNullValueAnalyzer(
-                    column=column, dt_column="datetime", period="M"
+                    column=column, dt_column="datetime", period="M", figsize=(14, 6)
                 ),
             }
         )
@@ -94,15 +94,15 @@ def create_analyzer() -> BaseAnalyzer:
     def create_continuous_column(column: str, log_y: bool = False) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": ColumnContinuousAnalyzer(column=column, log_y=log_y),
+                "overall": ColumnContinuousAnalyzer(column=column, log_y=log_y, figsize=(14, 6)),
                 "monthly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="M", log_y=log_y
+                    column=column, dt_column="datetime", period="M", log_y=log_y, figsize=(14, 6)
                 ),
                 "weekly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="W", log_y=log_y
+                    column=column, dt_column="datetime", period="W", log_y=log_y, figsize=(14, 6)
                 ),
                 "daily": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="D", log_y=log_y
+                    column=column, dt_column="datetime", period="D", log_y=log_y, figsize=(14, 6)
                 ),
             }
         )

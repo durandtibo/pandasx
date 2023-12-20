@@ -379,12 +379,11 @@ def create_temporal_null_figure(
             ax = axes[i // ncols, i % ncols]
         else:
             ax = axes[i]
-        ax.set_title(column)
+        ax.set_title(f"column: {column}")
 
         num_nulls, total, labels = prepare_data(
             df=df, column=column, dt_column=dt_column, period=period
         )
-
         plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
         readable_xticklabels(ax, max_num_xticks=100 // ncols)
 
