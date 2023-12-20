@@ -22,9 +22,9 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` or list , optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Example usage:
 
