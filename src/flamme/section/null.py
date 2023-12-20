@@ -373,9 +373,9 @@ def create_temporal_null_figure(
     df[dt_col] = df[dt_column].dt.to_period(period)
 
     nrows = math.ceil(len(columns) / ncols)
-    if figsize:
-        figsize = (figsize[0] * ncols, figsize[1] * nrows)
-    fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=figsize)
+    fig, axes = plt.subplots(
+        nrows=nrows, ncols=ncols, figsize=(figsize[0] * ncols, figsize[1] * nrows)
+    )
 
     for i, column in enumerate(columns):
         if ncols > 1:
