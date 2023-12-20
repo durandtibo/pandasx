@@ -81,7 +81,7 @@ class NullValueSection(BaseSection):
         return self._total_count
 
     @property
-    def figsize(self) -> tuple[int | None, int | None]:
+    def figsize(self) -> tuple[float, float] | None:
         r"""tuple: The individual figure size in pixels. The first
         dimension is the width and the second is the height."""
         return self._figsize
@@ -368,11 +368,7 @@ def create_temporal_null_figure(
     """
     if df.shape[0] == 0:
         return ""
-    df = df.copy()
     columns = sorted([col for col in df.columns if col != dt_column])
-    dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
-
     nrows = math.ceil(len(columns) / ncols)
     fig, axes = plt.subplots(
         nrows=nrows, ncols=ncols, figsize=(figsize[0] * ncols, figsize[1] * nrows)
@@ -385,16 +381,11 @@ def create_temporal_null_figure(
             ax = axes[i]
         ax.set_title(column)
 
-        null_col = f"__{column}_isnull__"
-        df2 = df[[column, dt_col]].copy()
-        df2.loc[:, null_col] = df2.loc[:, column].isnull()
+        num_nulls, total, labels = prepare_data(
+            df=df, column=column, dt_column=dt_column, period=period
+        )
 
-        df_sum = df2.groupby(dt_col)[null_col].sum().sort_index()
-        total = df2.groupby(dt_col)[null_col].count().sort_index().to_numpy()
-        labels = [str(dt) for dt in df_sum.index]
-        count = df_sum.to_numpy()
-
-        plot_temporal_null_total(ax=ax, labels=labels, num_nulls=count, total=total)
+        plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
         readable_xticklabels(ax, max_num_xticks=100 // ncols)
 
     return figure2html(fig)
@@ -415,3 +406,67 @@ def plot_temporal_null_total(
     ax2.set_ylabel("percentage", color=color)
     ax2.tick_params(axis="y", labelcolor=color)
     ax2.plot(labels, num_nulls / total, "o-", color=color)
+
+
+def prepare_data(
+    df: DataFrame,
+    column: str,
+    dt_column: str,
+    period: str,
+) -> tuple[np.ndarray, np.ndarray, list]:
+    r"""Prepares the data to create the figure and table.
+
+    Args:
+    ----
+        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        column (str): Specifies the column to analyze.
+        dt_column (str): Specifies the datetime column used to analyze
+            the temporal distribution.
+        period (str): Specifies the temporal period e.g. monthly or
+            daily.
+
+    Returns:
+    -------
+        tuple: A tuple with 3 values. The first value is a numpy NDArray
+            that contains the number of null values per period. The
+            second value is a numpy NDArray that contains the total
+            number of values. The third value is a list that contains
+            the label of each period.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> import pandas as pd
+        >>> from flamme.section.null_temp_col import prepare_data
+        >>> num_nulls, total, labels = prepare_data(
+        ...     df=pd.DataFrame(
+        ...         {
+        ...             "col": np.array([np.nan, 1, 0, 1]),
+        ...             "datetime": pd.to_datetime(
+        ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+        ...             ),
+        ...         }
+        ...     ),
+        ...     column="col",
+        ...     dt_column="datetime",
+        ...     period="M",
+        ... )
+        >>> num_nulls
+        array([1, 0, 0, 0])
+        >>> total
+        array([1, 1, 1, 1])
+        >>> labels
+        ['2020-01', '2020-02', '2020-03', '2020-04']
+    """
+    df = df[[column, dt_column]].copy()
+    dt_col = "__datetime__"
+    df[dt_col] = df[dt_column].dt.to_period(period)
+
+    null_col = f"__{column}_isnull__"
+    df.loc[:, null_col] = df.loc[:, column].isnull()
+
+    df_num_nulls = df.groupby(dt_col)[null_col].sum().sort_index()
+    df_total = df.groupby(dt_col)[null_col].count().sort_index()
+    labels = [str(dt) for dt in df_num_nulls.index]
+    return df_num_nulls.to_numpy().astype(int), df_total.to_numpy().astype(int), labels

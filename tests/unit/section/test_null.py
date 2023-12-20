@@ -9,7 +9,7 @@ from pandas.testing import assert_frame_equal
 from pytest import mark, raises
 
 from flamme.section import NullValueSection, TemporalNullValueSection
-from flamme.section.null import create_temporal_null_figure
+from flamme.section.null import create_temporal_null_figure, prepare_data
 
 ######################################
 #     Tests for NullValueSection     #
@@ -479,4 +479,48 @@ def test_create_temporal_null_figure_ncols(ncols: int) -> None:
             ncols=ncols,
         ),
         str,
+    )
+
+
+#################################
+#    Tests for prepare_data     #
+#################################
+
+
+def test_prepare_data() -> None:
+    assert objects_are_equal(
+        prepare_data(
+            df=DataFrame(
+                {
+                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        (
+            np.array([0, 0, 1, 0]),
+            np.array([1, 1, 1, 1]),
+            ["2020-01", "2020-02", "2020-03", "2020-04"],
+        ),
+    )
+
+
+def test_prepare_data_empty() -> None:
+    assert objects_are_equal(
+        prepare_data(
+            df=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        (
+            np.array([], dtype=int),
+            np.array([], dtype=int),
+            [],
+        ),
     )
