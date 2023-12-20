@@ -19,9 +19,9 @@ class NullValueAnalyzer(BaseAnalyzer):
 
     Args:
     ----
-    figsize (``tuple`` or list , optional): Specifies the figure
-        size in inches. The first dimension is the width and the
-        second is the height. Default: ``None``
+        figsize (``tuple`` or list , optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
 
     Example usage:
 
@@ -43,7 +43,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, figsize: tuple[int, int] | None = None) -> None:
+    def __init__(self, figsize: tuple[float, float] | None = None) -> None:
         self._figsize = figsize
 
     def __repr__(self) -> str:
@@ -71,9 +71,9 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
-        figsize (``tuple``, optional): Specifies the individual figure
-            size in pixels. The first dimension is the width and the
-            second is the height.  Default: ``(700, 300)``
+        figsize (``tuple``, optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``(7, 5)``
 
     Example usage:
 
@@ -84,7 +84,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import TemporalNullValueAnalyzer
         >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
         >>> analyzer
-        TemporalNullValueAnalyzer(dt_column=datetime, period=M)
+        TemporalNullValueAnalyzer(dt_column=datetime, period=M, ncols=2, figsize=(7, 5))
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -103,7 +103,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         dt_column: str,
         period: str,
         ncols: int = 2,
-        figsize: tuple[int, int] = (700, 300),
+        figsize: tuple[float, float] = (7, 5),
     ) -> None:
         self._dt_column = dt_column
         self._period = period
@@ -111,7 +111,10 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         self._figsize = figsize
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period})"
+        return (
+            f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period}, "
+            f"ncols={self._ncols}, figsize={self._figsize})"
+        )
 
     def analyze(self, df: DataFrame) -> TemporalNullValueSection | EmptySection:
         logger.info(
