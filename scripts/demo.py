@@ -114,7 +114,9 @@ def create_analyzer() -> BaseAnalyzer:
             "null values": MappingAnalyzer(
                 {
                     "overall": NullValueAnalyzer(figsize=(14, 6)),
-                    "temporal": GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+                    "temporal": GlobalTemporalNullValueAnalyzer(
+                        dt_column="datetime", period="M", figsize=(14, 6)
+                    ),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "weekly": TemporalNullValueAnalyzer(
                         dt_column="datetime", period="W", figsize=(7, 5)
