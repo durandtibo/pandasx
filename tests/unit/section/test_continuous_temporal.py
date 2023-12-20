@@ -5,7 +5,7 @@ import pandas as pd
 from coola import objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
-from pytest import fixture
+from pytest import fixture, mark
 
 from flamme.section import ColumnTemporalContinuousSection
 
@@ -72,6 +72,30 @@ def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None
         period="M",
     )
     assert section.period == "M"
+
+
+def test_column_temporal_continuous_section_figsize_default(dataframe: DataFrame) -> None:
+    assert (
+        ColumnTemporalContinuousSection(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ).figsize
+        is None
+    )
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_temporal_continuous_section_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    assert (
+        ColumnTemporalContinuousSection(
+            df=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
+        ).figsize
+        == figsize
+    )
 
 
 def test_column_temporal_continuous_section_get_statistics(dataframe: DataFrame) -> None:

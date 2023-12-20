@@ -44,6 +44,9 @@ class ColumnContinuousSection(BaseSection):
             value of the range or its associated quantile.
             ``q0.9`` means the 90% quantile. ``0`` is the minimum
             value and ``1`` is the maximum value. Default: ``None``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
     """
 
     def __init__(
@@ -54,6 +57,7 @@ class ColumnContinuousSection(BaseSection):
         log_y: bool = False,
         xmin: float | str | None = None,
         xmax: float | str | None = None,
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._series = series
         self._column = column
@@ -61,6 +65,7 @@ class ColumnContinuousSection(BaseSection):
         self._log_y = log_y
         self._xmin = xmin
         self._xmax = xmax
+        self._figsize = figsize
 
     @property
     def column(self) -> str:
@@ -85,6 +90,12 @@ class ColumnContinuousSection(BaseSection):
     @property
     def xmax(self) -> float | str | None:
         return self._xmax
+
+    @property
+    def figsize(self) -> tuple[float, float] | None:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         stats = {
@@ -159,6 +170,7 @@ class ColumnContinuousSection(BaseSection):
                     log_y=self._log_y,
                     xmin=self._xmin,
                     xmax=self._xmax,
+                    figsize=self._figsize,
                 ),
             }
         )
@@ -196,6 +208,7 @@ def create_histogram_figure(
     log_y: bool = False,
     xmin: float | str | None = None,
     xmax: float | str | None = None,
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates the HTML code of a figure.
 

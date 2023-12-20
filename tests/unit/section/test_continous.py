@@ -81,6 +81,15 @@ def test_column_continuous_section_xmax(series: Series, xmax: float | str) -> No
     assert ColumnContinuousSection(series=series, column="col", xmax=xmax).xmax == xmax
 
 
+def test_column_continuous_section_figsize_default(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_continuous_section_figsize(series: Series, figsize: tuple[float, float]) -> None:
+    assert ColumnContinuousSection(series=series, column="col", figsize=figsize).figsize == figsize
+
+
 def test_column_continuous_section_get_statistics(series: Series) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert objects_are_allclose(
@@ -187,6 +196,11 @@ def test_create_histogram_figure_xmin(series: Series, xmin: float | str | None) 
 @mark.parametrize("xmax", (1.0, "q0.9", None))
 def test_create_histogram_figure_xmax(series: Series, xmax: float | str | None) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", xmax=xmax), str)
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_create_histogram_figure_figsize(series: Series, figsize: tuple[float, float]) -> None:
+    assert isinstance(create_histogram_figure(series=series, column="col", figsize=figsize), str)
 
 
 #######################################

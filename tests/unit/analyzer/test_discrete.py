@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from coola import objects_are_equal
 from pandas import DataFrame
-from pytest import fixture
+from pytest import fixture, mark
 
 from flamme.analyzer import ColumnDiscreteAnalyzer, ColumnTemporalDiscreteAnalyzer
 from flamme.section import (
@@ -13,6 +13,17 @@ from flamme.section import (
     EmptySection,
 )
 
+
+@fixture
+def dataframe() -> DataFrame:
+    return DataFrame(
+        {
+            "col": np.array([1, 42, np.nan, 22]),
+            "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
+        }
+    )
+
+
 ############################################
 #     Tests for ColumnDiscreteAnalyzer     #
 ############################################
@@ -20,6 +31,21 @@ from flamme.section import (
 
 def test_column_discrete_analyzer_str() -> None:
     assert str(ColumnDiscreteAnalyzer(column="col")).startswith("ColumnDiscreteAnalyzer(")
+
+
+def test_column_discrete_analyzer_figsize_default(dataframe: DataFrame) -> None:
+    section = ColumnDiscreteAnalyzer(column="col").analyze(dataframe)
+    assert isinstance(section, ColumnDiscreteSection)
+    assert section.figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_discrete_analyzer_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    section = ColumnDiscreteAnalyzer(column="col", figsize=figsize).analyze(dataframe)
+    assert isinstance(section, ColumnDiscreteSection)
+    assert section.figsize == figsize
 
 
 def test_column_discrete_analyzer_get_statistics() -> None:
@@ -76,16 +102,6 @@ def test_column_discrete_analyzer_get_statistics_empty_no_column() -> None:
 ####################################################
 
 
-@fixture
-def dataframe() -> DataFrame:
-    return DataFrame(
-        {
-            "col": np.array([1, 42, np.nan, 22]),
-            "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
-        }
-    )
-
-
 def test_column_temporal_discrete_analyzer_str() -> None:
     assert str(
         ColumnTemporalDiscreteAnalyzer(column="col", dt_column="datetime", period="M")
@@ -114,6 +130,25 @@ def test_column_temporal_discrete_analyzer_period(dataframe: DataFrame) -> None:
     ).analyze(dataframe)
     assert isinstance(section, ColumnTemporalDiscreteSection)
     assert section.period == "M"
+
+
+def test_column_temporal_discrete_analyzer_figsize_default(dataframe: DataFrame) -> None:
+    section = ColumnTemporalDiscreteAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
+    assert section.figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_column_temporal_discrete_analyzer_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    section = ColumnTemporalDiscreteAnalyzer(
+        column="col", dt_column="datetime", period="M", figsize=figsize
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
+    assert section.figsize == figsize
 
 
 def test_column_temporal_discrete_analyzer_get_statistics(dataframe: DataFrame) -> None:

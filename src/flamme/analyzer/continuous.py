@@ -35,6 +35,9 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
             value of the range or its associated quantile.
             ``q0.9`` means the 90% quantile. ``0`` is the minimum
             value and ``1`` is the maximum value. Default: ``q1``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Example usage:
 
@@ -45,7 +48,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ColumnContinuousAnalyzer
         >>> analyzer = ColumnContinuousAnalyzer(column="float")
         >>> analyzer
-        ColumnContinuousAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1)
+        ColumnContinuousAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -63,17 +66,19 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         log_y: bool = False,
         xmin: float | str | None = "q0",
         xmax: float | str | None = "q1",
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
         self._nbins = nbins
         self._log_y = log_y
         self._xmin = xmin
         self._xmax = xmax
+        self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins}, "
-            f"log_y={self._log_y}, xmin={self._xmin}, xmax={self._xmax})"
+            f"log_y={self._log_y}, xmin={self._xmin}, xmax={self._xmax}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnContinuousSection | EmptySection:
@@ -91,6 +96,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
             log_y=self._log_y,
             xmin=self._xmin,
             xmax=self._xmax,
+            figsize=self._figsize,
         )
 
 
@@ -107,6 +113,9 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
+        figsize (``tuple`` , optional): Specifies the figure size in
+            inches. The first dimension is the width and the second is
+            the height. Default: ``None``
 
     Example usage:
 
@@ -119,7 +128,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, log_y=False)
+        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, log_y=False, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -133,16 +142,25 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, column: str, dt_column: str, period: str, log_y: bool = False) -> None:
+    def __init__(
+        self,
+        column: str,
+        dt_column: str,
+        period: str,
+        log_y: bool = False,
+        figsize: tuple[float, float] | None = None,
+    ) -> None:
         self._column = column
         self._dt_column = dt_column
         self._period = period
         self._log_y = log_y
+        self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dt_column={self._dt_column}, period={self._period}, log_y={self._log_y})"
+            f"dt_column={self._dt_column}, period={self._period}, "
+            f"log_y={self._log_y}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
@@ -168,4 +186,5 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             dt_column=self._dt_column,
             period=self._period,
             log_y=self._log_y,
+            figsize=self._figsize,
         )

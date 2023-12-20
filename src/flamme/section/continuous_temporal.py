@@ -37,6 +37,9 @@ class ColumnTemporalContinuousSection(BaseSection):
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
     """
 
     def __init__(
@@ -46,12 +49,14 @@ class ColumnTemporalContinuousSection(BaseSection):
         dt_column: str,
         period: str,
         log_y: bool = False,
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._df = df
         self._column = column
         self._dt_column = dt_column
         self._period = period
         self._log_y = log_y
+        self._figsize = figsize
 
     @property
     def column(self) -> str:
@@ -68,6 +73,12 @@ class ColumnTemporalContinuousSection(BaseSection):
     @property
     def period(self) -> str:
         return self._period
+
+    @property
+    def figsize(self) -> tuple[float, float] | None:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         return {}
@@ -93,6 +104,7 @@ class ColumnTemporalContinuousSection(BaseSection):
                     dt_column=self._dt_column,
                     period=self._period,
                     log_y=self._log_y,
+                    figsize=self._figsize,
                 ),
                 "table": create_temporal_table(
                     df=self._df,
@@ -125,7 +137,12 @@ This section analyzes the temporal distribution of column {{column}} by using th
 
 
 def create_temporal_figure(
-    df: DataFrame, column: str, dt_column: str, period: str, log_y: bool = False
+    df: DataFrame,
+    column: str,
+    dt_column: str,
+    period: str,
+    log_y: bool = False,
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates a HTML representation of a figure with the temporal value
     distribution.
@@ -140,6 +157,9 @@ def create_temporal_figure(
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
 
     Returns:
     -------
