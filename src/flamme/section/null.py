@@ -9,6 +9,7 @@ from collections.abc import Sequence
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -393,19 +394,24 @@ def create_temporal_null_figure(
         labels = [str(dt) for dt in df_sum.index]
         count = df_sum.to_numpy()
 
-        color = "tab:blue"
-        ax.set_ylabel("number of null/total values", color=color)
-        ax.tick_params(axis="y", labelcolor=color)
-        ax.bar(x=labels, height=total, color="tab:cyan", alpha=0.5, label="total")
-        ax.bar(x=labels, height=count, color=color, alpha=0.8, label="null")
-        ax.legend()
-
-        ax2 = ax.twinx()
-        color = "black"
-        ax2.set_ylabel("percentage", color=color)
-        ax2.tick_params(axis="y", labelcolor=color)
-        ax2.plot(labels, count / total, "o-", color=color)
-
-        readable_xticklabels(ax, max_num_xticks=50)
+        plot_temporal_null_total(ax=ax, labels=labels, num_nulls=count, total=total)
+        readable_xticklabels(ax, max_num_xticks=100 // ncols)
 
     return figure2html(fig)
+
+
+def plot_temporal_null_total(
+    ax: Axes, num_nulls: np.ndarray, total: np.ndarray, labels: list
+) -> None:
+    color = "tab:blue"
+    ax.set_ylabel("number of null/total values", color=color)
+    ax.tick_params(axis="y", labelcolor=color)
+    ax.bar(x=labels, height=total, color="tab:cyan", alpha=0.5, label="total")
+    ax.bar(x=labels, height=num_nulls, color=color, alpha=0.8, label="null")
+    ax.legend()
+
+    ax2 = ax.twinx()
+    color = "black"
+    ax2.set_ylabel("percentage", color=color)
+    ax2.tick_params(axis="y", labelcolor=color)
+    ax2.plot(labels, num_nulls / total, "o-", color=color)

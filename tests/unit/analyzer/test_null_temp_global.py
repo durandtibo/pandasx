@@ -80,7 +80,7 @@ def test_global_temporal_null_value_analyzer_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((700, 300), (100, 100)))
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
 def test_global_temporal_null_value_analyzer_figsize(figsize: tuple[int, int]) -> None:
     section = GlobalTemporalNullValueAnalyzer(
         dt_column="datetime", period="M", figsize=figsize
@@ -110,7 +110,7 @@ def test_global_temporal_null_value_analyzer_figsize_default() -> None:
             }
         )
     )
-    assert section.figsize == (None, None)
+    assert section.figsize is None
 
 
 def test_global_temporal_null_value_analyzer_get_statistics() -> None:

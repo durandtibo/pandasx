@@ -23,8 +23,8 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
         period (str): Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` or list , optional): Specifies the figure
-            size in pixels. The first dimension is the width and the
-            second is the height. Default: ``(None, None)``
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
 
     Example usage:
 
@@ -35,7 +35,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import GlobalTemporalNullValueAnalyzer
         >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
         >>> analyzer
-        GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=(None, None))
+        GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "col": np.array([np.nan, 1, 0, 1]),
@@ -51,7 +51,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
         self,
         dt_column: str,
         period: str,
-        figsize: tuple[int | None, int | None] | list[int | None] = (None, None),
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._dt_column = dt_column
         self._period = period
