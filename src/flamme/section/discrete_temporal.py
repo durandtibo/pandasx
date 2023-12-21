@@ -162,14 +162,16 @@ def create_temporal_figure(
     labels = sorted(
         df[col_count].columns.tolist(), key=lambda x: float("-inf") if math.isnan(x) else x
     )
+    num_labels = len(labels)
     steps = df.index.tolist()
     x = np.arange(len(steps), dtype=int)
     bottom = np.zeros_like(x)
-    width = (0.9 if len(steps) < 50 else 1,)
+    width = 0.9 if len(steps) < 50 else 1
     fig, ax = plt.subplots(figsize=figsize)
-    for label in labels:
+    my_cmap = plt.get_cmap("viridis")
+    for i, label in enumerate(labels):
         count = df[col_count][label].to_numpy()
-        ax.bar(x, count, label=label, bottom=bottom, width=width)
+        ax.bar(x, count, label=label, bottom=bottom, width=width, color=my_cmap(i / num_labels))
         bottom += count
 
     if len(labels) <= 10:
