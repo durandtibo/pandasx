@@ -165,7 +165,7 @@ In the following histogram, the columns are sorted by ascending order of null va
         ax.set_xlabel("column")
         ax.set_ylabel("number of null values")
         ax.set_title("number of null values per column")
-        return figure2html(fig)
+        return figure2html(fig, close_fig=True)
 
     def _create_table(self, sort_by: str) -> str:
         df = self._get_dataframe().sort_values(by=sort_by)
@@ -387,7 +387,7 @@ def create_temporal_null_figure(
         plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
         readable_xticklabels(ax, max_num_xticks=100 // ncols)
 
-    return figure2html(fig)
+    return figure2html(fig, close_fig=True)
 
 
 def plot_temporal_null_total(

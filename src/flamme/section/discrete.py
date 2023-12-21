@@ -217,7 +217,7 @@ def create_histogram(
     ax.set_xlim(-0.5, len(labels) - 0.5)
     ax.set_ylabel("Number of occurrences")
     ax.set_title(f"Number of occurrences for each value of {column}")
-    return figure2html(fig)
+    return figure2html(fig, close_fig=True)
 
 
 def create_table_row(column: str, count: int) -> str:
