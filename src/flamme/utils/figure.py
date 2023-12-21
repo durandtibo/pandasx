@@ -79,4 +79,4 @@ def readable_xticklabels(
     if len(xticks) > xticklabel_min or any(
         [len(str(label)) > xticklabel_max_len for label in ax.get_xticklabels()]
     ):
-        ax.set_xticklabels(ax.get_xticklabels(), rotation="vertical")
+        ax.tick_params(axis="x", labelrotation=90)
