@@ -3,11 +3,12 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalDiscreteSection"]
 
 import logging
+import math
 from collections.abc import Sequence
 
-import plotly
-import plotly.express as px
+import numpy as np
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -18,6 +19,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
 
 logger = logging.getLogger(__name__)
 
@@ -153,16 +155,28 @@ def create_temporal_figure(
     df = df[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
     df[col_dt] = df[dt_column].dt.to_period(period).astype(str)
-    # df = df[[column, col_dt]].groupby(by=col_dt, dropna=False).value_counts(dropna=False)
     df = df[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
     df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
+    df = df.set_index([col_dt, column]).unstack(fill_value=0)
 
-    fig = px.bar(
-        df,
-        x=col_dt,
-        y=col_count,
-        color=column,
-        barmode="group",
-        labels={col_count: "count", col_dt: "time", column: "value"},
+    labels = sorted(
+        df[col_count].columns.tolist(), key=lambda x: float("-inf") if math.isnan(x) else x
     )
-    return plotly.io.to_html(fig, full_html=False)
+    steps = df.index.tolist()
+    x = np.arange(len(steps), dtype=int)
+    bottom = np.zeros_like(x)
+    width = (0.9 if len(steps) < 50 else 1,)
+    fig, ax = plt.subplots(figsize=figsize)
+    for label in labels:
+        count = df[col_count][label].to_numpy()
+        ax.bar(x, count, label=label, bottom=bottom, width=width)
+        bottom += count
+
+    if len(labels) <= 10:
+        ax.legend()
+    ax.set_xticks(x, labels=steps)
+    readable_xticklabels(ax, max_num_xticks=100)
+    ax.set_xlim(-0.5, len(steps) - 0.5)
+    ax.set_ylabel("Number of occurrences")
+    ax.set_title(f"Temporal distribution for column {column}")
+    return figure2html(fig)

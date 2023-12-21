@@ -10,13 +10,16 @@ from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 
 
-def figure2html(fig: plt.Figure) -> str:
+def figure2html(fig: plt.Figure, close_fig: bool = False) -> str:
     r"""Converts a matplotlib figure to a string that can be used in a
     HTML file.
 
     Args:
     ----
         fig (``Figure``): Specifies the figure to convert.
+        close_fig (``bool``, optional): If ``True``, the figure is
+            closed after it is converted to HTML format.
+            Default: ``False``
 
     Returns:
     -------
@@ -36,6 +39,8 @@ def figure2html(fig: plt.Figure) -> str:
     fig.savefig(img, format="png", bbox_inches="tight")
     img.seek(0)
     data = base64.b64encode(img.getvalue()).decode("utf-8")
+    if close_fig:
+        plt.close(fig)
     return f'<img src="data:image/png;charset=utf-8;base64, {data}">'
 
 
