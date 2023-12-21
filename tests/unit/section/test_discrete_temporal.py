@@ -195,6 +195,23 @@ def test_create_temporal_figure(dataframe: DataFrame) -> None:
     )
 
 
+def test_create_temporal_figure_20_values() -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=DataFrame(
+                {
+                    "col": np.arange(20),
+                    "datetime": pd.date_range(start="2020-01-03", periods=20),
+                }
+            ),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
 @mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
 def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
     assert isinstance(

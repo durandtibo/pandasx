@@ -215,7 +215,7 @@ def create_histogram(
     )
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(-0.5, len(labels) - 0.5)
-    ax.set_ylabel("count")
+    ax.set_ylabel("Number of occurrences")
     ax.set_title(f"Number of occurrences for each value of {column}")
     return figure2html(fig)
 
