@@ -179,4 +179,4 @@ def create_temporal_figure(
     ax.set_xlim(-0.5, len(steps) - 0.5)
     ax.set_ylabel("Number of occurrences")
     ax.set_title(f"Temporal distribution for column {column}")
-    return figure2html(fig)
+    return figure2html(fig, close_fig=True)

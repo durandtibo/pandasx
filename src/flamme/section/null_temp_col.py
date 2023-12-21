@@ -180,7 +180,7 @@ def create_temporal_null_figure(
     fig, ax = plt.subplots(figsize=figsize)
     plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
     readable_xticklabels(ax, max_num_xticks=100)
-    return figure2html(fig)
+    return figure2html(fig, close_fig=True)
 
 
 def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:

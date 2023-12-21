@@ -19,7 +19,7 @@ def compute_size(string: str) -> int:
 def matplotlib_histogram(data: np.ndarray, bins: int = 100) -> str:
     fig, ax = plt.subplots(figsize=(16, 8))
     ax.hist(data, bins=bins, alpha=0.4)
-    return figure2html(fig)
+    return figure2html(fig, close_fig=True)
 
 
 def plotly_histogram(data: np.ndarray, bins: int = 100) -> str:
