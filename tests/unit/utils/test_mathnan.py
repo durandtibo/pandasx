@@ -5,16 +5,16 @@ from collections.abc import Sequence
 from coola import objects_are_allclose
 from pytest import mark, raises
 
-from flamme.utils.mathnan import LowNaN, sorted_nan
+from flamme.utils.mathnan import LowNaN, sortnan
 
-################################
-#     Tests for sorted_nan     #
-################################
+#############################
+#     Tests for sortnan     #
+#############################
 
 
-def test_sorted_nan() -> None:
+def test_sortnan() -> None:
     assert objects_are_allclose(
-        sorted_nan(
+        sortnan(
             [4, float("nan"), 2, 1.2, 7.9, -2, float("nan"), float("inf"), float("-inf")],
         ),
         [float("nan"), float("nan"), float("-inf"), -2, 1.2, 2, 4, 7.9, float("inf")],
@@ -22,9 +22,9 @@ def test_sorted_nan() -> None:
     )
 
 
-def test_sorted_nan_reverse() -> None:
+def test_sortnan_reverse() -> None:
     assert objects_are_allclose(
-        sorted_nan(
+        sortnan(
             [4, float("nan"), 2, 1.2, 7.9, -2, float("nan"), float("inf"), float("-inf")],
             reverse=True,
         ),
@@ -40,11 +40,13 @@ def test_sorted_nan_reverse() -> None:
         [4, 2, 1.2, 7.9, -2],
         (4, 2, 1.2, 7.9, -2),
         [],
+        [True, False, False, True],
+        {8, 3, 2, 5, 4, 7, 1, 9},
     ],
 )
 @mark.parametrize("reverse", (True, False))
-def test_sorted_nan_compatibility(data: Sequence, reverse: bool) -> None:
-    assert sorted_nan(data, reverse=reverse) == sorted(data, reverse=reverse)
+def test_sortnan_compatibility(data: Sequence, reverse: bool) -> None:
+    assert sortnan(data, reverse=reverse) == sorted(data, reverse=reverse)
 
 
 ############################

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-__all__ = ["sorted_nan"]
+__all__ = ["sortnan"]
 
 import math
-from collections.abc import Sequence
+from collections.abc import Iterable
 from typing import Any
 
 
-def sorted_nan(data: Sequence[int | float], reverse: bool = False) -> list[float]:
+def sortnan(
+    iterable: Iterable[bool | float | int], /, *, reverse: bool = False
+) -> list[bool | float | int]:
     r"""Implements a function to sort a sequence of numeric values with
     NaN.
 
@@ -16,8 +18,7 @@ def sorted_nan(data: Sequence[int | float], reverse: bool = False) -> list[float
     sorted.
 
     Args:
-        data (``Sequence``): Specifies the sequence of numeric values
-            to sort.
+        iterable (``Iterable``): Specifies the numeric values to sort.
         reverse (``bool``, optional): If set to ``True``, then the
             list elements are sorted as if each comparison were
             reversed. Default: ``False``
@@ -25,20 +26,20 @@ def sorted_nan(data: Sequence[int | float], reverse: bool = False) -> list[float
     Returns:
         list: The sorted list.
 
-     Example usage:
+    Example usage:
 
     .. code-block:: pycon
 
-        >>> from flamme.utils.mathnan import sorted_nan
+        >>> from flamme.utils.mathnan import sortnan
         >>> x = [4, float("nan"), 2, 1.2, 7.9, -2]
         >>> sorted(x)
         [4, nan, -2, 1.2, 2, 7.9]
-        >>> sorted_nan(x)
+        >>> sortnan(x)
         [nan, -2, 1.2, 2, 4, 7.9]
-        >>> sorted_nan(x, reverse=True)
+        >>> sortnan(x, reverse=True)
         [7.9, 4, 2, 1.2, -2, nan]
     """
-    return sorted(data, key=lambda x: LowNaN() if math.isnan(x) else x, reverse=reverse)
+    return sorted(iterable, key=lambda x: LowNaN() if math.isnan(x) else x, reverse=reverse)
 
 
 class LowNaN(float):
