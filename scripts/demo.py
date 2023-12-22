@@ -82,9 +82,9 @@ def create_analyzer() -> BaseAnalyzer:
                 "weekly": ColumnTemporalDiscreteAnalyzer(
                     column=column, dt_column="datetime", period="W", figsize=(14, 6)
                 ),
-                "daily": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="D", figsize=(14, 6)
-                ),
+                # "daily": ColumnTemporalDiscreteAnalyzer(
+                #     column=column, dt_column="datetime", period="D", figsize=(14, 6)
+                # ),
                 "null monthly": ColumnTemporalNullValueAnalyzer(
                     column=column, dt_column="datetime", period="M", figsize=(14, 6)
                 ),
@@ -128,7 +128,7 @@ def create_analyzer() -> BaseAnalyzer:
             ),
             "columns": MappingAnalyzer(
                 {
-                    "str": ColumnDiscreteAnalyzer(column="str"),
+                    "str": create_discrete_column(column="str"),
                     "int": create_discrete_column(column="int"),
                     "discrete": create_discrete_column(column="discrete"),
                     "missing": ColumnDiscreteAnalyzer(column="missing"),

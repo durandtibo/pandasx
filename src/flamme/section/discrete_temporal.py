@@ -3,7 +3,6 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalDiscreteSection"]
 
 import logging
-import math
 from collections.abc import Sequence
 
 import numpy as np
@@ -20,6 +19,7 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+from flamme.utils.sorting import mixed_typed_sort
 
 logger = logging.getLogger(__name__)
 
@@ -159,9 +159,7 @@ def create_temporal_figure(
     df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
     df = df.set_index([col_dt, column]).unstack(fill_value=0)
 
-    labels = sorted(
-        df[col_count].columns.tolist(), key=lambda x: float("-inf") if math.isnan(x) else x
-    )
+    labels = mixed_typed_sort(df[col_count].columns.tolist())
     num_labels = len(labels)
     steps = df.index.tolist()
     x = np.arange(len(steps), dtype=int)
