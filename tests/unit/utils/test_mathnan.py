@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable
 
 from coola import objects_are_allclose
 from pytest import mark, raises
@@ -45,7 +45,7 @@ def test_sortnan_reverse() -> None:
     ],
 )
 @mark.parametrize("reverse", (True, False))
-def test_sortnan_compatibility(data: Sequence, reverse: bool) -> None:
+def test_sortnan_compatibility(data: Iterable, reverse: bool) -> None:
     assert sortnan(data, reverse=reverse) == sorted(data, reverse=reverse)
 
 
