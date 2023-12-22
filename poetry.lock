@@ -271,13 +271,13 @@ test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
 name = "coola"
-version = "0.2.0a0"
+version = "0.2.0"
 description = "A library to check if two complex/nested objects are equal or not"
 optional = false
 python-versions = ">=3.9,<3.13"
 files = [
-    {file = "coola-0.2.0a0-py3-none-any.whl", hash = "sha256:6fa86c87c2aa4baf326a0288b5a24705bba6057a678830fac63f2874fbceb435"},
-    {file = "coola-0.2.0a0.tar.gz", hash = "sha256:8d0e4b1d025772c52331e99a4eb1b7f676ab0f13ddae38563d036b96e200e61b"},
+    {file = "coola-0.2.0-py3-none-any.whl", hash = "sha256:08633fc0782744e031e08809f6b8a3c6d126ea348788e5d2489c259901b4b366"},
+    {file = "coola-0.2.0.tar.gz", hash = "sha256:5918ab0d14f4158eb985a4f7a0fddfd0fcfce0aa4ede5f0f6b9a6794e66c1c67"},
 ]
 
 [package.extras]
@@ -1898,4 +1898,4 @@ all = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "f3c27a122ed6afa614a98deac8772b60d217438bcce0b7a51b2f5d875fbf1cba"
+content-hash = "b6696d8c5c14b2202199bd0996a74d4cbd2652888e678dbe6994eaa1177c2177"
