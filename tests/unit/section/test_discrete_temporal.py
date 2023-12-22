@@ -16,6 +16,7 @@ def dataframe() -> DataFrame:
     return DataFrame(
         {
             "col": np.array([1, 42, np.nan, 22]),
+            "col2": ["a", "b", 1, "a"],
             "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
         }
     )
@@ -183,11 +184,12 @@ def test_column_temporal_discrete_section_render_html_toc_args(
 ###########################################
 
 
-def test_create_temporal_figure(dataframe: DataFrame) -> None:
+@mark.parametrize("column", ["col", "col2"])
+def test_create_temporal_figure(dataframe: DataFrame, column: str) -> None:
     assert isinstance(
         create_temporal_figure(
             df=dataframe,
-            column="col",
+            column=column,
             dt_column="datetime",
             period="M",
         ),
