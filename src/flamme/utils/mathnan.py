@@ -27,12 +27,7 @@ def remove_nan(data: T) -> T:
         >>> remove_nan(data)
         [-inf, -2, 1.2]
     """
-    filtered = []
-    for x in data:
-        if isinstance(x, (float, int)) and math.isnan(x):
-            continue
-        filtered.append(x)
-    return type(data)(filtered)
+    return type(data)([x for x in data if not isinstance(x, (float, int)) or not math.isnan(x)])
 
 
 def sortnan(
