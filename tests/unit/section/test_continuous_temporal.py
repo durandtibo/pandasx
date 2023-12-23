@@ -45,23 +45,30 @@ def test_column_temporal_continuous_section_dt_column(dataframe: DataFrame) -> N
     assert section.dt_column == "datetime"
 
 
-def test_column_temporal_continuous_section_log_y_default(dataframe: DataFrame) -> None:
-    assert not ColumnTemporalContinuousSection(
-        df=dataframe,
-        column="col",
-        dt_column="datetime",
-        period="M",
-    ).log_y
+def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame) -> None:
+    assert (
+        ColumnTemporalContinuousSection(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ).yscale
+        == "linear"
+    )
 
 
-def test_column_temporal_continuous_section_log_y(dataframe: DataFrame) -> None:
-    assert ColumnTemporalContinuousSection(
-        df=dataframe,
-        column="col",
-        dt_column="datetime",
-        period="M",
-        log_y=True,
-    ).log_y
+@mark.parametrize("yscale", ("linear", "log"))
+def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale: str) -> None:
+    assert (
+        ColumnTemporalContinuousSection(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+            yscale=yscale,
+        ).yscale
+        == yscale
+    )
 
 
 def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None:

@@ -7,9 +7,9 @@ import numpy as np
 
 def find_range(
     values: np.ndarray,
-    xmin: float | str | None = None,
-    xmax: float | str | None = None,
-) -> tuple[float | None, float | None]:
+    xmin: float | int | str | None = None,
+    xmax: float | int | str | None = None,
+) -> tuple[float | int, float | int]:
     r"""Finds a range of value.
 
     Args:
@@ -37,17 +37,17 @@ def find_range(
         >>> from flamme.utils.range import find_range
         >>> data = np.arange(101)
         >>> find_range(data)
-        (None, None)
+        (0, 100)
         >>> find_range(data, xmin=5, xmax=50)
         (5, 50)
         >>> find_range(data, xmin="q0.1", xmax="q0.9")
         (10.0, 90.0)
     """
-    q = []
-    if isinstance(xmin, str):
-        q.append(float(xmin[1:]))
-    if isinstance(xmax, str):
-        q.append(float(xmax[1:]))
+    if xmin is None:
+        xmin = np.nanmin(values).item()
+    if xmax is None:
+        xmax = np.nanmax(values).item()
+    q = [float(x[1:]) for x in [xmin, xmax] if isinstance(x, str)]
     quantiles = np.nanquantile(values, q)
     if isinstance(xmin, str):
         xmin = quantiles[0]

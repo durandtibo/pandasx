@@ -35,8 +35,8 @@ class ColumnTemporalContinuousSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
         figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
             second is the height. Default: ``None``
@@ -48,14 +48,14 @@ class ColumnTemporalContinuousSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        log_y: bool = False,
+        yscale: str = "linear",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._df = df
         self._column = column
         self._dt_column = dt_column
         self._period = period
-        self._log_y = log_y
+        self._yscale = yscale
         self._figsize = figsize
 
     @property
@@ -67,8 +67,8 @@ class ColumnTemporalContinuousSection(BaseSection):
         return self._dt_column
 
     @property
-    def log_y(self) -> bool:
-        return self._log_y
+    def yscale(self) -> str:
+        return self._yscale
 
     @property
     def period(self) -> str:
@@ -103,7 +103,7 @@ class ColumnTemporalContinuousSection(BaseSection):
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
-                    log_y=self._log_y,
+                    yscale=self._yscale,
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_table(
@@ -141,7 +141,7 @@ def create_temporal_figure(
     column: str,
     dt_column: str,
     period: str,
-    log_y: bool = False,
+    yscale: str = "linear",
     figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates a HTML representation of a figure with the temporal value
@@ -155,8 +155,8 @@ def create_temporal_figure(
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
         figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
             second is the height. Default: ``None``
@@ -178,7 +178,6 @@ def create_temporal_figure(
         title=f"Distribution of values for column {column}",
         labels={column: "value", dt_col: "time"},
         points="outliers",
-        log_y=log_y,
     )
     return plotly.io.to_html(fig, full_html=False)
 
