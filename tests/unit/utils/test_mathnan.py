@@ -5,7 +5,25 @@ from collections.abc import Iterable
 from coola import objects_are_allclose
 from pytest import mark, raises
 
-from flamme.utils.mathnan import LowNaN, sortnan
+from flamme.utils.mathnan import LowNaN, remove_nan, sortnan
+
+################################
+#     Tests for remove_nan     #
+################################
+
+
+@mark.parametrize(
+    "data,output",
+    [
+        ([float("nan"), float("-inf"), -2, 1.2], [float("-inf"), -2, 1.2]),
+        ((float("nan"), float("-inf"), -2, 1.2), (float("-inf"), -2, 1.2)),
+        (["a", float("nan"), "b", "c", float("nan")], ["a", "b", "c"]),
+        ([], [])
+    ],
+)
+def test_remove_nan(data: list, output: list) -> None:
+    assert remove_nan(data) == output
+
 
 #############################
 #     Tests for sortnan     #
