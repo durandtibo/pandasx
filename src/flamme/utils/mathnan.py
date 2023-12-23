@@ -1,10 +1,33 @@
 from __future__ import annotations
 
-__all__ = ["sortnan"]
+__all__ = ["remove_nan", "sortnan"]
 
 import math
-from collections.abc import Iterable
-from typing import Any
+from collections.abc import Iterable, Sequence
+from typing import Any, TypeVar
+
+T = TypeVar("T", bound=Sequence)
+
+
+def remove_nan(data: T) -> T:
+    r"""Removes the NaN values from the input sequence.
+
+    Args:
+        data (``Sequence``): Specifies the input sequence.
+
+    Returns:
+        ``Sequence``: The input sequence without NaN values.
+
+    Example usage:
+
+    .. code-block:: pycon
+
+        >>> from flamme.utils.mathnan import remove_nan
+        >>> data = [float("nan"), float("-inf"), -2, 1.2]
+        >>> remove_nan(data)
+        [-inf, -2, 1.2]
+    """
+    return type(data)([x for x in data if not isinstance(x, (float, int)) or not math.isnan(x)])
 
 
 def sortnan(
