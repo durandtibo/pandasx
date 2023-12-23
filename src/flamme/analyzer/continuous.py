@@ -25,8 +25,8 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         column (str): Specifies the column to analyze.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
             ``q0.1`` means the 10% quantile. ``0`` is the minimum
@@ -48,7 +48,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ColumnContinuousAnalyzer
         >>> analyzer = ColumnContinuousAnalyzer(column="float")
         >>> analyzer
-        ColumnContinuousAnalyzer(column=float, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
+        ColumnContinuousAnalyzer(column=float, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -63,14 +63,14 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         self,
         column: str,
         nbins: int | None = None,
-        log_y: bool = False,
+        yscale: str = "linear",
         xmin: float | str | None = "q0",
         xmax: float | str | None = "q1",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
         self._nbins = nbins
-        self._log_y = log_y
+        self._yscale = yscale
         self._xmin = xmin
         self._xmax = xmax
         self._figsize = figsize
@@ -78,7 +78,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, nbins={self._nbins}, "
-            f"log_y={self._log_y}, xmin={self._xmin}, xmax={self._xmax}, figsize={self._figsize})"
+            f"yscale={self._yscale}, xmin={self._xmin}, xmax={self._xmax}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnContinuousSection | EmptySection:
@@ -93,7 +93,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
             column=self._column,
             series=df[self._column],
             nbins=self._nbins,
-            log_y=self._log_y,
+            yscale=self._yscale,
             xmin=self._xmin,
             xmax=self._xmax,
             figsize=self._figsize,
@@ -111,8 +111,8 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
             the height. Default: ``None``
@@ -128,7 +128,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         ...     column="float", dt_column="datetime", period="M"
         ... )
         >>> analyzer
-        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, log_y=False, figsize=None)
+        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, yscale=linear, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -147,20 +147,20 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         column: str,
         dt_column: str,
         period: str,
-        log_y: bool = False,
+        yscale: str = "linear",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
         self._dt_column = dt_column
         self._period = period
-        self._log_y = log_y
+        self._yscale = yscale
         self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
             f"dt_column={self._dt_column}, period={self._period}, "
-            f"log_y={self._log_y}, figsize={self._figsize})"
+            f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
@@ -185,6 +185,6 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             df=df,
             dt_column=self._dt_column,
             period=self._period,
-            log_y=self._log_y,
+            yscale=self._yscale,
             figsize=self._figsize,
         )

@@ -5,9 +5,8 @@ __all__ = ["ColumnContinuousSection"]
 import logging
 from collections.abc import Sequence
 
-import plotly
-import plotly.express as px
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import Series
 
 from flamme.section.base import BaseSection
@@ -18,6 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html
 from flamme.utils.range import find_range
 
 logger = logging.getLogger(__name__)
@@ -34,8 +34,8 @@ class ColumnContinuousSection(BaseSection):
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
             ``q0.1`` means the 10% quantile. ``0`` is the minimum
@@ -54,7 +54,7 @@ class ColumnContinuousSection(BaseSection):
         series: Series,
         column: str,
         nbins: int | None = None,
-        log_y: bool = False,
+        yscale: str = "linear",
         xmin: float | str | None = None,
         xmax: float | str | None = None,
         figsize: tuple[float, float] | None = None,
@@ -62,7 +62,7 @@ class ColumnContinuousSection(BaseSection):
         self._series = series
         self._column = column
         self._nbins = nbins
-        self._log_y = log_y
+        self._yscale = yscale
         self._xmin = xmin
         self._xmax = xmax
         self._figsize = figsize
@@ -72,8 +72,8 @@ class ColumnContinuousSection(BaseSection):
         return self._column
 
     @property
-    def log_y(self) -> bool:
-        return self._log_y
+    def yscale(self) -> str:
+        return self._yscale
 
     @property
     def nbins(self) -> int | None:
@@ -166,8 +166,9 @@ class ColumnContinuousSection(BaseSection):
                 "figure": create_histogram_figure(
                     series=self._series,
                     column=self._column,
+                    stats=stats,
                     nbins=self._nbins,
-                    log_y=self._log_y,
+                    yscale=self._yscale,
                     xmin=self._xmin,
                     xmax=self._xmax,
                     figsize=self._figsize,
@@ -204,8 +205,9 @@ This section analyzes the discrete distribution of values for column {{column}}.
 def create_histogram_figure(
     series: Series,
     column: str,
+    stats: dict | None = None,
     nbins: int | None = None,
-    log_y: bool = False,
+    yscale: str = "linear",
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
@@ -218,27 +220,63 @@ def create_histogram_figure(
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
+        yscale (bool, optional): Specifies the y-axis scale.
+            Default: ``linear``
+        xmin (float or str or None, optional): Specifies the minimum
+            value of the range or its associated quantile.
+            ``q0.1`` means the 10% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
+        xmax (float or str or None, optional): Specifies the maximum
+            value of the range or its associated quantile.
+            ``q0.9`` means the 90% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
 
     Returns:
     -------
         str: The HTML code of the figure.
     """
+    stats = stats or {}
     array = series.to_numpy()
+    if array.size == 0:
+        return "<span>&#9888;</span> No figure is generated because the column is empty"
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
-    fig = px.histogram(
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.hist(
         array,
-        marginal="box",
-        nbins=nbins,
-        title=f"Distribution of values for column {column}",
-        labels={"x": "value", "y": "count"},
-        log_y=log_y,
-        range_x=[xmin, xmax],
+        bins=nbins,
+        range=[xmin, xmax],
+        color="tab:blue",
     )
-    fig.update_layout(showlegend=False)
-
-    return plotly.io.to_html(fig, full_html=False)
+    ax.set_title(f"Distribution of values for column {column}")
+    ax.set_ylabel("Number of occurrences")
+    ax.set_yscale(yscale)
+    ax.set_xlim(xmin, xmax)
+    if "q05" in stats and stats["q05"] > xmin:
+        ax.axvline(stats["q05"], color="black", linestyle="dashed")
+        ax.text(
+            stats["q05"],
+            0.99,
+            "q0.05 ",
+            transform=ax.get_xaxis_transform(),
+            color="black",
+            horizontalalignment="right",
+            verticalalignment="top",
+        )
+    if "q95" in stats and stats["q95"] < xmax:
+        ax.axvline(stats["q95"], color="black", linestyle="dashed")
+        ax.text(
+            stats["q95"],
+            0.99,
+            " q0.95",
+            transform=ax.get_xaxis_transform(),
+            color="black",
+            horizontalalignment="left",
+            verticalalignment="top",
+        )
+    return figure2html(fig, close_fig=True)
 
 
 def create_stats_table(stats: dict, column: str) -> str:

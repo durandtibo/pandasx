@@ -59,21 +59,21 @@ def test_column_continuous_analyzer_nbins(nbins: int) -> None:
     assert section.nbins == nbins
 
 
-def test_column_continuous_analyzer_log_y_default() -> None:
+def test_column_continuous_analyzer_yscale_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
-    assert not section.log_y
+    assert section.yscale == "linear"
 
 
-@mark.parametrize("log_y", (True, False))
-def test_column_continuous_analyzer_log_y(log_y: bool) -> None:
-    section = ColumnContinuousAnalyzer(column="col", log_y=log_y).analyze(
+@mark.parametrize("yscale", ("linear", "log"))
+def test_column_continuous_analyzer_yscale(yscale: bool) -> None:
+    section = ColumnContinuousAnalyzer(column="col", yscale=yscale).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
-    assert section.log_y == log_y
+    assert section.yscale == yscale
 
 
 def test_column_continuous_analyzer_xmin_default() -> None:
@@ -220,21 +220,21 @@ def test_column_temporal_continuous_analyzer_period(dataframe: DataFrame) -> Non
     assert section.period == "M"
 
 
-def test_column_temporal_continuous_analyzer_log_y_default(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_analyzer_yscale_default(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, ColumnTemporalContinuousSection)
-    assert not section.log_y
+    assert section.yscale == "linear"
 
 
-@mark.parametrize("log_y", (True, False))
-def test_column_temporal_continuous_analyzer_log_y(dataframe: DataFrame, log_y: bool) -> None:
+@mark.parametrize("yscale", ("linear", "log"))
+def test_column_temporal_continuous_analyzer_yscale(dataframe: DataFrame, yscale: bool) -> None:
     section = ColumnTemporalContinuousAnalyzer(
-        column="col", dt_column="datetime", period="M", log_y=log_y
+        column="col", dt_column="datetime", period="M", yscale=yscale
     ).analyze(dataframe)
     assert isinstance(section, ColumnTemporalContinuousSection)
-    assert section.log_y == log_y
+    assert section.yscale == yscale
 
 
 def test_column_temporal_continuous_analyzer_figsize_default(dataframe: DataFrame) -> None:

@@ -91,18 +91,20 @@ def create_analyzer() -> BaseAnalyzer:
             }
         )
 
-    def create_continuous_column(column: str, log_y: bool = False) -> BaseAnalyzer:
+    def create_continuous_column(column: str, yscale: str = "linear") -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": ColumnContinuousAnalyzer(column=column, log_y=log_y, figsize=(14, 6)),
+                "overall": ColumnContinuousAnalyzer(
+                    column=column, yscale=yscale, nbins=100, figsize=(14, 6), xmin="q0.1"
+                ),
                 "monthly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="M", log_y=log_y, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="M", yscale=yscale, figsize=(14, 6)
                 ),
                 "weekly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="W", log_y=log_y, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="W", yscale=yscale, figsize=(14, 6)
                 ),
                 "daily": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="D", log_y=log_y, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="D", yscale=yscale, figsize=(14, 6)
                 ),
             }
         )
@@ -143,16 +145,16 @@ def create_analyzer() -> BaseAnalyzer:
 """
                             ),
                             "overall": ColumnContinuousAnalyzer(
-                                column="cauchy", log_y=True, xmax="q0.99"
+                                column="cauchy", yscale="log", xmax="q0.99"
                             ),
                             "monthly": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="M", log_y=True
+                                column="cauchy", dt_column="datetime", period="M", yscale="log"
                             ),
                             "weekly": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="W", log_y=True
+                                column="cauchy", dt_column="datetime", period="W", yscale="log"
                             ),
                             "daily": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="D", log_y=True
+                                column="cauchy", dt_column="datetime", period="D", yscale="log"
                             ),
                         }
                     ),
