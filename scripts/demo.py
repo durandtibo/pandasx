@@ -95,7 +95,7 @@ def create_analyzer() -> BaseAnalyzer:
         return MappingAnalyzer(
             {
                 "overall": ColumnContinuousAnalyzer(
-                    column=column, yscale=yscale, nbins=100, figsize=(14, 6), xmin="q0.1"
+                    column=column, yscale=yscale, nbins=100, figsize=(14, 6)
                 ),
                 "monthly": ColumnTemporalContinuousAnalyzer(
                     column=column, dt_column="datetime", period="M", yscale=yscale, figsize=(14, 6)
