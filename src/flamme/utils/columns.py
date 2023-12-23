@@ -31,12 +31,12 @@ class BaseColumn:
         >>> column
         Column(
           (can_be_null): True
-          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
+          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
           (transformer): ToNumericSeriesTransformer()
         )
         >>> analyzer = column.get_analyzer()
         >>> analyzer
-        ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
+        ColumnContinuousAnalyzer(column=col, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
         >>> transformer = column.get_transformer()
         >>> transformer
         ToNumericSeriesTransformer()
@@ -88,12 +88,12 @@ class Column(BaseColumn):
         >>> column
         Column(
           (can_be_null): True
-          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
+          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
           (transformer): ToNumericSeriesTransformer()
         )
         >>> analyzer = column.get_analyzer()
         >>> analyzer
-        ColumnContinuousAnalyzer(column=col, nbins=None, log_y=False, xmin=q0, xmax=q1, figsize=None)
+        ColumnContinuousAnalyzer(column=col, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
         >>> transformer = column.get_transformer()
         >>> transformer
         ToNumericSeriesTransformer()
