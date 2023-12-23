@@ -18,7 +18,7 @@ from flamme.utils.mathnan import LowNaN, remove_nan, sortnan
         ([float("nan"), float("-inf"), -2, 1.2], [float("-inf"), -2, 1.2]),
         ((float("nan"), float("-inf"), -2, 1.2), (float("-inf"), -2, 1.2)),
         (["a", float("nan"), "b", "c", float("nan")], ["a", "b", "c"]),
-        ([], [])
+        ([], []),
     ],
 )
 def test_remove_nan(data: list, output: list) -> None:
