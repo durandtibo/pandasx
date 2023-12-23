@@ -9,7 +9,11 @@ from pandas import Series
 from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousSection
-from flamme.section.continuous import create_histogram_figure, create_stats_table
+from flamme.section.continuous import (
+    create_boxplot_figure,
+    create_histogram_figure,
+    create_stats_table,
+)
 
 STATS_KEYS = [
     "mean",
@@ -190,6 +194,30 @@ def test_column_continuous_section_render_html_toc_args(series: Series) -> None:
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+##########################################
+#    Tests for create_boxplot_figure     #
+##########################################
+
+
+def test_create_boxplot_figure(series: Series) -> None:
+    assert isinstance(create_boxplot_figure(series=series), str)
+
+
+@mark.parametrize("xmin", (1.0, "q0.1", None))
+def test_create_boxplot_figure_xmin(series: Series, xmin: float | str | None) -> None:
+    assert isinstance(create_boxplot_figure(series=series, xmin=xmin), str)
+
+
+@mark.parametrize("xmax", (1.0, "q0.9", None))
+def test_create_boxplot_figure_xmax(series: Series, xmax: float | str | None) -> None:
+    assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_create_boxplot_figure_figsize(series: Series, figsize: tuple[float, float]) -> None:
+    assert isinstance(create_boxplot_figure(series=series, figsize=figsize), str)
 
 
 ############################################

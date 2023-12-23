@@ -163,12 +163,18 @@ class ColumnContinuousSection(BaseSection):
                 "unique_values": f"{stats['nunique']:,}",
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
-                "figure": create_histogram_figure(
+                "histogram_figure": create_histogram_figure(
                     series=self._series,
                     column=self._column,
                     stats=stats,
                     nbins=self._nbins,
                     yscale=self._yscale,
+                    xmin=self._xmin,
+                    xmax=self._xmax,
+                    figsize=self._figsize,
+                ),
+                "boxplot_figure": create_boxplot_figure(
+                    series=self._series,
                     xmin=self._xmin,
                     xmax=self._xmax,
                     figsize=self._figsize,
@@ -196,10 +202,51 @@ This section analyzes the discrete distribution of values for column {{column}}.
   <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
 </ul>
 
-{{figure}}
+{{histogram_figure}}
+{{boxplot_figure}}
 {{table}}
 <p style="margin-top: 1rem;">
 """
+
+
+def create_boxplot_figure(
+    series: Series,
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+    figsize: tuple[float, float] | None = None,
+) -> str:
+    r"""Creates the HTML code of a boxplot figure.
+
+    Args:
+    ----
+        row (``pandas.Series``): Specifies the series of data.
+        xmin (float or str or None, optional): Specifies the minimum
+            value of the range or its associated quantile.
+            ``q0.1`` means the 10% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
+        xmax (float or str or None, optional): Specifies the maximum
+            value of the range or its associated quantile.
+            ``q0.9`` means the 90% quantile. ``0`` is the minimum
+            value and ``1`` is the maximum value. Default: ``None``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
+
+    Returns:
+    -------
+        str: The HTML code of the figure.
+    """
+    array = series.dropna().to_numpy()
+    if array.size == 0:
+        return "<span>&#9888;</span> No figure is generated because the column is empty"
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    if figsize is not None:
+        figsize = (figsize[0], figsize[0] / 10)
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.boxplot(array, notch=True, vert=False, widths=0.7)
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylabel(" ")
+    return figure2html(fig, close_fig=True)
 
 
 def create_histogram_figure(
@@ -212,7 +259,7 @@ def create_histogram_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a figure.
+    r"""Creates the HTML code of a histogram figure.
 
     Args:
     ----
