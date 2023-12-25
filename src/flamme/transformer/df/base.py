@@ -98,11 +98,9 @@ def is_dataframe_transformer_config(config: dict) -> bool:
     the class.
 
     Args:
-    ----
         config (dict): Specifies the configuration to check.
 
     Returns:
-    -------
         bool: ``True`` if the input configuration is a configuration
             for a ``BaseDataFrameTransformer`` object.
 
@@ -128,12 +126,10 @@ def setup_dataframe_transformer(
     by using the ``BaseDataFrameTransformer`` factory function.
 
     Args:
-    ----
         transformer (``BaseDataFrameTransformer`` or dict): Specifies a
             ``pandas.DataFrame`` transformer or its configuration.
 
     Returns:
-    -------
         ``BaseDataFrameTransformer``: An instantiated transformer.
 
     Example usage:

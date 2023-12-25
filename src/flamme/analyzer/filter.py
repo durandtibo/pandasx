@@ -19,7 +19,6 @@ class FilteredAnalyzer(BaseAnalyzer):
     column.
 
     Args:
-    ----
         query (``str``): Soecifies the query.
         analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
             or its configuration.

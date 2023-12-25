@@ -14,7 +14,6 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     of columns.
 
     Args:
-    ----
         columns (``Sequence``): Specifies the columns to keep.
 
     Example usage:

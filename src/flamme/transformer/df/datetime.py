@@ -15,7 +15,6 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implements a transformer to convert some columns to numeric type.
 
     Args:
-    ----
         columns (``Sequence``): Specifies the columns to convert.
         **kwargs: Specifies the keyword arguments for
             ``pandas.to_datetime``.

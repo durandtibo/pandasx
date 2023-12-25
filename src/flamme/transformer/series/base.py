@@ -68,11 +68,9 @@ def is_series_transformer_config(config: dict) -> bool:
     the class.
 
     Args:
-    ----
         config (dict): Specifies the configuration to check.
 
     Returns:
-    -------
         bool: ``True`` if the input configuration is a configuration
             for a ``BaseSeriesTransformer`` object.
 
@@ -96,12 +94,10 @@ def setup_series_transformer(
     by using the ``BaseSeriesTransformer`` factory function.
 
     Args:
-    ----
         transformer (``BaseSeriesTransformer`` or dict): Specifies a
             ``pandas.Series`` transformer or its configuration.
 
     Returns:
-    -------
         ``BaseSeriesTransformer``: An instantiated transformer.
 
     Example usage:

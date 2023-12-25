@@ -29,7 +29,6 @@ class NullValueSection(BaseSection):
     r"""Implements a section that analyzes the number of null values.
 
     Args:
-    ----
         columns (``Sequence``): Specifies the column names.
         null_count (``numpy.ndarray``): Specifies the number of null
             values for each column.
@@ -206,13 +205,11 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         column (str): Specifies the column name.
         null_count (int): Specifies the number of null values.
         total_count (int): Specifies the total number of rows.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     pct = null_count / total_count
@@ -239,7 +236,6 @@ class TemporalNullValueSection(BaseSection):
     values.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -350,7 +346,6 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -363,7 +358,6 @@ def create_temporal_null_figure(
             the height. Default: ``(7, 5)``
 
     Returns:
-    -------
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
@@ -416,7 +410,6 @@ def prepare_data(
     r"""Prepares the data to create the figure and table.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -425,7 +418,6 @@ def prepare_data(
             daily.
 
     Returns:
-    -------
         tuple: A tuple with 3 values. The first value is a numpy NDArray
             that contains the number of null values per period. The
             second value is a numpy NDArray that contains the total

@@ -18,7 +18,6 @@ class NullValueAnalyzer(BaseAnalyzer):
     r"""Implements a null value analyzer.
 
     Args:
-    ----
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
             the height. Default: ``None``
@@ -64,7 +63,6 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     values.
 
     Args:
-    ----
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or

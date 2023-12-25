@@ -12,13 +12,11 @@ def human_file_size(path: Path | str, decimal: int = 2) -> str:
     r"""Gets a human-readable representation of a file size.
 
     Args:
-    ----
         path (``pathlib.Path`` or str): Specifies the file.
         decimal (int, optional): Specifies the number of decimal
             digits. Default: ``2``
 
     Returns:
-    -------
         str: The file size in a human-readable format.
 
     Example usage:
@@ -36,12 +34,10 @@ def sanitize_path(path: Path | str) -> Path:
     r"""Sanitizes a given path.
 
     Args:
-    ----
         path (``pathlib.Path`` or str): Specifies the path to
             sanitize.
 
     Returns:
-    -------
         ``pathlib.Path``: The sanitized path.
 
     Example usage:

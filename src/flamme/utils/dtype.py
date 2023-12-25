@@ -9,11 +9,9 @@ def df_column_types(df: DataFrame) -> dict[str, set]:
     r"""Computes the value types per column.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
 
     Returns:
-    -------
         dict: A dictionary with the value types for each column.
 
     Example usage:
@@ -43,11 +41,9 @@ def series_column_types(series: Series) -> set[type]:
     r"""Computes the value types in a ``pandas.Series``.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
 
     Returns:
-    -------
         dict: A dictionary with the value types for each column.
 
     Example usage:

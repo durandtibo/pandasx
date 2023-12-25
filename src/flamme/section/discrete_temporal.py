@@ -29,7 +29,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
     column with discrete values.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column of the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -133,7 +132,6 @@ def create_temporal_figure(
     distribution.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -147,7 +145,6 @@ def create_temporal_figure(
             second is the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:

@@ -17,12 +17,10 @@ def find_columns_type(df: DataFrame, cls: type) -> tuple[str, ...]:
     r"""Finds the list of columns that contains a given type.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame.
         cls: Specifies the type to find.
 
     Returns:
-    -------
         tuple: The tuple of columns with the given type.
 
     Example usage:
@@ -50,11 +48,9 @@ def find_columns_decimal(df: DataFrame) -> tuple[str, ...]:
     r"""Finds the list of columns that contains the type string.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame.
 
     Returns:
-    -------
         tuple: The tuple of columns with the type string.
 
     Example usage:
@@ -82,11 +78,9 @@ def find_columns_str(df: DataFrame) -> tuple[str, ...]:
     r"""Finds the list of columns that contains the type string.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame.
 
     Returns:
-    -------
         tuple: The tuple of columns with the type string.
 
     Example usage:

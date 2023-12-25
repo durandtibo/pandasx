@@ -17,7 +17,6 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to show the number of duplicated rows.
 
     Args:
-    ----
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
             columns. Default: ``None``

@@ -52,11 +52,9 @@ def is_ingestor_config(config: dict) -> bool:
     the class.
 
     Args:
-    ----
         config (dict): Specifies the configuration to check.
 
     Returns:
-    -------
         bool: ``True`` if the input configuration is a configuration
             for a ``BaseIngestor`` object.
 
@@ -82,12 +80,10 @@ def setup_ingestor(
     by using the ``BaseIngestor`` factory function.
 
     Args:
-    ----
         ingestor (``BaseIngestor`` or dict): Specifies an
             ingestor or its configuration.
 
     Returns:
-    -------
         ``BaseIngestor``: An instantiated ingestor.
 
     Example usage:

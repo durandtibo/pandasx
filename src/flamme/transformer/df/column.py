@@ -19,7 +19,6 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     ``pandas.Series`` transformers on some columns.
 
     Args:
-    ----
         columns (``Mapping``): Specifies the ``pandas.Series``
             transformers.
 

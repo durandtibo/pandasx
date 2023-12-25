@@ -30,7 +30,6 @@ class ColumnTemporalContinuousSection(BaseSection):
     column with continuous values.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column of the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -150,7 +149,6 @@ def create_temporal_figure(
     distribution.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -164,7 +162,6 @@ def create_temporal_figure(
             second is the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
@@ -201,7 +198,6 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
     about the temporal value distribution.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -210,7 +206,6 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
             daily.
 
     Returns:
-    -------
         str: The HTML representation of the table.
     """
     if df.shape[0] == 0:
@@ -285,11 +280,9 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     return Template(

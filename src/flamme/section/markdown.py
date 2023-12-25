@@ -24,7 +24,6 @@ class MarkdownSection(BaseSection):
     r"""Implements a section that converts a markdown string into HTML.
 
     Args:
-    ----
         desc (``str``): Specifies the markdown string to convert.
     """
 

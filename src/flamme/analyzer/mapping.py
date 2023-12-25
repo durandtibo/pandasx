@@ -15,7 +15,6 @@ class MappingAnalyzer(BaseAnalyzer):
     r"""Implements an analyzer to analyze multiple analyzers.
 
     Args:
-    ----
         analyzers (``Mapping``): Specifies the mappings to analyze.
             The key of each analyzer is used to organize the metrics
             and report.
