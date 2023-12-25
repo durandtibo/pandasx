@@ -33,6 +33,8 @@ from flamme.transformer.df import (
 
 logger = logging.getLogger(__name__)
 
+FIGSIZE = (14, 6)
+
 
 def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     rng = np.random.default_rng(42)
@@ -76,36 +78,41 @@ def create_analyzer() -> BaseAnalyzer:
     def create_discrete_column(column: str) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
-                "overall": ColumnDiscreteAnalyzer(column=column, figsize=(14, 6)),
+                "overall": ColumnDiscreteAnalyzer(column=column, figsize=FIGSIZE),
                 "monthly": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="M", figsize=(14, 6)
+                    column=column, dt_column="datetime", period="M", figsize=FIGSIZE
                 ),
                 # "weekly": ColumnTemporalDiscreteAnalyzer(
-                #     column=column, dt_column="datetime", period="W", figsize=(14, 6)
+                #     column=column, dt_column="datetime", period="W", figsize=FIGSIZE
                 # ),
                 # "daily": ColumnTemporalDiscreteAnalyzer(
-                #     column=column, dt_column="datetime", period="D", figsize=(14, 6)
+                #     column=column, dt_column="datetime", period="D", figsize=FIGSIZE
                 # ),
                 "null monthly": ColumnTemporalNullValueAnalyzer(
-                    column=column, dt_column="datetime", period="M", figsize=(14, 6)
+                    column=column, dt_column="datetime", period="M", figsize=FIGSIZE
                 ),
             }
         )
 
-    def create_continuous_column(column: str, yscale: str = "linear") -> BaseAnalyzer:
+    def create_continuous_column(
+        column: str,
+        yscale: str = "linear",
+        xmin: float | str | None = None,
+        xmax: float | str | None = None,
+    ) -> BaseAnalyzer:
         return MappingAnalyzer(
             {
                 "overall": ColumnContinuousAnalyzer(
-                    column=column, yscale=yscale, nbins=100, figsize=(14, 6)
+                    column=column, yscale=yscale, nbins=100, figsize=FIGSIZE, xmin=xmin, xmax=xmax
                 ),
                 "monthly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="M", yscale=yscale, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="M", yscale=yscale, figsize=FIGSIZE
                 ),
                 "weekly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="W", yscale=yscale, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="W", yscale=yscale, figsize=FIGSIZE
                 ),
                 "daily": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="D", yscale=yscale, figsize=(14, 6)
+                    column=column, dt_column="datetime", period="D", yscale=yscale, figsize=FIGSIZE
                 ),
             }
         )
@@ -116,16 +123,16 @@ def create_analyzer() -> BaseAnalyzer:
             "column type": DataTypeAnalyzer(),
             "null values": MappingAnalyzer(
                 {
-                    "overall": NullValueAnalyzer(figsize=(14, 6)),
+                    "overall": NullValueAnalyzer(figsize=FIGSIZE),
                     "temporal": GlobalTemporalNullValueAnalyzer(
-                        dt_column="datetime", period="M", figsize=(14, 6)
+                        dt_column="datetime", period="M", figsize=FIGSIZE
                     ),
                     "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
                     "weekly": TemporalNullValueAnalyzer(
                         dt_column="datetime", period="W", figsize=(7, 5)
                     ),
                     "daily": TemporalNullValueAnalyzer(
-                        dt_column="datetime", period="D", ncols=1, figsize=(14, 6)
+                        dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
                     ),
                 }
             ),
@@ -136,7 +143,9 @@ def create_analyzer() -> BaseAnalyzer:
                     "discrete": create_discrete_column(column="discrete"),
                     "missing": ColumnDiscreteAnalyzer(column="missing"),
                     "float": create_continuous_column(column="float"),
-                    "cauchy": create_continuous_column(column="cauchy", yscale="symlog"),
+                    "cauchy": create_continuous_column(
+                        column="cauchy", yscale="symlog", xmin="g0.001", xmax="g0.999"
+                    ),
                     "half cauchy": MappingAnalyzer(
                         {
                             "description": MarkdownAnalyzer(

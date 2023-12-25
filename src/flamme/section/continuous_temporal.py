@@ -229,10 +229,12 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
                 "max",
                 "std",
                 ("q01", lambda x: x.quantile(0.01)),
+                ("q05", lambda x: x.quantile(0.05)),
                 ("q10", lambda x: x.quantile(0.1)),
                 ("q25", lambda x: x.quantile(0.25)),
                 ("q75", lambda x: x.quantile(0.75)),
                 ("q90", lambda x: x.quantile(0.9)),
+                ("q95", lambda x: x.quantile(0.95)),
                 ("q99", lambda x: x.quantile(0.99)),
             ]
         )
@@ -258,11 +260,13 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
                 <th>std</th>
                 <th>min</th>
                 <th>quantile 1%</th>
+                <th>quantile 5%</th>
                 <th>quantile 10%</th>
                 <th>quantile 25%</th>
                 <th>median</th>
                 <th>quantile 75%</th>
                 <th>quantile 90%</th>
+                <th>quantile 95%</th>
                 <th>quantile 99%</th>
                 <th>max</th>
             </tr>
@@ -296,11 +300,13 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
     <td {{num_style}}>{{std}}</td>
     <td {{num_style}}>{{min}}</td>
     <td {{num_style}}>{{q01}}</td>
+    <td {{num_style}}>{{q05}}</td>
     <td {{num_style}}>{{q10}}</td>
     <td {{num_style}}>{{q25}}</td>
     <td {{num_style}}>{{median}}</td>
     <td {{num_style}}>{{q75}}</td>
     <td {{num_style}}>{{q90}}</td>
+    <td {{num_style}}>{{q95}}</td>
     <td {{num_style}}>{{q99}}</td>
     <td {{num_style}}>{{max}}</td>
 </tr>"""
@@ -315,10 +321,12 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
             "max": f"{row.max:,.4f}",
             "std": f"{row.std:,.4f}",
             "q01": f"{row.q01:,.4f}",
+            "q05": f"{row.q05:,.4f}",
             "q10": f"{row.q10:,.4f}",
             "q25": f"{row.q25:,.4f}",
             "q75": f"{row.q75:,.4f}",
             "q90": f"{row.q90:,.4f}",
+            "q95": f"{row.q95:,.4f}",
             "q99": f"{row.q99:,.4f}",
         }
     )
