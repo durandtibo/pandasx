@@ -25,7 +25,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         column (str): Specifies the column to analyze.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
@@ -111,7 +111,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is

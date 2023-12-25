@@ -5,10 +5,10 @@ __all__ = ["ColumnTemporalContinuousSection"]
 import logging
 from collections.abc import Sequence
 
+import numpy as np
 import pandas as pd
-import plotly
-import plotly.express as px
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -19,6 +19,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
+from flamme.utils.mathnan import remove_nan
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +37,7 @@ class ColumnTemporalContinuousSection(BaseSection):
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
@@ -155,7 +157,7 @@ def create_temporal_figure(
             the temporal distribution.
         period (str): Specifies the temporal period e.g. monthly or
             daily.
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
@@ -168,18 +170,30 @@ def create_temporal_figure(
     if df.shape[0] == 0:
         return ""
     df = df[[column, dt_column]].copy()
-    dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period).astype(str)
-
-    fig = px.box(
-        df,
-        x=dt_col,
-        y=column,
-        title=f"Distribution of values for column {column}",
-        labels={column: "value", dt_col: "time"},
-        points="outliers",
+    df[dt_column] = df[dt_column].dt.to_period(period).astype(str)
+    df_group = (
+        df.groupby(dt_column)[column]
+        .apply(list)
+        .reset_index(name=column)
+        .sort_values(by=[dt_column])
     )
-    return plotly.io.to_html(fig, full_html=False)
+
+    data = [remove_nan(x) for x in df_group[column].tolist()]
+    labels = df_group[dt_column].tolist()
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.boxplot(
+        data,
+        notch=True,
+        vert=True,
+        widths=0.7,
+        patch_artist=True,
+        boxprops=dict(facecolor="lightblue"),
+    )
+    ax.set_xticks(np.arange(len(labels)), labels=labels)
+    ax.set_title(f"Distribution of values for column {column}")
+    ax.set_yscale(yscale)
+    readable_xticklabels(ax)
+    return figure2html(fig, close_fig=True)
 
 
 def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:

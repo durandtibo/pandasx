@@ -42,7 +42,8 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "float": np.random.randn(nrows) * 3 + 1,
             "int": np.random.randint(0, 10, (nrows,)),
             "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
-            "cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
+            "cauchy": rng.standard_cauchy(size=(nrows,)),
+            "half cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
     mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
@@ -79,9 +80,9 @@ def create_analyzer() -> BaseAnalyzer:
                 "monthly": ColumnTemporalDiscreteAnalyzer(
                     column=column, dt_column="datetime", period="M", figsize=(14, 6)
                 ),
-                "weekly": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="W", figsize=(14, 6)
-                ),
+                # "weekly": ColumnTemporalDiscreteAnalyzer(
+                #     column=column, dt_column="datetime", period="W", figsize=(14, 6)
+                # ),
                 # "daily": ColumnTemporalDiscreteAnalyzer(
                 #     column=column, dt_column="datetime", period="D", figsize=(14, 6)
                 # ),
@@ -135,7 +136,8 @@ def create_analyzer() -> BaseAnalyzer:
                     "discrete": create_discrete_column(column="discrete"),
                     "missing": ColumnDiscreteAnalyzer(column="missing"),
                     "float": create_continuous_column(column="float"),
-                    "cauchy": MappingAnalyzer(
+                    "cauchy": create_continuous_column(column="cauchy", yscale="symlog"),
+                    "half cauchy": MappingAnalyzer(
                         {
                             "description": MarkdownAnalyzer(
                                 desc="""
@@ -145,16 +147,16 @@ def create_analyzer() -> BaseAnalyzer:
 """
                             ),
                             "overall": ColumnContinuousAnalyzer(
-                                column="cauchy", yscale="log", xmax="q0.99"
+                                column="half cauchy", yscale="log", xmax="q0.99"
                             ),
                             "monthly": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="M", yscale="log"
+                                column="half cauchy", dt_column="datetime", period="M", yscale="log"
                             ),
                             "weekly": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="W", yscale="log"
+                                column="half cauchy", dt_column="datetime", period="W", yscale="log"
                             ),
                             "daily": ColumnTemporalContinuousAnalyzer(
-                                column="cauchy", dt_column="datetime", period="D", yscale="log"
+                                column="half cauchy", dt_column="datetime", period="D", yscale="log"
                             ),
                         }
                     ),

@@ -34,7 +34,7 @@ class ColumnContinuousSection(BaseSection):
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
@@ -243,7 +243,14 @@ def create_boxplot_figure(
     if figsize is not None:
         figsize = (figsize[0], figsize[0] / 10)
     fig, ax = plt.subplots(figsize=figsize)
-    ax.boxplot(array, notch=True, vert=False, widths=0.7)
+    ax.boxplot(
+        array,
+        notch=True,
+        vert=False,
+        widths=0.7,
+        patch_artist=True,
+        boxprops=dict(facecolor="lightblue"),
+    )
     ax.set_xlim(xmin, xmax)
     ax.set_ylabel(" ")
     return figure2html(fig, close_fig=True)
@@ -267,7 +274,7 @@ def create_histogram_figure(
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
-        yscale (bool, optional): Specifies the y-axis scale.
+        yscale (str, optional): Specifies the y-axis scale.
             Default: ``linear``
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
