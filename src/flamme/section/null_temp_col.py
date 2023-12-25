@@ -28,7 +28,6 @@ class ColumnTemporalNullValueSection(BaseSection):
     values for a given column.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -155,7 +154,6 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -167,7 +165,6 @@ def create_temporal_null_figure(
             the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
@@ -188,7 +185,6 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
     distribution of null values.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
@@ -197,7 +193,6 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
             daily.
 
     Returns:
-    -------
         str: The HTML representation of the table.
     """
     if df.shape[0] == 0:
@@ -240,11 +235,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     num_non_nulls = total - num_nulls

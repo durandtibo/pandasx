@@ -17,7 +17,6 @@ class NoRepeatReporter(BaseReporter):
     r"""Implements a reporter that computes the report only once.
 
     Args:
-    ----
         reporter (``BaseReporter`` or dict): Specifies the reporter
             or its configuration.
         report_path (``Path`` or str): Specifies the path where to

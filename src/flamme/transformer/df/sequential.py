@@ -18,7 +18,6 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
     sequentially several transformers.
 
     Args:
-    ----
         transformers (``Sequence``): Specifies the transformers or
             their configurations.
 

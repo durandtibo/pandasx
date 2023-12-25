@@ -15,7 +15,6 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
     several transformers.
 
     Args:
-    ----
         transformers (``Sequence``): Specifies the transformers or
             their configurations.
 

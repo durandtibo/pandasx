@@ -16,11 +16,9 @@ def setup_object(obj_or_config: T | dict) -> T:
     r"""Sets up an object from its configuration.
 
     Args:
-    ----
         obj_or_config: Specifies the object or its configuration.
 
     Returns:
-    -------
         The instantiated object.
 
     Example usage:

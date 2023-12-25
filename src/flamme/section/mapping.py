@@ -20,7 +20,6 @@ class SectionDict(BaseSection):
     r"""Implements a section to manage a dictionary of sections.
 
     Args:
-    ----
         sections (dict): Specifies the dictionary of sections.
     """
 

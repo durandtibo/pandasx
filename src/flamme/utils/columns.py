@@ -65,7 +65,6 @@ class Column(BaseColumn):
     r"""Defines the column base class.
 
     Args:
-    ----
         can_be_null (bool): ``True`` if the column can have null
             values, otherwise ``False``.
         analyzer (``BaseAnalyzer`` or dict): Specifies the column

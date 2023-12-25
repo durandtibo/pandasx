@@ -21,7 +21,6 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     r"""Implements a discrete distribution analyzer.
 
     Args:
-    ----
         column (str): Specifies the column to analyze.
         dropna (bool, optional): If ``True``, the NaN values are not
             included in the analysis. Default: ``False``
@@ -91,7 +90,6 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     discrete values.
 
     Args:
-    ----
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.

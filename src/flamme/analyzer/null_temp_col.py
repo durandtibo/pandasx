@@ -17,7 +17,6 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     values for a given column.
 
     Args:
-    ----
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.

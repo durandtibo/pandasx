@@ -25,7 +25,6 @@ class Reporter(BaseReporter):
     r"""Implements a simple reporter.
 
     Args:
-    ----
         ingestor (``BaseIngestor`` or dict): Specifies the ingestor
             or its configuration.
         transformer (``BaseDataFrameTransformer`` or dict): Specifies

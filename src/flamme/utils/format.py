@@ -7,13 +7,11 @@ def human_byte(size: float | int, decimal: int = 2) -> str:
     r"""Computes a human readable string representation of byte sizes.
 
     Args:
-    ----
         size (float or int): Specifies the number of bytes.
         decimal (int, optional): Specifies the number of decimal
             digits. Default: ``2``
 
     Returns:
-    -------
         str: The human readable string representation of byte sizes.
 
     Example usage:

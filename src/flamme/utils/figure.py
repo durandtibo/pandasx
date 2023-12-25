@@ -15,14 +15,12 @@ def figure2html(fig: plt.Figure, close_fig: bool = False) -> str:
     HTML file.
 
     Args:
-    ----
         fig (``Figure``): Specifies the figure to convert.
         close_fig (``bool``, optional): If ``True``, the figure is
             closed after it is converted to HTML format.
             Default: ``False``
 
     Returns:
-    -------
         str: The converted figure to a string.
 
     Example usage:
@@ -54,7 +52,6 @@ def readable_xticklabels(
     particular if the tick labels are dense.
 
     Args:
-    ----
         ax (``matplotlib.axes.Axes``):
         max_num_xticks (int, optional): Specifies the maximum number
             of ticks to show in the figure. Default: ``100``

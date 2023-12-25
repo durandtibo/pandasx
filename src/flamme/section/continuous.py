@@ -28,7 +28,6 @@ class ColumnContinuousSection(BaseSection):
     values.
 
     Args:
-    ----
         series (``pandas.Series``): Specifies the series/column to
             analyze.
         column (str): Specifies the column name.
@@ -222,7 +221,6 @@ def create_boxplot_figure(
     r"""Creates the HTML code of a boxplot figure.
 
     Args:
-    ----
         row (``pandas.Series``): Specifies the series of data.
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
@@ -237,7 +235,6 @@ def create_boxplot_figure(
             second is the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML code of the figure.
     """
     array = series.dropna().to_numpy()
@@ -273,7 +270,6 @@ def create_histogram_figure(
     r"""Creates the HTML code of a histogram figure.
 
     Args:
-    ----
         row (``pandas.Series``): Specifies the series of data.
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
@@ -293,7 +289,6 @@ def create_histogram_figure(
             second is the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML code of the figure.
     """
     stats = stats or {}
@@ -341,12 +336,10 @@ def create_stats_table(stats: dict, column: str) -> str:
     r"""Creates the HTML code of the table with statistics.
 
     Args:
-    ----
         stats (dict): Specifies a dictionary with the statistics.
         column (str): Specifies the column name.
 
     Returns:
-    -------
         str: The HTML code of the table.
     """
     return Template(

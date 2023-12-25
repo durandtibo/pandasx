@@ -78,11 +78,9 @@ def is_analyzer_config(config: dict) -> bool:
     the class.
 
     Args:
-    ----
         config (dict): Specifies the configuration to check.
 
     Returns:
-    -------
         bool: ``True`` if the input configuration is a configuration
             for a ``BaseAnalyzer`` object.
 
@@ -106,12 +104,10 @@ def setup_analyzer(
     by using the ``BaseAnalyzer`` factory function.
 
     Args:
-    ----
         analyzer (``BaseAnalyzer`` or dict): Specifies an
             analyzer or its configuration.
 
     Returns:
-    -------
         ``BaseAnalyzer``: An instantiated analyzer.
 
     Example usage:

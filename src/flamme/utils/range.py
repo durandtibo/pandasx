@@ -13,7 +13,6 @@ def find_range(
     r"""Finds a range of value.
 
     Args:
-    ----
         values (``numpy.ndarray``): Specifies the values used to find
             the quantiles.
         xmin (float or str or None, optional): Specifies the minimum
@@ -26,7 +25,6 @@ def find_range(
             value and ``1`` is the maximum value. Default: ``None``
 
     Returns:
-    -------
         tuple: The range of values in the format ``(min, max)``.
 
     Example usage:

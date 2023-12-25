@@ -29,7 +29,6 @@ class GlobalTemporalNullValueSection(BaseSection):
     values for all columns.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -141,7 +140,6 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -152,7 +150,6 @@ def create_temporal_null_figure(
             second is the height. Default: ``None``
 
     Returns:
-    -------
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
@@ -171,7 +168,6 @@ def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> st
     distribution of null values.
 
     Args:
-    ----
         df (``DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -179,7 +175,6 @@ def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> st
             daily.
 
     Returns:
-    -------
         str: The HTML representation of the table.
     """
     if df.shape[0] == 0:
@@ -220,11 +215,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     num_non_nulls = total - num_nulls
@@ -258,7 +251,6 @@ def prepare_data(
     r"""Prepares the data to create the figure and table.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
@@ -266,7 +258,6 @@ def prepare_data(
             daily.
 
     Returns:
-    -------
         tuple: A tuple with 3 values. The first value is a numpy NDArray
             that contains the number of null values per period. The
             second value is a numpy NDArray that contains the total

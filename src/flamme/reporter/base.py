@@ -70,11 +70,9 @@ def is_reporter_config(config: dict) -> bool:
     the class.
 
     Args:
-    ----
         config (dict): Specifies the configuration to check.
 
     Returns:
-    -------
         bool: ``True`` if the input configuration is a configuration
             for a ``BaseReporter`` object.
 
@@ -112,12 +110,10 @@ def setup_reporter(
     by using the ``BaseReporter`` factory function.
 
     Args:
-    ----
         reporter (``BaseReporter`` or dict): Specifies an
             reporter or its configuration.
 
     Returns:
-    -------
         ``BaseReporter``: An instantiated reporter.
 
     Example usage:

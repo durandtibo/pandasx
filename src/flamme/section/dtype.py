@@ -25,7 +25,6 @@ class DataTypeSection(BaseSection):
     r"""Implements a section that analyzes the data type of each column.
 
     Args:
-    ----
         dtypes (``dict``): Specifies the data type for each column.
         types (``dict``): Specifies the types of the values in each
             column. A column can contain multiple types. The keys are
@@ -114,13 +113,11 @@ def create_table_row(column: str, dtype: np.dtype, types: set) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         column (str): Specifies the column name.
         dtype (``numpy.ndtype``): Specifies the column data type.
         types (set): Specifies the types in th column.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     types = sorted([str(t).replace("<", "&lt;").replace(">", "&gt;") for t in types])

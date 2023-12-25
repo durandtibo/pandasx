@@ -17,7 +17,6 @@ class CsvIngestor(BaseIngestor):
     r"""Implements a CSV DataFrame ingestor.
 
     Args:
-    ----
         path (``pathlib.Path`` or str): Specifies the path to the
             CSV file to ingest.
         **kwargs: Additional keyword arguments for

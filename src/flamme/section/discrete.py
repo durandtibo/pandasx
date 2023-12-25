@@ -27,7 +27,6 @@ class ColumnDiscreteSection(BaseSection):
     values.
 
     Args:
-    ----
         counter (``Counter``): Specifies the counter that represents
             the discrete distribution.
         null_values (int): Specifies the number of null values.
@@ -224,12 +223,10 @@ def create_table_row(column: str, count: int) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
-    ----
         column (str): Specifies the column name.
         count (int): Specifies the count for the column.
 
     Returns:
-    -------
         str: The HTML code of a row.
     """
     return Template("""<tr><th>{{column}}</th><td {{num_style}}>{{count}}</td></tr>""").render(

@@ -12,11 +12,9 @@ def tags2id(tags: Sequence[str]) -> str:
     a HTML file.
 
     Args:
-    ----
         tags (``Sequence``): Specifies the sequence of tags.
 
     Returns:
-    -------
         str: The generated ID from the tags.
     """
     return "-".join(tags).replace(" ", "-").lower()
@@ -27,11 +25,9 @@ def tags2title(tags: Sequence[str]) -> str:
     title.
 
     Args:
-    ----
         tags (``Sequence``): Specifies the sequence of tags.
 
     Returns:
-    -------
         str: The generated title from the tags.
     """
     return " | ".join(tags[::-1])
@@ -41,11 +37,9 @@ def valid_h_tag(index: int) -> int:
     r"""Computes a valid number of a h HTML tag.
 
     Args:
-    ----
         index (int): Specifies the original value.
 
     Returns:
-    -------
         int: A valid value.
     """
     return max(1, min(6, index))
@@ -58,7 +52,6 @@ def render_html_toc(
     section.
 
     Args:
-    ----
         number (str, optional): Specifies the section number
             associated to the section. Default: ""
         tags (``Sequence``, optional): Specifies the tags
@@ -67,7 +60,6 @@ def render_html_toc(
             Default: ``0``
 
     Returns:
-    -------
         str: The HTML table of content associated to the section.
     """
     if depth >= max_depth:

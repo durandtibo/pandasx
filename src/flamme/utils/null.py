@@ -10,11 +10,9 @@ def compute_null_per_col(df: DataFrame) -> DataFrame:
     r"""Computes the number and percentage of null values per column.
 
     Args:
-    ----
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
 
     Returns:
-    -------
         ``pandas.DataFrame``: A DataFrame with the number and
             percentage of null values per column.
 

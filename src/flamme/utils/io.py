@@ -12,12 +12,10 @@ def load_text(path: Path) -> str:
     r"""Reads the data from a given text file.
 
     Args:
-    ----
         path (``pathlib.Path``): Specifies the path where to the text
             file.
 
     Returns:
-    -------
         The data from the text file.
 
     Example usage:
@@ -38,7 +36,6 @@ def save_text(to_save: str, path: Path) -> None:
     r"""Saves the given data in a text file.
 
     Args:
-    ----
         to_save: Specifies the data to write in a text file.
         path (``pathlib.Path``): Specifies the path where to write the
             text file.

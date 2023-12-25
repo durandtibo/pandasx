@@ -21,7 +21,6 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-    ----
         column (str): Specifies the column to analyze.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
@@ -105,7 +104,6 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-    ----
         column (str): Specifies the column to analyze.
         dt_column (str): Specifies the datetime column used to analyze
             the temporal distribution.
