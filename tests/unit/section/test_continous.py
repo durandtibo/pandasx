@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import numpy as np
 from coola import objects_are_allclose
 from jinja2 import Template
@@ -14,22 +12,6 @@ from flamme.section.continuous import (
     create_histogram_figure,
     create_stats_table,
 )
-
-STATS_KEYS = [
-    "mean",
-    "median",
-    "min",
-    "max",
-    "std",
-    "q01",
-    "q05",
-    "q10",
-    "q25",
-    "q75",
-    "q90",
-    "q95",
-    "q99",
-]
 
 
 @fixture
@@ -49,6 +31,7 @@ def stats() -> dict:
         "min": 0.0,
         "max": 100.0,
         "std": 29.300170647967224,
+        "q001": 0.1,
         "q01": 1.0,
         "q05": 5.0,
         "q10": 10.0,
@@ -57,6 +40,7 @@ def stats() -> dict:
         "q90": 90.0,
         "q95": 95.0,
         "q99": 99.0,
+        "q999": 99.9,
     }
 
 
@@ -131,6 +115,7 @@ def test_column_continuous_section_get_statistics(series: Series) -> None:
             "min": 0.0,
             "max": 100.0,
             "std": 29.300170647967224,
+            "q001": 0.1,
             "q01": 1.0,
             "q05": 5.0,
             "q10": 10.0,
@@ -139,32 +124,67 @@ def test_column_continuous_section_get_statistics(series: Series) -> None:
             "q90": 90.0,
             "q95": 95.0,
             "q99": 99.0,
+            "q999": 99.9,
         },
     )
 
 
 def test_column_continuous_section_get_statistics_empty_row() -> None:
     section = ColumnContinuousSection(series=Series([]), column="col")
-    stats = section.get_statistics()
-    assert len(stats) == 17
-    assert stats["count"] == 0
-    assert stats["num_nulls"] == 0
-    assert stats["num_non_nulls"] == 0
-    assert stats["nunique"] == 0
-    for key in STATS_KEYS:
-        assert math.isnan(stats[key])
+    assert objects_are_allclose(
+        section.get_statistics(),
+        {
+            "count": 0,
+            "num_nulls": 0,
+            "num_non_nulls": 0,
+            "nunique": 0,
+            "mean": float("nan"),
+            "median": float("nan"),
+            "min": float("nan"),
+            "max": float("nan"),
+            "std": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+        },
+        equal_nan=True,
+    )
 
 
 def test_column_continuous_section_get_statistics_only_nans() -> None:
     section = ColumnContinuousSection(series=Series([np.nan, np.nan, np.nan, np.nan]), column="col")
-    stats = section.get_statistics()
-    assert len(stats) == 17
-    assert stats["count"] == 4
-    assert stats["num_nulls"] == 4
-    assert stats["num_non_nulls"] == 0
-    assert stats["nunique"] == 1
-    for key in STATS_KEYS:
-        assert math.isnan(stats[key])
+    assert objects_are_allclose(
+        section.get_statistics(),
+        {
+            "count": 4,
+            "num_nulls": 4,
+            "num_non_nulls": 0,
+            "nunique": 1,
+            "mean": float("nan"),
+            "median": float("nan"),
+            "min": float("nan"),
+            "max": float("nan"),
+            "std": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+        },
+        equal_nan=True,
+    )
 
 
 def test_column_continuous_section_render_html_body(series: Series) -> None:
@@ -279,26 +299,5 @@ def test_create_histogram_figure_figsize(
 #######################################
 
 
-def test_create_stats_table() -> None:
-    assert isinstance(
-        create_stats_table(
-            stats={
-                "count": 103,
-                "mean": 50.0,
-                "median": 50.0,
-                "min": 0.0,
-                "max": 100.0,
-                "std": 29.300170647967224,
-                "q01": 1.0,
-                "q05": 5.0,
-                "q10": 10.0,
-                "q25": 25.0,
-                "q75": 75.0,
-                "q90": 90.0,
-                "q95": 95.0,
-                "q99": 99.0,
-            },
-            column="col",
-        ),
-        str,
-    )
+def test_create_stats_table(stats: dict[str, float]) -> None:
+    assert isinstance(create_stats_table(stats=stats, column="col"), str)

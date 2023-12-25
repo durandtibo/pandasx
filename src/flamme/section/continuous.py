@@ -114,6 +114,7 @@ class ColumnContinuousSection(BaseSection):
                         "min": "min",
                         "max": "max",
                         "std": "std",
+                        "q001": lambda x: x.quantile(0.001),
                         "q01": lambda x: x.quantile(0.01),
                         "q05": lambda x: x.quantile(0.05),
                         "q10": lambda x: x.quantile(0.1),
@@ -122,6 +123,7 @@ class ColumnContinuousSection(BaseSection):
                         "q90": lambda x: x.quantile(0.9),
                         "q95": lambda x: x.quantile(0.95),
                         "q99": lambda x: x.quantile(0.99),
+                        "q999": lambda x: x.quantile(0.999),
                     }
                 )
                 .to_dict()
@@ -133,6 +135,7 @@ class ColumnContinuousSection(BaseSection):
                 "min": float("nan"),
                 "max": float("nan"),
                 "std": float("nan"),
+                "q001": float("nan"),
                 "q01": float("nan"),
                 "q05": float("nan"),
                 "q10": float("nan"),
@@ -141,6 +144,7 @@ class ColumnContinuousSection(BaseSection):
                 "q90": float("nan"),
                 "q95": float("nan"),
                 "q99": float("nan"),
+                "q999": float("nan"),
             }
         return stats
 
@@ -361,6 +365,7 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>mean</th><td {{num_style}}>{{mean}}</td></tr>
             <tr><th>std</th><td {{num_style}}>{{std}}</td></tr>
             <tr><th>min</th><td {{num_style}}>{{min}}</td></tr>
+            <tr><th>quantile 0.1%</th><td {{num_style}}>{{q01}}</td></tr>
             <tr><th>quantile 1%</th><td {{num_style}}>{{q01}}</td></tr>
             <tr><th>quantile 5%</th><td {{num_style}}>{{q05}}</td></tr>
             <tr><th>quantile 10%</th><td {{num_style}}>{{q10}}</td></tr>
@@ -370,6 +375,7 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>quantile 90%</th><td {{num_style}}>{{q90}}</td></tr>
             <tr><th>quantile 95%</th><td {{num_style}}>{{q95}}</td></tr>
             <tr><th>quantile 99%</th><td {{num_style}}>{{q99}}</td></tr>
+            <tr><th>quantile 99.9%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>max</th><td {{num_style}}>{{max}}</td></tr>
             <tr class="table-group-divider"></tr>
         </tbody>
@@ -386,6 +392,7 @@ def create_stats_table(stats: dict, column: str) -> str:
             "min": f"{stats['min']:,.4f}",
             "max": f"{stats['max']:,.4f}",
             "std": f"{stats['std']:,.4f}",
+            "q001": f"{stats['q001']:,.4f}",
             "q01": f"{stats['q01']:,.4f}",
             "q05": f"{stats['q05']:,.4f}",
             "q10": f"{stats['q10']:,.4f}",
@@ -394,5 +401,6 @@ def create_stats_table(stats: dict, column: str) -> str:
             "q90": f"{stats['q90']:,.4f}",
             "q95": f"{stats['q95']:,.4f}",
             "q99": f"{stats['q99']:,.4f}",
+            "q999": f"{stats['q999']:,.4f}",
         }
     )

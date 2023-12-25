@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import numpy as np
 import pandas as pd
 from coola import objects_are_allclose, objects_are_equal
@@ -15,7 +13,6 @@ from flamme.section import (
     ColumnTemporalContinuousSection,
     EmptySection,
 )
-from tests.unit.section.test_continous import STATS_KEYS
 
 ##############################################
 #     Tests for ColumnContinuousAnalyzer     #
@@ -68,7 +65,7 @@ def test_column_continuous_analyzer_yscale_default() -> None:
 
 
 @mark.parametrize("yscale", ("linear", "log"))
-def test_column_continuous_analyzer_yscale(yscale: bool) -> None:
+def test_column_continuous_analyzer_yscale(yscale: str) -> None:
     section = ColumnContinuousAnalyzer(column="col", yscale=yscale).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
@@ -144,6 +141,7 @@ def test_column_continuous_analyzer_get_statistics() -> None:
             "min": 0.0,
             "max": 100.0,
             "std": 29.300170647967224,
+            "q001": 0.1,
             "q01": 1.0,
             "q05": 5.0,
             "q10": 10.0,
@@ -152,6 +150,7 @@ def test_column_continuous_analyzer_get_statistics() -> None:
             "q90": 90.0,
             "q95": 95.0,
             "q99": 99.0,
+            "q999": 99.9,
         },
     )
 
@@ -159,14 +158,31 @@ def test_column_continuous_analyzer_get_statistics() -> None:
 def test_column_continuous_analyzer_get_statistics_empty() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(DataFrame({"col": []}))
     assert isinstance(section, ColumnContinuousSection)
-    stats = section.get_statistics()
-    assert len(stats) == 17
-    assert stats["count"] == 0
-    assert stats["num_nulls"] == 0
-    assert stats["num_non_nulls"] == 0
-    assert stats["nunique"] == 0
-    for key in STATS_KEYS:
-        assert math.isnan(stats[key])
+    assert objects_are_allclose(
+        section.get_statistics(),
+        {
+            "count": 0,
+            "num_nulls": 0,
+            "num_non_nulls": 0,
+            "nunique": 0,
+            "mean": float("nan"),
+            "median": float("nan"),
+            "min": float("nan"),
+            "max": float("nan"),
+            "std": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+        },
+        equal_nan=True,
+    )
 
 
 def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
