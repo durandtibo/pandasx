@@ -142,11 +142,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat coola==${{ matrix.coola-version }}
+          pip install flamme coola==${{ matrix.coola-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   jinja2:
@@ -171,11 +171,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat jinja2==${{ matrix.jinja2-version }}
+          pip install flamme jinja2==${{ matrix.jinja2-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   markdown:
@@ -200,11 +200,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat markdown==${{ matrix.markdown-version }}
+          pip install flamme markdown==${{ matrix.markdown-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   matplotlib:
@@ -229,11 +229,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat matplotlib==${{ matrix.matplotlib-version }}
+          pip install flamme matplotlib==${{ matrix.matplotlib-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   numpy:
@@ -258,11 +258,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat numpy==${{ matrix.numpy-version }}
+          pip install flamme numpy==${{ matrix.numpy-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
   objectory:
     runs-on: ${{ matrix.os }}
@@ -286,11 +286,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat objectory==${{ matrix.objectory-version }}
+          pip install flamme objectory==${{ matrix.objectory-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   pandas:
@@ -320,11 +320,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat pandas==${{ matrix.pandas-version }}
+          pip install flamme pandas==${{ matrix.pandas-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   pyarrow:
@@ -349,11 +349,11 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat pyarrow==${{ matrix.pyarrow-version }}
+          pip install flamme pyarrow==${{ matrix.pyarrow-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   tqdm:
@@ -378,8 +378,8 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install redcat tqdm==${{ matrix.tqdm-version }}
+          pip install flamme tqdm==${{ matrix.tqdm-version }}
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
