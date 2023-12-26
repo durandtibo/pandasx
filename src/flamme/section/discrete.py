@@ -6,6 +6,7 @@ import logging
 from collections import Counter
 from collections.abc import Sequence
 
+import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -205,13 +206,15 @@ def create_histogram(
     column: str, labels: list[str], counts: list[int], figsize: tuple[float, float] | None = None
 ) -> str:
     fig, ax = plt.subplots(figsize=figsize)
+    x = np.arange(len(labels))
     ax.bar(
-        labels,
+        x,
         counts,
         log=(counts[0] / counts[-1]) >= 20,
         width=0.9 if len(labels) < 50 else 1,
         color="tab:blue",
     )
+    ax.set_xticks(x, labels=labels)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(-0.5, len(labels) - 0.5)
     ax.set_ylabel("Number of occurrences")

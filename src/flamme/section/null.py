@@ -388,17 +388,20 @@ def plot_temporal_null_total(
     ax: Axes, num_nulls: np.ndarray, total: np.ndarray, labels: list
 ) -> None:
     color = "tab:blue"
+    x = np.arange(len(labels))
     ax.set_ylabel("number of null/total values", color=color)
     ax.tick_params(axis="y", labelcolor=color)
-    ax.bar(x=labels, height=total, color="tab:cyan", alpha=0.5, label="total")
-    ax.bar(x=labels, height=num_nulls, color=color, alpha=0.8, label="null")
+    ax.bar(x=x, height=total, color="tab:cyan", alpha=0.5, label="total")
+    ax.bar(x=x, height=num_nulls, color=color, alpha=0.8, label="null")
     ax.legend()
 
     ax2 = ax.twinx()
     color = "black"
     ax2.set_ylabel("percentage", color=color)
     ax2.tick_params(axis="y", labelcolor=color)
-    ax2.plot(labels, num_nulls / total, "o-", color=color)
+    ax2.plot(x, num_nulls / total, "o-", color=color)
+
+    ax.set_xticks(x, labels=labels)
 
 
 def prepare_data(
