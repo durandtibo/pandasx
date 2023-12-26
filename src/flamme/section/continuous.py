@@ -17,7 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html
+from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
 
 logger = logging.getLogger(__name__)
@@ -252,6 +252,7 @@ def create_boxplot_figure(
         patch_artist=True,
         boxprops=dict(facecolor="lightblue"),
     )
+    readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(xmin, xmax)
     ax.set_ylabel(" ")
     return figure2html(fig, close_fig=True)
@@ -303,10 +304,11 @@ def create_histogram_figure(
         range=[xmin, xmax],
         color="tab:blue",
     )
+    readable_xticklabels(ax, max_num_xticks=100)
+    ax.set_xlim(xmin, xmax)
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
     ax.set_yscale(yscale)
-    ax.set_xlim(xmin, xmax)
     if "q05" in stats and stats["q05"] > xmin:
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
         ax.text(

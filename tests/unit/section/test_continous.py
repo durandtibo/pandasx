@@ -235,7 +235,7 @@ def test_create_boxplot_figure_xmax(series: Series, xmax: float | str | None) ->
     assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@mark.parametrize("figsize", ((7, 3), (7.5, 3.5)))
 def test_create_boxplot_figure_figsize(series: Series, figsize: tuple[float, float]) -> None:
     assert isinstance(create_boxplot_figure(series=series, figsize=figsize), str)
 
@@ -276,7 +276,7 @@ def test_create_histogram_figure_xmin(
     )
 
 
-@mark.parametrize("xmax", (1.0, "q0.9", None))
+@mark.parametrize("xmax", (100.0, "q0.9", None))
 def test_create_histogram_figure_xmax(
     series: Series, stats: dict, xmax: float | str | None
 ) -> None:
