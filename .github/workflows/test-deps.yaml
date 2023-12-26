@@ -215,7 +215,7 @@ jobs:
 
       - name: Install numpy
         run: |
-          poetry run pip install numpy==${{ matrix.numpy-version }}
+          poetry run pip install numpy==${{ matrix.numpy-version }} pandas --upgrade
 
       - name: Show installed packages
         run: |
