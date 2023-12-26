@@ -181,7 +181,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.9', '3.10', '3.11' ]
-        objectory-version: [ 0.1.2 ]
+        objectory-version: [ 0.1.1 ]
 
     steps:
       - name: Checkout
