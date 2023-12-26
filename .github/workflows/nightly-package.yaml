@@ -1,7 +1,7 @@
 name: Nightly Package Tests
 on:
   schedule:
-    - cron: '0 10 * * *' # run at 10 AM UTC
+    - cron: '50 11 * * *' # run at 11:50 AM UTC
   workflow_dispatch:  # to trigger manually
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: [ '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: [ '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -72,7 +72,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: [ '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -100,7 +100,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: [ '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -143,6 +143,242 @@ jobs:
       - name: Install flamme
         run: |
           pip install redcat coola==${{ matrix.coola-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  jinja2:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        jinja2-version: [ 3.1.2, 3.0.3 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat jinja2==${{ matrix.jinja2-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  markdown:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        markdown-version: [ '3.5.1', '3.4.3' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat markdown==${{ matrix.markdown-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  matplotlib:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        matplotlib-version: [ 3.8.2, 3.7.4, 3.6.3 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat matplotlib==${{ matrix.matplotlib-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  numpy:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        numpy-version: [ 1.26.2, 1.25.2, 1.24.3, 1.23.5 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat numpy==${{ matrix.numpy-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+  objectory:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        objectory-version: [ 0.1.1 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat objectory==${{ matrix.objectory-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  pandas:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        pandas-version: [ 2.1.3, 2.0.3, 1.5.3, 1.4.4, 1.3.5 ]
+        exclude:
+          - pandas-version: 1.4.4
+            python-version: 3.11
+          - pandas-version: 1.3.5
+            python-version: 3.11
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat pandas==${{ matrix.pandas-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  pyarrow:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        pyarrow-version: [ 14.0.1, 13.0.0, 12.0.1, 11.0.0, 10.0.1 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat pyarrow==${{ matrix.pyarrow-version }}
+
+      - name: Run some checks
+        run: |
+          python tests/nightly_checks.py
+
+
+  tqdm:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.11', '3.10', '3.9' ]
+        tqdm-version: [ '4.66.1', '4.65.2' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install redcat tqdm==${{ matrix.tqdm-version }}
 
       - name: Run some checks
         run: |
