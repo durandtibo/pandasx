@@ -39,11 +39,13 @@ def compute_null_per_col(df: DataFrame) -> DataFrame:
     """
     null_count = df.isnull().sum().to_frame("count")["count"].to_numpy().astype(int)
     total_count = np.full((df.shape[1],), df.shape[0]).astype(int)
+    with np.errstate(invalid="ignore"):
+        null_pct = null_count.astype(float) / total_count.astype(float)
     return DataFrame(
         {
             "column": list(df.columns),
             "null": null_count,
             "total": total_count,
-            "null_pct": (null_count / total_count).astype(float),
+            "null_pct": null_pct,
         }
     )
