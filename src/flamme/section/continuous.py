@@ -197,7 +197,7 @@ class ColumnContinuousSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the discrete distribution of values for column {{column}}.
+This section analyzes the discrete distribution of values for column <em>{{column}}</em>.
 
 <ul>
   <li> total values: {{total_values}} </li>

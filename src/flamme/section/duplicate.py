@@ -52,6 +52,7 @@ class DuplicatedRowSection(BaseSection):
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the duplicated rows section using the columns: {self._columns}")
         stats = self.get_statistics()
+        columns = self._df.columns if self._columns is None else self._columns
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -59,7 +60,7 @@ class DuplicatedRowSection(BaseSection):
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "columns": self._columns,
+                "columns": ", ".join(columns),
                 "table": create_duplicate_table(
                     num_rows=stats["num_rows"], num_unique_rows=stats["num_unique_rows"]
                 ),
@@ -78,7 +79,7 @@ class DuplicatedRowSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section shows the number of duplicated rows using the following columns <em>{{columns}}</em>.
+This section shows the number of duplicated rows using the columns: <em>{{columns}}</em>.
 
 {{table}}
 <p style="margin-top: 1rem;">

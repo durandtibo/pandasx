@@ -105,7 +105,7 @@ class ColumnDiscreteSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the discrete distribution of values for column {{column}}.
+This section analyzes the discrete distribution of values for column <em>{{column}}</em>.
 
 <ul>
   <li> total values: {{total_values}} </li>
@@ -159,7 +159,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
     <div class="row">
       <div class="col">
         <p style="margin-top: 1rem;">
-        <b>Head: {{max_values}} most common values in column {{column}}</b>
+        <b>Head: {{max_values}} most common values in column <em>{{column}}</em></b>
         <table class="table table-hover table-responsive w-auto" >
             <thead class="thead table-group-divider">
                 <tr>
@@ -175,7 +175,7 @@ This section analyzes the discrete distribution of values for column {{column}}.
       </div>
       <div class="col">
         <p style="margin-top: 1rem;">
-        <b>Tail: {{max_values}} least common values in column {{column}}</b>
+        <b>Tail: {{max_values}} least common values in column <em>{{column}}</em></b>
         <table class="table table-hover table-responsive w-auto" >
             <thead class="thead table-group-divider">
                 <tr>
