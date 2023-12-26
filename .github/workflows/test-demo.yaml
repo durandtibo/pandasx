@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # manual trigger
 
 jobs:
-  run-mlp:
+  demo:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
