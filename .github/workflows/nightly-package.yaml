@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -72,7 +72,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -100,7 +100,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
 
     steps:
       - name: Checkout
@@ -128,7 +128,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         coola-version: [ 0.2.1 ]
 
     steps:
@@ -157,7 +157,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         jinja2-version: [ 3.1.2, 3.0.3 ]
 
     steps:
@@ -186,7 +186,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         markdown-version: [ '3.5.1', '3.4.3' ]
 
     steps:
@@ -215,7 +215,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         matplotlib-version: [ 3.8.2, 3.7.4, 3.6.3 ]
 
     steps:
@@ -244,8 +244,21 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
-        numpy-version: [ 1.26.2, 1.25.2, 1.24.3, 1.23.5 ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        numpy-version: [ 1.26.2, 1.25.2, 1.24.3, 1.23.5, 1.22.4, 1.21.6 ]
+        exclude:
+          - numpy-version: 1.21.6
+            python-version: '3.11'
+          - numpy-version: 1.21.6
+            python-version: '3.12'
+          - numpy-version: 1.22.4
+            python-version: '3.12'
+          - numpy-version: 1.23.5
+            python-version: '3.12'
+          - numpy-version: 1.24.3
+            python-version: '3.12'
+          - numpy-version: 1.25.2
+            python-version: '3.12'
 
     steps:
       - name: Checkout
@@ -272,7 +285,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         objectory-version: [ 0.1.1 ]
 
     steps:
@@ -301,13 +314,21 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
-        pandas-version: [ 2.1.3, 2.0.3, 1.5.3, 1.4.4, 1.3.5 ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        pandas-version: [ 2.1.4, 2.0.3, 1.5.3, 1.4.4, 1.3.5 ]
         exclude:
           - pandas-version: 1.4.4
-            python-version: 3.11
+            python-version: '3.11'
           - pandas-version: 1.3.5
-            python-version: 3.11
+            python-version: '3.11'
+          - pandas-version: 1.3.5
+            python-version: '3.12'
+          - pandas-version: 1.4.4
+            python-version: '3.12'
+          - pandas-version: 1.5.3
+            python-version: '3.12'
+          - pandas-version: 2.0.3
+            python-version: '3.12'
 
     steps:
       - name: Checkout
@@ -335,7 +356,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         pyarrow-version: [ 14.0.1, 13.0.0, 12.0.1, 11.0.0, 10.0.1 ]
 
     steps:
@@ -364,7 +385,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.10', '3.9' ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
         tqdm-version: [ '4.66.1', '4.65.2' ]
 
     steps:
