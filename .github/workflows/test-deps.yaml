@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.9', '3.10', '3.11' ]
-        coola-version: [ 0.2.0 ]
+        coola-version: [ 0.2.1 ]
 
     steps:
       - name: Checkout
@@ -181,7 +181,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.9', '3.10', '3.11' ]
-        objectory-version: [ 0.1.0 ]
+        objectory-version: [ 0.1.1 ]
 
     steps:
       - name: Checkout
