@@ -146,7 +146,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   jinja2:
@@ -175,7 +175,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   markdown:
@@ -204,7 +204,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   matplotlib:
@@ -233,7 +233,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   numpy:
@@ -262,7 +262,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
   objectory:
     runs-on: ${{ matrix.os }}
@@ -290,7 +290,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   pandas:
@@ -324,7 +324,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   pyarrow:
@@ -353,7 +353,7 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
 
 
   tqdm:
@@ -382,4 +382,4 @@ jobs:
 
       - name: Run some checks
         run: |
-          python tests/nightly_checks.py
+          python -m scripts.demo
