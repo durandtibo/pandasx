@@ -128,7 +128,8 @@ class ColumnTemporalContinuousSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the temporal distribution of column {{column}} by using the column {{dt_column}}.
+This section analyzes the temporal distribution of column <em>{{column}}</em>
+by using the column <em>{{dt_column}}</em>.
 
 {{figure}}
 

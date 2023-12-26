@@ -329,7 +329,7 @@ class TemporalNullValueSection(BaseSection):
 
 <p style="margin-top: 1rem;">
 This section analyzes the monthly distribution of null values.
-The column {{column}} is used to define the month of each row.
+The column <em>{{column}}</em> is used as the temporal column.
 
 {{figure}}
 """

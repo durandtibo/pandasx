@@ -121,7 +121,7 @@ class GlobalTemporalNullValueSection(BaseSection):
 
 <p style="margin-top: 1rem;">
 This section analyzes the temporal distribution of null values in all columns.
-The column <em>{{dt_column}}</em> is used as temporal column.
+The column <em>{{dt_column}}</em> is used as the temporal column.
 
 {{figure}}
 
