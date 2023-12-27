@@ -144,7 +144,7 @@ class ColumnContinuousSection(BaseSection):
                 )
                 .to_dict()
             )
-            stats["skewness"] = skew(self._series.to_numpy(), nan_policy="omit").item()
+            stats["skewness"] = float(skew(self._series.to_numpy(), nan_policy="omit"))
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
