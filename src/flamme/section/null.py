@@ -159,7 +159,10 @@ In the following histogram, the columns are sorted by ascending order of null va
     def _create_bar_figure(self) -> str:
         df = self._get_dataframe().sort_values(by="null")
         fig, ax = plt.subplots(figsize=self._figsize)
-        ax.bar(x=df["column"].tolist(), height=df["null"].to_numpy(), color="tab:blue")
+        labels = df["column"].tolist()
+        ax.bar(x=labels, height=df["null"].to_numpy(), color="tab:blue")
+        if labels:
+            ax.set_xlim(-0.5, len(labels) - 0.5)
         readable_xticklabels(ax, max_num_xticks=100)
         ax.set_xlabel("column")
         ax.set_ylabel("number of null values")
@@ -402,6 +405,7 @@ def plot_temporal_null_total(
     ax2.plot(x, num_nulls / total, "o-", color=color)
 
     ax.set_xticks(x, labels=labels)
+    ax.set_xlim(-0.5, len(labels) - 0.5)
 
 
 def prepare_data(
