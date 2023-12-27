@@ -7,8 +7,9 @@ from collections.abc import Sequence
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
 from pandas import Series
-from scipy.stats import skew
+from scipy.stats import kurtosis, skew
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -118,6 +119,7 @@ class ColumnContinuousSection(BaseSection):
             "q99": float("nan"),
             "q999": float("nan"),
             "skewness": float("nan"),
+            "kurtosis": float("nan"),
         }
         stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
         if stats["num_non_nulls"] > 0:
@@ -145,6 +147,7 @@ class ColumnContinuousSection(BaseSection):
                 .to_dict()
             )
             stats["skewness"] = float(skew(self._series.to_numpy(), nan_policy="omit"))
+            stats["kurtosis"] = float(kurtosis(self._series.to_numpy(), nan_policy="omit"))
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
@@ -309,7 +312,7 @@ def create_histogram_figure(
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
     ax.set_yscale(yscale)
-    if "q05" in stats and stats["q05"] > xmin:
+    if stats.get("q05", float("nan")) > xmin:
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
         ax.text(
             stats["q05"],
@@ -320,7 +323,7 @@ def create_histogram_figure(
             horizontalalignment="right",
             verticalalignment="top",
         )
-    if "q95" in stats and stats["q95"] < xmax:
+    if stats.get("q95", float("nan")) < xmax:
         ax.axvline(stats["q95"], color="black", linestyle="dashed")
         ax.text(
             stats["q95"],
@@ -331,6 +334,14 @@ def create_histogram_figure(
             horizontalalignment="left",
             verticalalignment="top",
         )
+    ax.legend(
+        [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
+        [
+            f'std={stats.get("std", float("nan")):.2f}',
+            f'skewness={stats.get("skewness", float("nan")):.2f}',
+            f'kurtosis={stats.get("kurtosis", float("nan")):.2f}',
+        ],
+    )
     return figure2html(fig, close_fig=True)
 
 
@@ -359,6 +370,8 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>count</th><td {{num_style}}>{{count}}</td></tr>
             <tr><th>mean</th><td {{num_style}}>{{mean}}</td></tr>
             <tr><th>std</th><td {{num_style}}>{{std}}</td></tr>
+            <tr><th>skewness</th><td {{num_style}}>{{skewness}}</td></tr>
+            <tr><th>kurtosis</th><td {{num_style}}>{{kurtosis}}</td></tr>
             <tr><th>min</th><td {{num_style}}>{{min}}</td></tr>
             <tr><th>quantile 0.1%</th><td {{num_style}}>{{q01}}</td></tr>
             <tr><th>quantile 1%</th><td {{num_style}}>{{q01}}</td></tr>
@@ -372,7 +385,6 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>quantile 99%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>quantile 99.9%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>max</th><td {{num_style}}>{{max}}</td></tr>
-            <tr><th>skewness</th><td {{num_style}}>{{skewness}}</td></tr>
             <tr class="table-group-divider"></tr>
         </tbody>
     </table>
@@ -384,20 +396,21 @@ def create_stats_table(stats: dict, column: str) -> str:
             "num_style": 'style="text-align: right;"',
             "count": f"{stats['count']:,}",
             "mean": f"{stats['mean']:,.4f}",
-            "median": f"{stats['median']:,.4f}",
-            "min": f"{stats['min']:,.4f}",
-            "max": f"{stats['max']:,.4f}",
             "std": f"{stats['std']:,.4f}",
+            "skewness": f"{stats['skewness']:,.4f}",
+            "kurtosis": f"{stats['kurtosis']:,.4f}",
+            "min": f"{stats['min']:,.4f}",
             "q001": f"{stats['q001']:,.4f}",
             "q01": f"{stats['q01']:,.4f}",
             "q05": f"{stats['q05']:,.4f}",
             "q10": f"{stats['q10']:,.4f}",
             "q25": f"{stats['q25']:,.4f}",
+            "median": f"{stats['median']:,.4f}",
             "q75": f"{stats['q75']:,.4f}",
             "q90": f"{stats['q90']:,.4f}",
             "q95": f"{stats['q95']:,.4f}",
             "q99": f"{stats['q99']:,.4f}",
             "q999": f"{stats['q999']:,.4f}",
-            "skewness": f"{stats['skewness']:,.4f}",
+            "max": f"{stats['max']:,.4f}",
         }
     )
