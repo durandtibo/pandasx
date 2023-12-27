@@ -32,7 +32,7 @@ class MappingAnalyzer(BaseAnalyzer):
         >>> analyzer
         MappingAnalyzer(
           (null): NullValueAnalyzer(figsize=None)
-          (duplicate): DuplicatedRowAnalyzer(columns=None)
+          (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
         )
         >>> df = pd.DataFrame(
         ...     {

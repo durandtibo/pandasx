@@ -20,6 +20,9 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
             columns. Default: ``None``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
 
     Example usage:
 
@@ -30,7 +33,7 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import DuplicatedRowAnalyzer
         >>> analyzer = DuplicatedRowAnalyzer()
         >>> analyzer
-        DuplicatedRowAnalyzer(columns=None)
+        DuplicatedRowAnalyzer(columns=None, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "col1": np.array([0, 1, 0, 1]),
@@ -48,12 +51,17 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, columns: Sequence[str] | None = None) -> None:
+    def __init__(
+        self,
+        columns: Sequence[str] | None = None,
+        figsize: tuple[float, float] | None = None,
+    ) -> None:
         self._columns = columns
+        self._figsize = figsize
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(columns={self._columns})"
+        return f"{self.__class__.__qualname__}(columns={self._columns}, figsize={self._figsize})"
 
     def analyze(self, df: DataFrame) -> DuplicatedRowSection:
         logger.info(f"Analyzing the duplicated rows section using the columns: {self._columns}")
-        return DuplicatedRowSection(df=df, columns=self._columns)
+        return DuplicatedRowSection(df=df, columns=self._columns, figsize=self._figsize)

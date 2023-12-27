@@ -6,6 +6,7 @@ import logging
 from collections.abc import Sequence
 
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -16,6 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +30,20 @@ class DuplicatedRowSection(BaseSection):
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
             columns. Default: ``None``
+        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            size in inches. The first dimension is the width and the
+            second is the height. Default: ``None``
     """
 
-    def __init__(self, df: DataFrame, columns: Sequence[str] | None = None) -> None:
+    def __init__(
+        self,
+        df: DataFrame,
+        columns: Sequence[str] | None = None,
+        figsize: tuple[float, float] | None = None,
+    ) -> None:
         self._df = df
         self._columns = columns if columns is None else tuple(columns)
+        self._figsize = figsize
 
     @property
     def df(self) -> DataFrame:
@@ -44,6 +55,12 @@ class DuplicatedRowSection(BaseSection):
         r"""Tuple or ``None``: The columns used to compute the
         duplicated rows."""
         return self._columns
+
+    @property
+    def figsize(self) -> tuple[float, float] | None:
+        r"""tuple: The individual figure size in pixels. The first
+        dimension is the width and the second is the height."""
+        return self._figsize
 
     def get_statistics(self) -> dict:
         df_no_duplicate = self._df.drop_duplicates(subset=self._columns)
@@ -61,8 +78,14 @@ class DuplicatedRowSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "columns": ", ".join(columns),
+                "num_columns": f"{len(columns):,}",
                 "table": create_duplicate_table(
                     num_rows=stats["num_rows"], num_unique_rows=stats["num_unique_rows"]
+                ),
+                "figure": create_duplicate_histogram(
+                    num_rows=stats["num_rows"],
+                    num_unique_rows=stats["num_unique_rows"],
+                    figsize=self._figsize,
                 ),
             }
         )
@@ -79,11 +102,27 @@ class DuplicatedRowSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section shows the number of duplicated rows using the columns: <em>{{columns}}</em>.
+This section shows the number of duplicated rows using {{num_columns}} columns:
+<em>{{columns}}</em>.
 
 {{table}}
+
+{{figure}}
 <p style="margin-top: 1rem;">
 """
+
+
+def create_duplicate_histogram(
+    num_rows: int, num_unique_rows: int, figsize: tuple[float, float] | None = None
+) -> str:
+    fig, ax = plt.subplots(figsize=figsize)
+    x = list(range(3))
+    ax.bar(x, [num_rows, num_unique_rows, num_rows - num_unique_rows], color="tab:blue")
+    ax.set_xticks(x, labels=["total", "unique", "duplicate"])
+    ax.set_xlim(-0.5, 2.5)
+    ax.set_ylabel("Number of occurrences")
+    ax.set_title("Analysis of the number of duplicate rows")
+    return figure2html(fig, close_fig=True)
 
 
 def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:

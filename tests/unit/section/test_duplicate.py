@@ -5,7 +5,7 @@ from coola import objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import fixture
+from pytest import fixture, mark
 
 from flamme.section import DuplicatedRowSection
 from flamme.section.duplicate import create_duplicate_table
@@ -40,6 +40,20 @@ def test_duplicated_rows_section_column_none(dataframe: DataFrame) -> None:
 def test_duplicated_rows_section_column(dataframe: DataFrame) -> None:
     section = DuplicatedRowSection(df=dataframe, columns=["col1", "col2"])
     assert section.columns == ("col1", "col2")
+
+
+def test_duplicated_rows_section_figsize_default(dataframe: DataFrame) -> None:
+    assert DuplicatedRowSection(df=dataframe, columns=["col1", "col2"]).figsize is None
+
+
+@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+def test_duplicated_rows_section_figsize(
+    dataframe: DataFrame, figsize: tuple[float, float]
+) -> None:
+    assert (
+        DuplicatedRowSection(df=dataframe, columns=["col1", "col2"], figsize=figsize).figsize
+        == figsize
+    )
 
 
 def test_duplicated_rows_section_get_statistics(dataframe: DataFrame) -> None:
