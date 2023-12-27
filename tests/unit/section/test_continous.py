@@ -41,6 +41,7 @@ def stats() -> dict:
         "q95": 95.0,
         "q99": 99.0,
         "q999": 99.9,
+        "skewness": 0.0,
     }
 
 
@@ -101,32 +102,9 @@ def test_column_continuous_section_figsize(series: Series, figsize: tuple[float,
     assert ColumnContinuousSection(series=series, column="col", figsize=figsize).figsize == figsize
 
 
-def test_column_continuous_section_get_statistics(series: Series) -> None:
+def test_column_continuous_section_get_statistics(series: Series, stats: dict) -> None:
     section = ColumnContinuousSection(series=series, column="col")
-    assert objects_are_allclose(
-        section.get_statistics(),
-        {
-            "count": 103,
-            "num_nulls": 2,
-            "num_non_nulls": 101,
-            "nunique": 102,
-            "mean": 50.0,
-            "median": 50.0,
-            "min": 0.0,
-            "max": 100.0,
-            "std": 29.300170647967224,
-            "q001": 0.1,
-            "q01": 1.0,
-            "q05": 5.0,
-            "q10": 10.0,
-            "q25": 25.0,
-            "q75": 75.0,
-            "q90": 90.0,
-            "q95": 95.0,
-            "q99": 99.0,
-            "q999": 99.9,
-        },
-    )
+    assert objects_are_allclose(section.get_statistics(), stats)
 
 
 def test_column_continuous_section_get_statistics_empty_row() -> None:
@@ -153,6 +131,7 @@ def test_column_continuous_section_get_statistics_empty_row() -> None:
             "q95": float("nan"),
             "q99": float("nan"),
             "q999": float("nan"),
+            "skewness": float("nan"),
         },
         equal_nan=True,
     )
@@ -182,6 +161,7 @@ def test_column_continuous_section_get_statistics_only_nans() -> None:
             "q95": float("nan"),
             "q99": float("nan"),
             "q999": float("nan"),
+            "skewness": float("nan"),
         },
         equal_nan=True,
     )
