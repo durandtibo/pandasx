@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from pandas import Series
+from scipy.stats import skew
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -49,14 +50,14 @@ class ColumnContinuousSection(BaseSection):
     """
 
     def __init__(
-        self,
-        series: Series,
-        column: str,
-        nbins: int | None = None,
-        yscale: str = "linear",
-        xmin: float | str | None = None,
-        xmax: float | str | None = None,
-        figsize: tuple[float, float] | None = None,
+            self,
+            series: Series,
+            column: str,
+            nbins: int | None = None,
+            yscale: str = "linear",
+            xmin: float | str | None = None,
+            xmax: float | str | None = None,
+            figsize: tuple[float, float] | None = None,
     ) -> None:
         self._series = series
         self._column = column
@@ -96,11 +97,27 @@ class ColumnContinuousSection(BaseSection):
         dimension is the width and the second is the height."""
         return self._figsize
 
-    def get_statistics(self) -> dict:
+    def get_statistics(self) -> dict[str, float | int]:
         stats = {
             "count": int(self._series.shape[0]),
             "num_nulls": int(self._series.isnull().sum()),
             "nunique": self._series.nunique(dropna=False),
+            "mean": float("nan"),
+            "median": float("nan"),
+            "min": float("nan"),
+            "max": float("nan"),
+            "std": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+            "skewness": float("nan"),
         }
         stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
         if stats["num_non_nulls"] > 0:
@@ -127,24 +144,7 @@ class ColumnContinuousSection(BaseSection):
                 )
                 .to_dict()
             )
-        else:
-            stats |= {
-                "mean": float("nan"),
-                "median": float("nan"),
-                "min": float("nan"),
-                "max": float("nan"),
-                "std": float("nan"),
-                "q001": float("nan"),
-                "q01": float("nan"),
-                "q05": float("nan"),
-                "q10": float("nan"),
-                "q25": float("nan"),
-                "q75": float("nan"),
-                "q90": float("nan"),
-                "q95": float("nan"),
-                "q99": float("nan"),
-                "q999": float("nan"),
-            }
+            stats["skewness"] = skew(self._series.to_numpy(), nan_policy="omit").item()
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
@@ -186,7 +186,7 @@ class ColumnContinuousSection(BaseSection):
         )
 
     def render_html_toc(
-        self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
+            self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
@@ -213,15 +213,15 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_boxplot_figure(
-    series: Series,
-    xmin: float | str | None = None,
-    xmax: float | str | None = None,
-    figsize: tuple[float, float] | None = None,
+        series: Series,
+        xmin: float | str | None = None,
+        xmax: float | str | None = None,
+        figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates the HTML code of a boxplot figure.
 
     Args:
-        row (``pandas.Series``): Specifies the series of data.
+        series (``pandas.Series``): Specifies the series of data.
         xmin (float or str or None, optional): Specifies the minimum
             value of the range or its associated quantile.
             ``q0.1`` means the 10% quantile. ``0`` is the minimum
@@ -259,19 +259,19 @@ def create_boxplot_figure(
 
 
 def create_histogram_figure(
-    series: Series,
-    column: str,
-    stats: dict | None = None,
-    nbins: int | None = None,
-    yscale: str = "linear",
-    xmin: float | str | None = None,
-    xmax: float | str | None = None,
-    figsize: tuple[float, float] | None = None,
+        series: Series,
+        column: str,
+        stats: dict | None = None,
+        nbins: int | None = None,
+        yscale: str = "linear",
+        xmin: float | str | None = None,
+        xmax: float | str | None = None,
+        figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates the HTML code of a histogram figure.
 
     Args:
-        row (``pandas.Series``): Specifies the series of data.
+        series (``pandas.Series``): Specifies the series of data.
         column (str): Specifies the column name.
         nbins (int or None, optional): Specifies the number of bins in
             the histogram. Default: ``None``
@@ -372,6 +372,7 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>quantile 99%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>quantile 99.9%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>max</th><td {{num_style}}>{{max}}</td></tr>
+            <tr><th>skewness</th><td {{num_style}}>{{skewness}}</td></tr>
             <tr class="table-group-divider"></tr>
         </tbody>
     </table>
@@ -397,5 +398,6 @@ def create_stats_table(stats: dict, column: str) -> str:
             "q95": f"{stats['q95']:,.4f}",
             "q99": f"{stats['q99']:,.4f}",
             "q999": f"{stats['q999']:,.4f}",
+            "skewness": f"{stats['skewness']:,.4f}",
         }
     )

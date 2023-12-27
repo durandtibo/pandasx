@@ -151,6 +151,7 @@ def test_column_continuous_analyzer_get_statistics() -> None:
             "q95": 95.0,
             "q99": 99.0,
             "q999": 99.9,
+            "skewness": 0.0,
         },
     )
 
@@ -180,6 +181,7 @@ def test_column_continuous_analyzer_get_statistics_empty() -> None:
             "q95": float("nan"),
             "q99": float("nan"),
             "q999": float("nan"),
+            "skewness": float("nan"),
         },
         equal_nan=True,
     )
