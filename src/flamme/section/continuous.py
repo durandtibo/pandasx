@@ -50,14 +50,14 @@ class ColumnContinuousSection(BaseSection):
     """
 
     def __init__(
-            self,
-            series: Series,
-            column: str,
-            nbins: int | None = None,
-            yscale: str = "linear",
-            xmin: float | str | None = None,
-            xmax: float | str | None = None,
-            figsize: tuple[float, float] | None = None,
+        self,
+        series: Series,
+        column: str,
+        nbins: int | None = None,
+        yscale: str = "linear",
+        xmin: float | str | None = None,
+        xmax: float | str | None = None,
+        figsize: tuple[float, float] | None = None,
     ) -> None:
         self._series = series
         self._column = column
@@ -186,7 +186,7 @@ class ColumnContinuousSection(BaseSection):
         )
 
     def render_html_toc(
-            self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
+        self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
@@ -213,10 +213,10 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_boxplot_figure(
-        series: Series,
-        xmin: float | str | None = None,
-        xmax: float | str | None = None,
-        figsize: tuple[float, float] | None = None,
+    series: Series,
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates the HTML code of a boxplot figure.
 
@@ -259,14 +259,14 @@ def create_boxplot_figure(
 
 
 def create_histogram_figure(
-        series: Series,
-        column: str,
-        stats: dict | None = None,
-        nbins: int | None = None,
-        yscale: str = "linear",
-        xmin: float | str | None = None,
-        xmax: float | str | None = None,
-        figsize: tuple[float, float] | None = None,
+    series: Series,
+    column: str,
+    stats: dict | None = None,
+    nbins: int | None = None,
+    yscale: str = "linear",
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates the HTML code of a histogram figure.
 
