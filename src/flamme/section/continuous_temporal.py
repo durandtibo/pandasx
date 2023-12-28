@@ -166,7 +166,7 @@ def create_temporal_figure(
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
-        return ""
+        return "<span>&#9888;</span> No figure is generated because the column is empty"
     df = df[[column, dt_column]].copy()
     df[dt_column] = df[dt_column].dt.to_period(period).astype(str)
     df_group = (
@@ -210,7 +210,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
         str: The HTML representation of the table.
     """
     if df.shape[0] == 0:
-        return ""
+        return "<span>&#9888;</span> No table is generated because the column is empty"
     df = df[[column, dt_column]].copy()
     dt_col = "__datetime__"
     df[dt_col] = df[dt_column].dt.to_period(period)
