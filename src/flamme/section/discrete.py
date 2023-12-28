@@ -223,7 +223,7 @@ def create_histogram(
     x = np.arange(len(labels))
     ax.bar(x, counts, width=0.9 if len(labels) < 50 else 1, color="tab:blue")
     if yscale == "auto":
-        yscale = "log" if (max(counts) / min(counts)) >= 20 else "linear"
+        yscale = "log" if (max(counts) / min(counts)) >= 50 else "linear"
     ax.set_yscale(yscale)
     ax.set_xticks(x, labels=labels)
     readable_xticklabels(ax, max_num_xticks=100)

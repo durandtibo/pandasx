@@ -21,22 +21,19 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-        column (str): Specifies the column to analyze.
-        nbins (int or None, optional): Specifies the number of bins in
-            the histogram. Default: ``None``
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        xmin (float or str or None, optional): Specifies the minimum
-            value of the range or its associated quantile.
-            ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``q0``
-        xmax (float or str or None, optional): Specifies the maximum
-            value of the range or its associated quantile.
-            ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``q1``
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+        column: Specifies the column name.
+        nbins: Specifies the number of bins in the histogram.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        xmin: Specifies the minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: Specifies the maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
@@ -47,7 +44,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ColumnContinuousAnalyzer
         >>> analyzer = ColumnContinuousAnalyzer(column="float")
         >>> analyzer
-        ColumnContinuousAnalyzer(column=float, nbins=None, yscale=linear, xmin=q0, xmax=q1, figsize=None)
+        ColumnContinuousAnalyzer(column=float, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -62,7 +59,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         self,
         column: str,
         nbins: int | None = None,
-        yscale: str = "linear",
+        yscale: str = "auto",
         xmin: float | str | None = "q0",
         xmax: float | str | None = "q1",
         figsize: tuple[float, float] | None = None,
