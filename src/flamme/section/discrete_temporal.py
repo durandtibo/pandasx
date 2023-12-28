@@ -149,7 +149,7 @@ def create_temporal_figure(
         str: The HTML representation of the figure.
     """
     if df.shape[0] == 0:
-        return ""
+        return "<span>&#9888;</span> No figure is generated because the column is empty"
     df = df[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
     df[col_dt] = df[dt_column].dt.to_period(period).astype(str)

@@ -28,16 +28,17 @@ class ColumnDiscreteSection(BaseSection):
     values.
 
     Args:
-        counter (``Counter``): Specifies the counter that represents
-            the discrete distribution.
-        null_values (int): Specifies the number of null values.
-        column (str, optional): Specifies the column name.
-            Default: ``'N/A'``
-        max_rows (int, optional): Specifies the maximum number of rows
-            to show in the table. Default: ``20``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        counter: Specifies the counter that represents the discrete
+            distribution.
+        null_values: Specifies the number of null values.
+        column: Specifies the column name.
+        max_rows: Specifies the maximum number of rows to show in the
+            table.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
     """
 
     def __init__(
@@ -46,21 +47,29 @@ class ColumnDiscreteSection(BaseSection):
         null_values: int = 0,
         column: str = "N/A",
         max_rows: int = 20,
+        yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._counter = counter
         self._null_values = null_values
         self._column = column
         self._max_rows = int(max_rows)
+        self._yscale = yscale
         self._figsize = figsize
 
         self._total = sum(self._counter.values())
 
     @property
     def figsize(self) -> tuple[float, float] | None:
-        r"""tuple: The individual figure size in pixels. The first
-        dimension is the width and the second is the height."""
+        r"""The individual figure size in pixels.
+
+        The first dimension is the width and the second is the height.
+        """
         return self._figsize
+
+    @property
+    def yscale(self) -> str:
+        return self._yscale
 
     def get_statistics(self) -> dict:
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
@@ -120,12 +129,13 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
     def _create_figure(self) -> str:
         if self._total == 0:
-            return ""
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
         fig = create_histogram(
             column=self._column,
             labels=[str(value) for value, _ in most_common],
             counts=[count for _, count in most_common],
+            yscale=self._yscale,
             figsize=self._figsize,
         )
         return Template(
@@ -141,7 +151,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
     def _create_table(self) -> str:
         if self._total == 0:
-            return ""
+            return "<span>&#9888;</span> No table is generated because the column is empty"
 
         most_common = self._counter.most_common(self._max_rows)
         rows_head = "\n".join(
@@ -203,17 +213,18 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_histogram(
-    column: str, labels: list[str], counts: list[int], figsize: tuple[float, float] | None = None
+    column: str,
+    labels: list[str],
+    counts: list[int],
+    yscale: str = "auto",
+    figsize: tuple[float, float] | None = None,
 ) -> str:
     fig, ax = plt.subplots(figsize=figsize)
     x = np.arange(len(labels))
-    ax.bar(
-        x,
-        counts,
-        log=(counts[0] / counts[-1]) >= 20,
-        width=0.9 if len(labels) < 50 else 1,
-        color="tab:blue",
-    )
+    ax.bar(x, counts, width=0.9 if len(labels) < 50 else 1, color="tab:blue")
+    if yscale == "auto":
+        yscale = "log" if (max(counts) / min(counts)) >= 20 else "linear"
+    ax.set_yscale(yscale)
     ax.set_xticks(x, labels=labels)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(-0.5, len(labels) - 0.5)

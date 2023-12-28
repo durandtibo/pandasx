@@ -21,14 +21,16 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     r"""Implements a discrete distribution analyzer.
 
     Args:
-        column (str): Specifies the column to analyze.
-        dropna (bool, optional): If ``True``, the NaN values are not
-            included in the analysis. Default: ``False``
-        max_rows (int, optional): Specifies the maximum number of rows
-            to show in the table. Default: ``20``
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+        column: Specifies the column to analyze.
+        dropna: If ``True``, the NaN values are not included in the
+            analysis.
+        max_rows: Specifies the maximum number of rows to show in the
+            table.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
@@ -55,17 +57,20 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         column: str,
         dropna: bool = False,
         max_rows: int = 20,
+        yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
         self._dropna = bool(dropna)
         self._max_rows = max_rows
+        self._yscale = yscale
         self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dropna={self._dropna}, max_rows={self._max_rows}, figsize={self._figsize})"
+            f"dropna={self._dropna}, max_rows={self._max_rows}, yscale={self._yscale}, "
+            f"figsize={self._figsize})"
         )
 
     def analyze(self, df: DataFrame) -> ColumnDiscreteSection | EmptySection:
@@ -81,6 +86,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             null_values=df[self._column].isnull().sum(),
             column=self._column,
             max_rows=self._max_rows,
+            yscale=self._yscale,
             figsize=self._figsize,
         )
 

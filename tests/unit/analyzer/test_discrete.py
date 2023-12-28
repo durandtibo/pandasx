@@ -48,6 +48,19 @@ def test_column_discrete_analyzer_figsize(
     assert section.figsize == figsize
 
 
+def test_column_discrete_analyzer_yscale_default(dataframe: DataFrame) -> None:
+    section = ColumnDiscreteAnalyzer(column="col").analyze(dataframe)
+    assert isinstance(section, ColumnDiscreteSection)
+    assert section.yscale == "auto"
+
+
+@mark.parametrize("yscale", ["linear", "log"])
+def test_column_discrete_analyzer_yscale(dataframe: DataFrame, yscale: str) -> None:
+    section = ColumnDiscreteAnalyzer(column="col", yscale=yscale).analyze(dataframe)
+    assert isinstance(section, ColumnDiscreteSection)
+    assert section.yscale == yscale
+
+
 def test_column_discrete_analyzer_get_statistics() -> None:
     section = ColumnDiscreteAnalyzer(column="int").analyze(
         DataFrame(
