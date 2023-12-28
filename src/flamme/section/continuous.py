@@ -125,6 +125,7 @@ class ColumnContinuousSection(BaseSection):
         if stats["num_non_nulls"] > 0:
             stats |= (
                 self._series.dropna()
+                .astype(float)
                 .agg(
                     {
                         "mean": "mean",
@@ -146,8 +147,13 @@ class ColumnContinuousSection(BaseSection):
                 )
                 .to_dict()
             )
-            stats["skewness"] = float(skew(self._series.to_numpy(), nan_policy="omit"))
-            stats["kurtosis"] = float(kurtosis(self._series.to_numpy(), nan_policy="omit"))
+            if stats["nunique"] > 1:
+                stats["skewness"] = float(
+                    skew(self._series.to_numpy(dtype=float), nan_policy="omit")
+                )
+                stats["kurtosis"] = float(
+                    kurtosis(self._series.to_numpy(dtype=float), nan_policy="omit")
+                )
         return stats
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
@@ -256,7 +262,8 @@ def create_boxplot_figure(
         boxprops=dict(facecolor="lightblue"),
     )
     readable_xticklabels(ax, max_num_xticks=100)
-    ax.set_xlim(xmin, xmax)
+    if xmin < xmax:
+        ax.set_xlim(xmin, xmax)
     ax.set_ylabel(" ")
     return figure2html(fig, close_fig=True)
 
@@ -308,7 +315,8 @@ def create_histogram_figure(
         color="tab:blue",
     )
     readable_xticklabels(ax, max_num_xticks=100)
-    ax.set_xlim(xmin, xmax)
+    if xmin < xmax:
+        ax.set_xlim(xmin, xmax)
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
     ax.set_yscale(yscale)

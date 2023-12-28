@@ -139,6 +139,37 @@ def test_column_continuous_section_get_statistics_empty_row() -> None:
     )
 
 
+def test_column_continuous_section_get_statistics_single_value() -> None:
+    section = ColumnContinuousSection(series=Series([1, 1, 1, 1, 1]), column="col")
+    assert objects_are_allclose(
+        section.get_statistics(),
+        {
+            "count": 5,
+            "num_nulls": 0,
+            "num_non_nulls": 5,
+            "nunique": 1,
+            "mean": 1.0,
+            "std": 0.0,
+            "skewness": float("nan"),
+            "kurtosis": float("nan"),
+            "min": 1.0,
+            "q001": 1.0,
+            "q01": 1.0,
+            "q05": 1.0,
+            "q10": 1.0,
+            "q25": 1.0,
+            "median": 1.0,
+            "q75": 1.0,
+            "q90": 1.0,
+            "q95": 1.0,
+            "q99": 1.0,
+            "q999": 1.0,
+            "max": 1.0,
+        },
+        equal_nan=True,
+    )
+
+
 def test_column_continuous_section_get_statistics_only_nans() -> None:
     section = ColumnContinuousSection(series=Series([np.nan, np.nan, np.nan, np.nan]), column="col")
     assert objects_are_allclose(
@@ -208,12 +239,12 @@ def test_create_boxplot_figure(series: Series) -> None:
     assert isinstance(create_boxplot_figure(series=series), str)
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None))
+@mark.parametrize("xmin", (1.0, "q0.1", None, "q1"))
 def test_create_boxplot_figure_xmin(series: Series, xmin: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmin=xmin), str)
 
 
-@mark.parametrize("xmax", (1.0, "q0.9", None))
+@mark.parametrize("xmax", (1.0, "q0.9", None, "q0"))
 def test_create_boxplot_figure_xmax(series: Series, xmax: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
 
@@ -250,7 +281,7 @@ def test_create_histogram_figure_yscale(series: Series, stats: dict, yscale: str
     )
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None))
+@mark.parametrize("xmin", (1.0, "q0.1", None, "q1"))
 def test_create_histogram_figure_xmin(
     series: Series, stats: dict, xmin: float | str | None
 ) -> None:
@@ -259,7 +290,7 @@ def test_create_histogram_figure_xmin(
     )
 
 
-@mark.parametrize("xmax", (100.0, "q0.9", None))
+@mark.parametrize("xmax", (100.0, "q0.9", None, "q0"))
 def test_create_histogram_figure_xmax(
     series: Series, stats: dict, xmax: float | str | None
 ) -> None:
