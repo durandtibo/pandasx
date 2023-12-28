@@ -36,8 +36,8 @@ class ColumnContinuousSection(BaseSection):
         column: Specifies the column name.
         nbins: Specifies the number of bins in the histogram.
         yscale: Specifies the y-axis scale. If ``'auto'``, the
-            ``'linear'`` or ``'log'`` scale is chosen based on the
-            distribution.
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
         xmin: Specifies the minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
@@ -426,7 +426,7 @@ def auto_yscale(array: np.ndarray, nbins: int | None) -> str:
         nbins: Specifies the number of bins in the histogram.
 
     Returns:
-        The scale for y-axis
+        The scale for y-axis.
     """
     if nbins is None:
         nbins = 100

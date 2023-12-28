@@ -24,8 +24,8 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
         column: Specifies the column name.
         nbins: Specifies the number of bins in the histogram.
         yscale: Specifies the y-axis scale. If ``'auto'``, the
-            ``'linear'`` or ``'log'`` scale is chosen based on the
-            distribution.
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
         xmin: Specifies the minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
@@ -101,40 +101,40 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
-            daily.
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+        period: Specifies the temporal period e.g. monthly or daily.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import TemporalNullValueAnalyzer
+    >>> analyzer = ColumnTemporalContinuousAnalyzer(
+    ...     column="float", dt_column="datetime", period="M"
+    ... )
+    >>> analyzer
+    ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, yscale=auto, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...         "datetime": pd.to_datetime(
+    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...         ),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import TemporalNullValueAnalyzer
-        >>> analyzer = ColumnTemporalContinuousAnalyzer(
-        ...     column="float", dt_column="datetime", period="M"
-        ... )
-        >>> analyzer
-        ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, yscale=linear, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...         "datetime": pd.to_datetime(
-        ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...         ),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(
@@ -142,7 +142,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
         column: str,
         dt_column: str,
         period: str,
-        yscale: str = "linear",
+        yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
