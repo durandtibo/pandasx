@@ -41,7 +41,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         >>> from flamme.analyzer import ColumnDiscreteAnalyzer
         >>> analyzer = ColumnDiscreteAnalyzer(column="str")
         >>> analyzer
-        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, figsize=None)
+        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, yscale=auto, figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
