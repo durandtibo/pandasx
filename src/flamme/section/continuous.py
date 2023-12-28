@@ -5,6 +5,7 @@ __all__ = ["ColumnContinuousSection"]
 import logging
 from collections.abc import Sequence
 
+import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
@@ -19,6 +20,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
 
@@ -30,24 +32,20 @@ class ColumnContinuousSection(BaseSection):
     values.
 
     Args:
-        series (``pandas.Series``): Specifies the series/column to
-            analyze.
-        column (str): Specifies the column name.
-        nbins (int or None, optional): Specifies the number of bins in
-            the histogram. Default: ``None``
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        xmin (float or str or None, optional): Specifies the minimum
-            value of the range or its associated quantile.
-            ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        xmax (float or str or None, optional): Specifies the maximum
-            value of the range or its associated quantile.
-            ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        series: Specifies the series/column to analyze.
+        column: Specifies the column name.
+        nbins: Specifies the number of bins in the histogram.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        xmin: Specifies the minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: Specifies the maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
     """
 
     def __init__(
@@ -55,7 +53,7 @@ class ColumnContinuousSection(BaseSection):
         series: Series,
         column: str,
         nbins: int | None = None,
-        yscale: str = "linear",
+        yscale: str = "auto",
         xmin: float | str | None = None,
         xmax: float | str | None = None,
         figsize: tuple[float, float] | None = None,
@@ -230,18 +228,15 @@ def create_boxplot_figure(
     r"""Creates the HTML code of a boxplot figure.
 
     Args:
-        series (``pandas.Series``): Specifies the series of data.
-        xmin (float or str or None, optional): Specifies the minimum
-            value of the range or its associated quantile.
-            ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        xmax (float or str or None, optional): Specifies the maximum
-            value of the range or its associated quantile.
-            ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        series: Specifies the series/column to analyze.
+        xmin: Specifies the minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: Specifies the maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Returns:
         str: The HTML code of the figure.
@@ -271,7 +266,7 @@ def create_boxplot_figure(
 def create_histogram_figure(
     series: Series,
     column: str,
-    stats: dict | None = None,
+    stats: dict,
     nbins: int | None = None,
     yscale: str = "linear",
     xmin: float | str | None = None,
@@ -281,28 +276,25 @@ def create_histogram_figure(
     r"""Creates the HTML code of a histogram figure.
 
     Args:
-        series (``pandas.Series``): Specifies the series of data.
-        column (str): Specifies the column name.
-        nbins (int or None, optional): Specifies the number of bins in
-            the histogram. Default: ``None``
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        xmin (float or str or None, optional): Specifies the minimum
-            value of the range or its associated quantile.
-            ``q0.1`` means the 10% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        xmax (float or str or None, optional): Specifies the maximum
-            value of the range or its associated quantile.
-            ``q0.9`` means the 90% quantile. ``0`` is the minimum
-            value and ``1`` is the maximum value. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        series: Specifies the series/column to analyze.
+        column: Specifies the column name.
+        stats: Specifies a dictionary with the statistics.
+        nbins: Specifies the number of bins in the histogram.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        xmin: Specifies the minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: Specifies the maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Returns:
         str: The HTML code of the figure.
     """
-    stats = stats or {}
     array = series.to_numpy()
     if array.size == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
@@ -319,8 +311,10 @@ def create_histogram_figure(
         ax.set_xlim(xmin, xmax)
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
+    if yscale == "auto":
+        yscale = auto_yscale(array=array, nbins=nbins)
     ax.set_yscale(yscale)
-    if stats.get("q05", float("nan")) > xmin:
+    if stats["q05"] > xmin:
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
         ax.text(
             stats["q05"],
@@ -331,7 +325,7 @@ def create_histogram_figure(
             horizontalalignment="right",
             verticalalignment="top",
         )
-    if stats.get("q95", float("nan")) < xmax:
+    if stats["q95"] < xmax:
         ax.axvline(stats["q95"], color="black", linestyle="dashed")
         ax.text(
             stats["q95"],
@@ -345,9 +339,9 @@ def create_histogram_figure(
     ax.legend(
         [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
         [
-            f'std={stats.get("std", float("nan")):.2f}',
-            f'skewness={stats.get("skewness", float("nan")):.2f}',
-            f'kurtosis={stats.get("kurtosis", float("nan")):.2f}',
+            f'std={stats["std"]:.2f}',
+            f'skewness={stats["skewness"]:.2f}',
+            f'kurtosis={stats["kurtosis"]:.2f}',
         ],
     )
     return figure2html(fig, close_fig=True)
@@ -357,11 +351,11 @@ def create_stats_table(stats: dict, column: str) -> str:
     r"""Creates the HTML code of the table with statistics.
 
     Args:
-        stats (dict): Specifies a dictionary with the statistics.
-        column (str): Specifies the column name.
+        stats: Specifies a dictionary with the statistics.
+        column: Specifies the column name.
 
     Returns:
-        str: The HTML code of the table.
+        The HTML code of the table.
     """
     return Template(
         """
@@ -422,3 +416,25 @@ def create_stats_table(stats: dict, column: str) -> str:
             "max": f"{stats['max']:,.4f}",
         }
     )
+
+
+def auto_yscale(array: np.ndarray, nbins: int | None) -> str:
+    r"""Finds a good scale for y-axis based on the data.
+
+    Args:
+        array: Specifies the data to use to find the scale.
+        nbins: Specifies the number of bins in the histogram.
+
+    Returns:
+        The scale for y-axis
+    """
+    if nbins is None:
+        nbins = 100
+    array = nonnan(array)
+    counts = np.histogram(array, bins=nbins)[0]
+    min_nonzero_count = min([c for c in counts if c > 0])
+    if (np.max(counts) / max(min_nonzero_count, 1)) < 50:
+        return "linear"
+    if np.nanmin(array) <= 0.0:
+        return "symlog"
+    return "log"

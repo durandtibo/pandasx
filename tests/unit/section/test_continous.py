@@ -8,6 +8,7 @@ from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
+    auto_yscale,
     create_boxplot_figure,
     create_histogram_figure,
     create_stats_table,
@@ -59,12 +60,13 @@ def test_column_continuous_section_column(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").column == "col"
 
 
-def test_column_continuous_section_log_y_default(series: Series) -> None:
-    assert ColumnContinuousSection(series=series, column="col").yscale == "linear"
+def test_column_continuous_section_yscale_default(series: Series) -> None:
+    assert ColumnContinuousSection(series=series, column="col").yscale == "auto"
 
 
-def test_column_continuous_section_log_y(series: Series) -> None:
-    assert ColumnContinuousSection(series=series, column="col", yscale="log").yscale == "log"
+@mark.parametrize("yscale", ["log", "linear"])
+def test_column_continuous_section_yscale(series: Series, yscale: str) -> None:
+    assert ColumnContinuousSection(series=series, column="col", yscale=yscale).yscale == yscale
 
 
 def test_column_continuous_section_nbins_default(series: Series) -> None:
@@ -263,10 +265,6 @@ def test_create_histogram_figure(series: Series, stats: dict) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", stats=stats), str)
 
 
-def test_create_histogram_figure_no_stats(series: Series) -> None:
-    assert isinstance(create_histogram_figure(series=series, column="col"), str)
-
-
 @mark.parametrize("nbins", (1, 2, 4))
 def test_create_histogram_figure_nbins(series: Series, stats: dict, nbins: int) -> None:
     assert isinstance(
@@ -315,3 +313,44 @@ def test_create_histogram_figure_figsize(
 
 def test_create_stats_table(stats: dict[str, float]) -> None:
     assert isinstance(create_stats_table(stats=stats, column="col"), str)
+
+
+#################################
+#     Tests for auto_yscale     #
+#################################
+
+
+@mark.parametrize("nbins", [1, 5, 10, 100, 1000])
+def test_auto_yscale_nbins(nbins: int) -> None:
+    assert auto_yscale(np.arange(100), nbins=nbins) == "linear"
+
+
+@mark.parametrize(
+    "array", [np.ones(100), np.arange(100), np.asarray(list(range(100)) + [float("nan")])]
+)
+def test_auto_yscale_linear(array: np.ndarray) -> None:
+    assert auto_yscale(array, nbins=10) == "linear"
+
+
+@mark.parametrize(
+    "array",
+    [
+        np.asarray([1] * 100 + list(range(1, 11))),
+        np.asarray([100] * 1000 + list(range(1, 11))),
+        np.asarray([1] * 100 + list(range(1, 11)) + [float("nan")]),
+    ],
+)
+def test_auto_yscale_log(array: np.ndarray) -> None:
+    assert auto_yscale(array, nbins=10) == "log"
+
+
+@mark.parametrize(
+    "array",
+    [
+        np.asarray([1] * 100 + [-1]),
+        np.asarray([100] * 1000 + [0]),
+        np.asarray([100] * 1000 + [0, float("nan")]),
+    ],
+)
+def test_auto_yscale_symlog(array: np.ndarray) -> None:
+    assert auto_yscale(array, nbins=10) == "symlog"

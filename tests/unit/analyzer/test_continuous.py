@@ -61,10 +61,10 @@ def test_column_continuous_analyzer_yscale_default() -> None:
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
-    assert section.yscale == "linear"
+    assert section.yscale == "auto"
 
 
-@mark.parametrize("yscale", ("linear", "log"))
+@mark.parametrize("yscale", ["linear", "log"])
 def test_column_continuous_analyzer_yscale(yscale: str) -> None:
     section = ColumnContinuousAnalyzer(column="col", yscale=yscale).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
