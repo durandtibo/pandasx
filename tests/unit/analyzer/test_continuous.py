@@ -246,11 +246,11 @@ def test_column_temporal_continuous_analyzer_yscale_default(dataframe: DataFrame
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
     assert isinstance(section, ColumnTemporalContinuousSection)
-    assert section.yscale == "linear"
+    assert section.yscale == "auto"
 
 
 @mark.parametrize("yscale", ("linear", "log"))
-def test_column_temporal_continuous_analyzer_yscale(dataframe: DataFrame, yscale: bool) -> None:
+def test_column_temporal_continuous_analyzer_yscale(dataframe: DataFrame, yscale: str) -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M", yscale=yscale
     ).analyze(dataframe)

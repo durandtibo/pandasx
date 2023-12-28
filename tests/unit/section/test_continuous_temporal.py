@@ -8,6 +8,7 @@ from pandas import DataFrame
 from pytest import fixture, mark
 
 from flamme.section import ColumnTemporalContinuousSection
+from flamme.section.continuous_temporal import create_temporal_figure
 
 
 @fixture
@@ -53,11 +54,11 @@ def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame)
             dt_column="datetime",
             period="M",
         ).yscale
-        == "linear"
+        == "auto"
     )
 
 
-@mark.parametrize("yscale", ("linear", "log"))
+@mark.parametrize("yscale", ["linear", "log"])
 def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale: str) -> None:
     assert (
         ColumnTemporalContinuousSection(
@@ -93,7 +94,7 @@ def test_column_temporal_continuous_section_figsize_default(dataframe: DataFrame
     )
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_continuous_section_figsize(
     dataframe: DataFrame, figsize: tuple[float, float]
 ) -> None:
@@ -200,4 +201,49 @@ def test_column_temporal_continuous_section_render_html_toc_args(
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+###########################################
+#    Tests for create_temporal_figure     #
+###########################################
+
+
+def test_create_temporal_figure(dataframe: DataFrame) -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+@mark.parametrize("yscale", ["linear", "log"])
+def test_create_temporal_figure_yscale(dataframe: DataFrame, yscale: str) -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+            yscale=yscale,
+        ),
+        str,
+    )
+
+
+@mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
+def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
+    assert isinstance(
+        create_temporal_figure(
+            df=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+            figsize=figsize,
+        ),
+        str,
     )

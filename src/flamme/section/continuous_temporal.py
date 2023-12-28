@@ -12,6 +12,7 @@ from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
+from flamme.section.continuous import auto_yscale
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -30,17 +31,16 @@ class ColumnTemporalContinuousSection(BaseSection):
     column with continuous values.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column of the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
-            daily.
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        period: Specifies the temporal period e.g. monthly or daily.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
     """
 
     def __init__(
@@ -49,7 +49,7 @@ class ColumnTemporalContinuousSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        yscale: str = "linear",
+        yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._df = df
@@ -143,30 +143,30 @@ def create_temporal_figure(
     column: str,
     dt_column: str,
     period: str,
-    yscale: str = "linear",
+    yscale: str = "auto",
     figsize: tuple[float, float] | None = None,
 ) -> str:
     r"""Creates a HTML representation of a figure with the temporal value
     distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
-            daily.
-        yscale (str, optional): Specifies the y-axis scale.
-            Default: ``linear``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        period: Specifies the temporal period e.g. monthly or daily.
+        yscale: Specifies the y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
+    array = df[column].to_numpy(dtype=float)
     df = df[[column, dt_column]].copy()
     df[dt_column] = df[dt_column].dt.to_period(period).astype(str)
     df_group = (
@@ -189,6 +189,8 @@ def create_temporal_figure(
     )
     ax.set_xticks(np.arange(len(labels)), labels=labels)
     ax.set_title(f"Distribution of values for column {column}")
+    if yscale == "auto":
+        yscale = auto_yscale(array=array, nbins=100)
     ax.set_yscale(yscale)
     readable_xticklabels(ax)
     return figure2html(fig, close_fig=True)
@@ -281,10 +283,10 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
     r"""Creates the HTML code of a new table row.
 
     Args:
-        row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
+        row: Specifies a DataFrame row.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     return Template(
         """<tr>
