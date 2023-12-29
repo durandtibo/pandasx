@@ -343,7 +343,7 @@ def add_cdf_plot(
     nright = array[array > xmax].size
     counts, edges = np.histogram(array[np.logical_and(array >= xmin, array <= xmax)], bins=nbins)
     cdf = (np.cumsum(counts) + nleft) / (np.sum(counts) + nleft + nright)
-    x = [(left + right) * 0.5 for left, right in zip(edges[:-1], edges[1:], strict=True)]
+    x = [(left + right) * 0.5 for left, right in zip(edges[:-1], edges[1:])]
     ax = ax.twinx()
     ax.tick_params(axis="y", labelcolor=color)
     ax.plot(x, cdf, color=color, label="CDF")
