@@ -1,8 +1,16 @@
+from __future__ import annotations
+
 import numpy as np
 from coola import objects_are_allclose
 from pandas import DataFrame
+from pytest import raises
 
-from flamme.analyzer import DuplicatedRowAnalyzer, MappingAnalyzer, NullValueAnalyzer
+from flamme.analyzer import (
+    DataTypeAnalyzer,
+    DuplicatedRowAnalyzer,
+    MappingAnalyzer,
+    NullValueAnalyzer,
+)
 from flamme.section import SectionDict
 
 #####################################
@@ -91,3 +99,43 @@ def test_mapping_analyzer_get_statistics_empty() -> None:
             },
         },
     )
+
+
+def test_mapping_analyzer_add_analyzer() -> None:
+    analyzer = MappingAnalyzer(
+        {
+            "section1": NullValueAnalyzer(),
+            "section2": DuplicatedRowAnalyzer(),
+        }
+    )
+    analyzer.add_analyzer("section3", DataTypeAnalyzer())
+    assert isinstance(analyzer.analyzers, dict)
+    assert len(analyzer.analyzers) == 3
+    assert isinstance(analyzer.analyzers["section1"], NullValueAnalyzer)
+    assert isinstance(analyzer.analyzers["section2"], DuplicatedRowAnalyzer)
+    assert isinstance(analyzer.analyzers["section3"], DataTypeAnalyzer)
+
+
+def test_mapping_analyzer_add_analyzer_replace_ok_false() -> None:
+    analyzer = MappingAnalyzer(
+        {
+            "section1": NullValueAnalyzer(),
+            "section2": DataTypeAnalyzer(),
+        }
+    )
+    with raises(KeyError, match="`section2` is already used to register an analyzer."):
+        analyzer.add_analyzer("section2", DuplicatedRowAnalyzer())
+
+
+def test_mapping_analyzer_add_analyzer_replace_ok_true() -> None:
+    analyzer = MappingAnalyzer(
+        {
+            "section1": NullValueAnalyzer(),
+            "section2": DataTypeAnalyzer(),
+        }
+    )
+    analyzer.add_analyzer("section2", DuplicatedRowAnalyzer(), replace_ok=True)
+    assert isinstance(analyzer.analyzers, dict)
+    assert len(analyzer.analyzers) == 2
+    assert isinstance(analyzer.analyzers["section1"], NullValueAnalyzer)
+    assert isinstance(analyzer.analyzers["section2"], DuplicatedRowAnalyzer)

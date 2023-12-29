@@ -58,3 +58,47 @@ class MappingAnalyzer(BaseAnalyzer):
         return SectionDict(
             {name: analyzer.analyze(df) for name, analyzer in self._analyzers.items()}
         )
+
+    def add_analyzer(self, key: str, analyzer: BaseAnalyzer, replace_ok: bool = False) -> None:
+        r"""Adds an analyzer to the current analyzer.
+
+        Args:
+            key: Specifies the key of the analyzer.
+            analyzer: Specifies the analyzer to add.
+            replace_ok: If ``False``, ``KeyError`` is raised if an
+                analyzer with the same key exists. If ``True``,
+                the new analyzer will replace the existing analyzer.
+
+        Raises:
+            KeyError: if an  analyzer with the same key exists.
+
+        Example usage:
+
+        ```pycon
+        >>> import numpy as np
+        >>> import pandas as pd
+        >>> from flamme.analyzer import MappingAnalyzer, NullValueAnalyzer, DuplicatedRowAnalyzer
+        >>> analyzer = MappingAnalyzer({"null": NullValueAnalyzer()})
+        >>> analyzer.add_analyzer("duplicate", DuplicatedRowAnalyzer())
+        >>> analyzer
+        MappingAnalyzer(
+          (null): NullValueAnalyzer(figsize=None)
+          (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
+        )
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "int": np.array([np.nan, 1, 0, 1]),
+        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+        ...         "str": np.array(["A", "B", None, np.nan]),
+        ...     }
+        ... )
+        >>> section = analyzer.analyze(df)
+
+        ```
+        """
+        if key in self._analyzers and not replace_ok:
+            raise KeyError(
+                f"`{key}` is already used to register an analyzer. "
+                "Use `replace_ok=True` to replace the analyzer"
+            )
+        self._analyzers[key] = analyzer
