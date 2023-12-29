@@ -14,7 +14,7 @@ from flamme.section.base import BaseSection
 from flamme.section.continuous import (
     create_boxplot_figure,
     create_histogram_figure,
-    create_stats_table,
+    create_stats_table, add_cdf_plot,
 )
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -211,15 +211,16 @@ def create_histogram_range_figure(
     if array.size == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
-    array = array[np.logical_and(array >= xmin, array <= xmax)]
+    array_range = array[np.logical_and(array >= xmin, array <= xmax)]
     fig, ax = plt.subplots(figsize=figsize)
-    ax.hist(array, bins=nbins, range=[xmin, xmax], color="tab:blue", alpha=0.9)
+    ax.hist(array_range, bins=nbins, range=[xmin, xmax], color="tab:blue", alpha=0.9)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
     if yscale == "auto":
-        yscale = auto_yscale_continuous(array=array, nbins=nbins)
+        yscale = auto_yscale_continuous(array=array_range, nbins=nbins)
     ax.set_yscale(yscale)
+    add_cdf_plot(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
     return figure2html(fig, close_fig=True)
