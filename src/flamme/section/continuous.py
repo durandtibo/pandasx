@@ -7,6 +7,7 @@ from collections.abc import Sequence
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
 from pandas import Series
 
@@ -244,12 +245,7 @@ def create_histogram_figure(
         return "<span>&#9888;</span> No figure is generated because the column is empty"
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     fig, ax = plt.subplots(figsize=figsize)
-    ax.hist(
-        array,
-        bins=nbins,
-        range=[xmin, xmax],
-        color="tab:blue",
-    )
+    ax.hist(array, bins=nbins, range=[xmin, xmax], color="tab:blue")
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
@@ -258,28 +254,13 @@ def create_histogram_figure(
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
-    if stats["q05"] > xmin:
+    if xmin < stats["q05"] < xmax:
+        add_axvline_quantile(ax, x=stats["q05"], label="q0.05 ", horizontalalignment="right")
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
-        ax.text(
-            stats["q05"],
-            0.99,
-            "q0.05 ",
-            transform=ax.get_xaxis_transform(),
-            color="black",
-            horizontalalignment="right",
-            verticalalignment="top",
-        )
-    if stats["q95"] < xmax:
-        ax.axvline(stats["q95"], color="black", linestyle="dashed")
-        ax.text(
-            stats["q95"],
-            0.99,
-            " q0.95",
-            transform=ax.get_xaxis_transform(),
-            color="black",
-            horizontalalignment="left",
-            verticalalignment="top",
-        )
+    if xmin < stats["q95"] < xmax:
+        add_axvline_quantile(ax, x=stats["q95"], label=" q0.95", horizontalalignment="left")
+    # if xmin < stats["median"] < xmax:
+    #     add_axvline_median(ax, x=stats["median"])
     ax.legend(
         [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
         [
@@ -289,6 +270,46 @@ def create_histogram_figure(
         ],
     )
     return figure2html(fig, close_fig=True)
+
+
+def add_axvline_quantile(
+    ax: Axes,
+    x: float,
+    label: str,
+    color: str = "black",
+    linestyle: str = "dashed",
+    horizontalalignment: str = "center",
+) -> None:
+    ax.axvline(x, color=color, linestyle=linestyle)
+    ax.text(
+        x,
+        0.99,
+        label,
+        transform=ax.get_xaxis_transform(),
+        color=color,
+        horizontalalignment=horizontalalignment,
+        verticalalignment="top",
+    )
+
+
+def add_axvline_median(
+    ax: Axes,
+    x: float,
+    label: str = "median",
+    color: str = "black",
+    linestyle: str = "dashed",
+    horizontalalignment: str = "center",
+) -> None:
+    ax.axvline(x, color=color, linestyle=linestyle)
+    ax.text(
+        x,
+        0.99,
+        label,
+        transform=ax.get_xaxis_transform(),
+        color=color,
+        horizontalalignment=horizontalalignment,
+        verticalalignment="top",
+    )
 
 
 def create_stats_table(stats: dict, column: str) -> str:

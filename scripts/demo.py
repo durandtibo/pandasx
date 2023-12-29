@@ -8,6 +8,7 @@ import pandas as pd
 
 from flamme.analyzer import (
     BaseAnalyzer,
+    ColumnContinuousAdvancedAnalyzer,
     ColumnContinuousAnalyzer,
     ColumnDiscreteAnalyzer,
     ColumnTemporalContinuousAnalyzer,
@@ -19,7 +20,7 @@ from flamme.analyzer import (
     MappingAnalyzer,
     MarkdownAnalyzer,
     NullValueAnalyzer,
-    TemporalNullValueAnalyzer, ColumnContinuousAdvancedAnalyzer,
+    TemporalNullValueAnalyzer,
 )
 from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
@@ -147,7 +148,7 @@ def create_analyzer() -> BaseAnalyzer:
                     "missing": ColumnDiscreteAnalyzer(column="missing"),
                     "float": create_continuous_column(column="float"),
                     "cauchy": create_continuous_column(
-                        column="cauchy", yscale="symlog", xmin="g0.001", xmax="g0.999"
+                        column="cauchy", yscale="auto", xmin="g0.001", xmax="g0.999"
                     ),
                     "half cauchy": MappingAnalyzer(
                         {

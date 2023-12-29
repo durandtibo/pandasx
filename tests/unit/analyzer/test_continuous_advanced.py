@@ -6,13 +6,8 @@ from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
 from pytest import mark
 
-from flamme.analyzer import (
-    ColumnContinuousAdvancedAnalyzer,
-)
-from flamme.section import (
-    ColumnContinuousAdvancedSection,
-    EmptySection,
-)
+from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
+from flamme.section import ColumnContinuousAdvancedSection, EmptySection
 
 ######################################################
 #     Tests for ColumnContinuousAdvancedAnalyzer     #
