@@ -12,9 +12,10 @@ from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
+    add_cdf_plot,
     create_boxplot_figure,
     create_histogram_figure,
-    create_stats_table, add_cdf_plot,
+    create_stats_table,
 )
 from flamme.section.utils import (
     GO_TO_TOP,
