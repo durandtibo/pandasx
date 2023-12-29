@@ -3,11 +3,13 @@ from __future__ import annotations
 import numpy as np
 from coola import objects_are_allclose
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import Series
 from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
+    add_cdf_plot,
     create_boxplot_figure,
     create_histogram_figure,
     create_stats_table,
@@ -312,3 +314,18 @@ def test_create_histogram_figure_figsize(
 
 def test_create_stats_table(stats: dict[str, float]) -> None:
     assert isinstance(create_stats_table(stats=stats, column="col"), str)
+
+
+#################################
+#    Tests for add_cdf_plot     #
+#################################
+
+
+def test_add_cdf_plot_empty() -> None:
+    fig, ax = plt.subplots()
+    add_cdf_plot(ax, array=np.asarray([]), nbins=10)
+
+
+def test_add_cdf_plot() -> None:
+    fig, ax = plt.subplots()
+    add_cdf_plot(ax, array=np.arange(101), nbins=10)
