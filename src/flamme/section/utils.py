@@ -72,7 +72,7 @@ def render_html_toc(
     return f'<li><a href="#{tags2id(tags)}">{number} {tag}</a></li>'
 
 
-def auto_yscale_continuous(array: np.ndarray, nbins: int | None) -> str:
+def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
     r"""Finds a good scale for y-axis based on the data distribution.
 
     Args:
