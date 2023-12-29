@@ -313,7 +313,6 @@ def create_histogram_figure(
     ax.set_ylabel("Number of occurrences")
     if yscale == "auto":
         yscale = auto_continuous_yscale(array=array, nbins=nbins)
-    logger.info(f"yscale: {yscale}")
     ax.set_yscale(yscale)
     if stats["q05"] > xmin:
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
@@ -434,9 +433,6 @@ def auto_continuous_yscale(array: np.ndarray, nbins: int | None) -> str:
     array = nonnan(array)
     counts = np.histogram(array, bins=nbins)[0]
     nonzero_count = [c for c in counts if c > 0]
-    logger.info(f"nonzero_count: ({len(nonzero_count):,}) {nonzero_count}")
-    logger.info(f"ratio: {max(nonzero_count) / max(min(nonzero_count), 1)}")
-    logger.info(f"nanmin: {np.nanmin(array)}")
     if len(nonzero_count) <= 2 or (max(nonzero_count) / max(min(nonzero_count), 1)) < 50:
         return "linear"
     if np.nanmin(array) <= 0.0:
