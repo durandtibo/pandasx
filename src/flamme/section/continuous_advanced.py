@@ -12,7 +12,6 @@ from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
-    add_axvline_median,
     create_boxplot_figure,
     create_histogram_figure,
     create_stats_table,
@@ -136,14 +135,14 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 {{full_histogram}}
 {{full_boxplot}}
+{{table}}
+<p style="margin-top: 1rem;">
 
 <p style="margin-top: 1rem;">
 <b> Analysis of distribution in the inter-quartile range (IQR) </b>
 
 {{iqr_histogram}}
 
-{{table}}
-<p style="margin-top: 1rem;">
 """
 
     def _create_full_boxplot(self) -> str:
@@ -214,13 +213,9 @@ def create_histogram_range_figure(
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     array = array[np.logical_and(array >= xmin, array <= xmax)]
     fig, ax = plt.subplots(figsize=figsize)
-    ax.hist(
-        array,
-        bins=nbins,
-        range=[xmin, xmax],
-        color="tab:blue",
-    )
-    add_axvline_median(ax, x=np.nanmedian(array))
+    ax.hist(array, bins=nbins, range=[xmin, xmax], color="tab:blue", alpha=0.9)
+    if xmin < xmax:
+        ax.set_xlim(xmin, xmax)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
