@@ -5,7 +5,7 @@ from coola import objects_are_allclose
 from pandas import DataFrame
 
 from flamme.analyzer import ChoiceAnalyzer, DuplicatedRowAnalyzer, NullValueAnalyzer
-from flamme.section import DuplicatedRowSection, NullValueSection, SectionDict
+from flamme.section import DuplicatedRowSection, NullValueSection
 
 ####################################
 #     Tests for ChoiceAnalyzer     #
