@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
-from flamme.section.continuous import auto_yscale
+from flamme.section.continuous import auto_continuous_yscale
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -190,7 +190,7 @@ def create_temporal_figure(
     ax.set_xticks(np.arange(len(labels)), labels=labels)
     ax.set_title(f"Distribution of values for column {column}")
     if yscale == "auto":
-        yscale = auto_yscale(array=array, nbins=100)
+        yscale = auto_continuous_yscale(array=array, nbins=100)
     ax.set_yscale(yscale)
     readable_xticklabels(ax)
     return figure2html(fig, close_fig=True)
