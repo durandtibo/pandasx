@@ -187,6 +187,7 @@ def create_temporal_figure(
         patch_artist=True,
         boxprops=dict(facecolor="lightblue"),
     )
+    ax.set_ylim(np.nanmin(array), np.nanmax(array))
     ax.set_xticks(np.arange(len(labels)), labels=labels)
     ax.set_title(f"Distribution of values for column {column}")
     if yscale == "auto":
