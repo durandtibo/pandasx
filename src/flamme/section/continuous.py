@@ -5,7 +5,6 @@ __all__ = ["ColumnContinuousSection"]
 import logging
 from collections.abc import Sequence
 
-import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
@@ -15,12 +14,12 @@ from scipy.stats import kurtosis, skew
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
+    auto_yscale_continuous,
     render_html_toc,
     tags2id,
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
 
@@ -312,7 +311,7 @@ def create_histogram_figure(
     ax.set_title(f"Distribution of values for column {column}")
     ax.set_ylabel("Number of occurrences")
     if yscale == "auto":
-        yscale = auto_continuous_yscale(array=array, nbins=nbins)
+        yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
     if stats["q05"] > xmin:
         ax.axvline(stats["q05"], color="black", linestyle="dashed")
@@ -416,25 +415,3 @@ def create_stats_table(stats: dict, column: str) -> str:
             "max": f"{stats['max']:,.4f}",
         }
     )
-
-
-def auto_continuous_yscale(array: np.ndarray, nbins: int | None) -> str:
-    r"""Finds a good scale for y-axis based on the data.
-
-    Args:
-        array: Specifies the data to use to find the scale.
-        nbins: Specifies the number of bins in the histogram.
-
-    Returns:
-        The scale for y-axis.
-    """
-    if nbins is None:
-        nbins = 100
-    array = nonnan(array)
-    counts = np.histogram(array, bins=nbins)[0]
-    nonzero_count = [c for c in counts if c > 0]
-    if len(nonzero_count) <= 2 or (max(nonzero_count) / max(min(nonzero_count), 1)) < 50:
-        return "linear"
-    if np.nanmin(array) <= 0.0:
-        return "symlog"
-    return "log"
