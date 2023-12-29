@@ -25,7 +25,12 @@ class MappingAnalyzer(BaseAnalyzer):
 
         >>> import numpy as np
         >>> import pandas as pd
-        >>> from flamme.analyzer import FilteredAnalyzer, NullValueAnalyzer, DuplicatedRowAnalyzer
+        >>> from flamme.analyzer import (
+        ...     FilteredAnalyzer,
+        ...     NullValueAnalyzer,
+        ...     DuplicatedRowAnalyzer,
+        ...     MappingAnalyzer,
+        ... )
         >>> analyzer = MappingAnalyzer(
         ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()}
         ... )
