@@ -19,7 +19,7 @@ from flamme.analyzer import (
     MappingAnalyzer,
     MarkdownAnalyzer,
     NullValueAnalyzer,
-    TemporalNullValueAnalyzer,
+    TemporalNullValueAnalyzer, ColumnContinuousAdvancedAnalyzer,
 )
 from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
@@ -113,6 +113,9 @@ def create_analyzer() -> BaseAnalyzer:
                 ),
                 "daily": ColumnTemporalContinuousAnalyzer(
                     column=column, dt_column="datetime", period="D", yscale=yscale, figsize=FIGSIZE
+                ),
+                "advanced": ColumnContinuousAdvancedAnalyzer(
+                    column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
                 ),
             }
         )
