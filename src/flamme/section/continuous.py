@@ -9,12 +9,12 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from pandas import Series
-from scipy.stats import kurtosis, skew
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
     auto_yscale_continuous,
+    compute_statistics,
     render_html_toc,
     tags2id,
     tags2title,
@@ -96,62 +96,7 @@ class ColumnContinuousSection(BaseSection):
         return self._figsize
 
     def get_statistics(self) -> dict[str, float | int]:
-        stats = {
-            "count": int(self._series.shape[0]),
-            "num_nulls": int(self._series.isnull().sum()),
-            "nunique": self._series.nunique(dropna=False),
-            "mean": float("nan"),
-            "median": float("nan"),
-            "min": float("nan"),
-            "max": float("nan"),
-            "std": float("nan"),
-            "q001": float("nan"),
-            "q01": float("nan"),
-            "q05": float("nan"),
-            "q10": float("nan"),
-            "q25": float("nan"),
-            "q75": float("nan"),
-            "q90": float("nan"),
-            "q95": float("nan"),
-            "q99": float("nan"),
-            "q999": float("nan"),
-            "skewness": float("nan"),
-            "kurtosis": float("nan"),
-        }
-        stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
-        if stats["num_non_nulls"] > 0:
-            stats |= (
-                self._series.dropna()
-                .astype(float)
-                .agg(
-                    {
-                        "mean": "mean",
-                        "median": "median",
-                        "min": "min",
-                        "max": "max",
-                        "std": "std",
-                        "q001": lambda x: x.quantile(0.001),
-                        "q01": lambda x: x.quantile(0.01),
-                        "q05": lambda x: x.quantile(0.05),
-                        "q10": lambda x: x.quantile(0.1),
-                        "q25": lambda x: x.quantile(0.25),
-                        "q75": lambda x: x.quantile(0.75),
-                        "q90": lambda x: x.quantile(0.9),
-                        "q95": lambda x: x.quantile(0.95),
-                        "q99": lambda x: x.quantile(0.99),
-                        "q999": lambda x: x.quantile(0.999),
-                    }
-                )
-                .to_dict()
-            )
-            if stats["nunique"] > 1:
-                stats["skewness"] = float(
-                    skew(self._series.to_numpy(dtype=float), nan_policy="omit")
-                )
-                stats["kurtosis"] = float(
-                    kurtosis(self._series.to_numpy(dtype=float), nan_policy="omit")
-                )
-        return stats
+        return compute_statistics(self._series)
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the continuous distribution of {self._column}")
