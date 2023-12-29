@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __all__ = [
     "BaseSection",
+    "ColumnContinuousAdvancedSection",
     "ColumnContinuousSection",
     "ColumnDiscreteSection",
     "ColumnTemporalContinuousSection",
@@ -19,6 +20,7 @@ __all__ = [
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import ColumnContinuousSection
+from flamme.section.continuous_advanced import ColumnContinuousAdvancedSection
 from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
 from flamme.section.discrete import ColumnDiscreteSection
 from flamme.section.discrete_temporal import ColumnTemporalDiscreteSection
