@@ -123,12 +123,13 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
     return Template(
         """<tr>
     <th>{{value}}</th>
-    <td>{{count}}</td>
-    <td>{{percentage}}</td>
-    <td>{{cum_percentage}}</td>
+    <td {{num_style}}>{{count}}</td>
+    <td {{num_style}}>{{percentage}}</td>
+    <td {{num_style}}>{{cum_percentage}}</td>
 </tr>"""
     ).render(
         {
+            "num_style": 'style="text-align: right;"',
             "value": value,
             "count": f"{count:,}",
             "percentage": f"{100*count / total:.2f}",

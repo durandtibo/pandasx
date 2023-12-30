@@ -16,6 +16,7 @@ __all__ = [
     "GlobalTemporalNullValueAnalyzer",
     "MappingAnalyzer",
     "MarkdownAnalyzer",
+    "MostFrequentValuesAnalyzer",
     "NullValueAnalyzer",
     "TemporalNullValueAnalyzer",
     "is_analyzer_config",
@@ -39,6 +40,7 @@ from flamme.analyzer.duplicate import DuplicatedRowAnalyzer
 from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer
+from flamme.analyzer.most_frequent import MostFrequentValuesAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer, TemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_global import GlobalTemporalNullValueAnalyzer
