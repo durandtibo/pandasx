@@ -347,7 +347,7 @@ def add_cdf_plot(
     ax = ax.twinx()
     ax.tick_params(axis="y", labelcolor=color)
     ax.plot(x, cdf, color=color, label="CDF")
-    ax.set_ylim(0.0, 1.0)
+    ax.set_ylim(max(0.0, cdf[0]), min(1.0, cdf[-1]))
     ax.set_ylabel("cumulative distribution function (CDF)", color=color)
 
 
