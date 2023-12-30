@@ -19,6 +19,7 @@ from flamme.analyzer import (
     GlobalTemporalNullValueAnalyzer,
     MappingAnalyzer,
     MarkdownAnalyzer,
+    MostFrequentValuesAnalyzer,
     NullValueAnalyzer,
     TemporalNullValueAnalyzer,
 )
@@ -92,6 +93,7 @@ def create_analyzer() -> BaseAnalyzer:
                 "null monthly": ColumnTemporalNullValueAnalyzer(
                     column=column, dt_column="datetime", period="M", figsize=FIGSIZE
                 ),
+                "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
             }
         )
 
@@ -118,6 +120,7 @@ def create_analyzer() -> BaseAnalyzer:
                 "advanced": ColumnContinuousAdvancedAnalyzer(
                     column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
                 ),
+                "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
             }
         )
 
