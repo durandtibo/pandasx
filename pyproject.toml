@@ -63,7 +63,7 @@ plotly = ">=5.12,<6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=23.12"
-coverage = { extras = ["toml"], version = "^7.3" }
+coverage = { extras = ["toml"], version = "^7.4" }
 docformatter = { extras = ["tomli"], version = "^1.7" }
 pre-commit = "^3.6"
 pygments = "^2.17"
