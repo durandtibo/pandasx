@@ -9,6 +9,8 @@ from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
+    add_axvline_median,
+    add_axvline_quantile,
     add_cdf_plot,
     create_boxplot_figure,
     create_histogram_figure,
@@ -314,6 +316,26 @@ def test_create_histogram_figure_figsize(
 
 def test_create_stats_table(stats: dict[str, float]) -> None:
     assert isinstance(create_stats_table(stats=stats, column="col"), str)
+
+
+#########################################
+#    Tests for add_axvline_quantile     #
+#########################################
+
+
+def test_add_axvline_quantile() -> None:
+    fig, ax = plt.subplots()
+    add_axvline_quantile(ax, x=1.0, label="my_label")
+
+
+#######################################
+#    Tests for add_axvline_median     #
+#######################################
+
+
+def test_add_axvline_median() -> None:
+    fig, ax = plt.subplots()
+    add_axvline_median(ax, x=1.0)
 
 
 #################################
