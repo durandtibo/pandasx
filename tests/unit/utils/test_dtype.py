@@ -9,6 +9,8 @@ from pandas import DataFrame, Series
 
 from flamme.utils.dtype import (
     df_column_types,
+    find_date_columns_from_dtypes,
+    find_numeric_columns_from_dtypes,
     read_dtypes_from_schema,
     series_column_types,
 )
@@ -27,6 +29,37 @@ def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     )
     df.to_parquet(path)
     return path
+
+
+@pytest.fixture()
+def dtypes() -> dict[str, pa.DataType]:
+    return {
+        "col_bool": pa.bool_(),
+        "col_date32": pa.date32(),
+        "col_date64": pa.date64(),
+        "col_decimal128_12_0": pa.decimal128(12, 0),
+        "col_decimal128_5_2": pa.decimal128(5, 2),
+        "col_decimal256_12_0": pa.decimal256(12, 0),
+        "col_decimal256_5_2": pa.decimal256(5, 2),
+        "col_float16": pa.float16(),
+        "col_float32": pa.float32(),
+        "col_float64": pa.float64(),
+        "col_int16": pa.int16(),
+        "col_int32": pa.int32(),
+        "col_int64": pa.int64(),
+        "col_int8": pa.int8(),
+        "col_str": pa.string(),
+        "col_time32_s": pa.time32("s"),
+        "col_time32_ms": pa.time32("ms"),
+        "col_time64_ns": pa.time64("ns"),
+        "col_time64_us": pa.time64("us"),
+        "col_timestamp_ns": pa.timestamp("ns"),
+        "col_timestamp_us": pa.timestamp("us"),
+        "col_uint16": pa.uint16(),
+        "col_uint32": pa.uint32(),
+        "col_uint64": pa.uint64(),
+        "col_uint8": pa.uint8(),
+    }
 
 
 ##################################
@@ -80,3 +113,48 @@ def test_read_dtypes_from_schema(df_path: Path) -> None:
         "col_int": pa.int64(),
         "col_str": pa.string(),
     }
+
+
+######################################################
+#     Tests for find_numeric_columns_from_dtypes     #
+######################################################
+
+
+def test_find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> None:
+    assert find_numeric_columns_from_dtypes(dtypes) == [
+        "col_decimal128_12_0",
+        "col_decimal128_5_2",
+        "col_decimal256_12_0",
+        "col_decimal256_5_2",
+        "col_float16",
+        "col_float32",
+        "col_float64",
+        "col_int16",
+        "col_int32",
+        "col_int64",
+        "col_int8",
+        "col_uint16",
+        "col_uint32",
+        "col_uint64",
+        "col_uint8",
+    ]
+
+
+def test_find_numeric_columns_from_dtypes_empty() -> None:
+    assert find_numeric_columns_from_dtypes({}) == []
+
+
+###################################################
+#     Tests for find_date_columns_from_dtypes     #
+###################################################
+
+
+def test_find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> None:
+    assert find_date_columns_from_dtypes(dtypes) == [
+        "col_date32",
+        "col_date64",
+    ]
+
+
+def test_find_date_columns_from_dtypes_empty() -> None:
+    assert find_date_columns_from_dtypes({}) == []

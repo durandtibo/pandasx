@@ -1,10 +1,17 @@
 from __future__ import annotations
 
-__all__ = ["df_column_types", "series_column_types", "read_dtypes_from_schema"]
+__all__ = [
+    "df_column_types",
+    "find_date_columns_from_dtypes",
+    "find_numeric_columns_from_dtypes",
+    "read_dtypes_from_schema",
+    "series_column_types",
+]
 
 import logging
 from pathlib import Path
 
+import pyarrow as pa
 import pyarrow.parquet as pq
 from pandas import DataFrame, Series
 
@@ -83,3 +90,35 @@ def read_dtypes_from_schema(path: Path | str) -> dict:
     logger.info(f"Reading schema from {path}")
     schema = pq.read_schema(path)
     return {name: dtype for name, dtype in zip(schema.names, schema.types)}
+
+
+def find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
+    r"""Finds the columns with a numeric type.
+
+    Args:
+        dtypes: The mapping of column names and data types.
+
+    Returns:
+        The columns with a numeric type.
+    """
+    columns = []
+    for col, dtype in dtypes.items():
+        if pa.types.is_decimal(dtype) or pa.types.is_floating(dtype) or pa.types.is_integer(dtype):
+            columns.append(col)
+    return columns
+
+
+def find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
+    r"""Finds the columns with a date type.
+
+    Args:
+        dtypes: The mapping of column names and data types.
+
+    Returns:
+        The columns with a date type.
+    """
+    columns = []
+    for col, dtype in dtypes.items():
+        if pa.types.is_date(dtype):
+            columns.append(col)
+    return columns
