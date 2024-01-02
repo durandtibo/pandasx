@@ -113,3 +113,26 @@ def test_column_dataframe_transformer_transform_missing_column_ignore_missing(
                 }
             ),
         )
+
+
+def test_column_dataframe_transformer_add_transformer() -> None:
+    transformer = Column({"col2": ToNumeric(), "col3": StripString()})
+    transformer.add_transformer(column="col1", transformer=ToNumeric())
+    assert len(transformer.transformers) == 3
+    assert isinstance(transformer.transformers["col1"], ToNumeric)
+    assert isinstance(transformer.transformers["col2"], ToNumeric)
+    assert isinstance(transformer.transformers["col3"], StripString)
+
+
+def test_column_dataframe_transformer_add_transformer_replace_ok_false() -> None:
+    transformer = Column({"col2": ToNumeric(), "col3": StripString()})
+    with raises(KeyError, match="`col3` is already used to register a transformer."):
+        transformer.add_transformer(column="col3", transformer=ToNumeric())
+
+
+def test_column_dataframe_transformer_add_transformer_replace_ok_true() -> None:
+    transformer = Column({"col2": ToNumeric(), "col3": StripString()})
+    transformer.add_transformer(column="col3", transformer=ToNumeric(), replace_ok=True)
+    assert len(transformer.transformers) == 2
+    assert isinstance(transformer.transformers["col2"], ToNumeric)
+    assert isinstance(transformer.transformers["col3"], ToNumeric)
