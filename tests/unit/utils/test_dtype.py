@@ -1,9 +1,33 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
+import pyarrow as pa
+import pytest
 from pandas import DataFrame, Series
 
-from flamme.utils.dtype import df_column_types, series_column_types
+from flamme.utils.dtype import (
+    df_column_types,
+    read_dtypes_from_schema,
+    series_column_types,
+)
+
+
+@pytest.fixture(scope="module")
+def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
+    nrows = 10
+    df = DataFrame(
+        {
+            "col_float": np.arange(nrows, dtype=float) + 0.5,
+            "col_int": np.arange(nrows, dtype=int),
+            "col_str": [f"a{i}" for i in range(nrows)],
+        }
+    )
+    df.to_parquet(path)
+    return path
+
 
 ##################################
 #     Tests for column_types     #
@@ -42,3 +66,17 @@ def test_series_column_types() -> None:
 
 def test_series_column_types_empty() -> None:
     assert series_column_types(Series([])) == set()
+
+
+#############################################
+#     Tests for read_dtypes_from_schema     #
+#############################################
+
+
+def test_read_dtypes_from_schema(df_path: Path) -> None:
+    dtypes = read_dtypes_from_schema(df_path)
+    assert dtypes == {
+        "col_float": pa.float64(),
+        "col_int": pa.int64(),
+        "col_str": pa.string(),
+    }
