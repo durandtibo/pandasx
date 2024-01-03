@@ -6,8 +6,7 @@ from jinja2 import Template
 from pandas import DataFrame
 from pytest import fixture
 
-from flamme.section import DuplicatedRowSection
-from flamme.section.toc import TableOfContentSection
+from flamme.section import DuplicatedRowSection, TableOfContentSection
 
 
 @fixture

@@ -7,9 +7,8 @@ import logging
 from coola.utils import str_indent, str_mapping
 from pandas import DataFrame
 
-from flamme.analyzer.base import BaseAnalyzer
+from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section import BaseSection
-from flamme.utils import setup_object
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +47,7 @@ class FilteredAnalyzer(BaseAnalyzer):
 
     def __init__(self, query: str, analyzer: BaseAnalyzer | dict) -> None:
         self._query = query
-        self._analyzer = setup_object(analyzer)
+        self._analyzer = setup_analyzer(analyzer)
 
     def __repr__(self) -> str:
         args = str_indent(str_mapping({"query": self._query, "analyzer": self._analyzer}))
