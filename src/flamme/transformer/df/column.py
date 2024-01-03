@@ -19,37 +19,38 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     ``pandas.Series`` transformers on some columns.
 
     Args:
-        columns Specifies the ``pandas.Series`` transformers.
+        columns: Specifies the ``pandas.Series`` transformers.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.transformer.df import Column
+    >>> from flamme.transformer.series import ToNumeric, StripString
+    >>> transformer = Column({"col2": ToNumeric(), "col3": StripString()})
+    >>> transformer
+    ColumnDataFrameTransformer(
+      (col2): ToNumericSeriesTransformer()
+      (col3): StripStringSeriesTransformer()
+      (ignore_missing): False
+    )
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "col1": [1, 2, 3, 4, 5],
+    ...         "col2": ["1", "2", "3", "4", "5"],
+    ...         "col3": [" a", "b ", " c ", "  d  ", "e"],
+    ...     }
+    ... )
+    >>> df = transformer.transform(df)
+    >>> df
+       col1  col2 col3
+    0     1     1    a
+    1     2     2    b
+    2     3     3    c
+    3     4     4    d
+    4     5     5    e
 
-        >>> import pandas as pd
-        >>> from flamme.transformer.df import Column
-        >>> from flamme.transformer.series import ToNumeric, StripString
-        >>> transformer = Column({"col2": ToNumeric(), "col3": StripString()})
-        >>> transformer
-        ColumnDataFrameTransformer(
-          (col2): ToNumericSeriesTransformer()
-          (col3): StripStringSeriesTransformer()
-          (ignore_missing): False
-        )
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": [" a", "b ", " c ", "  d  ", "e"],
-        ...     }
-        ... )
-        >>> df = transformer.transform(df)
-        >>> df
-           col1  col2 col3
-        0     1     1    a
-        1     2     2    b
-        2     3     3    c
-        3     4     4    d
-        4     5     5    e
+    ```
     """
 
     def __init__(

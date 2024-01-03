@@ -32,6 +32,7 @@ from flamme.transformer.df import (
     ToDatetime,
     ToNumeric,
 )
+from flamme.utils.logging import configure_logging
 
 logger = logging.getLogger(__name__)
 
@@ -215,5 +216,5 @@ def main_report() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    configure_logging(level=logging.INFO)
     main_report()
