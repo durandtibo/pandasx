@@ -139,7 +139,8 @@ def create_analyzer() -> BaseAnalyzer:
                     column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
                 ),
                 "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
-            }
+            },
+            max_toc_depth=1,
         )
 
     return MappingAnalyzer(
