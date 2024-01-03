@@ -16,6 +16,7 @@ __all__ = [
     "MostFrequentValuesSection",
     "NullValueSection",
     "SectionDict",
+    "TableOfContentSection",
     "TemporalNullValueSection",
 ]
 
@@ -34,3 +35,4 @@ from flamme.section.most_frequent import MostFrequentValuesSection
 from flamme.section.null import NullValueSection, TemporalNullValueSection
 from flamme.section.null_temp_col import ColumnTemporalNullValueSection
 from flamme.section.null_temp_global import GlobalTemporalNullValueSection
+from flamme.section.toc import TableOfContentSection

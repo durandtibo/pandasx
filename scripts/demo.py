@@ -107,16 +107,33 @@ def create_analyzer() -> BaseAnalyzer:
         return MappingAnalyzer(
             {
                 "overall": ColumnContinuousAnalyzer(
-                    column=column, yscale=yscale, nbins=100, figsize=FIGSIZE, xmin=xmin, xmax=xmax
+                    column=column,
+                    yscale=yscale,
+                    nbins=100,
+                    figsize=FIGSIZE,
+                    xmin=xmin,
+                    xmax=xmax,
                 ),
                 "monthly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="M", yscale=yscale, figsize=FIGSIZE
+                    column=column,
+                    dt_column="datetime",
+                    period="M",
+                    yscale=yscale,
+                    figsize=FIGSIZE,
                 ),
                 "weekly": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="W", yscale=yscale, figsize=FIGSIZE
+                    column=column,
+                    dt_column="datetime",
+                    period="W",
+                    yscale=yscale,
+                    figsize=FIGSIZE,
                 ),
                 "daily": ColumnTemporalContinuousAnalyzer(
-                    column=column, dt_column="datetime", period="D", yscale=yscale, figsize=FIGSIZE
+                    column=column,
+                    dt_column="datetime",
+                    period="D",
+                    yscale=yscale,
+                    figsize=FIGSIZE,
                 ),
                 "advanced": ColumnContinuousAdvancedAnalyzer(
                     column=column, yscale=yscale, nbins=100, figsize=FIGSIZE

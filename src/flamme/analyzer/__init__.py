@@ -18,6 +18,7 @@ __all__ = [
     "MarkdownAnalyzer",
     "MostFrequentValuesAnalyzer",
     "NullValueAnalyzer",
+    "TableOfContentAnalyzer",
     "TemporalNullValueAnalyzer",
     "is_analyzer_config",
     "setup_analyzer",
@@ -44,3 +45,4 @@ from flamme.analyzer.most_frequent import MostFrequentValuesAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer, TemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_global import GlobalTemporalNullValueAnalyzer
+from flamme.analyzer.toc import TableOfContentAnalyzer

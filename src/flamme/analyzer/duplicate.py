@@ -38,14 +38,7 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
         ...     {
         ...         "col1": np.array([0, 1, 0, 1]),
         ...         "col2": np.array([1, 0, 1, 0]),
-        ...         "col3": np.array(
-        ...             [
-        ...                 1,
-        ...                 1,
-        ...                 1,
-        ...                 1,
-        ...             ]
-        ...         ),
+        ...         "col3": np.array([1, 1, 1, 1]),
         ...     }
         ... )
         >>> section = analyzer.analyze(df)
