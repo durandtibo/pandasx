@@ -339,6 +339,8 @@ def add_cdf_plot(
     """
     nbins = nbins or 1000
     array = nonnan(array)
+    if array.size == 0:
+        return
     nleft = array[array < xmin].size
     nright = array[array > xmax].size
     counts, edges = np.histogram(array[np.logical_and(array >= xmin, array <= xmax)], bins=nbins)
@@ -347,7 +349,9 @@ def add_cdf_plot(
     ax = ax.twinx()
     ax.tick_params(axis="y", labelcolor=color)
     ax.plot(x, cdf, color=color, label="CDF")
-    ax.set_ylim(max(0.0, cdf[0]), min(1.0, cdf[-1]))
+    xmin, xmax = max(0.0, cdf[0]), min(1.0, cdf[-1])
+    if xmin < xmax:
+        ax.set_ylim(xmin, xmax)
     ax.set_ylabel("cumulative distribution function (CDF)", color=color)
 
 
