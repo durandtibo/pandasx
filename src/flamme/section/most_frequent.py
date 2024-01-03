@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class MostFrequentValuesSection(BaseSection):
-    r"""Implements a section that analyzes the data type of each column.
+    r"""Implement a section that analyzes the data type of each column.
 
     Args:
         counter: Specifies the counter with the number of occurrences
@@ -52,6 +52,7 @@ class MostFrequentValuesSection(BaseSection):
                 "section": number,
                 "table": self._create_table(),
                 "column": self._column,
+                "top": f"{self._top:,}",
             }
         )
 
@@ -68,7 +69,7 @@ class MostFrequentValuesSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the most frequent values in <em>{{column}}</em>.
+This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 
 <ul>
   <li> <b>count</b>: is the number of occurrences of the value </li>
