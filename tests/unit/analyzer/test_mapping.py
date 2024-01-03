@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_allclose
 from pandas import DataFrame
-from pytest import raises
 
 from flamme.analyzer import (
     DataTypeAnalyzer,
@@ -101,6 +101,27 @@ def test_mapping_analyzer_get_statistics_empty() -> None:
     )
 
 
+@pytest.mark.parametrize("max_toc_depth", [0, 1, 2])
+def test_mapping_analyzer_max_toc_depth(max_toc_depth: int) -> None:
+    section = MappingAnalyzer(
+        {
+            "section1": NullValueAnalyzer(),
+            "section2": NullValueAnalyzer(),
+        },
+        max_toc_depth=max_toc_depth,
+    ).analyze(
+        DataFrame(
+            {
+                "float": np.array([1.2, 4.2, np.nan, 2.2]),
+                "int": np.array([np.nan, 1, 0, 1]),
+                "str": np.array(["A", "B", None, np.nan]),
+            }
+        )
+    )
+    assert isinstance(section, SectionDict)
+    assert section.max_toc_depth == max_toc_depth
+
+
 def test_mapping_analyzer_add_analyzer() -> None:
     analyzer = MappingAnalyzer(
         {
@@ -123,7 +144,7 @@ def test_mapping_analyzer_add_analyzer_replace_ok_false() -> None:
             "section2": DataTypeAnalyzer(),
         }
     )
-    with raises(KeyError, match="`section2` is already used to register an analyzer."):
+    with pytest.raises(KeyError, match="`section2` is already used to register an analyzer."):
         analyzer.add_analyzer("section2", DuplicatedRowAnalyzer())
 
 

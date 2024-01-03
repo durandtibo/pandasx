@@ -18,6 +18,9 @@ class MappingAnalyzer(BaseAnalyzer):
         analyzers (``Mapping``): Specifies the mappings to analyze.
             The key of each analyzer is used to organize the metrics
             and report.
+        max_toc_depth: Specifies the maximum level to show in the
+            table of content. Set this value to ``0`` to not show
+            the table of content at the beginning of the section.
 
     Example usage:
 
@@ -49,8 +52,11 @@ class MappingAnalyzer(BaseAnalyzer):
         >>> section = analyzer.analyze(df)
     """
 
-    def __init__(self, analyzers: Mapping[str, BaseAnalyzer | dict]) -> None:
+    def __init__(
+        self, analyzers: Mapping[str, BaseAnalyzer | dict], max_toc_depth: int = 0
+    ) -> None:
         self._analyzers = {name: setup_analyzer(analyzer) for name, analyzer in analyzers.items()}
+        self._max_toc_depth = max_toc_depth
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(\n  {str_indent(str_mapping(self._analyzers))}\n)"
@@ -61,7 +67,8 @@ class MappingAnalyzer(BaseAnalyzer):
 
     def analyze(self, df: DataFrame) -> SectionDict:
         return SectionDict(
-            {name: analyzer.analyze(df) for name, analyzer in self._analyzers.items()}
+            sections={name: analyzer.analyze(df) for name, analyzer in self._analyzers.items()},
+            max_toc_depth=self._max_toc_depth,
         )
 
     def add_analyzer(self, key: str, analyzer: BaseAnalyzer, replace_ok: bool = False) -> None:
