@@ -40,10 +40,10 @@ class DataFrameSummarySection(BaseSection):
         return tuple(self._df.columns)
 
     def get_null_count(self) -> tuple[int, ...]:
-        return tuple(self._df.isna().sum().to_frame("__count__")["__count__"].tolist())
+        return tuple(self._df.isna().sum().to_frame("__count__")["__count__"].astype(int).tolist())
 
     def get_nunique(self) -> tuple[int, ...]:
-        return tuple(self._df.nunique(dropna=False).tolist())
+        return tuple(self._df.nunique(dropna=False).astype(int).tolist())
 
     def get_column_types(self) -> tuple[set, ...]:
         return tuple(series_column_types(self._df[col]) for col in self.df)
