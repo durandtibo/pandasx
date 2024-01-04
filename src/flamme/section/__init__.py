@@ -8,6 +8,7 @@ __all__ = [
     "ColumnTemporalContinuousSection",
     "ColumnTemporalDiscreteSection",
     "ColumnTemporalNullValueSection",
+    "DataFrameSummarySection",
     "DataTypeSection",
     "DuplicatedRowSection",
     "EmptySection",
@@ -24,6 +25,7 @@ from flamme.section.base import BaseSection
 from flamme.section.continuous import ColumnContinuousSection
 from flamme.section.continuous_advanced import ColumnContinuousAdvancedSection
 from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
+from flamme.section.df_summary import DataFrameSummarySection
 from flamme.section.discrete import ColumnDiscreteSection
 from flamme.section.discrete_temporal import ColumnTemporalDiscreteSection
 from flamme.section.dtype import DataTypeSection
