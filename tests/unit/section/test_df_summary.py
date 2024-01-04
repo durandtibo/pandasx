@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from types import NoneType
-
 import numpy as np
 import pytest
 from jinja2 import Template
 from pandas import DataFrame
 
 from flamme.section import DataFrameSummarySection
+
+NoneType = type(None)
 
 
 @pytest.fixture()
