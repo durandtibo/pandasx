@@ -43,6 +43,7 @@ class MostFrequentValuesSection(BaseSection):
         }
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+        logger.info("Rendering the most frequent values section...")
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -59,7 +60,6 @@ class MostFrequentValuesSection(BaseSection):
     def render_html_toc(
         self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
     ) -> str:
-        logger.info("Rendering the most frequent values section...")
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
@@ -78,6 +78,7 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 </ul>
 
 {{table}}
+<p style="margin-top: 1rem;">
 """
 
     def _create_table(self) -> str:
