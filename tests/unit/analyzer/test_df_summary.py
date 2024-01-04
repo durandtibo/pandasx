@@ -80,13 +80,18 @@ def test_column_type_analyzer_top(dataframe: DataFrame, top: int) -> None:
     assert section.top == top
 
 
+def test_column_type_analyzer_top_incorrect(dataframe: DataFrame) -> None:
+    with pytest.raises(ValueError):
+        DataFrameSummaryAnalyzer(top=-1)
+
+
 def test_column_type_analyzer_sort() -> None:
-    section = DataFrameSummaryAnalyzer().analyze(
+    section = DataFrameSummaryAnalyzer(sort=True).analyze(
         DataFrame(
             {
-                "col3": np.array([1.2, 4.2, np.nan, 2.2, 1, 2.2]),
-                "col1": np.array([1, 1, 0, 1, 1, 1]),
-                "col2": np.array(["A", "B", None, np.nan, "C", "B"]),
+                "col2": np.array([1, 1, 0, 1, 1, 1]),
+                "col3": np.array(["A", "B", None, np.nan, "C", "B"]),
+                "col1": np.array([1.2, 4.2, np.nan, 2.2, 1, 2.2]),
             }
         )
     )
@@ -94,7 +99,7 @@ def test_column_type_analyzer_sort() -> None:
     assert objects_are_equal(
         section.get_statistics(),
         {
-            "columns": ("col3", "col1", "col2"),
+            "columns": ("col1", "col2", "col3"),
             "null_count": (1, 0, 2),
             "nunique": (5, 2, 5),
             "column_types": ({float}, {int}, {float, str, NoneType}),
