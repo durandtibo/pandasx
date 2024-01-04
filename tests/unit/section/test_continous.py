@@ -114,7 +114,7 @@ def test_column_continuous_section_get_statistics(series: Series, stats: dict) -
 
 
 def test_column_continuous_section_get_statistics_empty_row() -> None:
-    section = ColumnContinuousSection(series=Series([]), column="col")
+    section = ColumnContinuousSection(series=Series([], dtype=object), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -219,7 +219,7 @@ def test_column_continuous_section_render_html_body_args(series: Series) -> None
 
 
 def test_column_continuous_section_render_html_body_empty() -> None:
-    section = ColumnContinuousSection(series=Series([]), column="col")
+    section = ColumnContinuousSection(series=Series([], dtype=object), column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 

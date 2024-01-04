@@ -98,7 +98,7 @@ def test_series_column_types() -> None:
 
 
 def test_series_column_types_empty() -> None:
-    assert series_column_types(Series([])) == set()
+    assert series_column_types(Series([], dtype=object)) == set()
 
 
 #############################################
