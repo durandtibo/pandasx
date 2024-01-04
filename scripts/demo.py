@@ -14,11 +14,11 @@ from flamme.analyzer import (
     ColumnTemporalContinuousAnalyzer,
     ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
+    DataFrameSummaryAnalyzer,
     DataTypeAnalyzer,
     DuplicatedRowAnalyzer,
     GlobalTemporalNullValueAnalyzer,
     MappingAnalyzer,
-    MarkdownAnalyzer,
     MostFrequentValuesAnalyzer,
     NullValueAnalyzer,
     TemporalNullValueAnalyzer,
@@ -77,126 +77,113 @@ def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
     return df
 
 
-def create_analyzer() -> BaseAnalyzer:
-    def create_discrete_column(column: str) -> BaseAnalyzer:
-        return MappingAnalyzer(
-            {
-                "overall": ColumnDiscreteAnalyzer(column=column, figsize=FIGSIZE),
-                "monthly": ColumnTemporalDiscreteAnalyzer(
-                    column=column, dt_column="datetime", period="M", figsize=FIGSIZE
-                ),
-                # "weekly": ColumnTemporalDiscreteAnalyzer(
-                #     column=column, dt_column="datetime", period="W", figsize=FIGSIZE
-                # ),
-                # "daily": ColumnTemporalDiscreteAnalyzer(
-                #     column=column, dt_column="datetime", period="D", figsize=FIGSIZE
-                # ),
-                "null monthly": ColumnTemporalNullValueAnalyzer(
-                    column=column, dt_column="datetime", period="M", figsize=FIGSIZE
-                ),
-                "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
-            }
-        )
-
-    def create_continuous_column(
-        column: str,
-        yscale: str = "linear",
-        xmin: float | str | None = None,
-        xmax: float | str | None = None,
-    ) -> BaseAnalyzer:
-        return MappingAnalyzer(
-            {
-                "overall": ColumnContinuousAnalyzer(
-                    column=column,
-                    yscale=yscale,
-                    nbins=100,
-                    figsize=FIGSIZE,
-                    xmin=xmin,
-                    xmax=xmax,
-                ),
-                "monthly": ColumnTemporalContinuousAnalyzer(
-                    column=column,
-                    dt_column="datetime",
-                    period="M",
-                    yscale=yscale,
-                    figsize=FIGSIZE,
-                ),
-                "weekly": ColumnTemporalContinuousAnalyzer(
-                    column=column,
-                    dt_column="datetime",
-                    period="W",
-                    yscale=yscale,
-                    figsize=FIGSIZE,
-                ),
-                "daily": ColumnTemporalContinuousAnalyzer(
-                    column=column,
-                    dt_column="datetime",
-                    period="D",
-                    yscale=yscale,
-                    figsize=FIGSIZE,
-                ),
-                "advanced": ColumnContinuousAdvancedAnalyzer(
-                    column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
-                ),
-                "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
-            },
-            max_toc_depth=1,
-        )
-
+def create_null_value_analyzer() -> BaseAnalyzer:
     return MappingAnalyzer(
         {
+            "overall": NullValueAnalyzer(figsize=FIGSIZE),
+            "temporal": GlobalTemporalNullValueAnalyzer(
+                dt_column="datetime", period="M", figsize=FIGSIZE
+            ),
+            "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
+            "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W", figsize=(7, 5)),
+            "daily": TemporalNullValueAnalyzer(
+                dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
+            ),
+        }
+    )
+
+
+def create_discrete_column_analyzer(column: str) -> BaseAnalyzer:
+    return MappingAnalyzer(
+        {
+            "overall": ColumnDiscreteAnalyzer(column=column, figsize=FIGSIZE),
+            "monthly": ColumnTemporalDiscreteAnalyzer(
+                column=column, dt_column="datetime", period="M", figsize=FIGSIZE
+            ),
+            # "weekly": ColumnTemporalDiscreteAnalyzer(
+            #     column=column, dt_column="datetime", period="W", figsize=FIGSIZE
+            # ),
+            # "daily": ColumnTemporalDiscreteAnalyzer(
+            #     column=column, dt_column="datetime", period="D", figsize=FIGSIZE
+            # ),
+            "null monthly": ColumnTemporalNullValueAnalyzer(
+                column=column, dt_column="datetime", period="M", figsize=FIGSIZE
+            ),
+            "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
+        }
+    )
+
+
+def create_continuous_column_analyzer(
+    column: str,
+    yscale: str = "linear",
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+) -> BaseAnalyzer:
+    return MappingAnalyzer(
+        {
+            "overall": ColumnContinuousAnalyzer(
+                column=column,
+                yscale=yscale,
+                nbins=100,
+                figsize=FIGSIZE,
+                xmin=xmin,
+                xmax=xmax,
+            ),
+            "monthly": ColumnTemporalContinuousAnalyzer(
+                column=column,
+                dt_column="datetime",
+                period="M",
+                yscale=yscale,
+                figsize=FIGSIZE,
+            ),
+            "weekly": ColumnTemporalContinuousAnalyzer(
+                column=column,
+                dt_column="datetime",
+                period="W",
+                yscale=yscale,
+                figsize=FIGSIZE,
+            ),
+            "daily": ColumnTemporalContinuousAnalyzer(
+                column=column,
+                dt_column="datetime",
+                period="D",
+                yscale=yscale,
+                figsize=FIGSIZE,
+            ),
+            "advanced": ColumnContinuousAdvancedAnalyzer(
+                column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
+            ),
+            "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
+        },
+        max_toc_depth=1,
+    )
+
+
+def create_analyzer() -> BaseAnalyzer:
+    columns = MappingAnalyzer(
+        {
+            "str": create_discrete_column_analyzer(column="str"),
+            "int": create_discrete_column_analyzer(column="int"),
+            "discrete": create_discrete_column_analyzer(column="discrete"),
+            "missing": ColumnDiscreteAnalyzer(column="missing"),
+            "float": create_continuous_column_analyzer(column="float"),
+            "cauchy": create_continuous_column_analyzer(
+                column="cauchy", yscale="auto", xmin="g0.001", xmax="g0.999"
+            ),
+            "half cauchy": create_continuous_column_analyzer(
+                column="half cauchy", yscale="log", xmax="q0.99"
+            ),
+        }
+    )
+    columns = MappingAnalyzer({})
+    return MappingAnalyzer(
+        {
+            "summary": DataFrameSummaryAnalyzer(),
             "duplicate": DuplicatedRowAnalyzer(),
             "column type": DataTypeAnalyzer(),
-            "null values": MappingAnalyzer(
-                {
-                    "overall": NullValueAnalyzer(figsize=FIGSIZE),
-                    "temporal": GlobalTemporalNullValueAnalyzer(
-                        dt_column="datetime", period="M", figsize=FIGSIZE
-                    ),
-                    "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M"),
-                    "weekly": TemporalNullValueAnalyzer(
-                        dt_column="datetime", period="W", figsize=(7, 5)
-                    ),
-                    "daily": TemporalNullValueAnalyzer(
-                        dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
-                    ),
-                }
-            ),
-            "columns": MappingAnalyzer(
-                {
-                    "str": create_discrete_column(column="str"),
-                    "int": create_discrete_column(column="int"),
-                    "discrete": create_discrete_column(column="discrete"),
-                    "missing": ColumnDiscreteAnalyzer(column="missing"),
-                    "float": create_continuous_column(column="float"),
-                    "cauchy": create_continuous_column(
-                        column="cauchy", yscale="auto", xmin="g0.001", xmax="g0.999"
-                    ),
-                    "half cauchy": MappingAnalyzer(
-                        {
-                            "description": MarkdownAnalyzer(
-                                desc="""
-- **Link:** URL
-- **Description:** blabla
-- **Valid values:** float values
-"""
-                            ),
-                            "overall": ColumnContinuousAnalyzer(
-                                column="half cauchy", yscale="log", xmax="q0.99"
-                            ),
-                            "monthly": ColumnTemporalContinuousAnalyzer(
-                                column="half cauchy", dt_column="datetime", period="M", yscale="log"
-                            ),
-                            "weekly": ColumnTemporalContinuousAnalyzer(
-                                column="half cauchy", dt_column="datetime", period="W", yscale="log"
-                            ),
-                            "daily": ColumnTemporalContinuousAnalyzer(
-                                column="half cauchy", dt_column="datetime", period="D", yscale="log"
-                            ),
-                        }
-                    ),
-                }
-            ),
+            "null values": create_null_value_analyzer(),
+            "columns": columns,
             # "subset": ColumnSubsetAnalyzer(
             #     columns=["discrete", "str"], analyzer=NullValueAnalyzer()
             # ),
