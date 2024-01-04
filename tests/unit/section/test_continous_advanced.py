@@ -95,7 +95,7 @@ def test_column_continuous_advanced_section_get_statistics(series: Series, stats
 
 
 def test_column_continuous_advanced_section_get_statistics_empty_row() -> None:
-    section = ColumnContinuousAdvancedSection(series=Series([]), column="col")
+    section = ColumnContinuousAdvancedSection(series=Series([], dtype=object), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -202,7 +202,7 @@ def test_column_continuous_advanced_section_render_html_body_args(series: Series
 
 
 def test_column_continuous_advanced_section_render_html_body_empty() -> None:
-    section = ColumnContinuousAdvancedSection(series=Series([]), column="col")
+    section = ColumnContinuousAdvancedSection(series=Series([], dtype=object), column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 

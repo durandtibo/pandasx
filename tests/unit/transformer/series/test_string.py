@@ -28,5 +28,5 @@ def test_strip_string_series_transformer_transform_none() -> None:
 
 def test_strip_string_series_transformer_transform_empty() -> None:
     transformer = StripString()
-    series = transformer.transform(pd.Series([]))
-    assert_series_equal(series, pd.Series([]))
+    series = transformer.transform(pd.Series([], dtype=object))
+    assert_series_equal(series, pd.Series([], dtype=object))

@@ -150,7 +150,7 @@ def test_auto_yscale_continuous_symlog(array: np.ndarray) -> None:
 ########################################
 
 
-@mark.parametrize("data", [np.asarray([]), pd.Series([])])
+@mark.parametrize("data", [np.asarray([]), pd.Series([], dtype=object)])
 def test_compute_statistics_empty(data: np.ndarray | pd.Series) -> None:
     assert objects_are_allclose(
         compute_statistics(data),
