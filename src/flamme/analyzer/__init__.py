@@ -10,6 +10,7 @@ __all__ = [
     "ColumnTemporalContinuousAnalyzer",
     "ColumnTemporalDiscreteAnalyzer",
     "ColumnTemporalNullValueAnalyzer",
+    "DataFrameSummaryAnalyzer",
     "DataTypeAnalyzer",
     "DuplicatedRowAnalyzer",
     "FilteredAnalyzer",
@@ -32,6 +33,7 @@ from flamme.analyzer.continuous import (
     ColumnTemporalContinuousAnalyzer,
 )
 from flamme.analyzer.continuous_advanced import ColumnContinuousAdvancedAnalyzer
+from flamme.analyzer.df_summary import DataFrameSummaryAnalyzer
 from flamme.analyzer.discrete import (
     ColumnDiscreteAnalyzer,
     ColumnTemporalDiscreteAnalyzer,
