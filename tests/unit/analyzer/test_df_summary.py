@@ -28,7 +28,7 @@ def dataframe() -> DataFrame:
 
 
 def test_column_type_analyzer_str() -> None:
-    assert str(DataFrameSummaryAnalyzer()) == "DataFrameSummaryAnalyzer()"
+    assert str(DataFrameSummaryAnalyzer()).startswith("DataFrameSummaryAnalyzer(")
 
 
 def test_column_type_analyzer_get_statistics(dataframe: DataFrame) -> None:
@@ -69,5 +69,34 @@ def test_column_type_analyzer_get_statistics_empty_no_column() -> None:
             "null_count": (),
             "nunique": (),
             "column_types": (),
+        },
+    )
+
+
+@pytest.mark.parametrize("top", [0, 1, 2])
+def test_column_type_analyzer_top(dataframe: DataFrame, top: int) -> None:
+    section = DataFrameSummaryAnalyzer(top=top).analyze(dataframe)
+    assert isinstance(section, DataFrameSummarySection)
+    assert section.top == top
+
+
+def test_column_type_analyzer_sort() -> None:
+    section = DataFrameSummaryAnalyzer().analyze(
+        DataFrame(
+            {
+                "col3": np.array([1.2, 4.2, np.nan, 2.2, 1, 2.2]),
+                "col1": np.array([1, 1, 0, 1, 1, 1]),
+                "col2": np.array(["A", "B", None, np.nan, "C", "B"]),
+            }
+        )
+    )
+    assert isinstance(section, DataFrameSummarySection)
+    assert objects_are_equal(
+        section.get_statistics(),
+        {
+            "columns": ("col3", "col1", "col2"),
+            "null_count": (1, 0, 2),
+            "nunique": (5, 2, 5),
+            "column_types": ({float}, {int}, {float, str, NoneType}),
         },
     )
