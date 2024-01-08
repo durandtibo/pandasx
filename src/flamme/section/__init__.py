@@ -19,12 +19,14 @@ __all__ = [
     "SectionDict",
     "TableOfContentSection",
     "TemporalNullValueSection",
+    "TemporalRowCountSection",
 ]
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import ColumnContinuousSection
 from flamme.section.continuous_advanced import ColumnContinuousAdvancedSection
 from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
+from flamme.section.count_rows import TemporalRowCountSection
 from flamme.section.df_summary import DataFrameSummarySection
 from flamme.section.discrete import ColumnDiscreteSection
 from flamme.section.discrete_temporal import ColumnTemporalDiscreteSection
