@@ -6,6 +6,7 @@ import logging
 from collections.abc import Sequence
 
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -16,6 +17,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html, readable_xticklabels
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +92,12 @@ class TemporalRowCountSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "dt_column": self._dt_column,
+                "figure": create_temporal_count_figure(
+                    df=self._df,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                    figsize=self._figsize,
+                ),
                 "table": create_temporal_count_table(
                     df=self._df,
                     dt_column=self._dt_column,
@@ -110,7 +118,7 @@ class TemporalRowCountSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the temporal distribution of null values in all columns.
+This section analyzes the number of rows per temporal window.
 The column <em>{{dt_column}}</em> is used as the temporal column.
 
 {{figure}}
@@ -120,9 +128,38 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 """
 
 
+def create_temporal_count_figure(
+    df: DataFrame,
+    dt_column: str,
+    period: str,
+    figsize: tuple[float, float] | None = None,
+) -> str:
+    r"""Return a HTML representation of a figure with number of rows per
+    temporal windows.
+
+    Args:
+        df: Specifies the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
+            the temporal distribution.
+        period: Specifies the temporal period e.g. monthly or daily.
+
+    Returns:
+        str: The HTML representation of the figure.
+    """
+    if df.shape[0] == 0:
+        return "<span>&#9888;</span> No figure is generated because there is no data"
+
+    counts, labels = prepare_data(df=df, dt_column=dt_column, period=period)
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.bar(x=labels, height=counts, color="tab:blue")
+    ax.set_ylabel("number of rows")
+    readable_xticklabels(ax, max_num_xticks=100)
+    return figure2html(fig, close_fig=True)
+
+
 def create_temporal_count_table(df: DataFrame, dt_column: str, period: str) -> str:
-    r"""Return a HTML representation of a table with the temporal
-    distribution of null values.
+    r"""Return a HTML representation of a figure with number of rows per
+    temporal windows.
 
     Args:
         df: Specifies the DataFrame to analyze.
@@ -199,6 +236,9 @@ def prepare_data(
     Returns:
         A tuple with the counts and the temporal window labels.
     """
+    if df.shape[0] == 0:
+        return [], []
+
     df = df[[dt_column]].copy()
     columns = df.columns.tolist()
     dt_col = "__datetime__"

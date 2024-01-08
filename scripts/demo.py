@@ -22,6 +22,7 @@ from flamme.analyzer import (
     MostFrequentValuesAnalyzer,
     NullValueAnalyzer,
     TemporalNullValueAnalyzer,
+    TemporalRowCountAnalyzer,
 )
 from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
@@ -180,6 +181,11 @@ def create_analyzer() -> BaseAnalyzer:
     return MappingAnalyzer(
         {
             "summary": DataFrameSummaryAnalyzer(),
+            "monthly count": TemporalRowCountAnalyzer(
+                dt_column="datetime",
+                period="M",
+                figsize=FIGSIZE,
+            ),
             "duplicate": DuplicatedRowAnalyzer(),
             "column type": DataTypeAnalyzer(),
             "null values": create_null_value_analyzer(),
