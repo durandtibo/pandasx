@@ -9,7 +9,11 @@ from pandas.testing import assert_frame_equal
 from pytest import mark, raises
 
 from flamme.section import TemporalRowCountSection
-from flamme.section.count_rows import create_temporal_count_table, prepare_data
+from flamme.section.count_rows import (
+    create_temporal_count_figure,
+    create_temporal_count_table,
+    prepare_data,
+)
 
 
 @pytest.fixture
@@ -202,6 +206,31 @@ def test_create_temporal_count_table_empty() -> None:
     )
 
 
+#################################################
+#    Tests for create_temporal_count_figure     #
+#################################################
+
+
+def test_create_temporal_count_figure(dataframe: DataFrame) -> None:
+    assert isinstance(
+        create_temporal_count_figure(
+            df=dataframe,
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+def test_create_temporal_count_figure_empty() -> None:
+    assert isinstance(
+        create_temporal_count_figure(
+            df=DataFrame({"datetime": []}), dt_column="datetime", period="M"
+        ),
+        str,
+    )
+
+
 #################################
 #    Tests for prepare_data     #
 #################################
@@ -223,11 +252,7 @@ def test_prepare_data(dataframe: DataFrame) -> None:
 
 def test_prepare_data_empty() -> None:
     assert objects_are_equal(
-        prepare_data(
-            df=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
-            dt_column="datetime",
-            period="M",
-        ),
+        prepare_data(df=DataFrame({"datetime": []}), dt_column="datetime", period="M"),
         ([], []),
         show_difference=True,
     )
