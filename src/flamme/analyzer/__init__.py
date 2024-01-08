@@ -21,6 +21,7 @@ __all__ = [
     "NullValueAnalyzer",
     "TableOfContentAnalyzer",
     "TemporalNullValueAnalyzer",
+    "TemporalRowCountAnalyzer",
     "is_analyzer_config",
     "setup_analyzer",
 ]
@@ -33,6 +34,7 @@ from flamme.analyzer.continuous import (
     ColumnTemporalContinuousAnalyzer,
 )
 from flamme.analyzer.continuous_advanced import ColumnContinuousAdvancedAnalyzer
+from flamme.analyzer.count_rows import TemporalRowCountAnalyzer
 from flamme.analyzer.df_summary import DataFrameSummaryAnalyzer
 from flamme.analyzer.discrete import (
     ColumnDiscreteAnalyzer,
