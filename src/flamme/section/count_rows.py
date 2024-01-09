@@ -47,7 +47,6 @@ class TemporalRowCountSection(BaseSection):
                 f"Datetime column {dt_column} is not in the DataFrame "
                 f"(columns:{sorted(df.columns)})"
             )
-
         self._df = df
         self._dt_column = dt_column
         self._period = period
