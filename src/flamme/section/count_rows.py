@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class TemporalRowCountSection(BaseSection):
-    r"""Implements a section to analyze the number of rows per temporal
+    r"""Implement a section to analyze the number of rows per temporal
     window.
 
     Args:
@@ -47,7 +47,6 @@ class TemporalRowCountSection(BaseSection):
                 f"Datetime column {dt_column} is not in the DataFrame "
                 f"(columns:{sorted(df.columns)})"
             )
-
         self._df = df
         self._dt_column = dt_column
         self._period = period
@@ -153,6 +152,7 @@ def create_temporal_count_figure(
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=labels, height=counts, color="tab:blue")
     ax.set_ylabel("number of rows")
+    ax.set_xlim(-0.5, len(labels) - 0.5)
     readable_xticklabels(ax, max_num_xticks=100)
     return figure2html(fig, close_fig=True)
 
