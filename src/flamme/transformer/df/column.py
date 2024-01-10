@@ -80,6 +80,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
                         f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
                     )
             else:
+                logger.info(f"Transforming column `{col}`...")
                 df[col] = transformer.transform(df[col])
         return df
 
