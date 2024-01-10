@@ -17,7 +17,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     of columns.
 
     Args:
-        columns (``Sequence``): Specifies the columns to keep.
+        columns: Specifies the columns to keep.
         ignore_missing: If ``False``, an exception is raised if a
             column is missing, otherwise a warning message is shown.
 
@@ -68,4 +68,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
                     raise RuntimeError(msg)
             else:
                 columns.append(col)
-        return df[columns].copy()
+        logger.info(f"Selecting {len(columns):,} columns: {columns}")
+        df = df[columns].copy()
+        logger.info(f"DataFrame shape after the column selection: {df.shape}")
+        return df
