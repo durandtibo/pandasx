@@ -64,7 +64,7 @@ class NoRepeatReporter(BaseReporter):
     def compute(self) -> None:
         if self._report_path.is_file():
             logger.warning(
-                f"The report ({self._report_path}) already exists and it is not be computed"
+                f"The report ({self._report_path}) already exists and it is not re-computed"
             )
             return
         self._reporter.compute()

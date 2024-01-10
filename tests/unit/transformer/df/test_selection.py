@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import logging
+
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from pytest import raises
+from pytest import LogCaptureFixture, raises
 
 from flamme.transformer.df import ColumnSelection
 
@@ -46,5 +48,14 @@ def test_column_selection_dataframe_transformer_transform_empty_row() -> None:
 
 def test_column_selection_dataframe_transformer_transform_empty() -> None:
     transformer = ColumnSelection(columns=["col1", "col2"])
-    with raises(RuntimeError, match=r"Column col1 is not in the DataFrame \(columns:"):
+    with raises(RuntimeError, match=r"Column `col1` is not in the DataFrame \(columns:"):
         transformer.transform(pd.DataFrame({}))
+
+
+def test_column_selection_dataframe_transformer_transform_empty_ignore_missing(
+    caplog: LogCaptureFixture,
+) -> None:
+    transformer = ColumnSelection(columns=["col"], ignore_missing=True)
+    with caplog.at_level(logging.WARNING):
+        transformer.transform(pd.DataFrame({}))
+        assert caplog.messages[0] == "Column `col` is not in the DataFrame"

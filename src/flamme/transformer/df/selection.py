@@ -2,11 +2,14 @@ from __future__ import annotations
 
 __all__ = ["ColumnSelectionDataFrameTransformer"]
 
+import logging
 from collections.abc import Sequence
 
 from pandas import DataFrame
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
+
+logger = logging.getLogger(__name__)
 
 
 class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
@@ -15,6 +18,8 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
 
     Args:
         columns (``Sequence``): Specifies the columns to keep.
+        ignore_missing: If ``False``, an exception is raised if a
+            column is missing, otherwise a warning message is shown.
 
     Example usage:
 
@@ -24,7 +29,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
         >>> from flamme.transformer.df import ColumnSelection
         >>> transformer = ColumnSelection(columns=["col1", "col2"])
         >>> transformer
-        ColumnSelectionDataFrameTransformer(columns=['col1', 'col2'])
+        ColumnSelectionDataFrameTransformer(columns=['col1', 'col2'], ignore_missing=False)
         >>> df = pd.DataFrame(
         ...     {
         ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
@@ -42,16 +47,25 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
         4        None     5
     """
 
-    def __init__(self, columns: Sequence[str]) -> None:
+    def __init__(self, columns: Sequence[str], ignore_missing: bool = False) -> None:
         self._columns = list(columns)
+        self._ignore_missing = bool(ignore_missing)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(columns={self._columns})"
+        return (
+            f"{self.__class__.__qualname__}(columns={self._columns}, "
+            f"ignore_missing={self._ignore_missing})"
+        )
 
     def transform(self, df: DataFrame) -> DataFrame:
+        columns = []
         for col in self._columns:
             if col not in df:
-                raise RuntimeError(
-                    f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
-                )
-        return df[self._columns].copy()
+                if self._ignore_missing:
+                    logger.warning(f"Column `{col}` is not in the DataFrame")
+                else:
+                    msg = f"Column `{col}` is not in the DataFrame (columns:{sorted(df.columns)})"
+                    raise RuntimeError(msg)
+            else:
+                columns.append(col)
+        return df[columns].copy()
