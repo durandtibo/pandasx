@@ -230,6 +230,7 @@ def create_table_row(
 
 TYPE_NAMES = {
     "pandas._libs.tslibs.timestamps.Timestamp": "pandas.Timestamp",
+    "pandas._libs.tslibs.nattype.NaTType": "pandas.NaTType",
 }
 
 
