@@ -178,7 +178,7 @@ def create_analyzer() -> BaseAnalyzer:
             ),
         }
     )
-    columns = MappingAnalyzer({})
+    # columns = MappingAnalyzer({})
     return MappingAnalyzer(
         {
             "summary": DataFrameSummaryAnalyzer(),

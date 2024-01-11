@@ -116,6 +116,9 @@ def test_column_continuous_analyzer_get_statistics() -> None:
             "q99": 99.0,
             "q999": 99.9,
             "max": 100.0,
+            ">0": 100,
+            "<0": 0,
+            "=0": 1,
         },
         atol=1e-2,
     )
@@ -148,6 +151,9 @@ def test_column_continuous_analyzer_get_statistics_empty() -> None:
             "q99": float("nan"),
             "q999": float("nan"),
             "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
