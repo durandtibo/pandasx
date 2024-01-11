@@ -28,6 +28,7 @@ from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
 from flamme.transformer.df import (
     BaseDataFrameTransformer,
+    ColumnSelection,
     SequentialDataFrameTransformer,
     StripString,
     ToDatetime,
@@ -200,6 +201,10 @@ def create_analyzer() -> BaseAnalyzer:
 def create_transformer() -> BaseDataFrameTransformer:
     return SequentialDataFrameTransformer(
         [
+            ColumnSelection(
+                columns=["str", "float", "int", "cauchy", "datetime", "datetime_str", "missing"],
+                ignore_missing=True,
+            ),
             StripString(columns=["str"]),
             ToNumeric(columns=["float", "int", "cauchy"]),
             ToDatetime(columns=["datetime", "datetime_str"]),
