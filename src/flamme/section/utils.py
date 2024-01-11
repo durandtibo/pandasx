@@ -157,6 +157,9 @@ def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float | int]:
         "q99": float("nan"),
         "q999": float("nan"),
         "max": float("nan"),
+        ">0": (series > 0).sum().item(),
+        "<0": (series < 0).sum().item(),
+        "=0": (series == 0).sum().item(),
     }
     stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
     if stats["num_non_nulls"] > 0:

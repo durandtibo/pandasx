@@ -395,6 +395,9 @@ def create_stats_table(stats: dict, column: str) -> str:
             <tr><th>quantile 99%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>quantile 99.9%</th><td {{num_style}}>{{q99}}</td></tr>
             <tr><th>max</th><td {{num_style}}>{{max}}</td></tr>
+            <tr><th>number of zeros</th><td {{num_style}}>{{num_zeros}}</td></tr>
+            <tr><th>number of positive values</th><td {{num_style}}>{{num_pos}}</td></tr>
+            <tr><th>number of negative values</th><td {{num_style}}>{{num_neg}}</td></tr>
             <tr class="table-group-divider"></tr>
         </tbody>
     </table>
@@ -422,5 +425,8 @@ def create_stats_table(stats: dict, column: str) -> str:
             "q99": f"{stats['q99']:,.4f}",
             "q999": f"{stats['q999']:,.4f}",
             "max": f"{stats['max']:,.4f}",
+            "num_pos": f"{stats['>0']:,}",
+            "num_neg": f"{stats['<0']:,}",
+            "num_zeros": f"{stats['=0']:,}",
         }
     )

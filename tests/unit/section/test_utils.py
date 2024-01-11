@@ -176,6 +176,9 @@ def test_compute_statistics_empty(data: np.ndarray | pd.Series) -> None:
             "q99": float("nan"),
             "q999": float("nan"),
             "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
@@ -213,6 +216,9 @@ def test_compute_statistics(data: np.ndarray | pd.Series) -> None:
             "q99": 99.0,
             "q999": 99.9,
             "max": 100.0,
+            ">0": 100,
+            "<0": 0,
+            "=0": 1,
         },
         atol=1e-2,
     )
@@ -250,6 +256,9 @@ def test_compute_statistics_single_numeric_value(data: np.ndarray | pd.Series) -
             "q99": 1.0,
             "q999": 1.0,
             "max": 1.0,
+            ">0": 5,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
@@ -287,6 +296,9 @@ def test_compute_statistics_only_nans(data: np.ndarray | pd.Series) -> None:
             "q99": float("nan"),
             "q999": float("nan"),
             "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )

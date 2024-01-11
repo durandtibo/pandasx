@@ -47,6 +47,9 @@ def stats() -> dict:
         "q99": 99.0,
         "q999": 99.9,
         "max": 100.0,
+        ">0": 100,
+        "<0": 0,
+        "=0": 1,
     }
 
 
@@ -139,6 +142,9 @@ def test_column_continuous_section_get_statistics_empty_row() -> None:
             "q99": float("nan"),
             "q999": float("nan"),
             "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
@@ -170,6 +176,9 @@ def test_column_continuous_section_get_statistics_single_value() -> None:
             "q99": 1.0,
             "q999": 1.0,
             "max": 1.0,
+            ">0": 5,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
@@ -201,6 +210,9 @@ def test_column_continuous_section_get_statistics_only_nans() -> None:
             "q99": float("nan"),
             "q999": float("nan"),
             "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
         },
         equal_nan=True,
     )
