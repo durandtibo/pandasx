@@ -50,14 +50,13 @@ class ClickHouseIngestor(BaseIngestor):
 
     def ingest(self) -> DataFrame:
         logger.info(
-            f"Ingesting data from clickhouse... \n"
-            f"client configuration: {self._client_config}\n\n"
+            f"Ingesting data from clickhouse... \n\n"
             "---------------------------------------------------------------------------------\n"
             f"query:\n{self._query}\n"
             "---------------------------------------------------------------------------------\n\n"
         )
         client = clickhouse_connect.get_client(**self._client_config)
-        df = client.query_df(query=self._query).to_pandas().sort_index(axis=1)
+        df = client.query_df(query=self._query).sort_index(axis=1)
         logger.info(f"Data ingested. DataFrame shape: {df.shape}")
         logger.info(f"number of unique column names: {len(set(df.columns)):,}")
         return df
