@@ -62,7 +62,7 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
         df_null = compute_null_per_col(df)
         columns = df_null[df_null["null_pct"] < self._threshold]["column"].tolist()
         logger.info(
-            f"Removing {len(columns) - num_orig_cols:,} columns because they have too "
+            f"Removing {num_orig_cols - len(columns):,} columns because they have too "
             f"many null values (threshold={self._threshold})..."
         )
         return df[columns].copy()
