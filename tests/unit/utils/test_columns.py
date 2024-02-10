@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import pytest
 from objectory import OBJECT_TARGET
-from pytest import mark
 
 from flamme.analyzer import (
     BaseAnalyzer,
@@ -26,7 +26,7 @@ def test_column_str() -> None:
     ).startswith("Column(")
 
 
-@mark.parametrize("can_be_null", (True, False))
+@pytest.mark.parametrize("can_be_null", [True, False])
 def test_column_can_be_null(can_be_null: bool) -> None:
     assert (
         Column(
@@ -38,13 +38,13 @@ def test_column_can_be_null(can_be_null: bool) -> None:
     )
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "analyzer",
-    (
+    [
         ColumnContinuousAnalyzer(column="col"),
         ColumnDiscreteAnalyzer(column="col"),
         {OBJECT_TARGET: "flamme.analyzer.ColumnContinuousAnalyzer", "column": "col"},
-    ),
+    ],
 )
 def test_column_get_analyzer(analyzer: BaseAnalyzer | dict) -> None:
     assert isinstance(
@@ -53,9 +53,9 @@ def test_column_get_analyzer(analyzer: BaseAnalyzer | dict) -> None:
     )
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "transformer",
-    (ToNumeric(), StripString(), {OBJECT_TARGET: "flamme.transformer.series.ToNumeric"}),
+    [ToNumeric(), StripString(), {OBJECT_TARGET: "flamme.transformer.series.ToNumeric"}],
 )
 def test_column_get_transformer(transformer: BaseSeriesTransformer | dict) -> None:
     assert isinstance(

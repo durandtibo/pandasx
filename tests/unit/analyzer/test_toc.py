@@ -9,7 +9,7 @@ from flamme.analyzer import DuplicatedRowAnalyzer, TableOfContentAnalyzer
 from flamme.section import TableOfContentSection
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

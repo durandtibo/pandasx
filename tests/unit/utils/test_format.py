@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pytest import mark
+import pytest
 
 from flamme.utils.format import human_byte
 
@@ -9,8 +9,8 @@ from flamme.utils.format import human_byte
 ################################
 
 
-@mark.parametrize(
-    "size,output",
+@pytest.mark.parametrize(
+    ("size", "output"),
     [
         (2, "2.00 B"),
         (1023.0, "1,023.00 B"),
@@ -26,8 +26,8 @@ def test_human_byte_decimal_2(size: int, output: str) -> None:
     assert human_byte(size) == output
 
 
-@mark.parametrize(
-    "size,output",
+@pytest.mark.parametrize(
+    ("size", "output"),
     [
         (2, "2.000 B"),
         (1023.0, "1,023.000 B"),

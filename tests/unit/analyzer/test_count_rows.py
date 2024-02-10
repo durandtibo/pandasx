@@ -11,7 +11,7 @@ from flamme.analyzer import TemporalRowCountAnalyzer
 from flamme.section import EmptySection, TemporalRowCountSection
 
 
-@pytest.fixture
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

@@ -30,9 +30,7 @@ def remove_nan(data: T) -> T:
     return type(data)([x for x in data if not isinstance(x, (float, int)) or not math.isnan(x)])
 
 
-def sortnan(
-    iterable: Iterable[bool | float | int], /, *, reverse: bool = False
-) -> list[bool | float | int]:
+def sortnan(iterable: Iterable[bool | float], /, *, reverse: bool = False) -> list[bool | float]:
     r"""Implements a function to sort a sequence of numeric values with
     NaN.
 

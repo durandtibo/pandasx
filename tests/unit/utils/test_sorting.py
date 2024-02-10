@@ -1,19 +1,22 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
+import pytest
 from coola import objects_are_allclose
-from pytest import mark
 
 from flamme.utils.sorting import mixed_typed_sort
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 ######################################
 #     Tests for mixed_typed_sort     #
 ######################################
 
 
-@mark.parametrize(
-    "data,output",
+@pytest.mark.parametrize(
+    ("data", "output"),
     [
         # NaNs
         (
@@ -30,8 +33,8 @@ def test_mixed_typed_sort(data: Iterable, output: Iterable) -> None:
     assert objects_are_allclose(mixed_typed_sort(data), output, equal_nan=True)
 
 
-@mark.parametrize(
-    "data,output",
+@pytest.mark.parametrize(
+    ("data", "output"),
     [
         # NaNs
         (

@@ -207,7 +207,7 @@ def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
 ######################################################
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
