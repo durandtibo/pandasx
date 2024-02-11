@@ -25,7 +25,7 @@ def test_column_dataframe_transformer_str_empty() -> None:
 
 
 def test_column_dataframe_transformer_transform_1() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -33,9 +33,9 @@ def test_column_dataframe_transformer_transform_1() -> None:
         }
     )
     transformer = Column({"col2": ToNumeric()})
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -47,7 +47,7 @@ def test_column_dataframe_transformer_transform_1() -> None:
 
 
 def test_column_dataframe_transformer_transform_2() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -55,9 +55,9 @@ def test_column_dataframe_transformer_transform_2() -> None:
         }
     )
     transformer = Column({"col2": ToNumeric(), "col3": StripString()})
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -70,8 +70,8 @@ def test_column_dataframe_transformer_transform_2() -> None:
 
 def test_column_dataframe_transformer_transform_empty() -> None:
     transformer = Column({})
-    dataframe = transformer.transform(pd.DataFrame({}))
-    assert_frame_equal(dataframe, pd.DataFrame({}))
+    df = transformer.transform(pd.DataFrame({}))
+    assert_frame_equal(df, pd.DataFrame({}))
 
 
 def test_column_dataframe_transformer_transform_missing_column() -> None:
@@ -93,7 +93,7 @@ def test_column_dataframe_transformer_transform_missing_column_ignore_missing(
 ) -> None:
     transformer = Column({"col": ToNumeric()}, ignore_missing=True)
     with caplog.at_level(level=logging.WARNING):
-        dataframe = transformer.transform(
+        df = transformer.transform(
             pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
@@ -104,7 +104,7 @@ def test_column_dataframe_transformer_transform_missing_column_ignore_missing(
         )
         assert caplog.messages
         assert_frame_equal(
-            dataframe,
+            df,
             pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],

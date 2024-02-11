@@ -25,7 +25,7 @@ def test_to_datetime_dataframe_transformer_str_kwargs() -> None:
 
 
 def test_to_datetime_dataframe_transformer_transform() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"],
             "col2": [1, 2, 3, 4, 5],
@@ -34,9 +34,9 @@ def test_to_datetime_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ToDatetime(columns=["col1"])
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": pd.to_datetime(
@@ -51,7 +51,7 @@ def test_to_datetime_dataframe_transformer_transform() -> None:
 
 
 def test_to_datetime_dataframe_transformer_transform_kwargs() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "abc"],
             "col2": [1, 2, 3, 4, 5],
@@ -60,9 +60,9 @@ def test_to_datetime_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = ToDatetime(columns=["col1", "col3"], errors="coerce", format="%Y-%m-%d")
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": pd.to_datetime(

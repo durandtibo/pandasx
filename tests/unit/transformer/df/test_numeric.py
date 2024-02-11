@@ -25,7 +25,7 @@ def test_to_numeric_dataframe_transformer_str_kwargs() -> None:
 
 
 def test_to_numeric_dataframe_transformer_transform() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -34,9 +34,9 @@ def test_to_numeric_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ToNumeric(columns=["col1", "col3"])
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -49,7 +49,7 @@ def test_to_numeric_dataframe_transformer_transform() -> None:
 
 
 def test_to_numeric_dataframe_transformer_transform_kwargs() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -58,9 +58,9 @@ def test_to_numeric_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = ToNumeric(columns=["col1", "col3"], errors="coerce")
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
