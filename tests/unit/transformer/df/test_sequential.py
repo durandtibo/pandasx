@@ -26,7 +26,7 @@ def test_sequential_dataframe_transformer_str_empty() -> None:
 
 
 def test_sequential_dataframe_transformer_transform_1() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, "  "],
             "col2": ["1", "2", "3", "4", "5"],
@@ -35,9 +35,9 @@ def test_sequential_dataframe_transformer_transform_1() -> None:
         }
     )
     transformer = Sequential([ToNumeric(columns=["col1", "col2"], errors="coerce")])
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1.0, 2.0, 3.0, 4.0, float("nan")],
@@ -50,7 +50,7 @@ def test_sequential_dataframe_transformer_transform_1() -> None:
 
 
 def test_sequential_dataframe_transformer_transform_2() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, "  "],
             "col2": ["1", "2", "3", "4", "5"],
@@ -64,9 +64,9 @@ def test_sequential_dataframe_transformer_transform_2() -> None:
             ToNumeric(columns=["col1", "col2"]),
         ]
     )
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1.0, 2.0, 3.0, 4.0, float("nan")],

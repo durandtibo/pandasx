@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 
 import pandas as pd
+import pytest
 from pandas.testing import assert_frame_equal
-from pytest import LogCaptureFixture, raises
 
 from flamme.transformer.df import ColumnSelection
 
@@ -20,7 +20,7 @@ def test_column_selection_dataframe_transformer_str() -> None:
 
 
 def test_column_selection_dataframe_transformer_transform() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
             "col2": [1, None, 3, None, 5],
@@ -28,9 +28,9 @@ def test_column_selection_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ColumnSelection(columns=["col1", "col2"])
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
@@ -42,18 +42,18 @@ def test_column_selection_dataframe_transformer_transform() -> None:
 
 def test_column_selection_dataframe_transformer_transform_empty_row() -> None:
     transformer = ColumnSelection(columns=["col1", "col2"])
-    df = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
-    assert_frame_equal(df, pd.DataFrame({"col1": [], "col2": []}))
+    dataframe = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
+    assert_frame_equal(dataframe, pd.DataFrame({"col1": [], "col2": []}))
 
 
 def test_column_selection_dataframe_transformer_transform_empty() -> None:
     transformer = ColumnSelection(columns=["col1", "col2"])
-    with raises(RuntimeError, match=r"Column `col1` is not in the DataFrame \(columns:"):
+    with pytest.raises(RuntimeError, match=r"Column `col1` is not in the DataFrame \(columns:"):
         transformer.transform(pd.DataFrame({}))
 
 
 def test_column_selection_dataframe_transformer_transform_empty_ignore_missing(
-    caplog: LogCaptureFixture,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     transformer = ColumnSelection(columns=["col"], ignore_missing=True)
     with caplog.at_level(logging.WARNING):

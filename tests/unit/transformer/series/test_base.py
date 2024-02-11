@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
+from typing import TYPE_CHECKING
 
 from objectory import OBJECT_TARGET
-from pytest import LogCaptureFixture
 
 from flamme.transformer.series import (
     ToNumeric,
     is_series_transformer_config,
     setup_series_transformer,
 )
+
+if TYPE_CHECKING:
+    import pytest
 
 ##################################################
 #     Tests for is_series_transformer_config     #
@@ -42,7 +45,7 @@ def test_setup_series_transformer_dict() -> None:
     )
 
 
-def test_setup_series_transformer_incorrect_type(caplog: LogCaptureFixture) -> None:
+def test_setup_series_transformer_incorrect_type(caplog: pytest.LogCaptureFixture) -> None:
     with caplog.at_level(level=logging.WARNING):
         assert isinstance(setup_series_transformer({OBJECT_TARGET: "collections.Counter"}), Counter)
         assert caplog.messages

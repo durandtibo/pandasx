@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from flamme.transformer.df import StripString
+from flamme.transformer.dataframe import StripString
 
 #####################################################
 #     Tests for StripStringDataFrameTransformer     #
@@ -18,7 +18,7 @@ def test_strip_str_dataframe_transformer_str() -> None:
 
 
 def test_strip_str_dataframe_transformer_transform() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, "  "],
             "col2": ["1", "2", "3", "4", "5"],
@@ -27,9 +27,9 @@ def test_strip_str_dataframe_transformer_transform() -> None:
         }
     )
     transformer = StripString(columns=["col1", "col3"])
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, ""],
@@ -42,7 +42,7 @@ def test_strip_str_dataframe_transformer_transform() -> None:
 
 
 def test_strip_str_dataframe_transformer_transform_none() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, "  ", None, 42, 4.2],
             "col2": ["1", "2", "3", "4", "5", None, 42, 4.2],
@@ -51,9 +51,9 @@ def test_strip_str_dataframe_transformer_transform_none() -> None:
         }
     )
     transformer = StripString(columns=["col1", "col3"])
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, "", None, 42, 4.2],
@@ -66,7 +66,7 @@ def test_strip_str_dataframe_transformer_transform_none() -> None:
 
 
 def test_strip_str_dataframe_transformer_transform_empty() -> None:
-    df = pd.DataFrame({})
+    dataframe = pd.DataFrame({})
     transformer = StripString(columns=[])
-    df = transformer.transform(df)
-    assert_frame_equal(df, pd.DataFrame({}))
+    dataframe = transformer.transform(dataframe)
+    assert_frame_equal(dataframe, pd.DataFrame({}))
