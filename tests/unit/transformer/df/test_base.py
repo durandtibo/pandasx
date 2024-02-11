@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 def test_is_dataframe_transformer_config_true() -> None:
     assert is_dataframe_transformer_config(
         {
-            OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
+            OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
             "columns": ["col1", "col3"],
         }
     )
@@ -47,7 +47,7 @@ def test_setup_dataframe_transformer_dict() -> None:
     assert isinstance(
         setup_dataframe_transformer(
             {
-                OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
+                OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
                 "columns": ["col1", "col3"],
             }
         ),
