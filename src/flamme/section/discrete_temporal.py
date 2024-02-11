@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalDiscreteSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
@@ -21,6 +21,9 @@ from flamme.section.utils import (
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.sorting import mixed_typed_sort
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
 logger = logging.getLogger(__name__)
 
 
@@ -35,9 +38,8 @@ class ColumnTemporalDiscreteSection(BaseSection):
             the temporal distribution.
         period: Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
     """
 
     def __init__(
@@ -141,9 +143,8 @@ def create_temporal_figure(
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Returns:
         The HTML representation of the figure.

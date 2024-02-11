@@ -3,12 +3,15 @@ from __future__ import annotations
 __all__ = ["TableOfContentAnalyzer"]
 
 import logging
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section.toc import TableOfContentSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 

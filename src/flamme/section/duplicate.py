@@ -1,13 +1,15 @@
+r"""Contain the implementation of a section to analyze the duplicate
+values."""
+
 from __future__ import annotations
 
 __all__ = ["DuplicatedRowSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -19,6 +21,11 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,10 +36,10 @@ class DuplicatedRowSection(BaseSection):
         df: Specifies the DataFrame to analyze.
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
-            columns. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            columns.
+        figsize: Specifies the figure
             size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+            second is the height.
     """
 
     def __init__(

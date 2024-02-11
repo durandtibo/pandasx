@@ -3,8 +3,7 @@ from __future__ import annotations
 __all__ = ["ColumnDiscreteSection"]
 
 import logging
-from collections import Counter
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
@@ -19,6 +18,10 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+
+if TYPE_CHECKING:
+    from collections import Counter
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 

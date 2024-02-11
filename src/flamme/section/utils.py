@@ -1,3 +1,5 @@
+r"""Contain utility functions to generate sections."""
+
 from __future__ import annotations
 
 __all__ = [
@@ -69,7 +71,7 @@ def render_html_toc(
         number: Specifies the section number associated to the section.
         tags: Specifies the tags associated to the section.
         depth: Specifies the depth in the report.
-        max_depth: Specifies the maximum depth to generate in the ROC.
+        max_depth: Specifies the maximum depth to generate in the TOC.
 
     Returns:
         The HTML table of content associated to the section.

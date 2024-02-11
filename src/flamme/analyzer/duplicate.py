@@ -3,12 +3,15 @@ from __future__ import annotations
 __all__ = ["DuplicatedRowAnalyzer"]
 
 import logging
-from collections.abc import Sequence
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DuplicatedRowSection
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -19,10 +22,10 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     Args:
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
-            columns. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            columns.
+        figsize: Specifies the figure
             size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+            second is the height.
 
     Example usage:
 

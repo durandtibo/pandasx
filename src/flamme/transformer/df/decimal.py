@@ -5,7 +5,6 @@ from __future__ import annotations
 
 __all__ = ["DecimalToNumericDataFrameTransformer"]
 
-
 from typing import TYPE_CHECKING, Any
 
 import pandas as pd

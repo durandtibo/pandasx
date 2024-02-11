@@ -3,13 +3,11 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalContinuousSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -22,6 +20,12 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.mathnan import remove_nan
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    import pandas as pd
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +189,7 @@ def create_temporal_figure(
         vert=True,
         widths=0.7,
         patch_artist=True,
-        boxprops=dict(facecolor="lightblue"),
+        boxprops={"facecolor": "lightblue"},
     )
     ax.set_ylim(np.nanmin(array), np.nanmax(array))
     ax.set_xticks(np.arange(len(labels)), labels=labels)

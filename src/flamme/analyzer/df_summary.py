@@ -3,11 +3,13 @@ from __future__ import annotations
 __all__ = ["DataFrameSummaryAnalyzer"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataFrameSummarySection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +44,8 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
 
     def __init__(self, top: int = 5, sort: bool = False) -> None:
         if top < 0:
-            raise ValueError(f"Incorrect top value ({top}). top must be positive")
+            msg = f"Incorrect top value ({top}). top must be positive"
+            raise ValueError(msg)
         self._top = top
         self._sort = bool(sort)
 

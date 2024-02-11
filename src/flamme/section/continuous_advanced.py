@@ -3,12 +3,11 @@ from __future__ import annotations
 __all__ = ["ColumnContinuousAdvancedSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
@@ -28,6 +27,11 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import Series
 
 logger = logging.getLogger(__name__)
 

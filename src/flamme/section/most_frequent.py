@@ -1,10 +1,12 @@
+r"""Contain the implementation of a section to analyze the most frequent
+values for a given columns."""
+
 from __future__ import annotations
 
 __all__ = ["MostFrequentValuesSection"]
 
 import logging
-from collections import Counter
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 
@@ -17,11 +19,16 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 
+if TYPE_CHECKING:
+    from collections import Counter
+    from collections.abc import Sequence
+
 logger = logging.getLogger(__name__)
 
 
 class MostFrequentValuesSection(BaseSection):
-    r"""Implement a section that analyzes the data type of each column.
+    r"""Implement a section that analyzes the most frequent values for a
+    given columns.
 
     Args:
         counter: Specifies the counter with the number of occurrences
@@ -38,9 +45,7 @@ class MostFrequentValuesSection(BaseSection):
         self._total = sum(self._counter.values())
 
     def get_statistics(self) -> dict:
-        return {
-            "most_common": [(value, count) for value, count in self._counter.most_common(self._top)]
-        }
+        return {"most_common": list(self._counter.most_common(self._top))}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info("Rendering the most frequent values section...")
@@ -82,7 +87,7 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 """
 
     def _create_table(self) -> str:
-        most_common = [(value, count) for value, count in self._counter.most_common(self._top)]
+        most_common = list(self._counter.most_common(self._top))
         rows = []
         cumcount = 0
         for value, count in most_common:
@@ -134,7 +139,7 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
             "num_style": 'style="text-align: right;"',
             "value": value,
             "count": f"{count:,}",
-            "percentage": f"{100*count / total:.2f}",
-            "cum_percentage": f"{100*cumcount / total:.2f}",
+            "percentage": f"{100 * count / total:.2f}",
+            "cum_percentage": f"{100 * cumcount / total:.2f}",
         }
     )

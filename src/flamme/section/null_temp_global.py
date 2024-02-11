@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of null values for all columns."""
+
 from __future__ import annotations
 
 __all__ = ["GlobalTemporalNullValueSection"]
@@ -171,7 +174,7 @@ def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> st
     Args:
         df: Specifies the DataFrame to analyze.
         dt_column: Specifies the datetime column used to analyze the
-        temporal distribution.
+            temporal distribution.
         period: Specifies the temporal period e.g. monthly or daily.
 
     Returns:
@@ -215,7 +218,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Create the HTML code of a new table row.
 
     Args:
-        row: Specifies a DataFrame row.
+        label: Specifies the label of the row.
+        num_nulls: Specifies the number of null values.
+        total: Specifies the total number of values.
 
     Returns:
         The HTML code of a row.

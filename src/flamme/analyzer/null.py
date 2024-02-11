@@ -3,13 +3,16 @@ from __future__ import annotations
 __all__ = ["TemporalNullValueAnalyzer", "NullValueAnalyzer"]
 
 import logging
+from typing import TYPE_CHECKING
 
 import numpy as np
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection
 from flamme.section.null import NullValueSection, TemporalNullValueSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +23,7 @@ class NullValueAnalyzer(BaseAnalyzer):
     Args:
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
 
     Example usage:
 
@@ -67,7 +70,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period: Specifies the temporal period e.g. monthly or
             daily.
-        ncols (int, optional): Specifies the number of columns.
+        ncols: Specifies the number of columns.
             Default: ``2``
         figsize (``tuple``, optional): Specifies the figure size in
             inches. The first dimension is the width and the second is

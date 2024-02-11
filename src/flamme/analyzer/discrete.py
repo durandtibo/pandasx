@@ -4,8 +4,7 @@ __all__ = ["ColumnDiscreteAnalyzer", "ColumnTemporalDiscreteAnalyzer"]
 
 import logging
 from collections import Counter
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import (
@@ -13,6 +12,9 @@ from flamme.section import (
     ColumnTemporalDiscreteSection,
     EmptySection,
 )
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +105,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
 
     Example usage:
 

@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import great_expectations as gx
-from great_expectations.validator.validator import Validator
 
 from scripts.demo import create_dataframe
+
+if TYPE_CHECKING:
+    from great_expectations.validator.validator import Validator
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +60,7 @@ def add_expectations(validator: Validator) -> None:
     validator.expect_column_values_to_not_be_null("int", mostly=0.39, result_format="SUMMARY")
     validator.expect_column_values_to_be_null("int", mostly=0.59, result_format="SUMMARY")
     validator.expect_column_values_to_be_in_set(
-        "int", value_set={i for i in range(10)}, result_format="SUMMARY"
+        "int", value_set=set(range(10)), result_format="SUMMARY"
     )
 
     validator.expect_column_values_to_not_be_null("str", mostly=0.79, result_format="SUMMARY")

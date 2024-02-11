@@ -3,11 +3,13 @@ from __future__ import annotations
 __all__ = ["GlobalTemporalNullValueAnalyzer"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, GlobalTemporalNullValueSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +25,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
 
     Example usage:
 

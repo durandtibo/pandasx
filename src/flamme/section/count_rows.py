@@ -3,11 +3,10 @@ from __future__ import annotations
 __all__ = ["TemporalRowCountSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -18,6 +17,11 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -43,10 +47,11 @@ class TemporalRowCountSection(BaseSection):
         figsize: tuple[float, float] | None = None,
     ) -> None:
         if dt_column not in df:
-            raise ValueError(
+            msg = (
                 f"Datetime column {dt_column} is not in the DataFrame "
                 f"(columns:{sorted(df.columns)})"
             )
+            raise ValueError(msg)
         self._df = df
         self._dt_column = dt_column
         self._period = period

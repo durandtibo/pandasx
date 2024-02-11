@@ -1,12 +1,14 @@
+r"""Contain the implementation of a section to analyze the data types of
+each column."""
+
 from __future__ import annotations
 
 __all__ = ["DataTypeSection"]
 
 import copy
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
-import numpy as np
 from jinja2 import Template
 
 from flamme.section.base import BaseSection
@@ -18,6 +20,11 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    import numpy as np
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,8 +32,8 @@ class DataTypeSection(BaseSection):
     r"""Implement a section that analyzes the data type of each column.
 
     Args:
-        dtypes (``dict``): Specifies the data type for each column.
-        types (``dict``): Specifies the types of the values in each
+        dtypes: Specifies the data type for each column.
+        types: Specifies the types of the values in each
             column. A column can contain multiple types. The keys are
             the column names.
     """
@@ -38,11 +45,12 @@ class DataTypeSection(BaseSection):
         dtkeys = set(self._dtypes.keys())
         tkeys = set(self._types.keys())
         if dtkeys != tkeys:
-            raise RuntimeError(
+            msg = (
                 f"The keys of dtypes and types do not match:\n"
                 f"({len(dtkeys)}): {dtkeys}\n"
                 f"({len(tkeys)}): {tkeys}\n"
             )
+            raise RuntimeError(msg)
 
     def get_statistics(self) -> dict:
         return copy.deepcopy(self._types)

@@ -3,12 +3,14 @@ from __future__ import annotations
 __all__ = ["DataTypeAnalyzer"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
 from flamme.utils.dtype import df_column_types
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 

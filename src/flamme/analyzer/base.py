@@ -4,12 +4,15 @@ __all__ = ["BaseAnalyzer", "setup_analyzer"]
 
 import logging
 from abc import ABC
+from typing import TYPE_CHECKING
 
 from objectory import AbstractFactory
 from objectory.utils import is_object_config
-from pandas import DataFrame
 
-from flamme.section import BaseSection
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
+    from flamme.section import BaseSection
 
 logger = logging.getLogger(__name__)
 

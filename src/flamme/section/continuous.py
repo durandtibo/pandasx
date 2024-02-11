@@ -3,14 +3,12 @@ from __future__ import annotations
 __all__ = ["ColumnContinuousSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
-from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -25,6 +23,12 @@ from flamme.section.utils import (
 from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from matplotlib.axes import Axes
+    from pandas import Series
 
 logger = logging.getLogger(__name__)
 
@@ -201,7 +205,7 @@ def create_boxplot_figure(
         vert=False,
         widths=0.7,
         patch_artist=True,
-        boxprops=dict(facecolor="lightblue"),
+        boxprops={"facecolor": "lightblue"},
     )
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:

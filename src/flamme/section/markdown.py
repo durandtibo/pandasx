@@ -1,9 +1,12 @@
+r"""Contain the implementation of a section to convert a markdown string
+into HTML."""
+
 from __future__ import annotations
 
 __all__ = ["MarkdownSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import markdown
 from jinja2 import Template
@@ -16,6 +19,9 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 

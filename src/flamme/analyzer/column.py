@@ -3,14 +3,19 @@ from __future__ import annotations
 __all__ = ["ColumnSubsetAnalyzer"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import BaseSection
 from flamme.utils import setup_object
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
+
+    from flamme.section import BaseSection
 
 logger = logging.getLogger(__name__)
 

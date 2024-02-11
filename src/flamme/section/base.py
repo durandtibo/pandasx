@@ -1,38 +1,37 @@
+r"""Contain the base class to implement a section."""
+
 from __future__ import annotations
 
 __all__ = ["BaseSection"]
 
 from abc import ABC, abstractmethod
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class BaseSection(ABC):
-    r"""Defines the base class to manage sections."""
+    r"""Define the base class to manage sections."""
 
     @abstractmethod
     def get_statistics(self) -> dict:
-        r"""Computes the statistics associated to the section.
+        r"""Return the statistics associated to the section.
 
         Returns:
-        -------
-            dict: The statistics.
+            The statistics.
         """
 
     @abstractmethod
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
-        r"""Renders the HTML body associated to the section.
+        r"""Return the HTML body associated to the section.
 
         Args:
-        ----
-            number (str, optional): Specifies the section number.
-                Default: ""
-            tags (``Sequence``, optional): Specifies the tags
-                associated to the section. Default: ``()``
-            depth (int, optional): Specifies the depth in the report.
-                Default: ``0``
+            number: Specifies the section number.
+            tags: Specifies the tags associated to the section.
+            depth: Specifies the depth in the report.
 
         Returns:
-        -------
             The HTML body associated to the section.
         """
 
@@ -40,19 +39,16 @@ class BaseSection(ABC):
     def render_html_toc(
         self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
     ) -> str:
-        r"""Renders the HTML table of content (TOC) associated to the
+        r"""Return the HTML table of content (TOC) associated to the
         section.
 
         Args:
-        ----
-            number (str, optional): Specifies the section number
-                associated to the section. Default: ""
-            tags (``Sequence``, optional): Specifies the tags
-                associated to the section. Default: ``()``
-            depth (int, optional): Specifies the depth in the report.
-                Default: ``0``
+            number: Specifies the section number associated to the
+                section.
+            tags: Specifies the tags associated to the section.
+            depth: Specifies the depth in the report.
+            max_depth: Specifies the maximum depth to generate in the TOC.
 
         Returns:
-        -------
             The HTML table of content associated to the section.
         """

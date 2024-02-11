@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ["Reporter"]
 
 import logging
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
 
@@ -17,6 +17,9 @@ from flamme.transformer.df.base import (
 )
 from flamme.utils.io import save_text
 from flamme.utils.path import sanitize_path
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +36,7 @@ class Reporter(BaseReporter):
             or its configuration.
         report_path (``Path`` or str): Specifies the path where to
             save the HTML report.
-        max_toc_depth (int, optional): Specifies the maximum level
+        max_toc_depth: Specifies the maximum level
             to show in the table of content. Default: ``6``
 
     Example usage:

@@ -1,13 +1,15 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of null values for a given column."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalNullValueSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.null import plot_temporal_null_total, prepare_data
@@ -19,6 +21,11 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +43,7 @@ class ColumnTemporalNullValueSection(BaseSection):
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
     """
 
     def __init__(
@@ -48,13 +55,11 @@ class ColumnTemporalNullValueSection(BaseSection):
         figsize: tuple[float, float] | None = None,
     ) -> None:
         if column not in df:
-            raise ValueError(
-                f"Column {column} is not in the DataFrame (columns:{sorted(df.columns)})"
-            )
+            msg = f"Column {column} is not in the DataFrame (columns:{sorted(df.columns)})"
+            raise ValueError(msg)
         if dt_column not in df:
-            raise ValueError(
-                f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(df.columns)})"
-            )
+            msg = f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(df.columns)})"
+            raise ValueError(msg)
 
         self._df = df
         self._column = column
@@ -162,7 +167,7 @@ def create_temporal_null_figure(
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
 
     Returns:
         The HTML representation of the figure.
@@ -235,7 +240,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Create the HTML code of a new table row.
 
     Args:
-        row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
+        label: Specifies the label of the row.
+        num_nulls: Specifies the number of null values.
+        total: Specifies the total number of values.
 
     Returns:
         The HTML code of a row.

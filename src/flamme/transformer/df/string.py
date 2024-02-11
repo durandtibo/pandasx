@@ -5,7 +5,6 @@ from __future__ import annotations
 
 __all__ = ["StripStringDataFrameTransformer"]
 
-
 from typing import TYPE_CHECKING
 
 from tqdm import tqdm
