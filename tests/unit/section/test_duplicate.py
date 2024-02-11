@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import fixture, mark
 
 from flamme.section import DuplicatedRowSection
 from flamme.section.duplicate import create_duplicate_table
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
@@ -46,7 +46,7 @@ def test_duplicated_rows_section_figsize_default(dataframe: DataFrame) -> None:
     assert DuplicatedRowSection(df=dataframe, columns=["col1", "col2"]).figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_duplicated_rows_section_figsize(
     dataframe: DataFrame, figsize: tuple[float, float]
 ) -> None:

@@ -1,25 +1,28 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
+import pytest
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import TempPathFactory, fixture
 
 from flamme.ingestor import CsvIngestor
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-@fixture(scope="module")
-def df_path(tmp_path_factory: TempPathFactory) -> Path:
+
+@pytest.fixture(scope="module")
+def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("data").joinpath("df.csv")
-    df = DataFrame(
+    dataframe = DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    df.to_csv(path, index=False)
+    dataframe.to_csv(path, index=False)
     return path
 
 

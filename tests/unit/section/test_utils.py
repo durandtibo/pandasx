@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_allclose
-from pytest import mark
 
 from flamme.section.utils import (
     auto_yscale_continuous,
@@ -102,12 +102,12 @@ def test_render_html_toc_max_depth() -> None:
 ############################################
 
 
-@mark.parametrize("nbins", [1, 5, 10, 100, 1000])
+@pytest.mark.parametrize("nbins", [1, 5, 10, 100, 1000])
 def test_auto_yscale_continuous_nbins(nbins: int) -> None:
     assert auto_yscale_continuous(np.arange(100), nbins=nbins) == "linear"
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "array",
     [
         np.ones(100),
@@ -121,7 +121,7 @@ def test_auto_yscale_continuous_linear(array: np.ndarray) -> None:
     assert auto_yscale_continuous(array, nbins=10) == "linear"
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "array",
     [
         np.asarray([1] * 100 + list(range(1, 11))),
@@ -133,7 +133,7 @@ def test_auto_yscale_continuous_log(array: np.ndarray) -> None:
     assert auto_yscale_continuous(array, nbins=10) == "log"
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "array",
     [
         np.asarray([1] * 100 + [-1, 10, 100]),
@@ -150,7 +150,7 @@ def test_auto_yscale_continuous_symlog(array: np.ndarray) -> None:
 ########################################
 
 
-@mark.parametrize("data", [np.asarray([]), pd.Series([], dtype=object)])
+@pytest.mark.parametrize("data", [np.asarray([]), pd.Series([], dtype=object)])
 def test_compute_statistics_empty(data: np.ndarray | pd.Series) -> None:
     assert objects_are_allclose(
         compute_statistics(data),
@@ -184,7 +184,7 @@ def test_compute_statistics_empty(data: np.ndarray | pd.Series) -> None:
     )
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "data",
     [
         np.asarray([np.nan] + list(range(101)) + [np.nan]),
@@ -224,7 +224,7 @@ def test_compute_statistics(data: np.ndarray | pd.Series) -> None:
     )
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "data",
     [
         np.asarray([1, 1, 1, 1, 1]),
@@ -264,7 +264,7 @@ def test_compute_statistics_single_numeric_value(data: np.ndarray | pd.Series) -
     )
 
 
-@mark.parametrize(
+@pytest.mark.parametrize(
     "data",
     [
         np.asarray([np.nan, np.nan, np.nan, np.nan]),

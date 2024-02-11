@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_allclose, objects_are_equal
 from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
-from pytest import fixture, mark
 
 from flamme.analyzer import ColumnContinuousAnalyzer, ColumnTemporalContinuousAnalyzer
 from flamme.section import (
@@ -47,7 +47,7 @@ def test_column_continuous_analyzer_nbins_default() -> None:
     assert section.nbins is None
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_column_continuous_analyzer_nbins(nbins: int) -> None:
     section = ColumnContinuousAnalyzer(column="col", nbins=nbins).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -64,7 +64,7 @@ def test_column_continuous_analyzer_yscale_default() -> None:
     assert section.yscale == "auto"
 
 
-@mark.parametrize("yscale", ["linear", "log"])
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_column_continuous_analyzer_yscale(yscale: str) -> None:
     section = ColumnContinuousAnalyzer(column="col", yscale=yscale).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -81,7 +81,7 @@ def test_column_continuous_analyzer_xmin_default() -> None:
     assert section.xmin == "q0"
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None))
+@pytest.mark.parametrize("xmin", [1.0, "q0.1", None])
 def test_column_continuous_analyzer_xmin(xmin: float | str | None) -> None:
     section = ColumnContinuousAnalyzer(column="col", xmin=xmin).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -98,7 +98,7 @@ def test_column_continuous_analyzer_xmax_default() -> None:
     assert section.xmax == "q1"
 
 
-@mark.parametrize("xmax", (1.0, "q0.1", None))
+@pytest.mark.parametrize("xmax", [1.0, "q0.1", None])
 def test_column_continuous_analyzer_xmax(xmax: float | str | None) -> None:
     section = ColumnContinuousAnalyzer(column="col", xmax=xmax).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -115,7 +115,7 @@ def test_column_continuous_analyzer_figsize_default() -> None:
     assert section.figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> None:
     section = ColumnContinuousAnalyzer(column="col", figsize=figsize).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -207,7 +207,7 @@ def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
 ######################################################
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
@@ -255,7 +255,7 @@ def test_column_temporal_continuous_analyzer_yscale_default(dataframe: DataFrame
     assert section.yscale == "auto"
 
 
-@mark.parametrize("yscale", ("linear", "log"))
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_column_temporal_continuous_analyzer_yscale(dataframe: DataFrame, yscale: str) -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M", yscale=yscale
@@ -274,7 +274,7 @@ def test_column_temporal_continuous_analyzer_figsize_default(dataframe: DataFram
     assert section.figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_continuous_analyzer_figsize(
     dataframe: DataFrame, figsize: tuple[float, float]
 ) -> None:

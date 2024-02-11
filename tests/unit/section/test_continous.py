@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from pandas import Series
-from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
@@ -18,12 +18,12 @@ from flamme.section.continuous import (
 )
 
 
-@fixture()
+@pytest.fixture()
 def series() -> Series:
     return Series([np.nan] + list(range(101)) + [np.nan])
 
 
-@fixture()
+@pytest.fixture()
 def stats() -> dict:
     return {
         "count": 103,
@@ -70,7 +70,7 @@ def test_column_continuous_section_yscale_default(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").yscale == "auto"
 
 
-@mark.parametrize("yscale", ["log", "linear"])
+@pytest.mark.parametrize("yscale", ["log", "linear"])
 def test_column_continuous_section_yscale(series: Series, yscale: str) -> None:
     assert ColumnContinuousSection(series=series, column="col", yscale=yscale).yscale == yscale
 
@@ -79,7 +79,7 @@ def test_column_continuous_section_nbins_default(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").nbins is None
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_column_continuous_section_nbins(series: Series, nbins: int) -> None:
     assert ColumnContinuousSection(series=series, column="col", nbins=nbins).nbins == nbins
 
@@ -88,7 +88,7 @@ def test_column_continuous_section_xmin_default(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").xmin is None
 
 
-@mark.parametrize("xmin", (1.0, "q0.1"))
+@pytest.mark.parametrize("xmin", [1.0, "q0.1"])
 def test_column_continuous_section_xmin(series: Series, xmin: float | str) -> None:
     assert ColumnContinuousSection(series=series, column="col", xmin=xmin).xmin == xmin
 
@@ -97,7 +97,7 @@ def test_column_continuous_section_xmax_default(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").xmax is None
 
 
-@mark.parametrize("xmax", (5.0, "q0.9"))
+@pytest.mark.parametrize("xmax", [5.0, "q0.9"])
 def test_column_continuous_section_xmax(series: Series, xmax: float | str) -> None:
     assert ColumnContinuousSection(series=series, column="col", xmax=xmax).xmax == xmax
 
@@ -106,7 +106,7 @@ def test_column_continuous_section_figsize_default(series: Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_section_figsize(series: Series, figsize: tuple[float, float]) -> None:
     assert ColumnContinuousSection(series=series, column="col", figsize=figsize).figsize == figsize
 
@@ -256,17 +256,17 @@ def test_create_boxplot_figure(series: Series) -> None:
     assert isinstance(create_boxplot_figure(series=series), str)
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None, "q1"))
+@pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_boxplot_figure_xmin(series: Series, xmin: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmin=xmin), str)
 
 
-@mark.parametrize("xmax", (1.0, "q0.9", None, "q0"))
+@pytest.mark.parametrize("xmax", [1.0, "q0.9", None, "q0"])
 def test_create_boxplot_figure_xmax(series: Series, xmax: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
 
 
-@mark.parametrize("figsize", ((7, 3), (7.5, 3.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (7.5, 3.5)])
 def test_create_boxplot_figure_figsize(series: Series, figsize: tuple[float, float]) -> None:
     assert isinstance(create_boxplot_figure(series=series, figsize=figsize), str)
 
@@ -280,21 +280,21 @@ def test_create_histogram_figure(series: Series, stats: dict) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", stats=stats), str)
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_create_histogram_figure_nbins(series: Series, stats: dict, nbins: int) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, nbins=nbins), str
     )
 
 
-@mark.parametrize("yscale", ("linear", "log"))
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_create_histogram_figure_yscale(series: Series, stats: dict, yscale: str) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, yscale=yscale), str
     )
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None, "q1"))
+@pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_histogram_figure_xmin(
     series: Series, stats: dict, xmin: float | str | None
 ) -> None:
@@ -303,7 +303,7 @@ def test_create_histogram_figure_xmin(
     )
 
 
-@mark.parametrize("xmax", (100.0, "q0.9", None, "q0"))
+@pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
 def test_create_histogram_figure_xmax(
     series: Series, stats: dict, xmax: float | str | None
 ) -> None:
@@ -312,7 +312,7 @@ def test_create_histogram_figure_xmax(
     )
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_figure_figsize(
     series: Series, stats: dict, figsize: tuple[float, float]
 ) -> None:

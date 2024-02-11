@@ -7,7 +7,6 @@ from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import mark, raises
 
 from flamme.section import GlobalTemporalNullValueSection
 from flamme.section.null_temp_global import (
@@ -38,7 +37,7 @@ def test_column_temporal_null_value_section_df(dataframe: DataFrame) -> None:
     assert_frame_equal(section.df, dataframe)
 
 
-@mark.parametrize("dt_column", ("datetime", "date"))
+@pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = GlobalTemporalNullValueSection(
         df=DataFrame(
@@ -57,13 +56,13 @@ def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_column_temporal_null_value_section_period(dataframe: DataFrame, period: str) -> None:
     section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period=period)
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_null_value_section_figsize(
     dataframe: DataFrame, figsize: tuple[int, int]
 ) -> None:
@@ -79,7 +78,7 @@ def test_column_temporal_null_value_section_figsize_default(dataframe: DataFrame
 
 
 def test_column_temporal_null_value_section_missing_dt_column(dataframe: DataFrame) -> None:
-    with raises(
+    with pytest.raises(
         ValueError, match=r"Datetime column my_datetime is not in the DataFrame \(columns:"
     ):
         GlobalTemporalNullValueSection(df=dataframe, dt_column="my_datetime", period="M")

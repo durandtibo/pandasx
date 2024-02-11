@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_equal
 from pandas import DataFrame
-from pytest import fixture
 
 from flamme.analyzer import DuplicatedRowAnalyzer, TableOfContentAnalyzer
 from flamme.section import TableOfContentSection
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

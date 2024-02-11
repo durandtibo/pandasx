@@ -5,7 +5,6 @@ import pytest
 from coola import objects_are_equal
 from pandas import DataFrame
 from pandas._testing import assert_frame_equal
-from pytest import mark
 
 from flamme.analyzer import TemporalRowCountAnalyzer
 from flamme.section import EmptySection, TemporalRowCountSection
@@ -45,7 +44,7 @@ def test_temporal_row_count_analyzer_df(dataframe: DataFrame) -> None:
     assert_frame_equal(section.df, dataframe)
 
 
-@mark.parametrize("dt_column", ("datetime", "date"))
+@pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_temporal_row_count_analyzer_dt_column(dt_column: str) -> None:
     section = TemporalRowCountAnalyzer(dt_column=dt_column, period="M").analyze(
         DataFrame(
@@ -60,13 +59,13 @@ def test_temporal_row_count_analyzer_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_temporal_row_count_analyzer_period(dataframe: DataFrame, period: str) -> None:
     section = TemporalRowCountAnalyzer(dt_column="datetime", period=period).analyze(dataframe)
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_temporal_row_count_analyzer_figsize(
     dataframe: DataFrame, figsize: tuple[int, int]
 ) -> None:

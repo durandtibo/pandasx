@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_equal
 from pandas import DataFrame
 from pandas._testing import assert_frame_equal
-from pytest import mark
 
 from flamme.analyzer import NullValueAnalyzer, TemporalNullValueAnalyzer
 from flamme.section import EmptySection, NullValueSection, TemporalNullValueSection
@@ -120,7 +120,7 @@ def test_monthly_null_value_analyzer_df() -> None:
     )
 
 
-@mark.parametrize("dt_column", ("datetime", "str"))
+@pytest.mark.parametrize("dt_column", ["datetime", "str"])
 def test_monthly_null_value_analyzer_dt_column(dt_column: str) -> None:
     section = TemporalNullValueAnalyzer(dt_column=dt_column, period="M").analyze(
         DataFrame(
@@ -137,7 +137,7 @@ def test_monthly_null_value_analyzer_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_monthly_null_value_analyzer_period(period: str) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period=period).analyze(
         DataFrame(
@@ -154,7 +154,7 @@ def test_monthly_null_value_analyzer_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("ncols", (1, 2))
+@pytest.mark.parametrize("ncols", [1, 2])
 def test_monthly_null_value_analyzer_ncols(ncols: int) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M", ncols=ncols).analyze(
         DataFrame(
@@ -171,7 +171,7 @@ def test_monthly_null_value_analyzer_ncols(ncols: int) -> None:
     assert section.ncols == ncols
 
 
-@mark.parametrize("figsize", ((700, 300), (100, 100)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_monthly_null_value_analyzer_figsize(figsize: tuple[int, int]) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M", figsize=figsize).analyze(
         DataFrame(

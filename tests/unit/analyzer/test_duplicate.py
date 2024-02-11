@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_equal
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import fixture, mark
 
 from flamme.analyzer import DuplicatedRowAnalyzer
 from flamme.section import DuplicatedRowSection
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
@@ -55,7 +55,7 @@ def test_column_discrete_analyzer_figsize_default(dataframe: DataFrame) -> None:
     assert section.figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_discrete_analyzer_figsize(
     dataframe: DataFrame, figsize: tuple[float, float]
 ) -> None:

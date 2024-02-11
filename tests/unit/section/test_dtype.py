@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from numpy import dtype
-from pytest import raises
 
 from flamme.section import DataTypeSection
 
@@ -13,7 +13,7 @@ from flamme.section import DataTypeSection
 
 
 def test_data_type_section_incorrect_different_key() -> None:
-    with raises(RuntimeError, match="The keys of dtypes and types do not match:"):
+    with pytest.raises(RuntimeError, match="The keys of dtypes and types do not match:"):
         DataTypeSection(
             dtypes={"col": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
             types={"float": {float}, "int": {int}, "str": {str, type(None)}},
@@ -21,7 +21,7 @@ def test_data_type_section_incorrect_different_key() -> None:
 
 
 def test_data_type_section_incorrect_missing_key() -> None:
-    with raises(RuntimeError, match="The keys of dtypes and types do not match:"):
+    with pytest.raises(RuntimeError, match="The keys of dtypes and types do not match:"):
         DataTypeSection(
             dtypes={"int": dtype("float64"), "str": dtype("O")},
             types={"float": {float}, "int": {int}, "str": {str, type(None)}},

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_equal
 from pandas import DataFrame
 from pandas._testing import assert_frame_equal
-from pytest import mark
 
 from flamme.analyzer import ColumnTemporalNullValueAnalyzer
 from flamme.section import ColumnTemporalNullValueSection, EmptySection
@@ -47,7 +47,7 @@ def test_column_temporal_null_value_analyzer_df() -> None:
     )
 
 
-@mark.parametrize("column", ("col1", "col2"))
+@pytest.mark.parametrize("column", ["col1", "col2"])
 def test_column_temporal_null_value_analyzer_column(column: str) -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column=column, dt_column="datetime", period="M"
@@ -65,7 +65,7 @@ def test_column_temporal_null_value_analyzer_column(column: str) -> None:
     assert section.column == column
 
 
-@mark.parametrize("dt_column", ("datetime", "date"))
+@pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_column_temporal_null_value_analyzer_dt_column(dt_column: str) -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column="col", dt_column=dt_column, period="M"
@@ -83,7 +83,7 @@ def test_column_temporal_null_value_analyzer_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_column_temporal_null_value_analyzer_period(period: str) -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column="col", dt_column="datetime", period=period
@@ -100,7 +100,7 @@ def test_column_temporal_null_value_analyzer_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_null_value_analyzer_figsize(figsize: tuple[int, int]) -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column="col", dt_column="datetime", period="M", figsize=figsize

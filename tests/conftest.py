@@ -1,10 +1,9 @@
-__all__ = ["close_plt_figure"]
+__all__ = []
 
-
+import pytest
 from matplotlib import pyplot as plt
-from pytest import fixture
 
 
-@fixture(autouse=True)
-def close_plt_figure() -> None:
+@pytest.fixture(autouse=True)
+def _close_plt_figure() -> None:
     plt.close()
