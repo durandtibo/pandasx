@@ -33,8 +33,8 @@ def test_clickhouse_ingestor_ingest() -> None:
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    query_dataframe_mock = Mock(return_value=dataframe)
-    clickhouse_mock = Mock(return_value=Mock(query_dataframe=query_dataframe_mock))
+    query_df_mock = Mock(return_value=dataframe)
+    clickhouse_mock = Mock(return_value=Mock(query_df=query_df_mock))
     with patch("flamme.ingestor.clickhouse.clickhouse_connect.get_client", clickhouse_mock):
         dataframe = ingestor.ingest()
         assert_frame_equal(
@@ -48,4 +48,4 @@ def test_clickhouse_ingestor_ingest() -> None:
             ),
         )
         clickhouse_mock.assert_called_once_with(username="POLAR")
-        query_dataframe_mock.assert_called_once_with(query="select * from source.dataset")
+        query_df_mock.assert_called_once_with(query="select * from source.dataset")
