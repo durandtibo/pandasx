@@ -113,7 +113,7 @@ def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
     return "log"
 
 
-def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float | int]:
+def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
     r"""Compute several descriptive statistics for the input data.
 
     Args:

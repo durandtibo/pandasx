@@ -9,7 +9,7 @@ from pytest import fixture
 from flamme.section import DuplicatedRowSection, TableOfContentSection
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

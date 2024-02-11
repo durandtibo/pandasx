@@ -18,12 +18,12 @@ from flamme.section.continuous import (
 )
 
 
-@fixture
+@fixture()
 def series() -> Series:
     return Series([np.nan] + list(range(101)) + [np.nan])
 
 
-@fixture
+@fixture()
 def stats() -> dict:
     return {
         "count": 103,

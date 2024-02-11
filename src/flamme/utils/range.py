@@ -7,9 +7,9 @@ import numpy as np
 
 def find_range(
     values: np.ndarray,
-    xmin: float | int | str | None = None,
-    xmax: float | int | str | None = None,
-) -> tuple[float | int, float | int]:
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+) -> tuple[float, float]:
     r"""Finds a range of value.
 
     Args:

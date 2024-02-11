@@ -9,7 +9,7 @@ from flamme.analyzer import MostFrequentValuesAnalyzer
 from flamme.section import EmptySection, MostFrequentValuesSection
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame({"col": np.array([1, 42, np.nan, 22, 1, 2, 1, np.nan])})
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ["human_byte"]
 
 
-def human_byte(size: float | int, decimal: int = 2) -> str:
+def human_byte(size: float, decimal: int = 2) -> str:
     r"""Computes a human readable string representation of byte sizes.
 
     Args:

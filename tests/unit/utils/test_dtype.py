@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pyarrow as pa
@@ -15,19 +15,22 @@ from flamme.utils.dtype import (
     series_column_types,
 )
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 @pytest.fixture(scope="module")
 def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
     nrows = 10
-    df = DataFrame(
+    dataframe = DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
             "col_int": np.arange(nrows, dtype=int),
             "col_str": [f"a{i}" for i in range(nrows)],
         }
     )
-    df.to_parquet(path)
+    dataframe.to_parquet(path)
     return path
 
 

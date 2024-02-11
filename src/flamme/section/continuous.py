@@ -98,7 +98,7 @@ class ColumnContinuousSection(BaseSection):
         dimension is the width and the second is the height."""
         return self._figsize
 
-    def get_statistics(self) -> dict[str, float | int]:
+    def get_statistics(self) -> dict[str, float]:
         return compute_statistics(self._series)
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:

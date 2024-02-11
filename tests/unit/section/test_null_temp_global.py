@@ -17,7 +17,7 @@ from flamme.section.null_temp_global import (
 )
 
 
-@pytest.fixture
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

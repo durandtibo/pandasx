@@ -10,12 +10,12 @@ from flamme.section import ColumnContinuousAdvancedSection
 from flamme.section.continuous_advanced import create_histogram_range_figure
 
 
-@fixture
+@fixture()
 def series() -> Series:
     return Series([np.nan] + list(range(101)) + [np.nan])
 
 
-@fixture
+@fixture()
 def stats() -> dict:
     return {
         "count": 103,

@@ -10,7 +10,7 @@ from flamme.analyzer import DuplicatedRowAnalyzer
 from flamme.section import DuplicatedRowSection
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

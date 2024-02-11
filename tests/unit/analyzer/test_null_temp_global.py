@@ -12,7 +12,7 @@ from flamme.analyzer import GlobalTemporalNullValueAnalyzer
 from flamme.section import EmptySection, GlobalTemporalNullValueSection
 
 
-@pytest.fixture
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

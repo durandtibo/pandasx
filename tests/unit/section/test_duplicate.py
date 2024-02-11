@@ -11,7 +11,7 @@ from flamme.section import DuplicatedRowSection
 from flamme.section.duplicate import create_duplicate_table
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

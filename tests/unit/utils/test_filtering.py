@@ -16,7 +16,7 @@ from flamme.utils.filtering import (
 
 
 def test_find_columns_type_str() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -24,11 +24,11 @@ def test_find_columns_type_str() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, str) == ("col2", "col3", "col4")
+    assert find_columns_type(dataframe, str) == ("col2", "col3", "col4")
 
 
 def test_find_columns_type_int() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -36,11 +36,11 @@ def test_find_columns_type_int() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, int) == ("col1",)
+    assert find_columns_type(dataframe, int) == ("col1",)
 
 
 def test_find_columns_type_float() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -48,11 +48,11 @@ def test_find_columns_type_float() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, float) == tuple()
+    assert find_columns_type(dataframe, float) == ()
 
 
 def test_find_columns_type_empty() -> None:
-    assert find_columns_type(pd.DataFrame({}), str) == tuple()
+    assert find_columns_type(pd.DataFrame({}), str) == ()
 
 
 ##########################################
@@ -61,7 +61,7 @@ def test_find_columns_type_empty() -> None:
 
 
 def test_find_columns_decimal() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, Decimal(4), Decimal(5)],
             "col2": ["1", "2", "3", "4", "5"],
@@ -69,11 +69,11 @@ def test_find_columns_decimal() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_decimal(df) == ("col1", "col3")
+    assert find_columns_decimal(dataframe) == ("col1", "col3")
 
 
 def test_find_columns_decimal_empty() -> None:
-    assert find_columns_decimal(pd.DataFrame({})) == tuple()
+    assert find_columns_decimal(pd.DataFrame({})) == ()
 
 
 ######################################
@@ -82,7 +82,7 @@ def test_find_columns_decimal_empty() -> None:
 
 
 def test_find_columns_str() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -90,8 +90,8 @@ def test_find_columns_str() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_str(df) == ("col2", "col3", "col4")
+    assert find_columns_str(dataframe) == ("col2", "col3", "col4")
 
 
 def test_find_columns_str_empty() -> None:
-    assert find_columns_str(pd.DataFrame({})) == tuple()
+    assert find_columns_str(pd.DataFrame({})) == ()

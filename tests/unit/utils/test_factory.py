@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections import deque
 from typing import Any
 
+import pytest
 from objectory import OBJECT_TARGET
-from pytest import mark
 
 from flamme.utils import setup_object
 
@@ -13,8 +13,8 @@ from flamme.utils import setup_object
 ##################################
 
 
-@mark.parametrize(
-    "module", (deque(), {OBJECT_TARGET: "collections.deque", "iterable": [1, 2, 1, 3]})
+@pytest.mark.parametrize(
+    "module", [deque(), {OBJECT_TARGET: "collections.deque", "iterable": [1, 2, 1, 3]}]
 )
 def test_setup_object(module: Any) -> None:
     assert isinstance(setup_object(module), deque)

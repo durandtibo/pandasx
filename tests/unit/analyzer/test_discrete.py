@@ -14,7 +14,7 @@ from flamme.section import (
 )
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {

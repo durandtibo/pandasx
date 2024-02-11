@@ -11,7 +11,7 @@ from flamme.section import ColumnTemporalContinuousSection
 from flamme.section.continuous_temporal import create_temporal_figure
 
 
-@fixture
+@fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
