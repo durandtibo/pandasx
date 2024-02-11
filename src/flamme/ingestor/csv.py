@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class CsvIngestor(BaseIngestor):
-    r"""Implements a CSV DataFrame ingestor.
+    r"""Implement a CSV DataFrame ingestor.
 
     Args:
         path (``pathlib.Path`` or str): Specifies the path to the

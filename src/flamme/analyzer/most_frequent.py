@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class MostFrequentValuesAnalyzer(BaseAnalyzer):
-    r"""Implements a discrete distribution analyzer.
+    r"""Implement a discrete distribution analyzer.
 
     Args:
         column: Specifies the column to analyze.

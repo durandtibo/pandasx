@@ -1,35 +1,42 @@
+r"""Contain ``pandas.Series`` transformers to transform columns with
+string values."""
+
 from __future__ import annotations
 
 __all__ = ["StripStringSeriesTransformer"]
 
 
-from pandas import Series
+from typing import TYPE_CHECKING
 
 from flamme.transformer.series.base import BaseSeriesTransformer
 
+if TYPE_CHECKING:
+    from pandas import Series
+
 
 class StripStringSeriesTransformer(BaseSeriesTransformer):
-    r"""Implements a transformer to strip the strings in a
+    r"""Implement a transformer to strip the strings in a
     ``pandas.Series``.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.transformer.series import StripString
+    >>> transformer = StripString()
+    >>> transformer
+    StripStringSeriesTransformer()
+    >>> series = pd.Series(["a ", " b", "  c  ", " d ", "e"])
+    >>> series = transformer.transform(series)
+    >>> series
+    0    a
+    1    b
+    2    c
+    3    d
+    4    e
+    dtype: object
 
-        >>> import pandas as pd
-        >>> from flamme.transformer.series import StripString
-        >>> transformer = StripString()
-        >>> transformer
-        StripStringSeriesTransformer()
-        >>> series = pd.Series(["a ", " b", "  c  ", " d ", "e"])
-        >>> series = transformer.transform(series)
-        >>> series
-        0    a
-        1    b
-        2    c
-        3    d
-        4    e
-        dtype: object
+    ```
     """
 
     def __repr__(self) -> str:

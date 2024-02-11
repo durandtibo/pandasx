@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class NullValueAnalyzer(BaseAnalyzer):
-    r"""Implements a null value analyzer.
+    r"""Implement a null value analyzer.
 
     Args:
         figsize (``tuple`` , optional): Specifies the figure size in
@@ -59,7 +59,7 @@ class NullValueAnalyzer(BaseAnalyzer):
 
 
 class TemporalNullValueAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the temporal distribution of null
+    r"""Implement an analyzer to show the temporal distribution of null
     values.
 
     Args:

@@ -1,3 +1,5 @@
+r"""Contain ``pandas.DataFrame`` transformers."""
+
 from __future__ import annotations
 
 __all__ = [

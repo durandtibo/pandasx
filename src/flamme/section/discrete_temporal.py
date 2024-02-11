@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnTemporalDiscreteSection(BaseSection):
-    r"""Implements a section that analyzes the temporal distribution of a
+    r"""Implement a section that analyzes the temporal distribution of a
     column with discrete values.
 
     Args:

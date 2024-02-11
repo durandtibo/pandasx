@@ -61,7 +61,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
 
 def is_reporter_config(config: dict) -> bool:
-    r"""Indicates if the input configuration is a configuration for a
+    r"""Indicate if the input configuration is a configuration for a
     ``BaseReporter``.
 
     This function only checks if the value of the key  ``_target_``
@@ -70,7 +70,7 @@ def is_reporter_config(config: dict) -> bool:
     the class.
 
     Args:
-        config (dict): Specifies the configuration to check.
+        config: Specifies the configuration to check.
 
     Returns:
         bool: ``True`` if the input configuration is a configuration
@@ -104,7 +104,7 @@ def is_reporter_config(config: dict) -> bool:
 def setup_reporter(
     reporter: BaseReporter | dict,
 ) -> BaseReporter:
-    r"""Sets up an reporter.
+    r"""Set up an reporter.
 
     The reporter is instantiated from its configuration
     by using the ``BaseReporter`` factory function.

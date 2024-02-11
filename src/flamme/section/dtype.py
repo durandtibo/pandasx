@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataTypeSection(BaseSection):
-    r"""Implements a section that analyzes the data type of each column.
+    r"""Implement a section that analyzes the data type of each column.
 
     Args:
         dtypes (``dict``): Specifies the data type for each column.

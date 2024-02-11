@@ -1,21 +1,26 @@
+r"""Contain ``pandas.DataFrame`` transformers to transform columns with
+datetime values."""
+
 from __future__ import annotations
 
 __all__ = ["ToDatetimeDataFrameTransformer"]
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
-from pandas import DataFrame
 from tqdm import tqdm
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
 
 class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
-    r"""Implements a transformer to convert some columns to numeric type.
+    r"""Implement a transformer to convert some columns to numeric type.
 
     Args:
-        columns (``Sequence``): Specifies the columns to convert.
+        columns: Specifies the columns to convert.
         **kwargs: Specifies the keyword arguments for
             ``pandas.to_datetime``.
 
@@ -48,7 +53,7 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
         dtype: object
     """
 
-    def __init__(self, columns: Sequence[str], **kwargs) -> None:
+    def __init__(self, columns: Sequence[str], **kwargs: Any) -> None:
         self._columns = tuple(columns)
         self._kwargs = kwargs
 
@@ -58,7 +63,7 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
             args = ", " + args
         return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         for col in tqdm(self._columns, desc="Converting to numeric type"):
             df[col] = pd.to_datetime(df[col], **self._kwargs)
         return df

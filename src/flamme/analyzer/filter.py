@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class FilteredAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to find all the value types in each
-    column.
+    r"""Implement an analyzer to find all the value types in each column.
 
     Args:
         query (``str``): Soecifies the query.

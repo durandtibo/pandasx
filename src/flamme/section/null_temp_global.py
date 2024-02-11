@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class GlobalTemporalNullValueSection(BaseSection):
-    r"""Implements a section to analyze the temporal distribution of null
+    r"""Implement a section to analyze the temporal distribution of null
     values for all columns.
 
     Args:

@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnContinuousSection(BaseSection):
-    r"""Implements a section that analyzes a continuous distribution of
+    r"""Implement a section that analyzes a continuous distribution of
     values.
 
     Args:

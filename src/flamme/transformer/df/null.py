@@ -1,19 +1,24 @@
+r"""Contain ``pandas.DataFrame`` transformers to transform columns with
+null values."""
+
 from __future__ import annotations
 
 __all__ = ["NullColumnDataFrameTransformer"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
 from flamme.utils.null import compute_null_per_col
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
 
 class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
-    r"""Implements a ``pandas.DataFrame`` transformer to remove the
+    r"""Implement a ``pandas.DataFrame`` transformer to remove the
     columns that have too many null values.
 
     Args:

@@ -9,7 +9,7 @@ from flamme.section import MarkdownSection
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer that adds a mardown string to the report..
+    r"""Implement an analyzer that adds a mardown string to the report..
 
     Example usage:
 

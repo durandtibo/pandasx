@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class Reporter(BaseReporter):
-    r"""Implements a simple reporter.
+    r"""Implement a simple reporter.
 
     Args:
         ingestor (``BaseIngestor`` or dict): Specifies the ingestor

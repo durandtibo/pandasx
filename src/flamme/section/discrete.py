@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnDiscreteSection(BaseSection):
-    r"""Implements a section that analyzes a discrete distribution of
+    r"""Implement a section that analyzes a discrete distribution of
     values.
 
     Args:

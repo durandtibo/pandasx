@@ -1,3 +1,5 @@
+r"""Contain DataFrame analyzers."""
+
 from __future__ import annotations
 
 __all__ = [

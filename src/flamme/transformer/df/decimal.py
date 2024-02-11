@@ -1,18 +1,25 @@
+r"""Contain ``pandas.DataFrame`` transformers to transform columns with
+decimal values."""
+
 from __future__ import annotations
 
 __all__ = ["DecimalToNumericDataFrameTransformer"]
 
 
+from typing import TYPE_CHECKING, Any
+
 import pandas as pd
-from pandas import DataFrame
 from tqdm import tqdm
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
 from flamme.utils.filtering import find_columns_decimal
 
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
 
 class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
-    r"""Implements a ``pandas.DataFrame`` to convert all the columns with
+    r"""Implement a ``pandas.DataFrame`` to convert all the columns with
     ``Decimal`` objects to floats.
 
     Args:
@@ -52,7 +59,7 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
         dtype: object
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         self._kwargs = kwargs
 
     def __repr__(self) -> str:

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class ParquetIngestor(BaseIngestor):
-    r"""Implements a parquet DataFrame ingestor.
+    r"""Implement a parquet DataFrame ingestor.
 
     Args:
         path (``pathlib.Path`` or str): Specifies the path to the

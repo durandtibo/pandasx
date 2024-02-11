@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class DuplicatedRowSection(BaseSection):
-    r"""Implements a section to analyze the number of duplicated rows.
+    r"""Implement a section to analyze the number of duplicated rows.
 
     Args:
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.

@@ -1,21 +1,28 @@
+r"""Contain ``pandas.DataFrame`` transformers that combines multiple
+``pandas.Series`` transformers."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnDataFrameTransformer"]
 
 import logging
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 from tqdm import tqdm
 
 from flamme.transformer.df.base import BaseDataFrameTransformer
-from flamme.transformer.series.base import BaseSeriesTransformer
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
+    from flamme.transformer.series.base import BaseSeriesTransformer
 
 logger = logging.getLogger(__name__)
 
 
 class ColumnDataFrameTransformer(BaseDataFrameTransformer):
-    r"""Implements a ``pandas.DataFrame`` transformer that applies
+    r"""Implement a ``pandas.DataFrame`` transformer that applies
     ``pandas.Series`` transformers on some columns.
 
     Args:
@@ -76,9 +83,8 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
                         f"Skipping transformation for column {col} because the column is missing"
                     )
                 else:
-                    raise RuntimeError(
-                        f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
-                    )
+                    msg = f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
+                    raise RuntimeError(msg)
             else:
                 logger.info(f"Transforming column `{col}`...")
                 df[col] = transformer.transform(df[col])
@@ -125,8 +131,9 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
         ```
         """
         if column in self._columns and not replace_ok:
-            raise KeyError(
+            msg = (
                 f"`{column}` is already used to register a transformer. "
                 "Use `replace_ok=True` to replace the transformer"
             )
+            raise KeyError(msg)
         self._columns[column] = transformer

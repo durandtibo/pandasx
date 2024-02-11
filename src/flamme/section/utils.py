@@ -21,11 +21,11 @@ GO_TO_TOP = '<a href="#">Go to top</a>'
 
 
 def tags2id(tags: Sequence[str]) -> str:
-    r"""Converts a sequence of tags to a string that can be used as ID in
+    r"""Convert a sequence of tags to a string that can be used as ID in
     a HTML file.
 
     Args:
-        tags (``Sequence``): Specifies the sequence of tags.
+        tags: Specifies the sequence of tags.
 
     Returns:
         str: The generated ID from the tags.
@@ -34,11 +34,10 @@ def tags2id(tags: Sequence[str]) -> str:
 
 
 def tags2title(tags: Sequence[str]) -> str:
-    r"""Converts a sequence of tags to a string that can be used as
-    title.
+    r"""Convert a sequence of tags to a string that can be used as title.
 
     Args:
-        tags (``Sequence``): Specifies the sequence of tags.
+        tags: Specifies the sequence of tags.
 
     Returns:
         str: The generated title from the tags.

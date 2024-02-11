@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnTemporalContinuousSection(BaseSection):
-    r"""Implements a section that analyzes the temporal distribution of a
+    r"""Implement a section that analyzes the temporal distribution of a
     column with continuous values.
 
     Args:

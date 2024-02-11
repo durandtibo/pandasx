@@ -12,7 +12,7 @@ from flamme.section import BaseSection
 
 
 class ChoiceAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to analyze multiple analyzers.
+    r"""Implement an analyzer to analyze multiple analyzers.
 
     Args:
         analyzers (``Mapping``): Specifies the mappings to analyze.
@@ -79,7 +79,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
 
 
 class NumUniqueSelection(Callable):
-    r"""Implements a selection logic based on the number of unique values
+    r"""Implement a selection logic based on the number of unique values
     in a column.
 
     Args:
