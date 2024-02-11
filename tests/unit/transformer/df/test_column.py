@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 
 import pandas as pd
+import pytest
 from pandas.testing import assert_frame_equal
-from pytest import LogCaptureFixture, raises
 
 from flamme.transformer.df import Column
 from flamme.transformer.series import StripString, ToNumeric
@@ -25,7 +25,7 @@ def test_column_dataframe_transformer_str_empty() -> None:
 
 
 def test_column_dataframe_transformer_transform_1() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -33,9 +33,9 @@ def test_column_dataframe_transformer_transform_1() -> None:
         }
     )
     transformer = Column({"col2": ToNumeric()})
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -47,7 +47,7 @@ def test_column_dataframe_transformer_transform_1() -> None:
 
 
 def test_column_dataframe_transformer_transform_2() -> None:
-    df = pd.DataFrame(
+    dataframe = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -55,9 +55,9 @@ def test_column_dataframe_transformer_transform_2() -> None:
         }
     )
     transformer = Column({"col2": ToNumeric(), "col3": StripString()})
-    df = transformer.transform(df)
+    dataframe = transformer.transform(dataframe)
     assert_frame_equal(
-        df,
+        dataframe,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -70,13 +70,13 @@ def test_column_dataframe_transformer_transform_2() -> None:
 
 def test_column_dataframe_transformer_transform_empty() -> None:
     transformer = Column({})
-    df = transformer.transform(pd.DataFrame({}))
-    assert_frame_equal(df, pd.DataFrame({}))
+    dataframe = transformer.transform(pd.DataFrame({}))
+    assert_frame_equal(dataframe, pd.DataFrame({}))
 
 
 def test_column_dataframe_transformer_transform_missing_column() -> None:
     transformer = Column({"col": ToNumeric()})
-    with raises(RuntimeError, match="Column .* is not in the DataFrame"):
+    with pytest.raises(RuntimeError, match="Column .* is not in the DataFrame"):
         transformer.transform(
             pd.DataFrame(
                 {
@@ -89,11 +89,11 @@ def test_column_dataframe_transformer_transform_missing_column() -> None:
 
 
 def test_column_dataframe_transformer_transform_missing_column_ignore_missing(
-    caplog: LogCaptureFixture,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     transformer = Column({"col": ToNumeric()}, ignore_missing=True)
     with caplog.at_level(level=logging.WARNING):
-        df = transformer.transform(
+        dataframe = transformer.transform(
             pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
@@ -104,7 +104,7 @@ def test_column_dataframe_transformer_transform_missing_column_ignore_missing(
         )
         assert caplog.messages
         assert_frame_equal(
-            df,
+            dataframe,
             pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
@@ -126,7 +126,7 @@ def test_column_dataframe_transformer_add_transformer() -> None:
 
 def test_column_dataframe_transformer_add_transformer_replace_ok_false() -> None:
     transformer = Column({"col2": ToNumeric(), "col3": StripString()})
-    with raises(KeyError, match="`col3` is already used to register a transformer."):
+    with pytest.raises(KeyError, match="`col3` is already used to register a transformer."):
         transformer.add_transformer(column="col3", transformer=ToNumeric())
 
 

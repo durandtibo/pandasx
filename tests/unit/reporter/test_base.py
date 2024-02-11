@@ -2,15 +2,19 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from objectory import OBJECT_TARGET
-from pytest import LogCaptureFixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter, is_reporter_config, setup_reporter
 from flamme.transformer.df import Sequential
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 ########################################
 #     Tests for is_reporter_config     #
@@ -72,7 +76,7 @@ def test_setup_reporter_dict() -> None:
     )
 
 
-def test_setup_reporter_incorrect_type(caplog: LogCaptureFixture) -> None:
+def test_setup_reporter_incorrect_type(caplog: pytest.LogCaptureFixture) -> None:
     with caplog.at_level(level=logging.WARNING):
         assert isinstance(setup_reporter({OBJECT_TARGET: "collections.Counter"}), Counter)
         assert caplog.messages

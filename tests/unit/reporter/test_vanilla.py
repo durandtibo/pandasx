@@ -1,27 +1,31 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
+import pytest
 from pandas import DataFrame
-from pytest import TempPathFactory, fixture
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter
 from flamme.transformer.df import Sequential
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-@fixture(scope="module")
-def df_path(tmp_path_factory: TempPathFactory) -> Path:
+
+@pytest.fixture(scope="module")
+def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("data").joinpath("df.parquet")
-    df = DataFrame(
+    dataframe = DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    df.to_parquet(path)
+    dataframe.to_parquet(path)
     return path
 
 
