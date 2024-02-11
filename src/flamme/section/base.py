@@ -33,7 +33,7 @@ class BaseSection(ABC):
 
         Returns:
         -------
-            str: The HTML body associated to the section.
+            The HTML body associated to the section.
         """
 
     @abstractmethod
@@ -54,5 +54,5 @@ class BaseSection(ABC):
 
         Returns:
         -------
-            str: The HTML table of content associated to the section.
+            The HTML table of content associated to the section.
         """

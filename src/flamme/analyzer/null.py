@@ -52,7 +52,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         logger.info("Analyzing the null value distribution of all columns...")
         return NullValueSection(
             columns=list(df.columns),
-            null_count=df.isnull().sum().to_frame("count")["count"].to_numpy(),
+            null_count=df.isna().sum().to_frame("count")["count"].to_numpy(),
             total_count=np.full((df.shape[1],), df.shape[0]),
             figsize=self._figsize,
         )
@@ -63,9 +63,9 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     values.
 
     Args:
-        dt_column (str): Specifies the datetime column used to analyze
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``

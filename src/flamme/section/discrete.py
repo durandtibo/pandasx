@@ -234,14 +234,14 @@ def create_histogram(
 
 
 def create_table_row(column: str, count: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        column (str): Specifies the column name.
+        column: Specifies the column name.
         count (int): Specifies the count for the column.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     return Template("""<tr><th>{{column}}</th><td {{num_style}}>{{count}}</td></tr>""").render(
         {"num_style": 'style="text-align: right;"', "column": column, "count": f"{count:,}"}

@@ -83,7 +83,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             return EmptySection()
         return ColumnDiscreteSection(
             counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
-            null_values=df[self._column].isnull().sum(),
+            null_values=df[self._column].isna().sum(),
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
@@ -96,10 +96,10 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     discrete values.
 
     Args:
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is

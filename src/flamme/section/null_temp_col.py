@@ -28,11 +28,11 @@ class ColumnTemporalNullValueSection(BaseSection):
     values for a given column.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
@@ -69,17 +69,17 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     @property
     def column(self) -> str:
-        r"""str: The column to analyze."""
+        r"""The column to analyze."""
         return self._column
 
     @property
     def dt_column(self) -> str:
-        r"""str: The datetime column."""
+        r"""The datetime column."""
         return self._dt_column
 
     @property
     def period(self) -> str:
-        r"""str: The temporal period used to analyze the data."""
+        r"""The temporal period used to analyze the data."""
         return self._period
 
     @property
@@ -150,22 +150,22 @@ def create_temporal_null_figure(
     period: str,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal null
+    r"""Create a HTML representation of a figure with the temporal null
     value distribution.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
             the height. Default: ``None``
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return ""
@@ -181,19 +181,19 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Creates a HTML representation of a table with the temporal
+    r"""Create a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     if df.shape[0] == 0:
         return ""
@@ -232,13 +232,13 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
 
 
 def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     num_non_nulls = total - num_nulls
     return Template(

@@ -110,15 +110,15 @@ This section analyzes the values types for each column.
 
 
 def create_table_row(column: str, dtype: np.dtype, types: set) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        column (str): Specifies the column name.
+        column: Specifies the column name.
         dtype (``numpy.ndtype``): Specifies the column data type.
         types (set): Specifies the types in th column.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     types = sorted([str(t).replace("<", "&lt;").replace(">", "&gt;") for t in types])
     return Template(

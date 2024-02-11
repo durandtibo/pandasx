@@ -143,7 +143,7 @@ def create_temporal_count_figure(
         period: Specifies the temporal period e.g. monthly or daily.
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because there is no data"
@@ -168,7 +168,7 @@ def create_temporal_count_table(df: DataFrame, dt_column: str, period: str) -> s
         period: Specifies the temporal period e.g. monthly or daily.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     if df.shape[0] == 0:
         return ""

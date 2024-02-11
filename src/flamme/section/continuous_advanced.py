@@ -187,7 +187,7 @@ def create_histogram_range_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a histogram figure.
+    r"""Create the HTML code of a histogram figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -206,7 +206,7 @@ def create_histogram_range_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.to_numpy()
     if array.size == 0:

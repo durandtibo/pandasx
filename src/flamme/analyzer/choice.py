@@ -35,7 +35,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer = ChoiceAnalyzer(
     ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()},
-    ...     selection_fn=lambda df: "null" if df.isnull().values.any() else "duplicate",
+    ...     selection_fn=lambda df: "null" if df.isna().values.any() else "duplicate",
     ... )
     >>> analyzer
     ChoiceAnalyzer(

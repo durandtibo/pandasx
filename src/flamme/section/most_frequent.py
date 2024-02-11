@@ -111,7 +111,7 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 
 
 def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         value: Specifies a string representation of the value.
@@ -120,7 +120,7 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
         cumcount: Specifies the cumulative number of occurrences.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     return Template(
         """<tr>

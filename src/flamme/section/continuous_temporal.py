@@ -146,7 +146,7 @@ def create_temporal_figure(
     yscale: str = "auto",
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal value
+    r"""Create a HTML representation of a figure with the temporal value
     distribution.
 
     Args:
@@ -198,19 +198,19 @@ def create_temporal_figure(
 
 
 def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Creates a HTML representation of a table with some statistics
+    r"""Create a HTML representation of a table with some statistics
     about the temporal value distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     if df.shape[0] == 0:
         return "<span>&#9888;</span> No table is generated because the column is empty"
@@ -281,7 +281,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
 
 
 def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         row: Specifies a DataFrame row.

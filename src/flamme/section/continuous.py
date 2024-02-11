@@ -172,7 +172,7 @@ def create_boxplot_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a boxplot figure.
+    r"""Create the HTML code of a boxplot figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -186,7 +186,7 @@ def create_boxplot_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.dropna().to_numpy()
     if array.size == 0:
@@ -220,7 +220,7 @@ def create_histogram_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a histogram figure.
+    r"""Create the HTML code of a histogram figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -240,7 +240,7 @@ def create_histogram_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.to_numpy()
     if array.size == 0:
@@ -356,7 +356,7 @@ def add_cdf_plot(
 
 
 def create_stats_table(stats: dict, column: str) -> str:
-    r"""Creates the HTML code of the table with statistics.
+    r"""Create the HTML code of the table with statistics.
 
     Args:
         stats: Specifies a dictionary with the statistics.

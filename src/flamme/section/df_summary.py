@@ -188,7 +188,7 @@ def create_table_row(
     most_frequent_values: Sequence[tuple[Any, int]],
     total: int,
 ) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         column: Specifies the column name.

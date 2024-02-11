@@ -205,15 +205,15 @@ In the following histogram, the columns are sorted by ascending order of null va
 
 
 def create_table_row(column: str, null_count: int, total_count: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        column (str): Specifies the column name.
+        column: Specifies the column name.
         null_count (int): Specifies the number of null values.
         total_count (int): Specifies the total number of rows.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     pct = null_count / total_count
     return Template(
@@ -239,10 +239,10 @@ class TemporalNullValueSection(BaseSection):
     values.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
@@ -272,12 +272,12 @@ class TemporalNullValueSection(BaseSection):
 
     @property
     def dt_column(self) -> str:
-        r"""str: The datetime column."""
+        r"""The datetime column."""
         return self._dt_column
 
     @property
     def period(self) -> str:
-        r"""str: The temporal period used to analyze the data."""
+        r"""The temporal period used to analyze the data."""
         return self._period
 
     @property
@@ -345,14 +345,14 @@ def create_temporal_null_figure(
     ncols: int = 2,
     figsize: tuple[float, float] = (7, 5),
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal null
+    r"""Create a HTML representation of a figure with the temporal null
     value distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         ncols (int, optional): Specifies the number of columns.
             Default: ``2``
@@ -361,7 +361,7 @@ def create_temporal_null_figure(
             the height. Default: ``(7, 5)``
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return ""
@@ -417,11 +417,11 @@ def prepare_data(
     r"""Prepares the data to create the figure and table.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
@@ -461,8 +461,8 @@ def prepare_data(
     dt_col = "__datetime__"
     df[dt_col] = df[dt_column].dt.to_period(period)
 
-    null_col = f"__{column}_isnull__"
-    df.loc[:, null_col] = df.loc[:, column].isnull()
+    null_col = f"__{column}_isna__"
+    df.loc[:, null_col] = df.loc[:, column].isna()
 
     df_num_nulls = df.groupby(dt_col)[null_col].sum().sort_index()
     df_total = df.groupby(dt_col)[null_col].count().sort_index()

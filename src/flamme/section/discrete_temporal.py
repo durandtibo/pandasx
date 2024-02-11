@@ -29,11 +29,11 @@ class ColumnTemporalDiscreteSection(BaseSection):
     column with discrete values.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column of the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column of the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` or ``None``, optional): Specifies the figure
             size in inches. The first dimension is the width and the
@@ -129,15 +129,15 @@ def create_temporal_figure(
     period: str,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal value
+    r"""Create a HTML representation of a figure with the temporal value
     distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
@@ -146,7 +146,7 @@ def create_temporal_figure(
             second is the height. Default: ``None``
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
