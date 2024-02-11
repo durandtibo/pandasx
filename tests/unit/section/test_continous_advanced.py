@@ -1,21 +1,21 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from pandas import Series
-from pytest import fixture, mark
 
 from flamme.section import ColumnContinuousAdvancedSection
 from flamme.section.continuous_advanced import create_histogram_range_figure
 
 
-@fixture()
+@pytest.fixture()
 def series() -> Series:
     return Series([np.nan] + list(range(101)) + [np.nan])
 
 
-@fixture()
+@pytest.fixture()
 def stats() -> dict:
     return {
         "count": 103,
@@ -62,7 +62,7 @@ def test_column_continuous_advanced_section_yscale_default(series: Series) -> No
     assert ColumnContinuousAdvancedSection(series=series, column="col").yscale == "auto"
 
 
-@mark.parametrize("yscale", ["log", "linear"])
+@pytest.mark.parametrize("yscale", ["log", "linear"])
 def test_column_continuous_advanced_section_yscale(series: Series, yscale: str) -> None:
     assert (
         ColumnContinuousAdvancedSection(series=series, column="col", yscale=yscale).yscale == yscale
@@ -73,7 +73,7 @@ def test_column_continuous_advanced_section_nbins_default(series: Series) -> Non
     assert ColumnContinuousAdvancedSection(series=series, column="col").nbins is None
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_column_continuous_advanced_section_nbins(series: Series, nbins: int) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col", nbins=nbins).nbins == nbins
 
@@ -82,7 +82,7 @@ def test_column_continuous_advanced_section_figsize_default(series: Series) -> N
     assert ColumnContinuousAdvancedSection(series=series, column="col").figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_advanced_section_figsize(
     series: Series, figsize: tuple[float, float]
 ) -> None:
@@ -239,29 +239,29 @@ def test_create_histogram_range_figure(series: Series) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col"), str)
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_create_histogram_range_figure_nbins(series: Series, nbins: int) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", nbins=nbins), str)
 
 
-@mark.parametrize("yscale", ("linear", "log"))
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_create_histogram_range_figure_yscale(series: Series, yscale: str) -> None:
     assert isinstance(
         create_histogram_range_figure(series=series, column="col", yscale=yscale), str
     )
 
 
-@mark.parametrize("xmin", (1.0, "q0.1", None, "q1"))
+@pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_histogram_range_figure_xmin(series: Series, xmin: float | str | None) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", xmin=xmin), str)
 
 
-@mark.parametrize("xmax", (100.0, "q0.9", None, "q0"))
+@pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
 def test_create_histogram_range_figure_xmax(series: Series, xmax: float | str | None) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", xmax=xmax), str)
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_range_figure_figsize(
     series: Series, figsize: tuple[float, float]
 ) -> None:

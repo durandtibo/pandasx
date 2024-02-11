@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import mark, raises
 
 from flamme.section import ColumnTemporalNullValueSection
 from flamme.section.null_temp_col import (
@@ -46,7 +46,7 @@ def test_column_temporal_null_value_section_df() -> None:
     )
 
 
-@mark.parametrize("column", ("col1", "col2"))
+@pytest.mark.parametrize("column", ["col1", "col2"])
 def test_column_temporal_null_value_section_column(column: str) -> None:
     section = ColumnTemporalNullValueSection(
         df=DataFrame(
@@ -65,7 +65,7 @@ def test_column_temporal_null_value_section_column(column: str) -> None:
     assert section.column == column
 
 
-@mark.parametrize("dt_column", ("datetime", "date"))
+@pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = ColumnTemporalNullValueSection(
         df=DataFrame(
@@ -84,7 +84,7 @@ def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_column_temporal_null_value_section_period(period: str) -> None:
     section = ColumnTemporalNullValueSection(
         df=DataFrame(
@@ -102,7 +102,7 @@ def test_column_temporal_null_value_section_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
     section = ColumnTemporalNullValueSection(
         df=DataFrame(
@@ -139,7 +139,7 @@ def test_column_temporal_null_value_section_figsize_default() -> None:
 
 
 def test_column_temporal_null_value_section_missing_column() -> None:
-    with raises(ValueError, match=r"Column my_col is not in the DataFrame \(columns:"):
+    with pytest.raises(ValueError, match=r"Column my_col is not in the DataFrame \(columns:"):
         ColumnTemporalNullValueSection(
             df=DataFrame(
                 {
@@ -156,7 +156,7 @@ def test_column_temporal_null_value_section_missing_column() -> None:
 
 
 def test_column_temporal_null_value_section_missing_dt_column() -> None:
-    with raises(
+    with pytest.raises(
         ValueError, match=r"Datetime column my_datetime is not in the DataFrame \(columns:"
     ):
         ColumnTemporalNullValueSection(

@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_allclose, objects_are_equal
 from pandas import DataFrame
-from pytest import fixture
 
 from flamme.analyzer import MostFrequentValuesAnalyzer
 from flamme.section import EmptySection, MostFrequentValuesSection
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame({"col": np.array([1, 42, np.nan, 22, 1, 2, 1, np.nan])})
 

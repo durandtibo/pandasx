@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from collections import Counter
 
+import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
-from pytest import mark
 
 from flamme.section import ColumnDiscreteSection
 from flamme.section.discrete import create_histogram
@@ -21,7 +21,7 @@ def test_column_discrete_section_figsize_default() -> None:
     )
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_discrete_section_figsize(figsize: tuple[float, float]) -> None:
     assert (
         ColumnDiscreteSection(
@@ -38,7 +38,7 @@ def test_column_discrete_section_yscale_default() -> None:
     )
 
 
-@mark.parametrize("yscale", ["linear", "log"])
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_column_discrete_section_yscale(yscale: str) -> None:
     assert (
         ColumnDiscreteSection(
@@ -116,7 +116,7 @@ def test_create_histogram() -> None:
     )
 
 
-@mark.parametrize("yscale", ["linear", "log"])
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_create_histogram_yscale(yscale: str) -> None:
     assert isinstance(
         create_histogram(column="col", labels=["a", "b", "c"], counts=[5, 2, 100], yscale=yscale),
@@ -124,7 +124,7 @@ def test_create_histogram_yscale(yscale: str) -> None:
     )
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_figsize(figsize: tuple[float, float]) -> None:
     assert isinstance(
         create_histogram(column="col", labels=["a", "b", "c"], counts=[5, 2, 100], figsize=figsize),

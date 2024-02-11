@@ -24,21 +24,21 @@ def test_clickhouse_ingestor_str() -> None:
 def test_clickhouse_ingestor_ingest() -> None:
     ingestor = ClickHouseIngestor(
         query="select * from source.dataset",
-        client_config={"username": "POLAR", "password": "BEAR"},
+        client_config={"username": "POLAR"},
     )
-    df = DataFrame(
+    dataframe = DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    query_df_mock = Mock(return_value=df)
+    query_df_mock = Mock(return_value=dataframe)
     clickhouse_mock = Mock(return_value=Mock(query_df=query_df_mock))
     with patch("flamme.ingestor.clickhouse.clickhouse_connect.get_client", clickhouse_mock):
-        df = ingestor.ingest()
+        dataframe = ingestor.ingest()
         assert_frame_equal(
-            df,
+            dataframe,
             DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
@@ -47,5 +47,5 @@ def test_clickhouse_ingestor_ingest() -> None:
                 }
             ),
         )
-        clickhouse_mock.assert_called_once_with(username="POLAR", password="BEAR")
+        clickhouse_mock.assert_called_once_with(username="POLAR")
         query_df_mock.assert_called_once_with(query="select * from source.dataset")

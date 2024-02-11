@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_allclose, objects_are_equal
 from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
-from pytest import mark
 
 from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
@@ -44,7 +44,7 @@ def test_column_continuous_analyzer_nbins_default() -> None:
     assert section.nbins is None
 
 
-@mark.parametrize("nbins", (1, 2, 4))
+@pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_column_continuous_analyzer_nbins(nbins: int) -> None:
     section = ColumnContinuousAdvancedAnalyzer(column="col", nbins=nbins).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -61,7 +61,7 @@ def test_column_continuous_analyzer_yscale_default() -> None:
     assert section.yscale == "auto"
 
 
-@mark.parametrize("yscale", ["linear", "log"])
+@pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_column_continuous_analyzer_yscale(yscale: str) -> None:
     section = ColumnContinuousAdvancedAnalyzer(column="col", yscale=yscale).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
@@ -78,7 +78,7 @@ def test_column_continuous_analyzer_figsize_default() -> None:
     assert section.figsize is None
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> None:
     section = ColumnContinuousAdvancedAnalyzer(column="col", figsize=figsize).analyze(
         DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})

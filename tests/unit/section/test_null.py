@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
-from pytest import mark, raises
 
 from flamme.section import NullValueSection, TemporalNullValueSection
 from flamme.section.null import create_temporal_null_figure, prepare_data
@@ -17,7 +17,7 @@ from flamme.section.null import create_temporal_null_figure, prepare_data
 
 
 def test_null_value_section_incorrect_null_count_size() -> None:
-    with raises(RuntimeError, match=r"columns \(3\) and null_count \(2\) do not match"):
+    with pytest.raises(RuntimeError, match=r"columns \(3\) and null_count \(2\) do not match"):
         NullValueSection(
             columns=["col1", "col2", "col3"],
             null_count=np.array([0, 1]),
@@ -26,7 +26,7 @@ def test_null_value_section_incorrect_null_count_size() -> None:
 
 
 def test_null_value_section_incorrect_total_count_size() -> None:
-    with raises(RuntimeError, match=r"columns \(3\) and total_count \(2\) do not match"):
+    with pytest.raises(RuntimeError, match=r"columns \(3\) and total_count \(2\) do not match"):
         NullValueSection(
             columns=["col1", "col2", "col3"],
             null_count=np.array([0, 1, 2]),
@@ -64,7 +64,7 @@ def test_null_value_section_total_count() -> None:
     )
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_null_value_section_figsize(figsize: tuple[float, float]) -> None:
     assert (
         NullValueSection(
@@ -212,7 +212,7 @@ def test_temporal_null_value_section_df() -> None:
     )
 
 
-@mark.parametrize("dt_column", ("datetime", "str"))
+@pytest.mark.parametrize("dt_column", ["datetime", "str"])
 def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = TemporalNullValueSection(
         df=DataFrame(
@@ -231,7 +231,7 @@ def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
     assert section.dt_column == dt_column
 
 
-@mark.parametrize("period", ("M", "D"))
+@pytest.mark.parametrize("period", ["M", "D"])
 def test_temporal_null_value_section_period(period: str) -> None:
     section = TemporalNullValueSection(
         df=DataFrame(
@@ -250,7 +250,7 @@ def test_temporal_null_value_section_period(period: str) -> None:
     assert section.period == period
 
 
-@mark.parametrize("ncols", (1, 2))
+@pytest.mark.parametrize("ncols", [1, 2])
 def test_temporal_null_value_section_ncols(ncols: int) -> None:
     section = TemporalNullValueSection(
         df=DataFrame(
@@ -270,7 +270,7 @@ def test_temporal_null_value_section_ncols(ncols: int) -> None:
     assert section.ncols == ncols
 
 
-@mark.parametrize("figsize", ((7, 3), (1.5, 1.5)))
+@pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_temporal_null_value_section_figsize(figsize: tuple[float, float]) -> None:
     section = TemporalNullValueSection(
         df=DataFrame(
@@ -460,7 +460,7 @@ def test_create_temporal_null_figure() -> None:
     )
 
 
-@mark.parametrize("ncols", (1, 2))
+@pytest.mark.parametrize("ncols", [1, 2])
 def test_create_temporal_null_figure_ncols(ncols: int) -> None:
     assert isinstance(
         create_temporal_null_figure(

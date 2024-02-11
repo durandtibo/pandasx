@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from coola import objects_are_equal
 from jinja2 import Template
 from pandas import DataFrame
-from pytest import fixture
 
 from flamme.section import DuplicatedRowSection, TableOfContentSection
 
 
-@fixture()
+@pytest.fixture()
 def dataframe() -> DataFrame:
     return DataFrame(
         {
