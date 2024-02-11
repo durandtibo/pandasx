@@ -12,32 +12,33 @@ def compute_null_per_col(df: DataFrame) -> DataFrame:
     r"""Return the number and percentage of null values per column.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        df: Specifies the DataFrame to analyze.
 
     Returns:
-        ``pandas.DataFrame``: A DataFrame with the number and
-            percentage of null values per column.
+        A DataFrame with the number and percentage of null values per
+            column.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.utils.null import compute_null_per_col
+    >>> df = compute_null_per_col(
+    ...     pd.DataFrame(
+    ...         {
+    ...             "int": np.array([np.nan, 1, 0, 1]),
+    ...             "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...             "str": np.array(["A", "B", None, np.nan]),
+    ...         }
+    ...     )
+    ... )
+    >>> df
+      column  null  total  null_pct
+    0    int     1      4      0.25
+    1  float     1      4      0.25
+    2    str     2      4      0.50
 
-        >>> import pandas as pd
-        >>> from flamme.utils.null import compute_null_per_col
-        >>> df = compute_null_per_col(
-        ...     pd.DataFrame(
-        ...         {
-        ...             "int": np.array([np.nan, 1, 0, 1]),
-        ...             "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...             "str": np.array(["A", "B", None, np.nan]),
-        ...         }
-        ...     )
-        ... )
-        >>> df
-          column  null  total  null_pct
-        0    int     1      4      0.25
-        1  float     1      4      0.25
-        2    str     2      4      0.50
+    ```
     """
     null_count = df.isna().sum().to_frame("count")["count"].to_numpy().astype(int)
     total_count = np.full((df.shape[1],), df.shape[0]).astype(int)
