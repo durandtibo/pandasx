@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class DuplicatedRowAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the number of duplicated rows.
+    r"""Implement an analyzer to show the number of duplicated rows.
 
     Args:
         columns (``Sequence`` or ``None``): Specifies the columns used

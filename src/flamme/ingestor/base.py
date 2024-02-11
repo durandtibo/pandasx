@@ -43,7 +43,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
 
 def is_ingestor_config(config: dict) -> bool:
-    r"""Indicates if the input configuration is a configuration for a
+    r"""Indicate if the input configuration is a configuration for a
     ``BaseIngestor``.
 
     This function only checks if the value of the key  ``_target_``
@@ -52,7 +52,7 @@ def is_ingestor_config(config: dict) -> bool:
     the class.
 
     Args:
-        config (dict): Specifies the configuration to check.
+        config: Specifies the configuration to check.
 
     Returns:
         bool: ``True`` if the input configuration is a configuration
@@ -74,7 +74,7 @@ def is_ingestor_config(config: dict) -> bool:
 def setup_ingestor(
     ingestor: BaseIngestor | dict,
 ) -> BaseIngestor:
-    r"""Sets up an ingestor.
+    r"""Set up an ingestor.
 
     The ingestor is instantiated from its configuration
     by using the ``BaseIngestor`` factory function.

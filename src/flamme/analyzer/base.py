@@ -19,14 +19,41 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import NullValueAnalyzer
+    >>> analyzer = NullValueAnalyzer()
+    >>> analyzer
+    NullValueAnalyzer(figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> analyzer.analyze(df)
 
+    ```
+    """
+
+    def analyze(self, df: DataFrame) -> BaseSection:
+        r"""Analyzes the data in a DataFrame.
+
+        Args:
+            df: Specifies the DataFrame with the data to analyze.
+
+        Returns:
+            The section report.
+
+        Example usage:
+
+        ```pycon
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
-        >>> analyzer
-        NullValueAnalyzer(figsize=None)
         >>> df = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
@@ -35,41 +62,13 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
         ...     }
         ... )
         >>> analyzer.analyze(df)
-    """
 
-    def analyze(self, df: DataFrame) -> BaseSection:
-        r"""Analyzes the data in a DataFrame.
-
-        Args:
-        ----
-            df (``pandas.DataFrame``): Specifies the DataFrame with
-                the data to analyze.
-
-        Returns:
-        -------
-            ``BaseSection``: The section report.
-
-        Example usage:
-
-        .. code-block:: pycon
-
-            >>> import numpy as np
-            >>> import pandas as pd
-            >>> from flamme.analyzer import NullValueAnalyzer
-            >>> analyzer = NullValueAnalyzer()
-            >>> df = pd.DataFrame(
-            ...     {
-            ...         "int": np.array([np.nan, 1, 0, 1]),
-            ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-            ...         "str": np.array(["A", "B", None, np.nan]),
-            ...     }
-            ... )
-            >>> analyzer.analyze(df)
+        ```
         """
 
 
 def is_analyzer_config(config: dict) -> bool:
-    r"""Indicates if the input configuration is a configuration for a
+    r"""Indicate if the input configuration is a configuration for a
     ``BaseAnalyzer``.
 
     This function only checks if the value of the key  ``_target_``
@@ -78,10 +77,10 @@ def is_analyzer_config(config: dict) -> bool:
     the class.
 
     Args:
-        config (dict): Specifies the configuration to check.
+        config: Specifies the configuration to check.
 
     Returns:
-        bool: ``True`` if the input configuration is a configuration
+        ``True`` if the input configuration is a configuration
             for a ``BaseAnalyzer`` object.
 
     Example usage:
@@ -98,7 +97,7 @@ def is_analyzer_config(config: dict) -> bool:
 def setup_analyzer(
     analyzer: BaseAnalyzer | dict,
 ) -> BaseAnalyzer:
-    r"""Sets up an analyzer.
+    r"""Set up an analyzer.
 
     The analyzer is instantiated from its configuration
     by using the ``BaseAnalyzer`` factory function.

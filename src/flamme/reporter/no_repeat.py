@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class NoRepeatReporter(BaseReporter):
-    r"""Implements a reporter that computes the report only once.
+    r"""Implement a reporter that computes the report only once.
 
     Args:
         reporter (``BaseReporter`` or dict): Specifies the reporter

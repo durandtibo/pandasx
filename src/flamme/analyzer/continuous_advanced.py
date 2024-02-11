@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the temporal distribution of
+    r"""Implement an analyzer to show the temporal distribution of
     continuous values.
 
     Args:

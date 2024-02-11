@@ -26,10 +26,10 @@ logger = logging.getLogger(__name__)
 
 
 class NullValueSection(BaseSection):
-    r"""Implements a section that analyzes the number of null values.
+    r"""Implement a section that analyzes the number of null values.
 
     Args:
-        columns (``Sequence``): Specifies the column names.
+        columns: Specifies the column names.
         null_count (``numpy.ndarray``): Specifies the number of null
             values for each column.
         total_count (``numpy.ndarray``): Specifies the total number
@@ -235,7 +235,7 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
 
 
 class TemporalNullValueSection(BaseSection):
-    r"""Implements a section to analyze the temporal distribution of null
+    r"""Implement a section to analyze the temporal distribution of null
     values.
 
     Args:

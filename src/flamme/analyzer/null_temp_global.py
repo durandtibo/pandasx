@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the temporal distribution of null
+    r"""Implement an analyzer to show the temporal distribution of null
     values for a given column.
 
     Args:

@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class MarkdownSection(BaseSection):
-    r"""Implements a section that converts a markdown string into HTML.
+    r"""Implement a section that converts a markdown string into HTML.
 
     Args:
         desc (``str``): Specifies the markdown string to convert.

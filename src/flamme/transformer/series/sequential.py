@@ -1,17 +1,25 @@
+r"""Contain a ``pandas.Series`` transformer to combine sequentially
+multiple transformers."""
+
 from __future__ import annotations
 
 __all__ = ["SequentialSeriesTransformer"]
 
-from collections.abc import Sequence
+
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_sequence
-from pandas import Series
 
 from flamme.transformer.series import BaseSeriesTransformer, setup_series_transformer
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import Series
+
 
 class SequentialSeriesTransformer(BaseSeriesTransformer):
-    r"""Implements a ``pandas.Series`` transformer to apply sequentially
+    r"""Implement a ``pandas.Series`` transformer to apply sequentially
     several transformers.
 
     Args:

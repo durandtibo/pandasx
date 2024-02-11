@@ -17,7 +17,7 @@ from flamme.section.utils import (
 
 
 class SectionDict(BaseSection):
-    r"""Implements a section to manage a dictionary of sections.
+    r"""Implement a section to manage a dictionary of sections.
 
     Args:
         sections: Specifies the dictionary of sections.

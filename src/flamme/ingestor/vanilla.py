@@ -9,7 +9,7 @@ from flamme.ingestor.base import BaseIngestor
 
 
 class Ingestor(BaseIngestor):
-    r"""Implements a simple DataFrame ingestor.
+    r"""Implement a simple DataFrame ingestor.
 
     Args:
         df (``pandas.DataFrame``): Specifies the DataFrame to ingest.

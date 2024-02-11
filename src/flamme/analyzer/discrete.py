@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnDiscreteAnalyzer(BaseAnalyzer):
-    r"""Implements a discrete distribution analyzer.
+    r"""Implement a discrete distribution analyzer.
 
     Args:
         column: Specifies the column to analyze.
@@ -92,7 +92,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
 
 
 class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to show the temporal distribution of
+    r"""Implement an analyzer to show the temporal distribution of
     discrete values.
 
     Args:

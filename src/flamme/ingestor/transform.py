@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class TransformedIngestor(BaseIngestor):
-    r"""Implements an ingestor that also transforms the DataFrame.
+    r"""Implement an ingestor that also transforms the DataFrame.
 
     Args:
         path (``pathlib.Path`` or str): Specifies the path to the

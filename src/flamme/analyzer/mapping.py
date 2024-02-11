@@ -12,7 +12,7 @@ from flamme.section import SectionDict
 
 
 class MappingAnalyzer(BaseAnalyzer):
-    r"""Implements an analyzer to analyze multiple analyzers.
+    r"""Implement an analyzer to analyze multiple analyzers.
 
     Args:
         analyzers (``Mapping``): Specifies the mappings to analyze.

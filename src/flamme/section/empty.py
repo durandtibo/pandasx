@@ -8,7 +8,7 @@ from flamme.section.base import BaseSection
 
 
 class EmptySection(BaseSection):
-    r"""Implements an empty section.
+    r"""Implement an empty section.
 
     This section is implemented to deal with missing columns or to skip
     some analyses.
