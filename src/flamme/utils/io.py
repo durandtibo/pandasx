@@ -1,3 +1,5 @@
+r"""Contain IO functions to load/save data."""
+
 from __future__ import annotations
 
 __all__ = ["load_text", "save_text"]
@@ -9,44 +11,44 @@ logger = logging.getLogger(__name__)
 
 
 def load_text(path: Path) -> str:
-    r"""Reads the data from a given text file.
+    r"""Read the data from a given text file.
 
     Args:
-        path (``pathlib.Path``): Specifies the path where to the text
-            file.
+        path: Specifies the path where to the text file.
 
     Returns:
         The data from the text file.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from pathlib import Path
+    >>> from flamme.utils.io import load_text
+    >>> data = load_text(Path("/path/to/data.txt"))  # xdoctest: +SKIP()
 
-        >>> from pathlib import Path
-        >>> from flamme.utils.io import load_text
-        >>> data = load_text(Path("/path/to/data.txt"))  # xdoctest: +SKIP()
+    ```
     """
     logger.debug(f"read {path}")
     with Path.open(path) as file:
-        data = file.read()
-    return data
+        return file.read()
 
 
 def save_text(to_save: str, path: Path) -> None:
-    r"""Saves the given data in a text file.
+    r"""Save the given data in a text file.
 
     Args:
         to_save: Specifies the data to write in a text file.
-        path (``pathlib.Path``): Specifies the path where to write the
+        path: Specifies the path where to write the
             text file.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from pathlib import Path
+    >>> from flamme.utils.io import save_text
+    >>> save_text("abc", Path("/path/to/data.txt"))  # xdoctest: +SKIP()
 
-        >>> from pathlib import Path
-        >>> from flamme.utils.io import save_text
-        >>> save_text("abc", Path("/path/to/data.txt"))  # xdoctest: +SKIP()
+    ```
     """
     logger.debug(f"write data in a text file: {path}")
     path.parents[0].mkdir(exist_ok=True, parents=True)

@@ -1,3 +1,5 @@
+r"""Contain utility functions to analyze data with null values."""
+
 from __future__ import annotations
 
 __all__ = ["compute_null_per_col"]
@@ -7,7 +9,7 @@ from pandas import DataFrame
 
 
 def compute_null_per_col(df: DataFrame) -> DataFrame:
-    r"""Computes the number and percentage of null values per column.
+    r"""Return the number and percentage of null values per column.
 
     Args:
         df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
@@ -37,7 +39,7 @@ def compute_null_per_col(df: DataFrame) -> DataFrame:
         1  float     1      4      0.25
         2    str     2      4      0.50
     """
-    null_count = df.isnull().sum().to_frame("count")["count"].to_numpy().astype(int)
+    null_count = df.isna().sum().to_frame("count")["count"].to_numpy().astype(int)
     total_count = np.full((df.shape[1],), df.shape[0]).astype(int)
     with np.errstate(invalid="ignore"):
         null_pct = null_count.astype(float) / total_count.astype(float)

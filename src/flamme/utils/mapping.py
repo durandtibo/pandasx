@@ -1,3 +1,5 @@
+r"""Contain utility functions for mappings."""
+
 from __future__ import annotations
 
 __all__ = ["sort_by_keys"]

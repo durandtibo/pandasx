@@ -1,3 +1,6 @@
+r"""Contain a function to instantiate an object from its
+configuration."""
+
 from __future__ import annotations
 
 __all__ = ["setup_object"]
@@ -13,7 +16,7 @@ T = TypeVar("T")
 
 
 def setup_object(obj_or_config: T | dict) -> T:
-    r"""Sets up an object from its configuration.
+    r"""Set up an object from its configuration.
 
     Args:
         obj_or_config: Specifies the object or its configuration.
@@ -23,14 +26,15 @@ def setup_object(obj_or_config: T | dict) -> T:
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.utils import setup_object
+    >>> obj = setup_object({"_target_": "collections.deque", "iterable": [1, 2, 1, 3]})
+    >>> obj
+    deque([1, 2, 1, 3])
+    >>> setup_object(obj)  # Do nothing because the object is already instantiated
+    deque([1, 2, 1, 3])
 
-       >>> from flamme.utils import setup_object
-       >>> obj = setup_object({"_target_": "collections.deque", "iterable": [1, 2, 1, 3]})
-       >>> obj
-       deque([1, 2, 1, 3])
-       >>> setup_object(obj)  # Do nothing because the object is already instantiated
-       deque([1, 2, 1, 3])
+    ```
     """
     if isinstance(obj_or_config, dict):
         logger.info("Initializing an object from its configuration... ")

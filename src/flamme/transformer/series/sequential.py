@@ -15,30 +15,31 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
     several transformers.
 
     Args:
-        transformers (``Sequence``): Specifies the transformers or
-            their configurations.
+        transformers: Specifies the transformers or their
+            configurations.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.transformer.series import Sequential, StripString, ToNumeric
+    >>> transformer = Sequential([StripString(), ToNumeric()])
+    >>> transformer
+    SequentialSeriesTransformer(
+      (0): StripStringSeriesTransformer()
+      (1): ToNumericSeriesTransformer()
+    )
+    >>> series = pd.Series([" 1", "2 ", " 3 ", "4", "5"])
+    >>> series = transformer.transform(series)
+    >>> series
+    0    1
+    1    2
+    2    3
+    3    4
+    4    5
+    dtype: int64
 
-        >>> import pandas as pd
-        >>> from flamme.transformer.series import Sequential, StripString, ToNumeric
-        >>> transformer = Sequential([StripString(), ToNumeric()])
-        >>> transformer
-        SequentialSeriesTransformer(
-          (0): StripStringSeriesTransformer()
-          (1): ToNumericSeriesTransformer()
-        )
-        >>> series = pd.Series([" 1", "2 ", " 3 ", "4", "5"])
-        >>> series = transformer.transform(series)
-        >>> series
-        0    1
-        1    2
-        2    3
-        3    4
-        4    5
-        dtype: int64
+    ```
     """
 
     def __init__(self, transformers: Sequence[BaseSeriesTransformer | dict]) -> None:
