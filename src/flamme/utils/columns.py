@@ -1,3 +1,5 @@
+r"""Contain very experimental code to manage columns."""
+
 from __future__ import annotations
 
 __all__ = ["BaseColumn", "Column"]
@@ -14,88 +16,87 @@ from flamme.transformer.series.base import (
 
 
 class BaseColumn:
-    r"""Defines the column base class.
+    r"""Define the column base class.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.utils.columns import Column
+    >>> from flamme.analyzer import ColumnContinuousAnalyzer
+    >>> from flamme.transformer.series import ToNumeric
+    >>> column = Column(
+    ...     can_be_null=True,
+    ...     analyzer=ColumnContinuousAnalyzer(column="col"),
+    ...     transformer=ToNumeric(),
+    ... )
+    >>> column
+    Column(
+      (can_be_null): True
+      (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
+      (transformer): ToNumericSeriesTransformer()
+    )
+    >>> analyzer = column.get_analyzer()
+    >>> analyzer
+    ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
+    >>> transformer = column.get_transformer()
+    >>> transformer
+    ToNumericSeriesTransformer()
 
-        >>> from flamme.utils.columns import Column
-        >>> from flamme.analyzer import ColumnContinuousAnalyzer
-        >>> from flamme.transformer.series import ToNumeric
-        >>> column = Column(
-        ...     can_be_null=True,
-        ...     analyzer=ColumnContinuousAnalyzer(column="col"),
-        ...     transformer=ToNumeric(),
-        ... )
-        >>> column
-        Column(
-          (can_be_null): True
-          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-          (transformer): ToNumericSeriesTransformer()
-        )
-        >>> analyzer = column.get_analyzer()
-        >>> analyzer
-        ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-        >>> transformer = column.get_transformer()
-        >>> transformer
-        ToNumericSeriesTransformer()
+    ```
     """
 
     @abstractmethod
     def get_analyzer(self) -> BaseAnalyzer:
-        r"""Gets the column analyzer.
+        r"""Get the column analyzer.
 
         Returns:
-        -------
-            ``BaseAnalyzer``: The column analyzer.
+            The column analyzer.
         """
 
     @abstractmethod
     def get_transformer(self) -> BaseSeriesTransformer:
-        r"""Gets the column transformer.
+        r"""Get the column transformer.
 
         Returns:
-        -------
-            ``BaseSeriesTransformer``: The column transformer.
+            The column transformer.
         """
 
 
 class Column(BaseColumn):
-    r"""Defines the column base class.
+    r"""Define the column base class.
 
     Args:
-        can_be_null (bool): ``True`` if the column can have null
-            values, otherwise ``False``.
-        analyzer (``BaseAnalyzer`` or dict): Specifies the column
-            analyzer or its configuration.
-        transformer (``BaseSeriesTransformer`` or dict): Specifies
-            the column  transformer or its configuration.
+        can_be_null: ``True`` if the column can have null values,
+            otherwise ``False``.
+        analyzer: Specifies the column analyzer or its configuration.
+        transformer: Specifies the column  transformer or its
+        `configuration.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.utils.columns import Column
+    >>> from flamme.analyzer import ColumnContinuousAnalyzer
+    >>> from flamme.transformer.series import ToNumeric
+    >>> column = Column(
+    ...     can_be_null=True,
+    ...     analyzer=ColumnContinuousAnalyzer(column="col"),
+    ...     transformer=ToNumeric(),
+    ... )
+    >>> column
+    Column(
+      (can_be_null): True
+      (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
+      (transformer): ToNumericSeriesTransformer()
+    )
+    >>> analyzer = column.get_analyzer()
+    >>> analyzer
+    ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
+    >>> transformer = column.get_transformer()
+    >>> transformer
+    ToNumericSeriesTransformer()
 
-        >>> from flamme.utils.columns import Column
-        >>> from flamme.analyzer import ColumnContinuousAnalyzer
-        >>> from flamme.transformer.series import ToNumeric
-        >>> column = Column(
-        ...     can_be_null=True,
-        ...     analyzer=ColumnContinuousAnalyzer(column="col"),
-        ...     transformer=ToNumeric(),
-        ... )
-        >>> column
-        Column(
-          (can_be_null): True
-          (analyzer): ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-          (transformer): ToNumericSeriesTransformer()
-        )
-        >>> analyzer = column.get_analyzer()
-        >>> analyzer
-        ColumnContinuousAnalyzer(column=col, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-        >>> transformer = column.get_transformer()
-        >>> transformer
-        ToNumericSeriesTransformer()
+    ```
     """
 
     def __init__(
@@ -122,7 +123,8 @@ class Column(BaseColumn):
 
     @property
     def can_be_null(self) -> bool:
-        r"""bool: ``True`` if the column can have null values, otherwise ``False``"""
+        r"""``True`` if the column can have null values, otherwise
+        ``False``."""
         return self._can_be_null
 
     def get_analyzer(self) -> BaseAnalyzer:

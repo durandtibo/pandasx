@@ -1,15 +1,20 @@
+r"""Contain utility functions to sort values from multiple types."""
+
 from __future__ import annotations
 
 __all__ = ["mixed_typed_sort"]
 
 from collections import defaultdict
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from flamme.utils.mathnan import sortnan
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 
 def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
-    r"""Returns a new list containing all items from the iterable sorted
+    r"""Return a new list containing all items from the iterable sorted
     in ascending order.
 
     This function is an extension of the built-in ``sorted`` function
@@ -24,24 +29,24 @@ def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
     numerical values, so it is possible to sort a list with NaNs.
 
     Args:
-        iterable (``Iterable``): Specifies the data to sort.
-        reverse (``bool``, optional): If set to ``True``, then the
-            list elements are sorted as if each comparison were
-            reversed. Default: ``False``
+        iterable: Specifies the data to sort.
+        reverse: If set to ``True``, then the list elements are sorted
+            as if each comparison were reversed.
 
     Returns:
-        list: The sorted data.
+        The sorted data.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.utils.sorting import mixed_typed_sort
+    >>> x = [1, "c", "a", "b", 4, -2]
+    >>> mixed_typed_sort(x)
+    [-2, 1, 4, 'a', 'b', 'c']
+    >>> mixed_typed_sort(x, reverse=True)
+    [4, 1, -2, 'c', 'b', 'a']
 
-        >>> from flamme.utils.sorting import mixed_typed_sort
-        >>> x = [1, "c", "a", "b", 4, -2]
-        >>> mixed_typed_sort(x)
-        [-2, 1, 4, 'a', 'b', 'c']
-        >>> mixed_typed_sort(x, reverse=True)
-        [4, 1, -2, 'c', 'b', 'a']
+    ```
     """
     typed_data = defaultdict(list)
     for v in iterable:

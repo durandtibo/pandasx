@@ -1,3 +1,5 @@
+r"""Contain utility functions to manage data types."""
+
 from __future__ import annotations
 
 __all__ = [
@@ -9,19 +11,23 @@ __all__ = [
 ]
 
 import logging
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pyarrow as pa
 import pyarrow.parquet as pq
-from pandas import DataFrame, Series
 
 from flamme.utils.path import sanitize_path
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from pandas import DataFrame, Series
 
 logger = logging.getLogger(__name__)
 
 
 def df_column_types(df: DataFrame) -> dict[str, set]:
-    r"""Computes the value types per column.
+    r"""Return the value types per column.
 
     Args:
         df: Specifies the DataFrame to analyze.
@@ -54,7 +60,7 @@ def df_column_types(df: DataFrame) -> dict[str, set]:
 
 
 def series_column_types(series: Series) -> set[type]:
-    r"""Computes the value types in a ``pandas.Series``.
+    r"""Return the value types in a ``pandas.Series``.
 
     Args:
         series: Specifies the DataFrame to analyze.
@@ -89,11 +95,11 @@ def read_dtypes_from_schema(path: Path | str) -> dict:
     path = sanitize_path(path)
     logger.info(f"Reading schema from {path}")
     schema = pq.read_schema(path)
-    return {name: dtype for name, dtype in zip(schema.names, schema.types)}
+    return dict(zip(schema.names, schema.types))
 
 
 def find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
-    r"""Finds the columns with a numeric type.
+    r"""Find the columns with a numeric type.
 
     Args:
         dtypes: The mapping of column names and data types.
@@ -109,7 +115,7 @@ def find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str
 
 
 def find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
-    r"""Finds the columns with a date type.
+    r"""Find the columns with a date type.
 
     Args:
         dtypes: The mapping of column names and data types.

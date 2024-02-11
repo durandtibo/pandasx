@@ -1,3 +1,5 @@
+r"""Contain utility functions for NumPy arrays."""
+
 from __future__ import annotations
 
 __all__ = ["nonnan"]
@@ -6,7 +8,7 @@ import numpy as np
 
 
 def nonnan(array: np.ndarray) -> np.ndarray:
-    r"""Returns the non-NaN values of an array.
+    r"""Return the non-NaN values of an array.
 
     Args:
         array: Specifies the input array.

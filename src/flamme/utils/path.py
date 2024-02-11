@@ -1,60 +1,66 @@
+r"""Contain utility functions to manage paths."""
+
 from __future__ import annotations
 
 __all__ = ["human_file_size", "sanitize_path", "find_files", "find_parquet_files"]
 
-from collections.abc import Callable
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.parse import unquote, urlparse
 
 from flamme.utils.format import human_byte
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 
 def human_file_size(path: Path | str, decimal: int = 2) -> str:
-    r"""Gets a human-readable representation of a file size.
+    r"""Get a human-readable representation of a file size.
 
     Args:
-        path (``pathlib.Path`` or str): Specifies the file.
-        decimal (int, optional): Specifies the number of decimal
-            digits. Default: ``2``
+        path: Specifies the path to the file.
+        decimal: Specifies the number of decimal digits.
 
     Returns:
-        str: The file size in a human-readable format.
+        The file size in a human-readable format.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.utils.path import human_file_size
+    >>> human_file_size("README.md")
+    '...B'
 
-        >>> from flamme.utils.path import human_file_size
-        >>> human_file_size("README.md")
-        '...B'
+    ```
     """
     return human_byte(size=sanitize_path(path).stat().st_size, decimal=decimal)
 
 
 def sanitize_path(path: Path | str) -> Path:
-    r"""Sanitizes a given path.
+    r"""Sanitize a given path.
 
     Args:
-        path (``pathlib.Path`` or str): Specifies the path to
-            sanitize.
+        path: Specifies the path to sanitize.
 
     Returns:
-        ``pathlib.Path``: The sanitized path.
+        The sanitized path.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from pathlib import Path
+    >>> from flamme.utils.path import sanitize_path
+    >>> sanitize_path("something")
+    PosixPath('.../something')
+    >>> sanitize_path("")
+    PosixPath('...')
+    >>> sanitize_path(Path("something"))
+    PosixPath('.../something')
+    >>> sanitize_path(Path("something/./../"))
+    PosixPath('...')
 
-        >>> from pathlib import Path
-        >>> from flamme.utils.path import sanitize_path
-        >>> sanitize_path("something")
-        PosixPath('.../something')
-        >>> sanitize_path("")
-        PosixPath('...')
-        >>> sanitize_path(Path("something"))
-        PosixPath('.../something')
-        >>> sanitize_path(Path("something/./../"))
-        PosixPath('...')
+    ```
     """
     if isinstance(path, str):
         # Use urlparse to parse file URI: https://stackoverflow.com/a/15048213
@@ -65,7 +71,7 @@ def sanitize_path(path: Path | str) -> Path:
 def find_files(
     path: Path | str, filter_fn: Callable[[Path], bool], recursive: bool = True
 ) -> list[Path]:
-    r"""Finds the path of all the tar files in a given path.
+    r"""Find the path of all the tar files in a given path.
 
     This function does not check if a path is a symbolic link so be
     careful if you are using a path with symbolic links.
@@ -96,7 +102,7 @@ def find_files(
 
 
 def find_parquet_files(path: Path | str, recursive: bool = True) -> list[Path]:
-    r"""Finds the path of all the parquet files in a given path.
+    r"""Find the path of all the parquet files in a given path.
 
     This function does not check if a path is a symbolic link so be
     careful if you are using a path with symbolic links.
