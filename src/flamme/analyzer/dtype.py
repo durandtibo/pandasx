@@ -20,22 +20,23 @@ class DataTypeAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import DataTypeAnalyzer
+    >>> analyzer = DataTypeAnalyzer()
+    >>> analyzer
+    DataTypeAnalyzer()
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import DataTypeAnalyzer
-        >>> analyzer = DataTypeAnalyzer()
-        >>> analyzer
-        DataTypeAnalyzer()
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __repr__(self) -> str:

@@ -270,30 +270,31 @@ def prepare_data(
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.section.null_temp_global import prepare_data
+    >>> num_nulls, total, labels = prepare_data(
+    ...     df=pd.DataFrame(
+    ...         {
+    ...             "col1": np.array([np.nan, 1, 0, 1]),
+    ...             "col2": np.array([np.nan, 1, 0, np.nan]),
+    ...             "datetime": pd.to_datetime(
+    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...             ),
+    ...         }
+    ...     ),
+    ...     dt_column="datetime",
+    ...     period="M",
+    ... )
+    >>> num_nulls
+    array([2, 0, 0, 1])
+    >>> total
+    array([2, 2, 2, 2])
+    >>> labels
+    ['2020-01', '2020-02', '2020-03', '2020-04']
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.section.null_temp_global import prepare_data
-        >>> num_nulls, total, labels = prepare_data(
-        ...     df=pd.DataFrame(
-        ...         {
-        ...             "col1": np.array([np.nan, 1, 0, 1]),
-        ...             "col2": np.array([np.nan, 1, 0, np.nan]),
-        ...             "datetime": pd.to_datetime(
-        ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...             ),
-        ...         }
-        ...     ),
-        ...     dt_column="datetime",
-        ...     period="M",
-        ... )
-        >>> num_nulls
-        array([2, 0, 0, 1])
-        >>> total
-        array([2, 2, 2, 2])
-        >>> labels
-        ['2020-01', '2020-02', '2020-03', '2020-04']
+    ```
     """
     df = df.copy()
     columns = df.columns.tolist()

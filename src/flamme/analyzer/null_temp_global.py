@@ -23,29 +23,29 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period: Specifies the temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import GlobalTemporalNullValueAnalyzer
+    >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
+    >>> analyzer
+    GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "col": np.array([np.nan, 1, 0, 1]),
+    ...         "datetime": pd.to_datetime(
+    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...         ),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import GlobalTemporalNullValueAnalyzer
-        >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
-        >>> analyzer
-        GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col": np.array([np.nan, 1, 0, 1]),
-        ...         "datetime": pd.to_datetime(
-        ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...         ),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(

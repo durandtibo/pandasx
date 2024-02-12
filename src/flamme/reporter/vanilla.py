@@ -28,32 +28,30 @@ class Reporter(BaseReporter):
     r"""Implement a simple reporter.
 
     Args:
-        ingestor (``BaseIngestor`` or dict): Specifies the ingestor
-            or its configuration.
-        transformer (``BaseDataFrameTransformer`` or dict): Specifies
-            a ``pandas.DataFrame`` transformer or its configuration.
-        ingestor (``BaseAnalyzer`` or dict): Specifies the analyzer
-            or its configuration.
-        report_path (``Path`` or str): Specifies the path where to
-            save the HTML report.
-        max_toc_depth: Specifies the maximum level
-            to show in the table of content. Default: ``6``
+        ingestor: Specifies the ingestor or its configuration.
+        transformer: Specifies a ``pandas.DataFrame`` transformer or
+            its configuration.
+        ingestor: Specifies the analyzer or its configuration.
+        report_path: Specifies the path where to save the HTML report.
+        max_toc_depth: Specifies the maximum level to show in the
+            table of content.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.analyzer import NullValueAnalyzer
+    >>> from flamme.ingestor import ParquetIngestor
+    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.reporter import Reporter
+    >>> reporter = Reporter(
+    ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
+    ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...     analyzer=NullValueAnalyzer(),
+    ...     report_path="/path/to/report.html",
+    ... )
+    >>> report = reporter.compute()  # doctest: +SKIP
 
-        >>> from flamme.analyzer import NullValueAnalyzer
-        >>> from flamme.ingestor import ParquetIngestor
-        >>> from flamme.transformer.df import SequentialDataFrameTransformer
-        >>> from flamme.reporter import Reporter
-        >>> reporter = Reporter(
-        ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-        ...     transformer=SequentialDataFrameTransformer(transformers=[]),
-        ...     analyzer=NullValueAnalyzer(),
-        ...     report_path="/path/to/report.html",
-        ... )
-        >>> report = reporter.compute()  # doctest: +SKIP
+    ```
     """
 
     def __init__(

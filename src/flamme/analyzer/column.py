@@ -30,25 +30,26 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import ColumnSubsetAnalyzer, NullValueAnalyzer
+    >>> analyzer = ColumnSubsetAnalyzer(columns=["int", "float"], analyzer=NullValueAnalyzer())
+    >>> analyzer
+    ColumnSubsetAnalyzer(
+      (columns): 2 ['int', 'float']
+      (analyzer): NullValueAnalyzer(figsize=None)
+    )
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import ColumnSubsetAnalyzer, NullValueAnalyzer
-        >>> analyzer = ColumnSubsetAnalyzer(columns=["int", "float"], analyzer=NullValueAnalyzer())
-        >>> analyzer
-        ColumnSubsetAnalyzer(
-          (columns): 2 ['int', 'float']
-          (analyzer): NullValueAnalyzer(figsize=None)
-        )
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, columns: Sequence[str], analyzer: BaseAnalyzer | dict) -> None:

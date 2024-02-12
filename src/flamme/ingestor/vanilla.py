@@ -18,23 +18,24 @@ class Ingestor(BaseIngestor):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.ingestor import Ingestor
+    >>> ingestor = Ingestor(
+    ...     df=pd.DataFrame(
+    ...         {
+    ...             "col1": [1, 2, 3, 4, 5],
+    ...             "col2": ["1", "2", "3", "4", "5"],
+    ...             "col3": ["1", "2", "3", "4", "5"],
+    ...             "col4": ["a", "b", "c", "d", "e"],
+    ...         }
+    ...     )
+    ... )
+    >>> ingestor
+    Ingestor(shape=(5, 4))
+    >>> df = ingestor.ingest()
 
-        >>> import pandas as pd
-        >>> from flamme.ingestor import Ingestor
-        >>> ingestor = Ingestor(
-        ...     df=pd.DataFrame(
-        ...         {
-        ...             "col1": [1, 2, 3, 4, 5],
-        ...             "col2": ["1", "2", "3", "4", "5"],
-        ...             "col3": ["1", "2", "3", "4", "5"],
-        ...             "col4": ["a", "b", "c", "d", "e"],
-        ...         }
-        ...     )
-        ... )
-        >>> ingestor
-        Ingestor(shape=(5, 4))
-        >>> df = ingestor.ingest()
+    ```
     """
 
     def __init__(self, df: DataFrame) -> None:

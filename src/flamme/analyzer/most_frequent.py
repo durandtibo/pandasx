@@ -26,16 +26,17 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import MostFrequentValuesAnalyzer
+    >>> analyzer = MostFrequentValuesAnalyzer(column="str")
+    >>> analyzer
+    MostFrequentValuesAnalyzer(column=str, dropna=False, top=100)
+    >>> df = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import MostFrequentValuesAnalyzer
-        >>> analyzer = MostFrequentValuesAnalyzer(column="str")
-        >>> analyzer
-        MostFrequentValuesAnalyzer(column=str, dropna=False, top=100)
-        >>> df = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, column: str, dropna: bool = False, top: int = 100) -> None:

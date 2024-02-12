@@ -16,32 +16,34 @@ logger = logging.getLogger(__name__)
 
 
 class BaseIngestor(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to implement a DataFrame ingestor.
+    r"""Define the base class to implement a DataFrame ingestor.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.ingestor import ParquetIngestor
+    >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
+    >>> ingestor
+    ParquetIngestor(path=/path/to/df.parquet)
+    >>> df = ingestor.ingest()  # doctest: +SKIP
 
-        >>> from flamme.ingestor import ParquetIngestor
-        >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
-        >>> ingestor
-        ParquetIngestor(path=/path/to/df.parquet)
-        >>> df = ingestor.ingest()  # doctest: +SKIP
+    ```
     """
 
     def ingest(self) -> DataFrame:
-        r"""Ingests a DataFrame.
+        r"""Ingest a DataFrame.
 
         Returns:
-            ``pandas.DataFrame``: The ingested DataFrame.
+            The ingested DataFrame.
 
         Example usage:
 
-        .. code-block:: pycon
+        ```pycon
+        >>> from flamme.ingestor import ParquetIngestor
+        >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
+        >>> df = ingestor.ingest()  # doctest: +SKIP
 
-            >>> from flamme.ingestor import ParquetIngestor
-            >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
-            >>> df = ingestor.ingest()  # doctest: +SKIP
+        ```
         """
 
 
@@ -58,18 +60,19 @@ def is_ingestor_config(config: dict) -> bool:
         config: Specifies the configuration to check.
 
     Returns:
-        bool: ``True`` if the input configuration is a configuration
+        ``True`` if the input configuration is a configuration
             for a ``BaseIngestor`` object.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.ingestor import is_ingestor_config
+    >>> is_ingestor_config(
+    ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}
+    ... )
+    True
 
-        >>> from flamme.ingestor import is_ingestor_config
-        >>> is_ingestor_config(
-        ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}
-        ... )
-        True
+    ```
     """
     return is_object_config(config, BaseIngestor)
 
@@ -83,22 +86,22 @@ def setup_ingestor(
     by using the ``BaseIngestor`` factory function.
 
     Args:
-        ingestor (``BaseIngestor`` or dict): Specifies an
-            ingestor or its configuration.
+        ingestor: Specifies an ingestor or its configuration.
 
     Returns:
-        ``BaseIngestor``: An instantiated ingestor.
+        An instantiated ingestor.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.ingestor import setup_ingestor
+    >>> ingestor = setup_ingestor(
+    ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}
+    ... )
+    >>> ingestor
+    CsvIngestor(path=/path/to/data.csv)
 
-        >>> from flamme.ingestor import setup_ingestor
-        >>> ingestor = setup_ingestor(
-        ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}
-        ... )
-        >>> ingestor
-        CsvIngestor(path=/path/to/data.csv)
+    ```
     """
     if isinstance(ingestor, dict):
         logger.info("Initializing an ingestor from its configuration... ")

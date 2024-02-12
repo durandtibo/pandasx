@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ["CsvIngestor"]
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pandas import DataFrame, read_csv
 
@@ -27,16 +27,17 @@ class CsvIngestor(BaseIngestor):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.ingestor import ParquetIngestor
+    >>> ingestor = ParquetIngestor(path="/path/to/df.csv")
+    >>> ingestor
+    ParquetIngestor(path=/path/to/df.csv)
+    >>> df = ingestor.ingest()  # doctest: +SKIP
 
-        >>> from flamme.ingestor import ParquetIngestor
-        >>> ingestor = ParquetIngestor(path="/path/to/df.csv")
-        >>> ingestor
-        ParquetIngestor(path=/path/to/df.csv)
-        >>> df = ingestor.ingest()  # doctest: +SKIP
+    ```
     """
 
-    def __init__(self, path: Path | str, **kwargs) -> None:
+    def __init__(self, path: Path | str, **kwargs: Any) -> None:
         self._path = sanitize_path(path)
         self._kwargs = kwargs
 

@@ -36,22 +36,23 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import ColumnDiscreteAnalyzer
+    >>> analyzer = ColumnDiscreteAnalyzer(column="str")
+    >>> analyzer
+    ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, yscale=auto, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import ColumnDiscreteAnalyzer
-        >>> analyzer = ColumnDiscreteAnalyzer(column="str")
-        >>> analyzer
-        ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, yscale=auto, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(
@@ -109,27 +110,28 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
+    >>> analyzer = ColumnTemporalDiscreteAnalyzer(
+    ...     column="str", dt_column="datetime", period="M"
+    ... )
+    >>> analyzer
+    ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...         "datetime": pd.to_datetime(
+    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...         ),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
-        >>> analyzer = ColumnTemporalDiscreteAnalyzer(
-        ...     column="str", dt_column="datetime", period="M"
-        ... )
-        >>> analyzer
-        ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...         "datetime": pd.to_datetime(
-        ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...         ),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(

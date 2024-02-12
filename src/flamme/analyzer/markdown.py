@@ -16,16 +16,17 @@ class MarkdownAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import MarkdownAnalyzer
+    >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
+    >>> analyzer
+    MarkdownAnalyzer()
+    >>> df = pd.DataFrame({})
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import MarkdownAnalyzer
-        >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
-        >>> analyzer
-        MarkdownAnalyzer()
-        >>> df = pd.DataFrame({})
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, desc: str) -> None:
