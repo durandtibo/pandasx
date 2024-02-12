@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
+from clickhouse_connect.driver import Client
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
@@ -16,16 +17,12 @@ from flamme.testing import clickhouse_connect_available
 @clickhouse_connect_available
 def test_clickhouse_ingestor_str() -> None:
     assert str(
-        ClickHouseIngestor(query="select * from source.dataset", client_config={})
+        ClickHouseIngestor(query="select * from source.dataset", client=Mock(spec=Client))
     ).startswith("ClickHouseIngestor(")
 
 
 @clickhouse_connect_available
 def test_clickhouse_ingestor_ingest() -> None:
-    ingestor = ClickHouseIngestor(
-        query="select * from source.dataset",
-        client_config={"username": "POLAR"},
-    )
     df = DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
@@ -33,19 +30,8 @@ def test_clickhouse_ingestor_ingest() -> None:
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    query_df_mock = Mock(return_value=df)
-    clickhouse_mock = Mock(return_value=Mock(query_df=query_df_mock))
-    with patch("flamme.ingestor.clickhouse.clickhouse_connect.get_client", clickhouse_mock):
-        df = ingestor.ingest()
-        assert_frame_equal(
-            df,
-            DataFrame(
-                {
-                    "col1": [1, 2, 3, 4, 5],
-                    "col2": ["a", "b", "c", "d", "e"],
-                    "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
-                }
-            ),
-        )
-        clickhouse_mock.assert_called_once_with(username="POLAR")
-        query_df_mock.assert_called_once_with(query="select * from source.dataset")
+    client_mock = Mock(spec=Client, query_df=Mock(return_value=df))
+    ingestor = ClickHouseIngestor(query="select * from source.dataset", client=client_mock)
+    out = ingestor.ingest()
+    assert_frame_equal(out, df)
+    client_mock.query_df.assert_called_once_with(query="select * from source.dataset")
