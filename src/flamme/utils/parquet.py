@@ -7,7 +7,7 @@ __all__ = ["get_table_schema"]
 
 from typing import TYPE_CHECKING
 
-import pyarrow
+import pyarrow as pa
 
 from flamme.utils.path import sanitize_path
 
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def get_table_schema(path: Path | str) -> pyarrow.Schema:
+def get_table_schema(path: Path | str) -> pa.Schema:
     r"""Return the table schema.
 
     Args:
@@ -24,4 +24,4 @@ def get_table_schema(path: Path | str) -> pyarrow.Schema:
     Returns:
         The table schema.
     """
-    return pyarrow.parquet.read_schema(sanitize_path(path))
+    return pa.parquet.read_schema(sanitize_path(path))

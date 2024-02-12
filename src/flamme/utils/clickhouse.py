@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
     if is_clickhouse_connect_available():  # pragma: no cover
         from clickhouse_connect.driver.client import Client
-    import pyarrow
+    import pyarrow as pa
 
 
-def get_table_schema(client: Client, table: str) -> pyarrow.Schema:
+def get_table_schema(client: Client, table: str) -> pa.Schema:
     r"""Return the table schema.
 
     Args:

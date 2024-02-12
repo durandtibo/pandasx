@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-import pyarrow
+import pyarrow as pa
 import pytest
 
 from flamme.testing import clickhouse_connect_available
@@ -14,11 +14,11 @@ if is_clickhouse_connect_available():  # pragma: no cover
 
 
 @pytest.fixture()
-def table() -> pyarrow.Table:
-    return pyarrow.Table.from_pydict(
+def table() -> pa.Table:
+    return pa.Table.from_pydict(
         {
-            "number": pyarrow.array([2, 4, 5, 100], type=pyarrow.int32()),
-            "string": pyarrow.array(["Flamingo", "Horse", "Brittle stars", "Centipede"]),
+            "number": pa.array([2, 4, 5, 100], type=pa.int32()),
+            "string": pa.array(["Flamingo", "Horse", "Brittle stars", "Centipede"]),
         }
     )
 
@@ -29,8 +29,8 @@ def table() -> pyarrow.Table:
 
 
 @clickhouse_connect_available
-def test_get_table_schema(table: pyarrow.Table) -> None:
+def test_get_table_schema(table: pa.Table) -> None:
     client = Mock(spec=Client, query_arrow=Mock(return_value=table))
-    assert get_table_schema(client, "source.table") == pyarrow.schema(
-        [("number", pyarrow.int32()), ("string", pyarrow.string())]
+    assert get_table_schema(client, "source.table") == pa.schema(
+        [("number", pa.int32()), ("string", pa.string())]
     )
