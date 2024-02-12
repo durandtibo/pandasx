@@ -1,4 +1,4 @@
-r"""Contain the implementation of a section to analyze the number null
+r"""Contain the implementation of sections to analyze the number null
 values."""
 
 from __future__ import annotations

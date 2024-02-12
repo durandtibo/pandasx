@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze a column with
+continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousSection"]
@@ -327,10 +330,10 @@ def add_cdf_plot(
     xmax: float = float("inf"),
     color: str = "tab:red",
 ) -> None:
-    r"""Adds the cumulative distribution function (CDF) plot.
+    r"""Add the cumulative distribution function (CDF) plot.
 
     Args:
-        ax:
+        ax: Specifies the axes of the matplotlib figure to update.
         array: Specifies the array with the data.
         nbins: Specifies the number of bins to use to plot the CDF.
         xmin: Specifies the minimum value of the range or its

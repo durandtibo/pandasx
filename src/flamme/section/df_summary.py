@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to generate a summary of a
+DataFrame."""
+
 from __future__ import annotations
 
 __all__ = ["DataFrameSummarySection"]

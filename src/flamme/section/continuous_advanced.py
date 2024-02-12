@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze a column with
+continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousAdvancedSection"]

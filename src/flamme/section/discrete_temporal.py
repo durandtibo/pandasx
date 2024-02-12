@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of a column with discrete values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalDiscreteSection"]

@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of a column with continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalContinuousSection"]
@@ -244,9 +247,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
         .sort_index()
     )
 
-    rows = []
-    for row in df_stats.itertuples():
-        rows.append(create_temporal_table_row(row))
+    rows = [create_temporal_table_row(row) for row in df_stats.itertuples()]
     return Template(
         """
 <details>

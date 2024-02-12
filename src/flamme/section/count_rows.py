@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to count the number of rows
+for a given temporal window."""
+
 from __future__ import annotations
 
 __all__ = ["TemporalRowCountSection"]
@@ -146,6 +149,8 @@ def create_temporal_count_figure(
         dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
         period: Specifies the temporal period e.g. monthly or daily.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Returns:
         The HTML representation of the figure.

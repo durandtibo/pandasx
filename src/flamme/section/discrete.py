@@ -1,3 +1,6 @@
+r"""Contain the implementation of a section to analyze a column with
+discrete values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnDiscreteSection"]
