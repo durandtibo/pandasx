@@ -277,3 +277,5 @@ known-first-party = ["src"]
 [tool.ruff.lint.flake8-import-conventions]
 [tool.ruff.lint.flake8-import-conventions.aliases]
 numpy = "np"
+pyarrow = "pa"
+pandas = "pd"

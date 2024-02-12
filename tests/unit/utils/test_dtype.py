@@ -11,6 +11,7 @@ from flamme.utils.dtype import (
     df_column_types,
     find_date_columns_from_dtypes,
     find_numeric_columns_from_dtypes,
+    get_dtypes_from_schema,
     read_dtypes_from_schema,
     series_column_types,
 )
@@ -161,3 +162,18 @@ def test_find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> None:
 
 def test_find_date_columns_from_dtypes_empty() -> None:
     assert find_date_columns_from_dtypes({}) == []
+
+
+#############################################
+#     Tests for read_dtypes_from_schema     #
+#############################################
+
+
+def test_get_dtypes_from_schema() -> None:
+    assert get_dtypes_from_schema(
+        pa.schema([("col_float", pa.float64()), ("col_int", pa.int32()), ("col_str", pa.string())])
+    ) == {
+        "col_float": pa.float64(),
+        "col_int": pa.int32(),
+        "col_str": pa.string(),
+    }

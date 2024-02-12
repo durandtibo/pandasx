@@ -6,6 +6,7 @@ __all__ = [
     "df_column_types",
     "find_date_columns_from_dtypes",
     "find_numeric_columns_from_dtypes",
+    "get_dtypes_from_schema",
     "read_dtypes_from_schema",
     "series_column_types",
 ]
@@ -83,7 +84,7 @@ def series_column_types(series: Series) -> set[type]:
     return {type(x) for x in series.tolist()}
 
 
-def read_dtypes_from_schema(path: Path | str) -> dict:
+def read_dtypes_from_schema(path: Path | str) -> dict[str, pa.DataType]:
     r"""Read the column data types from the schema.
 
     Args:
@@ -95,7 +96,7 @@ def read_dtypes_from_schema(path: Path | str) -> dict:
     path = sanitize_path(path)
     logger.info(f"Reading schema from {path}")
     schema = pq.read_schema(path)
-    return dict(zip(schema.names, schema.types))
+    return get_dtypes_from_schema(schema)
 
 
 def find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
@@ -128,3 +129,27 @@ def find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
         if pa.types.is_date(dtype):
             columns.append(col)
     return columns
+
+
+def get_dtypes_from_schema(schema: pa.Schema) -> dict[str, pa.DataType]:
+    r"""Read the column data types from the schema.
+
+    Args:
+        schema: Specifies the table schema.
+
+    Returns:
+        The mapping of column names and data types.
+
+    Example usage:
+
+    ```pycon
+    >>> import pyarrow
+    >>> from flamme.utils.dtype import get_dtypes_from_schema
+    >>> schema = pyarrow.schema([("number", pyarrow.int32()), ("string", pyarrow.string())])
+    >>> dtypes = get_dtypes_from_schema(schema)
+    >>> dtypes
+    {'number': DataType(int32), 'string': DataType(string)}
+
+    ```
+    """
+    return dict(zip(schema.names, schema.types))
