@@ -24,7 +24,7 @@ def test_decimal_to_numeric_dataframe_transformer_str_kwargs() -> None:
 
 
 def test_decimal_to_numeric_dataframe_transformer_transform() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, Decimal(5)],
             "col2": [Decimal(1), Decimal(2), Decimal(3), Decimal(4), Decimal(5)],
@@ -33,9 +33,9 @@ def test_decimal_to_numeric_dataframe_transformer_transform() -> None:
         }
     )
     transformer = DecimalToNumeric()
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -48,7 +48,7 @@ def test_decimal_to_numeric_dataframe_transformer_transform() -> None:
 
 
 def test_decimal_to_numeric_dataframe_transformer_transform_kwargs() -> None:
-    dataframe = pd.DataFrame(
+    df = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, Decimal(5)],
             "col2": [Decimal(1), Decimal(2), Decimal(3), Decimal(4), "nan"],
@@ -57,9 +57,9 @@ def test_decimal_to_numeric_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = DecimalToNumeric(errors="coerce")
-    dataframe = transformer.transform(dataframe)
+    df = transformer.transform(df)
     assert_frame_equal(
-        dataframe,
+        df,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],

@@ -3,12 +3,15 @@ from __future__ import annotations
 __all__ = ["NoRepeatReporter"]
 
 import logging
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
 
 from flamme.reporter.base import BaseReporter, setup_reporter
 from flamme.utils.path import sanitize_path
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

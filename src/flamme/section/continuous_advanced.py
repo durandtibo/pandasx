@@ -1,14 +1,16 @@
+r"""Contain the implementation of a section to analyze a column with
+continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousAdvancedSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
@@ -28,6 +30,11 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import Series
 
 logger = logging.getLogger(__name__)
 
@@ -187,7 +194,7 @@ def create_histogram_range_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a histogram figure.
+    r"""Create the HTML code of a histogram figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -206,7 +213,7 @@ def create_histogram_range_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.to_numpy()
     if array.size == 0:

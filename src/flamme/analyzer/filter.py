@@ -3,12 +3,16 @@ from __future__ import annotations
 __all__ = ["FilteredAnalyzer"]
 
 import logging
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
-from flamme.section import BaseSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
+    from flamme.section import BaseSection
 
 logger = logging.getLogger(__name__)
 

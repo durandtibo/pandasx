@@ -3,8 +3,7 @@ from __future__ import annotations
 __all__ = ["ColumnContinuousAnalyzer", "ColumnTemporalContinuousAnalyzer"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import (
@@ -12,6 +11,9 @@ from flamme.section import (
     ColumnTemporalContinuousSection,
     EmptySection,
 )
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 

@@ -1,10 +1,15 @@
+r"""Contain the implementation of an empty section."""
+
 from __future__ import annotations
 
 __all__ = ["EmptySection"]
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from flamme.section.base import BaseSection
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class EmptySection(BaseSection):

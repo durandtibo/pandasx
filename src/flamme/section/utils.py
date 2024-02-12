@@ -1,3 +1,5 @@
+r"""Contain utility functions to generate sections."""
+
 from __future__ import annotations
 
 __all__ = [
@@ -9,13 +11,16 @@ __all__ = [
     "valid_h_tag",
 ]
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 from scipy.stats import kurtosis, skew
 
 from flamme.utils.array import nonnan
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 GO_TO_TOP = '<a href="#">Go to top</a>'
 
@@ -28,7 +33,7 @@ def tags2id(tags: Sequence[str]) -> str:
         tags: Specifies the sequence of tags.
 
     Returns:
-        str: The generated ID from the tags.
+        The generated ID from the tags.
     """
     return "-".join(tags).replace(" ", "-").lower()
 
@@ -40,19 +45,19 @@ def tags2title(tags: Sequence[str]) -> str:
         tags: Specifies the sequence of tags.
 
     Returns:
-        str: The generated title from the tags.
+        The generated title from the tags.
     """
     return " | ".join(tags[::-1])
 
 
 def valid_h_tag(index: int) -> int:
-    r"""Computes a valid number of a h HTML tag.
+    r"""Return a valid number of a h HTML tag.
 
     Args:
-        index (int): Specifies the original value.
+        index: Specifies the original value.
 
     Returns:
-        int: A valid value.
+        A valid value.
     """
     return max(1, min(6, index))
 
@@ -60,19 +65,16 @@ def valid_h_tag(index: int) -> int:
 def render_html_toc(
     number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
 ) -> str:
-    r"""Renders the HTML table of content (TOC) associated to the
-    section.
+    r"""Return the HTML table of content (TOC) associated to the section.
 
     Args:
-        number (str, optional): Specifies the section number
-            associated to the section. Default: ""
-        tags (``Sequence``, optional): Specifies the tags
-            associated to the section. Default: ``()``
-        depth (int, optional): Specifies the depth in the report.
-            Default: ``0``
+        number: Specifies the section number associated to the section.
+        tags: Specifies the tags associated to the section.
+        depth: Specifies the depth in the report.
+        max_depth: Specifies the maximum depth to generate in the TOC.
 
     Returns:
-        str: The HTML table of content associated to the section.
+        The HTML table of content associated to the section.
     """
     if depth >= max_depth:
         return ""
@@ -113,7 +115,7 @@ def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
 
 
 def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
-    r"""Compute several descriptive statistics for the input data.
+    r"""Return several descriptive statistics for the input data.
 
     Args:
         data: Specifies the data to analyze.
@@ -138,7 +140,7 @@ def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
     series = data if isinstance(data, pd.Series) else pd.Series(data)
     stats = {
         "count": int(series.shape[0]),
-        "num_nulls": int(series.isnull().sum()),
+        "num_nulls": int(series.isna().sum()),
         "nunique": series.nunique(dropna=False),
         "mean": float("nan"),
         "std": float("nan"),

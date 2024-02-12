@@ -23,14 +23,14 @@ if TYPE_CHECKING:
 def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
     nrows = 10
-    dataframe = DataFrame(
+    df = DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
             "col_int": np.arange(nrows, dtype=int),
             "col_str": [f"a{i}" for i in range(nrows)],
         }
     )
-    dataframe.to_parquet(path)
+    df.to_parquet(path)
     return path
 
 

@@ -3,15 +3,18 @@ from __future__ import annotations
 __all__ = ["TransformedIngestor"]
 
 import logging
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
 from flamme.transformer.df.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 

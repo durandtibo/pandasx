@@ -1,13 +1,14 @@
+r"""Contain the implementation of a section to generate a summary of a
+DataFrame."""
+
 from __future__ import annotations
 
 __all__ = ["DataFrameSummarySection"]
 
 import logging
-from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from jinja2 import Template
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -18,6 +19,11 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.dtype import series_column_types
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +39,8 @@ class DataFrameSummarySection(BaseSection):
     def __init__(self, df: DataFrame, top: int = 5) -> None:
         self._df = df
         if top < 0:
-            raise ValueError(f"Incorrect top value ({top}). top must be positive")
+            msg = f"Incorrect top value ({top}). top must be positive"
+            raise ValueError(msg)
         self._top = top
 
     @property
@@ -188,7 +195,7 @@ def create_table_row(
     most_frequent_values: Sequence[tuple[Any, int]],
     total: int,
 ) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         column: Specifies the column name.
@@ -203,10 +210,10 @@ def create_table_row(
     """
     total = max(total, 1)
     types = ", ".join(sorted([prepare_type_name(t) for t in types]))
-    null = f"{null:,} ({100*null / total:.2f}%)"
-    nunique = f"{nunique:,} ({100*nunique / total:.2f}%)"
+    null = f"{null:,} ({100 * null / total:.2f}%)"
+    nunique = f"{nunique:,} ({100 * nunique / total:.2f}%)"
     most_frequent_values = ", ".join(
-        [f"{val} ({100*c/total:.2f}%)" for val, c in most_frequent_values]
+        [f"{val} ({100 * c / total:.2f}%)" for val, c in most_frequent_values]
     )
     return Template(
         """<tr>

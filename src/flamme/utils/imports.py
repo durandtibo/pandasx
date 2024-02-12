@@ -16,6 +16,7 @@ from coola.utils.imports import decorator_package_available
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+
 ##############################
 #     clickhouse_connect     #
 ##############################

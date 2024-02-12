@@ -1,8 +1,11 @@
+r"""Contain the implementation of a section to manage a dictionary of
+sections."""
+
 from __future__ import annotations
 
 __all__ = ["SectionDict"]
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent
 
@@ -14,6 +17,9 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class SectionDict(BaseSection):
@@ -45,8 +51,8 @@ class SectionDict(BaseSection):
         report = []
         if tags:
             report.append(
-                f'<h{valid_h_tag(depth+1)} id="{tags2id(tags)}">{number} '
-                f"{tags2title(tags)} </h{valid_h_tag(depth+1)}>"
+                f'<h{valid_h_tag(depth + 1)} id="{tags2id(tags)}">{number} '
+                f"{tags2title(tags)} </h{valid_h_tag(depth + 1)}>"
             )
             report.extend([GO_TO_TOP, '<p style="margin-top: 1rem;">'])
 

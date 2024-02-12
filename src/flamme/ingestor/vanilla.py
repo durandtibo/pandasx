@@ -2,17 +2,19 @@ from __future__ import annotations
 
 __all__ = ["Ingestor"]
 
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.ingestor.base import BaseIngestor
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 
 class Ingestor(BaseIngestor):
     r"""Implement a simple DataFrame ingestor.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to ingest.
+        df: Specifies the DataFrame to ingest.
 
     Example usage:
 

@@ -1,16 +1,17 @@
+r"""Contain the implementation of a section to analyze a column with
+continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
 from matplotlib.lines import Line2D
-from pandas import Series
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -25,6 +26,12 @@ from flamme.section.utils import (
 from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.range import find_range
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from matplotlib.axes import Axes
+    from pandas import Series
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +179,7 @@ def create_boxplot_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a boxplot figure.
+    r"""Create the HTML code of a boxplot figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -186,7 +193,7 @@ def create_boxplot_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.dropna().to_numpy()
     if array.size == 0:
@@ -201,7 +208,7 @@ def create_boxplot_figure(
         vert=False,
         widths=0.7,
         patch_artist=True,
-        boxprops=dict(facecolor="lightblue"),
+        boxprops={"facecolor": "lightblue"},
     )
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
@@ -220,7 +227,7 @@ def create_histogram_figure(
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates the HTML code of a histogram figure.
+    r"""Create the HTML code of a histogram figure.
 
     Args:
         series: Specifies the series/column to analyze.
@@ -240,7 +247,7 @@ def create_histogram_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        str: The HTML code of the figure.
+        The HTML code of the figure.
     """
     array = series.to_numpy()
     if array.size == 0:
@@ -323,10 +330,10 @@ def add_cdf_plot(
     xmax: float = float("inf"),
     color: str = "tab:red",
 ) -> None:
-    r"""Adds the cumulative distribution function (CDF) plot.
+    r"""Add the cumulative distribution function (CDF) plot.
 
     Args:
-        ax:
+        ax: Specifies the axes of the matplotlib figure to update.
         array: Specifies the array with the data.
         nbins: Specifies the number of bins to use to plot the CDF.
         xmin: Specifies the minimum value of the range or its
@@ -356,7 +363,7 @@ def add_cdf_plot(
 
 
 def create_stats_table(stats: dict, column: str) -> str:
-    r"""Creates the HTML code of the table with statistics.
+    r"""Create the HTML code of the table with statistics.
 
     Args:
         stats: Specifies a dictionary with the statistics.

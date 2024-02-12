@@ -1,13 +1,15 @@
+r"""Contain the implementation of a section to analyze the duplicate
+values."""
+
 from __future__ import annotations
 
 __all__ = ["DuplicatedRowSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -19,6 +21,11 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,13 +33,13 @@ class DuplicatedRowSection(BaseSection):
     r"""Implement a section to analyze the number of duplicated rows.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
+        df: Specifies the DataFrame to analyze.
         columns (``Sequence`` or ``None``): Specifies the columns used
             to compute the duplicated rows. ``None`` means all the
-            columns. Default: ``None``
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
+            columns.
+        figsize: Specifies the figure
             size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+            second is the height.
     """
 
     def __init__(
@@ -126,14 +133,14 @@ def create_duplicate_histogram(
 
 
 def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:
-    r"""Creates a table with information about duplicated rows.
+    r"""Create a table with information about duplicated rows.
 
     Args:
         num_rows (int): Specifies the number of rows.
         num_unique_rows (int): Specifies the number of unique rows.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     num_duplicated_rows = num_rows - num_unique_rows
     pct_unique_rows = num_unique_rows / num_rows if num_rows else float("nan")

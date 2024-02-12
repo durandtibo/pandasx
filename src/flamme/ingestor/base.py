@@ -4,10 +4,13 @@ __all__ = ["BaseIngestor", "is_ingestor_config", "setup_ingestor"]
 
 import logging
 from abc import ABC
+from typing import TYPE_CHECKING
 
 from objectory import AbstractFactory
 from objectory.utils import is_object_config
-from pandas import DataFrame
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 

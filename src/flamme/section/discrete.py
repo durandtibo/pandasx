@@ -1,10 +1,12 @@
+r"""Contain the implementation of a section to analyze a column with
+discrete values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnDiscreteSection"]
 
 import logging
-from collections import Counter
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
@@ -19,6 +21,10 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+
+if TYPE_CHECKING:
+    from collections import Counter
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -234,14 +240,14 @@ def create_histogram(
 
 
 def create_table_row(column: str, count: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        column (str): Specifies the column name.
+        column: Specifies the column name.
         count (int): Specifies the count for the column.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     return Template("""<tr><th>{{column}}</th><td {{num_style}}>{{count}}</td></tr>""").render(
         {"num_style": 'style="text-align: right;"', "column": column, "count": f"{count:,}"}

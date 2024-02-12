@@ -1,15 +1,16 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of a column with continuous values."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalContinuousSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -22,6 +23,12 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
 from flamme.utils.mathnan import remove_nan
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    import pandas as pd
+    from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
 
@@ -146,7 +153,7 @@ def create_temporal_figure(
     yscale: str = "auto",
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal value
+    r"""Create a HTML representation of a figure with the temporal value
     distribution.
 
     Args:
@@ -185,7 +192,7 @@ def create_temporal_figure(
         vert=True,
         widths=0.7,
         patch_artist=True,
-        boxprops=dict(facecolor="lightblue"),
+        boxprops={"facecolor": "lightblue"},
     )
     ax.set_ylim(np.nanmin(array), np.nanmax(array))
     ax.set_xticks(np.arange(len(labels)), labels=labels)
@@ -198,19 +205,19 @@ def create_temporal_figure(
 
 
 def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Creates a HTML representation of a table with some statistics
+    r"""Create a HTML representation of a table with some statistics
     about the temporal value distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     if df.shape[0] == 0:
         return "<span>&#9888;</span> No table is generated because the column is empty"
@@ -240,9 +247,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
         .sort_index()
     )
 
-    rows = []
-    for row in df_stats.itertuples():
-        rows.append(create_temporal_table_row(row))
+    rows = [create_temporal_table_row(row) for row in df_stats.itertuples()]
     return Template(
         """
 <details>
@@ -281,7 +286,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
 
 
 def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
         row: Specifies a DataFrame row.

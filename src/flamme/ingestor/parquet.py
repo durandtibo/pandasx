@@ -3,12 +3,15 @@ from __future__ import annotations
 __all__ = ["ParquetIngestor"]
 
 import logging
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from pandas import DataFrame, read_parquet
 
 from flamme.ingestor.base import BaseIngestor
 from flamme.utils.path import human_file_size, sanitize_path
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

@@ -1,15 +1,17 @@
+r"""Contain the implementation of sections to analyze the number null
+values."""
+
 from __future__ import annotations
 
 __all__ = ["NullValueSection", "TemporalNullValueSection"]
 
 import logging
 import math
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
 from pandas import DataFrame
 
 from flamme.section.base import BaseSection
@@ -21,6 +23,11 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from matplotlib.axes import Axes
 
 logger = logging.getLogger(__name__)
 
@@ -34,9 +41,9 @@ class NullValueSection(BaseSection):
             values for each column.
         total_count (``numpy.ndarray``): Specifies the total number
             of values for each column.
-        figsize (``tuple`` or ``None``, optional): Specifies the figure
+        figsize: Specifies the figure
             size in inches. The first dimension is the width and the
-            second is the height. Default: ``None``
+            second is the height.
     """
 
     def __init__(
@@ -52,15 +59,17 @@ class NullValueSection(BaseSection):
         self._figsize = figsize
 
         if len(self._columns) != self._null_count.shape[0]:
-            raise RuntimeError(
+            msg = (
                 f"columns ({len(self._columns):,}) and null_count ({self._null_count.shape[0]:,}) "
                 "do not match"
             )
+            raise RuntimeError(msg)
         if len(self._columns) != self._total_count.shape[0]:
-            raise RuntimeError(
+            msg = (
                 f"columns ({len(self._columns):,}) and total_count "
                 f"({self._total_count.shape[0]:,}) do not match"
             )
+            raise RuntimeError(msg)
 
     @property
     def columns(self) -> tuple[str, ...]:
@@ -157,10 +166,10 @@ In the following histogram, the columns are sorted by ascending order of null va
 """
 
     def _create_bar_figure(self) -> str:
-        df = self._get_dataframe().sort_values(by="null")
+        dataframe = self._get_dataframe().sort_values(by="null")
         fig, ax = plt.subplots(figsize=self._figsize)
-        labels = df["column"].tolist()
-        ax.bar(x=labels, height=df["null"].to_numpy(), color="tab:blue")
+        labels = dataframe["column"].tolist()
+        ax.bar(x=labels, height=dataframe["null"].to_numpy(), color="tab:blue")
         if labels:
             ax.set_xlim(-0.5, len(labels) - 0.5)
         readable_xticklabels(ax, max_num_xticks=100)
@@ -170,12 +179,14 @@ In the following histogram, the columns are sorted by ascending order of null va
         return figure2html(fig, close_fig=True)
 
     def _create_table(self, sort_by: str) -> str:
-        df = self._get_dataframe().sort_values(by=sort_by)
+        dataframe = self._get_dataframe().sort_values(by=sort_by)
         rows = "\n".join(
             [
                 create_table_row(column=column, null_count=null_count, total_count=total_count)
                 for column, null_count, total_count in zip(
-                    df["column"].to_numpy(), df["null"].to_numpy(), df["total"].to_numpy()
+                    dataframe["column"].to_numpy(),
+                    dataframe["null"].to_numpy(),
+                    dataframe["total"].to_numpy(),
                 )
             ]
         )
@@ -205,15 +216,15 @@ In the following histogram, the columns are sorted by ascending order of null va
 
 
 def create_table_row(column: str, null_count: int, total_count: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        column (str): Specifies the column name.
+        column: Specifies the column name.
         null_count (int): Specifies the number of null values.
         total_count (int): Specifies the total number of rows.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     pct = null_count / total_count
     return Template(
@@ -239,12 +250,12 @@ class TemporalNullValueSection(BaseSection):
     values.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
-        ncols (int, optional): Specifies the number of columns.
+        ncols: Specifies the number of columns.
             Default: ``2``
         figsize (``tuple``, optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
@@ -272,12 +283,12 @@ class TemporalNullValueSection(BaseSection):
 
     @property
     def dt_column(self) -> str:
-        r"""str: The datetime column."""
+        r"""The datetime column."""
         return self._dt_column
 
     @property
     def period(self) -> str:
-        r"""str: The temporal period used to analyze the data."""
+        r"""The temporal period used to analyze the data."""
         return self._period
 
     @property
@@ -345,23 +356,23 @@ def create_temporal_null_figure(
     ncols: int = 2,
     figsize: tuple[float, float] = (7, 5),
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal null
+    r"""Create a HTML representation of a figure with the temporal null
     value distribution.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
-        ncols (int, optional): Specifies the number of columns.
+        ncols: Specifies the number of columns.
             Default: ``2``
         figsize (``tuple``, optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
             the height. Default: ``(7, 5)``
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return ""
@@ -372,10 +383,7 @@ def create_temporal_null_figure(
     )
 
     for i, column in enumerate(columns):
-        if ncols > 1:
-            ax = axes[i // ncols, i % ncols]
-        else:
-            ax = axes[i]
+        ax = axes[i // ncols, i % ncols] if ncols > 1 else axes[i]
         ax.set_title(f"column: {column}")
 
         num_nulls, total, labels = prepare_data(
@@ -414,14 +422,14 @@ def prepare_data(
     dt_column: str,
     period: str,
 ) -> tuple[np.ndarray, np.ndarray, list]:
-    r"""Prepares the data to create the figure and table.
+    r"""Prepare the data to create the figure and table.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
@@ -457,14 +465,14 @@ def prepare_data(
         >>> labels
         ['2020-01', '2020-02', '2020-03', '2020-04']
     """
-    df = df[[column, dt_column]].copy()
+    dataframe = df[[column, dt_column]].copy()
     dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
+    dataframe[dt_col] = dataframe[dt_column].dt.to_period(period)
 
-    null_col = f"__{column}_isnull__"
-    df.loc[:, null_col] = df.loc[:, column].isnull()
+    null_col = f"__{column}_isna__"
+    dataframe.loc[:, null_col] = dataframe.loc[:, column].isna()
 
-    df_num_nulls = df.groupby(dt_col)[null_col].sum().sort_index()
-    df_total = df.groupby(dt_col)[null_col].count().sort_index()
-    labels = [str(dt) for dt in df_num_nulls.index]
-    return df_num_nulls.to_numpy().astype(int), df_total.to_numpy().astype(int), labels
+    num_nulls = dataframe.groupby(dt_col)[null_col].sum().sort_index()
+    total = dataframe.groupby(dt_col)[null_col].count().sort_index()
+    labels = [str(dt) for dt in num_nulls.index]
+    return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels

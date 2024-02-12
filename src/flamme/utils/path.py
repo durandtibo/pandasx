@@ -4,7 +4,6 @@ from __future__ import annotations
 
 __all__ = ["human_file_size", "sanitize_path", "find_files", "find_parquet_files"]
 
-
 from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import unquote, urlparse

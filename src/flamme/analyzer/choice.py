@@ -3,12 +3,16 @@ from __future__ import annotations
 __all__ = ["ChoiceAnalyzer", "NumUniqueSelection"]
 
 from collections.abc import Callable, Mapping
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
-from flamme.section import BaseSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
+    from flamme.section import BaseSection
 
 
 class ChoiceAnalyzer(BaseAnalyzer):
@@ -35,7 +39,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer = ChoiceAnalyzer(
     ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()},
-    ...     selection_fn=lambda df: "null" if df.isnull().values.any() else "duplicate",
+    ...     selection_fn=lambda df: "null" if df.isna().values.any() else "duplicate",
     ... )
     >>> analyzer
     ChoiceAnalyzer(

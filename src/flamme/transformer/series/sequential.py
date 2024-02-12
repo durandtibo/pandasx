@@ -5,7 +5,6 @@ from __future__ import annotations
 
 __all__ = ["SequentialSeriesTransformer"]
 
-
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_sequence

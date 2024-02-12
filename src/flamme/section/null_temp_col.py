@@ -1,13 +1,15 @@
+r"""Contain the implementation of a section to analyze the temporal
+distribution of null values for a given column."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalNullValueSection"]
 
 import logging
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.null import plot_temporal_null_total, prepare_data
@@ -20,6 +22,11 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html, readable_xticklabels
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from pandas import DataFrame
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,15 +35,15 @@ class ColumnTemporalNullValueSection(BaseSection):
     values for a given column.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
     """
 
     def __init__(
@@ -48,13 +55,11 @@ class ColumnTemporalNullValueSection(BaseSection):
         figsize: tuple[float, float] | None = None,
     ) -> None:
         if column not in df:
-            raise ValueError(
-                f"Column {column} is not in the DataFrame (columns:{sorted(df.columns)})"
-            )
+            msg = f"Column {column} is not in the DataFrame (columns:{sorted(df.columns)})"
+            raise ValueError(msg)
         if dt_column not in df:
-            raise ValueError(
-                f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(df.columns)})"
-            )
+            msg = f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(df.columns)})"
+            raise ValueError(msg)
 
         self._df = df
         self._column = column
@@ -69,17 +74,17 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     @property
     def column(self) -> str:
-        r"""str: The column to analyze."""
+        r"""The column to analyze."""
         return self._column
 
     @property
     def dt_column(self) -> str:
-        r"""str: The datetime column."""
+        r"""The datetime column."""
         return self._dt_column
 
     @property
     def period(self) -> str:
-        r"""str: The temporal period used to analyze the data."""
+        r"""The temporal period used to analyze the data."""
         return self._period
 
     @property
@@ -150,22 +155,22 @@ def create_temporal_null_figure(
     period: str,
     figsize: tuple[float, float] | None = None,
 ) -> str:
-    r"""Creates a HTML representation of a figure with the temporal null
+    r"""Create a HTML representation of a figure with the temporal null
     value distribution.
 
     Args:
-        df (``pandas.DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
         figsize (``tuple`` , optional): Specifies the figure size in
             inches. The first dimension is the width and the second is
-            the height. Default: ``None``
+            the height.
 
     Returns:
-        str: The HTML representation of the figure.
+        The HTML representation of the figure.
     """
     if df.shape[0] == 0:
         return ""
@@ -181,19 +186,19 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Creates a HTML representation of a table with the temporal
+    r"""Create a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
-        df (``DataFrame``): Specifies the DataFrame to analyze.
-        column (str): Specifies the column to analyze.
-        dt_column (str): Specifies the datetime column used to analyze
+        df: Specifies the DataFrame to analyze.
+        column: Specifies the column to analyze.
+        dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period (str): Specifies the temporal period e.g. monthly or
+        period: Specifies the temporal period e.g. monthly or
             daily.
 
     Returns:
-        str: The HTML representation of the table.
+        The HTML representation of the table.
     """
     if df.shape[0] == 0:
         return ""
@@ -232,13 +237,15 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
 
 
 def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> str:
-    r"""Creates the HTML code of a new table row.
+    r"""Create the HTML code of a new table row.
 
     Args:
-        row ("pd.core.frame.Pandas"): Specifies a DataFrame row.
+        label: Specifies the label of the row.
+        num_nulls: Specifies the number of null values.
+        total: Specifies the total number of values.
 
     Returns:
-        str: The HTML code of a row.
+        The HTML code of a row.
     """
     num_non_nulls = total - num_nulls
     return Template(

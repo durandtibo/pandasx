@@ -2,13 +2,17 @@ from __future__ import annotations
 
 __all__ = ["MappingAnalyzer"]
 
-from collections.abc import Mapping
+from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from pandas import DataFrame
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section import SectionDict
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from pandas import DataFrame
 
 
 class MappingAnalyzer(BaseAnalyzer):
@@ -109,8 +113,9 @@ class MappingAnalyzer(BaseAnalyzer):
         ```
         """
         if key in self._analyzers and not replace_ok:
-            raise KeyError(
+            msg = (
                 f"`{key}` is already used to register an analyzer. "
                 "Use `replace_ok=True` to replace the analyzer"
             )
+            raise KeyError(msg)
         self._analyzers[key] = analyzer

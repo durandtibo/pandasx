@@ -5,7 +5,6 @@ from __future__ import annotations
 
 __all__ = ["StripStringSeriesTransformer"]
 
-
 from typing import TYPE_CHECKING
 
 from flamme.transformer.series.base import BaseSeriesTransformer

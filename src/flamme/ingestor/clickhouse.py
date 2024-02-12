@@ -3,8 +3,7 @@ from __future__ import annotations
 __all__ = ["ClickHouseIngestor"]
 
 import logging
-
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.ingestor.base import BaseIngestor
 from flamme.utils.imports import (
@@ -12,9 +11,11 @@ from flamme.utils.imports import (
     is_clickhouse_connect_available,
 )
 
+if TYPE_CHECKING:
+    from pandas import DataFrame
+
 if is_clickhouse_connect_available():  # pragma: no cover
     import clickhouse_connect
-
 
 logger = logging.getLogger(__name__)
 

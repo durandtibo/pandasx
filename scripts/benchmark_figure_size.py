@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 
 from flamme.utils.figure import figure2html
 from flamme.utils.io import save_text
-from flamme.utils.path import human_file_size
 
 
 def compute_size(string: str) -> int:
@@ -33,18 +32,12 @@ def main() -> None:
         data = np.random.randn(size)
         figm = matplotlib_histogram(data)
         figp = plotly_histogram(data)
-        print(
-            f"data={data.shape[0]:,}",
-            f"matplotlib={compute_size(figm):,}",
-            f"plotly={compute_size(figp):,}",
-        )
         lines.append(f"<h2>size={size:,}</h2>")
         lines.append(figm)
         lines.append(figp)
 
     path = Path.cwd().joinpath("tmp/figures.html")
     save_text("\n".join(lines), path)
-    print(human_file_size(path))
 
 
 if __name__ == "__main__":

@@ -1,10 +1,15 @@
+r"""Implement a section that generates a table of content."""
+
 from __future__ import annotations
 
 __all__ = ["TableOfContentSection"]
 
-from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from flamme.section.base import BaseSection
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class TableOfContentSection(BaseSection):

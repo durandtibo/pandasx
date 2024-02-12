@@ -2,10 +2,13 @@ from __future__ import annotations
 
 __all__ = ["MarkdownAnalyzer"]
 
-from pandas import DataFrame
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import MarkdownSection
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
