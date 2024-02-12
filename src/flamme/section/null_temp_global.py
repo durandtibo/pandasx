@@ -301,7 +301,7 @@ def prepare_data(
     columns.remove(dt_column)
     dt_col = "__datetime__"
     df[dt_col] = df[dt_column].dt.to_period(period)
-    df.loc[:, columns] = df[columns].isna()
+    df.loc[:, columns] = df[columns].isna().astype(float)
 
     num_nulls = df.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
     total = df.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
