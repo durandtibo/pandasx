@@ -272,6 +272,7 @@ def prepare_data(
 
     .. code-block:: pycon
 
+        >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.section.null_temp_global import prepare_data
         >>> num_nulls, total, labels = prepare_data(
@@ -294,14 +295,14 @@ def prepare_data(
         >>> labels
         ['2020-01', '2020-02', '2020-03', '2020-04']
     """
-    dataframe = df.copy()
-    columns = dataframe.columns.tolist()
+    df = df.copy()
+    columns = df.columns.tolist()
     columns.remove(dt_column)
     dt_col = "__datetime__"
-    dataframe[dt_col] = dataframe[dt_column].dt.to_period(period)
-    dataframe.loc[:, columns] = dataframe[columns].isna()
+    df[dt_col] = df[dt_column].dt.to_period(period)
+    df.loc[:, columns] = df[columns].isna()
 
-    num_nulls = dataframe.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
-    total = dataframe.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
+    num_nulls = df.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
+    total = df.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
     labels = [str(dt) for dt in num_nulls.index]
     return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels
