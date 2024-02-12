@@ -4,10 +4,13 @@ from unittest.mock import Mock
 
 import pyarrow
 import pytest
-from clickhouse_connect.driver import Client
 
 from flamme.testing import clickhouse_connect_available
 from flamme.utils.clickhouse import get_table_schema
+from flamme.utils.imports import is_clickhouse_connect_available
+
+if is_clickhouse_connect_available():  # pragma: no cover
+    from clickhouse_connect.driver import Client
 
 
 @pytest.fixture()
