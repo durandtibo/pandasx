@@ -12,7 +12,6 @@ from flamme.utils.dtype import (
     find_date_columns_from_dtypes,
     find_numeric_columns_from_dtypes,
     get_dtypes_from_schema,
-    read_dtypes_from_schema,
     series_column_types,
 )
 
@@ -103,20 +102,6 @@ def test_series_column_types() -> None:
 
 def test_series_column_types_empty() -> None:
     assert series_column_types(Series([], dtype=object)) == set()
-
-
-#############################################
-#     Tests for read_dtypes_from_schema     #
-#############################################
-
-
-def test_read_dtypes_from_schema(df_path: Path) -> None:
-    dtypes = read_dtypes_from_schema(df_path)
-    assert dtypes == {
-        "col_float": pa.float64(),
-        "col_int": pa.int64(),
-        "col_str": pa.string(),
-    }
 
 
 ######################################################
