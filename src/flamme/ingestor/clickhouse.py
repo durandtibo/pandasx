@@ -8,16 +8,15 @@ import logging
 from typing import TYPE_CHECKING
 
 from flamme.ingestor.base import BaseIngestor
-from flamme.utils.imports import (
-    check_clickhouse_connect,
-    is_clickhouse_connect_available,
-)
+from flamme.utils import setup_object
 
 if TYPE_CHECKING:
+    from flamme.utils.imports import is_clickhouse_connect_available
+
+    if is_clickhouse_connect_available():
+        import clickhouse_connect
     from pandas import DataFrame
 
-if is_clickhouse_connect_available():  # pragma: no cover
-    import clickhouse_connect
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ class ClickHouseIngestor(BaseIngestor):
 
     Args:
         query: Specifies the query to get the data.
-        client_config: Specifies the clickhouse client configuration.
+        client: Specifies the clickhouse client or its configuration.
             Please check the documentation of
             ``clickhouse_connect.get_client`` to get more information.
 
@@ -35,18 +34,17 @@ class ClickHouseIngestor(BaseIngestor):
 
     ```pycon
     >>> from flamme.ingestor import ClickHouseIngestor
-    >>> ingestor = ClickHouseIngestor(query="", client_config={})
-    >>> ingestor
-    ClickHouseIngestor()
+    >>> import clickhouse_connect
+    >>> client = clickhouse_connect.get_client()  # doctest: +SKIP
+    >>> ingestor = ClickHouseIngestor(query="", client=client)  # doctest: +SKIP
     >>> df = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
 
-    def __init__(self, query: str, client_config: dict) -> None:
-        check_clickhouse_connect()
+    def __init__(self, query: str, client: clickhouse_connect.driver.Client | dict) -> None:
         self._query = str(query)
-        self._client_config = client_config
+        self._client: clickhouse_connect.driver.Client = setup_object(client)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
@@ -58,8 +56,7 @@ class ClickHouseIngestor(BaseIngestor):
             f"query:\n{self._query}\n"
             "---------------------------------------------------------------------------------\n\n"
         )
-        client = clickhouse_connect.get_client(**self._client_config)
-        df = client.query_df(query=self._query).sort_index(axis=1)
+        df = self._client.query_df(query=self._query).sort_index(axis=1)
         logger.info(f"Data ingested. DataFrame shape: {df.shape}")
         logger.info(f"number of unique column names: {len(set(df.columns)):,}")
         return df
