@@ -111,7 +111,7 @@ def find_parquet_files(path: Path | str, recursive: bool = True) -> list[Path]:
         recursive: Specifies if it should also check the sub-folders.
 
     Returns:
-        The tuple of path of parquet files.
+        The list of parquet files.
 
     Example usage:
 
