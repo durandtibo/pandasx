@@ -7,7 +7,6 @@ __all__ = [
     "find_date_columns_from_dtypes",
     "find_numeric_columns_from_dtypes",
     "get_dtypes_from_schema",
-    "read_dtypes_from_schema",
     "series_column_types",
 ]
 
@@ -15,12 +14,8 @@ import logging
 from typing import TYPE_CHECKING
 
 import pyarrow as pa
-import pyarrow.parquet as pq
-
-from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
-    from pathlib import Path
 
     from pandas import DataFrame, Series
 
@@ -84,21 +79,6 @@ def series_column_types(series: Series) -> set[type]:
     return {type(x) for x in series.tolist()}
 
 
-def read_dtypes_from_schema(path: Path | str) -> dict[str, pa.DataType]:
-    r"""Read the column data types from the schema.
-
-    Args:
-        path: Specifies the path to the schema.
-
-    Returns:
-        The mapping of column names and data types.
-    """
-    path = sanitize_path(path)
-    logger.info(f"Reading schema from {path}")
-    schema = pq.read_schema(path)
-    return get_dtypes_from_schema(schema)
-
-
 def find_numeric_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
     r"""Find the columns with a numeric type.
 
@@ -132,7 +112,7 @@ def find_date_columns_from_dtypes(dtypes: dict[str, pa.DataType]) -> list[str]:
 
 
 def get_dtypes_from_schema(schema: pa.Schema) -> dict[str, pa.DataType]:
-    r"""Read the column data types from the schema.
+    r"""Return the column data types from the schema.
 
     Args:
         schema: Specifies the table schema.
