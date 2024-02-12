@@ -441,29 +441,30 @@ def prepare_data(
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.section.null_temp_col import prepare_data
+    >>> num_nulls, total, labels = prepare_data(
+    ...     df=pd.DataFrame(
+    ...         {
+    ...             "col": np.array([np.nan, 1, 0, 1]),
+    ...             "datetime": pd.to_datetime(
+    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...             ),
+    ...         }
+    ...     ),
+    ...     column="col",
+    ...     dt_column="datetime",
+    ...     period="M",
+    ... )
+    >>> num_nulls
+    array([1, 0, 0, 0])
+    >>> total
+    array([1, 1, 1, 1])
+    >>> labels
+    ['2020-01', '2020-02', '2020-03', '2020-04']
 
-        >>> import pandas as pd
-        >>> from flamme.section.null_temp_col import prepare_data
-        >>> num_nulls, total, labels = prepare_data(
-        ...     df=pd.DataFrame(
-        ...         {
-        ...             "col": np.array([np.nan, 1, 0, 1]),
-        ...             "datetime": pd.to_datetime(
-        ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...             ),
-        ...         }
-        ...     ),
-        ...     column="col",
-        ...     dt_column="datetime",
-        ...     period="M",
-        ... )
-        >>> num_nulls
-        array([1, 0, 0, 0])
-        >>> total
-        array([1, 1, 1, 1])
-        >>> labels
-        ['2020-01', '2020-02', '2020-03', '2020-04']
+    ```
     """
     dataframe = df[[column, dt_column]].copy()
     dt_col = "__datetime__"

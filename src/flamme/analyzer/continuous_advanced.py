@@ -1,3 +1,5 @@
+r"""Implement continuous values analyzers."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousAdvancedAnalyzer"]
@@ -29,22 +31,23 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
+    >>> analyzer = ColumnContinuousAdvancedAnalyzer(column="float")
+    >>> analyzer
+    ColumnContinuousAdvancedAnalyzer(column=float, nbins=None, yscale=auto, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
-        >>> analyzer = ColumnContinuousAdvancedAnalyzer(column="float")
-        >>> analyzer
-        ColumnContinuousAdvancedAnalyzer(column=float, nbins=None, yscale=auto, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(

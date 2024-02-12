@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section about the most
+frequent values in a given columns."""
+
 from __future__ import annotations
 
 __all__ = ["MostFrequentValuesAnalyzer"]
@@ -16,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class MostFrequentValuesAnalyzer(BaseAnalyzer):
-    r"""Implement a discrete distribution analyzer.
+    r"""Implement a most frequent values analyzer for a given column.
 
     Args:
         column: Specifies the column to analyze.
@@ -26,16 +29,17 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import MostFrequentValuesAnalyzer
+    >>> analyzer = MostFrequentValuesAnalyzer(column="str")
+    >>> analyzer
+    MostFrequentValuesAnalyzer(column=str, dropna=False, top=100)
+    >>> df = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import MostFrequentValuesAnalyzer
-        >>> analyzer = MostFrequentValuesAnalyzer(column="str")
-        >>> analyzer
-        MostFrequentValuesAnalyzer(column=str, dropna=False, top=100)
-        >>> df = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, column: str, dropna: bool = False, top: int = 100) -> None:

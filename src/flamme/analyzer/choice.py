@@ -1,3 +1,6 @@
+r"""Implement an analyzer to automatically selects an analyzer based on
+a given selection logic."""
+
 from __future__ import annotations
 
 __all__ = ["ChoiceAnalyzer", "NumUniqueSelection"]

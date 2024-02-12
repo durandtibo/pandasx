@@ -1,3 +1,5 @@
+r"""Implement an analyzer that generates a table of content section."""
+
 from __future__ import annotations
 
 __all__ = ["TableOfContentAnalyzer"]

@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section about the number of
+rows per temporal window."""
+
 from __future__ import annotations
 
 __all__ = ["TemporalRowCountAnalyzer"]

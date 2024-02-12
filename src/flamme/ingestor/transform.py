@@ -1,3 +1,6 @@
+r"""Contain a wrapper around an ingestor to transform the data after
+ingestion."""
+
 from __future__ import annotations
 
 __all__ = ["TransformedIngestor"]
@@ -23,27 +26,27 @@ class TransformedIngestor(BaseIngestor):
     r"""Implement an ingestor that also transforms the DataFrame.
 
     Args:
-        path (``pathlib.Path`` or str): Specifies the path to the
-            CSV file to ingest.
-        transformer (``BaseDataFrameTransformer`` or dict): Specifies
-            a ``pandas.DataFrame`` transformer or its configuration.
+        ingestor: Specifies the base ingestor.
+        transformer: Specifies a ``pandas.DataFrame`` transformer or
+            its configuration.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
+    >>> from flamme.transformer.df import ToNumeric
+    >>> ingestor = TransformedIngestor(
+    ...     ingestor=ParquetIngestor(path="/path/to/df.csv"),
+    ...     transformer=ToNumeric(columns=["col1", "col3"]),
+    ... )
+    >>> ingestor
+    TransformedIngestor(
+      (ingestor): ParquetIngestor(path=/path/to/df.csv)
+      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+    )
+    >>> df = ingestor.ingest()  # doctest: +SKIP
 
-        >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
-        >>> from flamme.transformer.df import ToNumeric
-        >>> ingestor = TransformedIngestor(
-        ...     ingestor=ParquetIngestor(path="/path/to/df.csv"),
-        ...     transformer=ToNumeric(columns=["col1", "col3"]),
-        ... )
-        >>> ingestor
-        TransformedIngestor(
-          (ingestor): ParquetIngestor(path=/path/to/df.csv)
-          (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
-        )
-        >>> df = ingestor.ingest()  # doctest: +SKIP
+    ```
     """
 
     def __init__(

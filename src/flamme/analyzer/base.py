@@ -1,3 +1,5 @@
+r"""Contain the base class to implement an analyzer."""
+
 from __future__ import annotations
 
 __all__ = ["BaseAnalyzer", "setup_analyzer"]
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class BaseAnalyzer(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to analyze a DataFrame.
+    r"""Define the base class to analyze a DataFrame.
 
     Example usage:
 
@@ -42,7 +44,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
     """
 
     def analyze(self, df: DataFrame) -> BaseSection:
-        r"""Analyzes the data in a DataFrame.
+        r"""Analyze the data in a DataFrame.
 
         Args:
             df: Specifies the DataFrame with the data to analyze.
@@ -88,11 +90,12 @@ def is_analyzer_config(config: dict) -> bool:
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.analyzer import is_analyzer_config
+    >>> is_analyzer_config({"_target_": "flamme.analyzer.NullValueAnalyzer"})
+    True
 
-        >>> from flamme.analyzer import is_analyzer_config
-        >>> is_analyzer_config({"_target_": "flamme.analyzer.NullValueAnalyzer"})
-        True
+    ```
     """
     return is_object_config(config, BaseAnalyzer)
 
@@ -106,20 +109,20 @@ def setup_analyzer(
     by using the ``BaseAnalyzer`` factory function.
 
     Args:
-        analyzer (``BaseAnalyzer`` or dict): Specifies an
-            analyzer or its configuration.
+        analyzer: Specifies an analyzer or its configuration.
 
     Returns:
-        ``BaseAnalyzer``: An instantiated analyzer.
+        An instantiated analyzer.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.analyzer import setup_analyzer
+    >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NullValueAnalyzer"})
+    >>> analyzer
+    NullValueAnalyzer(figsize=None)
 
-        >>> from flamme.analyzer import setup_analyzer
-        >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NullValueAnalyzer"})
-        >>> analyzer
-        NullValueAnalyzer(figsize=None)
+    ```
     """
     if isinstance(analyzer, dict):
         logger.info("Initializing an analyzer from its configuration... ")

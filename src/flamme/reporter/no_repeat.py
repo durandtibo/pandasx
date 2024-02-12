@@ -1,3 +1,6 @@
+r"""Contain a wrapper around a reporter to generate the report only
+once."""
+
 from __future__ import annotations
 
 __all__ = ["NoRepeatReporter"]
@@ -20,29 +23,28 @@ class NoRepeatReporter(BaseReporter):
     r"""Implement a reporter that computes the report only once.
 
     Args:
-        reporter (``BaseReporter`` or dict): Specifies the reporter
-            or its configuration.
-        report_path (``Path`` or str): Specifies the path where to
-            save the HTML report.
+        reporter: Specifies the reporter or its configuration.
+        report_path: Specifies the path where to save the HTML report.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.analyzer import NullValueAnalyzer
+    >>> from flamme.ingestor import ParquetIngestor
+    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.reporter import Reporter, NoRepeatReporter
+    >>> reporter = NoRepeatReporter(
+    ...     reporter=Reporter(
+    ...         ingestor=ParquetIngestor("/path/to/data.parquet"),
+    ...         transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...         analyzer=NullValueAnalyzer(),
+    ...         report_path="/path/to/report.html",
+    ...     ),
+    ...     report_path="/path/to/report.html",
+    ... )
+    >>> report = reporter.compute()  # doctest: +SKIP
 
-        >>> from flamme.analyzer import NullValueAnalyzer
-        >>> from flamme.ingestor import ParquetIngestor
-        >>> from flamme.transformer.df import SequentialDataFrameTransformer
-        >>> from flamme.reporter import Reporter, NoRepeatReporter
-        >>> reporter = NoRepeatReporter(
-        ...     reporter=Reporter(
-        ...         ingestor=ParquetIngestor("/path/to/data.parquet"),
-        ...         transformer=SequentialDataFrameTransformer(transformers=[]),
-        ...         analyzer=NullValueAnalyzer(),
-        ...         report_path="/path/to/report.html",
-        ...     ),
-        ...     report_path="/path/to/report.html",
-        ... )
-        >>> report = reporter.compute()  # doctest: +SKIP
+    ```
     """
 
     def __init__(

@@ -1,3 +1,5 @@
+r"""Contain the base class to implement a reporter."""
+
 from __future__ import annotations
 
 __all__ = ["BaseReporter", "is_reporter_config", "setup_reporter"]
@@ -12,12 +14,40 @@ logger = logging.getLogger(__name__)
 
 
 class BaseReporter(ABC, metaclass=AbstractFactory):
-    r"""Defines the base class to compute a HTML report.
+    r"""Define the base class to compute a HTML report.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.analyzer import NullValueAnalyzer
+    >>> from flamme.ingestor import ParquetIngestor
+    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.reporter import Reporter
+    >>> reporter = Reporter(
+    ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
+    ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...     analyzer=NullValueAnalyzer(),
+    ...     report_path="/path/to/report.html",
+    ... )
+    >>> reporter
+    Reporter(
+      (ingestor): ParquetIngestor(path=/path/to/data.parquet)
+      (transformer): SequentialDataFrameTransformer()
+      (analyzer): NullValueAnalyzer(figsize=None)
+      (report_path): /path/to/report.html
+      (max_toc_depth): 6
+    )
+    >>> report = reporter.compute()  # doctest: +SKIP
 
+    ```
+    """
+
+    def compute(self) -> None:
+        r"""Generate a HTML report.
+
+        Example usage:
+
+        ```pycon
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> from flamme.ingestor import ParquetIngestor
         >>> from flamme.transformer.df import SequentialDataFrameTransformer
@@ -25,38 +55,12 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         >>> reporter = Reporter(
         ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
         ...     transformer=SequentialDataFrameTransformer(transformers=[]),
-        ...     analyzer=NullValueAnalyzer(),
+        ...     analyzer=NullValueAnalyzer(figsize=None),
         ...     report_path="/path/to/report.html",
         ... )
-        >>> reporter
-        Reporter(
-          (ingestor): ParquetIngestor(path=/path/to/data.parquet)
-          (transformer): SequentialDataFrameTransformer()
-          (analyzer): NullValueAnalyzer(figsize=None)
-          (report_path): /path/to/report.html
-          (max_toc_depth): 6
-        )
         >>> report = reporter.compute()  # doctest: +SKIP
-    """
 
-    def compute(self) -> None:
-        r"""Computes a HTML report.
-
-        Example usage:
-
-        .. code-block:: pycon
-
-            >>> from flamme.analyzer import NullValueAnalyzer
-            >>> from flamme.ingestor import ParquetIngestor
-            >>> from flamme.transformer.df import SequentialDataFrameTransformer
-            >>> from flamme.reporter import Reporter
-            >>> reporter = Reporter(
-            ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-            ...     transformer=SequentialDataFrameTransformer(transformers=[]),
-            ...     analyzer=NullValueAnalyzer(figsize=None),
-            ...     report_path="/path/to/report.html",
-            ... )
-            >>> report = reporter.compute()  # doctest: +SKIP
+        ```
         """
 
 
@@ -78,25 +82,26 @@ def is_reporter_config(config: dict) -> bool:
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.reporter import is_reporter_config
+    >>> is_reporter_config(
+    ...     {
+    ...         "_target_": "flamme.reporter.Reporter",
+    ...         "ingestor": {
+    ...             "_target_": "flamme.ingestor.CsvIngestor",
+    ...             "path": "/path/to/data.csv",
+    ...         },
+    ...         "transformer": {
+    ...             "_target_": "flamme.transformer.df.ToNumeric",
+    ...             "columns": ["col1", "col3"],
+    ...         },
+    ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
+    ...         "report_path": "/path/to/report.html",
+    ...     }
+    ... )
+    True
 
-        >>> from flamme.reporter import is_reporter_config
-        >>> is_reporter_config(
-        ...     {
-        ...         "_target_": "flamme.reporter.Reporter",
-        ...         "ingestor": {
-        ...             "_target_": "flamme.ingestor.CsvIngestor",
-        ...             "path": "/path/to/data.csv",
-        ...         },
-        ...         "transformer": {
-        ...             "_target_": "flamme.transformer.df.ToNumeric",
-        ...             "columns": ["col1", "col3"],
-        ...         },
-        ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
-        ...         "report_path": "/path/to/report.html",
-        ...     }
-        ... )
-        True
+    ```
     """
     return is_object_config(config, BaseReporter)
 
@@ -104,46 +109,46 @@ def is_reporter_config(config: dict) -> bool:
 def setup_reporter(
     reporter: BaseReporter | dict,
 ) -> BaseReporter:
-    r"""Set up an reporter.
+    r"""Set up a reporter.
 
     The reporter is instantiated from its configuration
     by using the ``BaseReporter`` factory function.
 
     Args:
-        reporter (``BaseReporter`` or dict): Specifies an
-            reporter or its configuration.
+        reporter: Specifies an reporter or its configuration.
 
     Returns:
-        ``BaseReporter``: An instantiated reporter.
+        An instantiated reporter.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> from flamme.reporter import setup_reporter
+    >>> reporter = setup_reporter(
+    ...     {
+    ...         "_target_": "flamme.reporter.Reporter",
+    ...         "ingestor": {
+    ...             "_target_": "flamme.ingestor.CsvIngestor",
+    ...             "path": "/path/to/data.csv",
+    ...         },
+    ...         "transformer": {
+    ...             "_target_": "flamme.transformer.df.ToNumeric",
+    ...             "columns": ["col1", "col3"],
+    ...         },
+    ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
+    ...         "report_path": "/path/to/report.html",
+    ...     }
+    ... )
+    >>> reporter
+    Reporter(
+      (ingestor): CsvIngestor(path=/path/to/data.csv)
+      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+      (analyzer): NullValueAnalyzer(figsize=None)
+      (report_path): /path/to/report.html
+      (max_toc_depth): 6
+    )
 
-        >>> from flamme.reporter import setup_reporter
-        >>> reporter = setup_reporter(
-        ...     {
-        ...         "_target_": "flamme.reporter.Reporter",
-        ...         "ingestor": {
-        ...             "_target_": "flamme.ingestor.CsvIngestor",
-        ...             "path": "/path/to/data.csv",
-        ...         },
-        ...         "transformer": {
-        ...             "_target_": "flamme.transformer.df.ToNumeric",
-        ...             "columns": ["col1", "col3"],
-        ...         },
-        ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
-        ...         "report_path": "/path/to/report.html",
-        ...     }
-        ... )
-        >>> reporter
-        Reporter(
-          (ingestor): CsvIngestor(path=/path/to/data.csv)
-          (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
-          (analyzer): NullValueAnalyzer(figsize=None)
-          (report_path): /path/to/report.html
-          (max_toc_depth): 6
-        )
+    ```
     """
     if isinstance(reporter, dict):
         logger.info("Initializing an reporter from its configuration... ")

@@ -1,3 +1,5 @@
+r"""Implement an analyzer that generates a markdown section."""
+
 from __future__ import annotations
 
 __all__ = ["MarkdownAnalyzer"]
@@ -12,20 +14,24 @@ if TYPE_CHECKING:
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer that adds a mardown string to the report..
+    r"""Implement an analyzer that adds a mardown string to the report.
+
+    Args:
+        desc: Specifies the markdown description.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import MarkdownAnalyzer
+    >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
+    >>> analyzer
+    MarkdownAnalyzer()
+    >>> df = pd.DataFrame({})
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import MarkdownAnalyzer
-        >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
-        >>> analyzer
-        MarkdownAnalyzer()
-        >>> df = pd.DataFrame({})
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, desc: str) -> None:

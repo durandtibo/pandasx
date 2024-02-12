@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze the number
+of null values."""
+
 from __future__ import annotations
 
 __all__ = ["TemporalNullValueAnalyzer", "NullValueAnalyzer"]
@@ -21,28 +24,28 @@ class NullValueAnalyzer(BaseAnalyzer):
     r"""Implement a null value analyzer.
 
     Args:
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import NullValueAnalyzer
+    >>> analyzer = NullValueAnalyzer()
+    >>> analyzer
+    NullValueAnalyzer(figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import NullValueAnalyzer
-        >>> analyzer = NullValueAnalyzer()
-        >>> analyzer
-        NullValueAnalyzer(figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, figsize: tuple[float, float] | None = None) -> None:
@@ -68,35 +71,33 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     Args:
         dt_column: Specifies the datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
-            daily.
+        period: Specifies the temporal period e.g. monthly or daily.
         ncols: Specifies the number of columns.
-            Default: ``2``
-        figsize (``tuple``, optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``(7, 5)``
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import TemporalNullValueAnalyzer
+    >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
+    >>> analyzer
+    TemporalNullValueAnalyzer(dt_column=datetime, period=M, ncols=2, figsize=(7, 5))
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...         "datetime": pd.to_datetime(
+    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...         ),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import TemporalNullValueAnalyzer
-        >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
-        >>> analyzer
-        TemporalNullValueAnalyzer(dt_column=datetime, period=M, ncols=2, figsize=(7, 5))
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...         "datetime": pd.to_datetime(
-        ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-        ...         ),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(

@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze number of
+duplicated rows."""
+
 from __future__ import annotations
 
 __all__ = ["DuplicatedRowAnalyzer"]
@@ -20,31 +23,30 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show the number of duplicated rows.
 
     Args:
-        columns (``Sequence`` or ``None``): Specifies the columns used
-            to compute the duplicated rows. ``None`` means all the
-            columns.
-        figsize: Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height.
+        columns: Specifies the columns used to compute the duplicated
+            rows. ``None`` means all the columns.
+        figsize: Specifies the figure size in inches. The first
+            dimension is the width and the second is the height.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import DuplicatedRowAnalyzer
+    >>> analyzer = DuplicatedRowAnalyzer()
+    >>> analyzer
+    DuplicatedRowAnalyzer(columns=None, figsize=None)
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "col1": np.array([0, 1, 0, 1]),
+    ...         "col2": np.array([1, 0, 1, 0]),
+    ...         "col3": np.array([1, 1, 1, 1]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import DuplicatedRowAnalyzer
-        >>> analyzer = DuplicatedRowAnalyzer()
-        >>> analyzer
-        DuplicatedRowAnalyzer(columns=None, figsize=None)
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "col1": np.array([0, 1, 0, 1]),
-        ...         "col2": np.array([1, 0, 1, 0]),
-        ...         "col3": np.array([1, 1, 1, 1]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(

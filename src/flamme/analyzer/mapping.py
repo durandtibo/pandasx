@@ -1,3 +1,5 @@
+r"""Implement analyzer that combine multiple analyzers."""
+
 from __future__ import annotations
 
 __all__ = ["MappingAnalyzer"]
@@ -16,10 +18,10 @@ if TYPE_CHECKING:
 
 
 class MappingAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer to analyze multiple analyzers.
+    r"""Implement an analyzer that combine multiple analyzers.
 
     Args:
-        analyzers (``Mapping``): Specifies the mappings to analyze.
+        analyzers: Specifies the mappings to analyze.
             The key of each analyzer is used to organize the metrics
             and report.
         max_toc_depth: Specifies the maximum level to show in the
@@ -28,32 +30,33 @@ class MappingAnalyzer(BaseAnalyzer):
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import (
+    ...     FilteredAnalyzer,
+    ...     NullValueAnalyzer,
+    ...     DuplicatedRowAnalyzer,
+    ...     MappingAnalyzer,
+    ... )
+    >>> analyzer = MappingAnalyzer(
+    ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()}
+    ... )
+    >>> analyzer
+    MappingAnalyzer(
+      (null): NullValueAnalyzer(figsize=None)
+      (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
+    )
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import (
-        ...     FilteredAnalyzer,
-        ...     NullValueAnalyzer,
-        ...     DuplicatedRowAnalyzer,
-        ...     MappingAnalyzer,
-        ... )
-        >>> analyzer = MappingAnalyzer(
-        ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()}
-        ... )
-        >>> analyzer
-        MappingAnalyzer(
-          (null): NullValueAnalyzer(figsize=None)
-          (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
-        )
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(
@@ -76,7 +79,7 @@ class MappingAnalyzer(BaseAnalyzer):
         )
 
     def add_analyzer(self, key: str, analyzer: BaseAnalyzer, replace_ok: bool = False) -> None:
-        r"""Adds an analyzer to the current analyzer.
+        r"""Add an analyzer to the current analyzer.
 
         Args:
             key: Specifies the key of the analyzer.
