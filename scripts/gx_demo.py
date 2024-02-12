@@ -1,3 +1,7 @@
+# noqa: INP001
+r"""Define some functions to explore ``great_expectations``."""
+
+
 from __future__ import annotations
 
 import logging
@@ -15,6 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 def add_expectations(validator: Validator) -> None:
+    r"""Add some expectations to a validator.
+
+    Args:
+        validator: Specifies the validator.
+    """
     validator.expect_table_column_count_to_be_between(min_value=7)
     validator.expect_table_row_count_to_be_between(min_value=10000, max_value=999999999)
 
@@ -71,6 +80,7 @@ def add_expectations(validator: Validator) -> None:
 
 
 def save_dataframe() -> Path:
+    r"""Generate and save a DataFrame."""
     path = Path.cwd().joinpath("tmp/data.csv")
     logger.info(f"Creating data and saving it in {path}")
     df = create_dataframe(nrows=100000)
@@ -79,6 +89,7 @@ def save_dataframe() -> Path:
 
 
 def main() -> None:
+    r"""Define the main function to explore some expectations."""
     logger.info("Create context")
     context = gx.get_context()
 
