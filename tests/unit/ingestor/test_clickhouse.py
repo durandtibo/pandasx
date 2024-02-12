@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-from clickhouse_connect.driver import Client
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
 from flamme.ingestor import ClickHouseIngestor
 from flamme.testing import clickhouse_connect_available
+from flamme.utils.imports import is_clickhouse_connect_available
+
+if is_clickhouse_connect_available():
+    from clickhouse_connect.driver import Client
 
 ########################################
 #     Tests for ClickHouseIngestor     #
