@@ -1,3 +1,5 @@
+r"""Contain the base class to implement an analyzer."""
+
 from __future__ import annotations
 
 __all__ = ["BaseAnalyzer", "setup_analyzer"]

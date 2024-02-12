@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze the
+temporal distribution of null values for a given column."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnTemporalNullValueAnalyzer"]

@@ -1,3 +1,5 @@
+r"""Implement continuous values analyzers."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnContinuousAnalyzer", "ColumnTemporalContinuousAnalyzer"]

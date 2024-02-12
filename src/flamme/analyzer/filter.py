@@ -1,3 +1,6 @@
+r"""Implement an analyzer that filters the data before to analyze the
+data."""
+
 from __future__ import annotations
 
 __all__ = ["FilteredAnalyzer"]
@@ -18,34 +21,35 @@ logger = logging.getLogger(__name__)
 
 
 class FilteredAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer to find all the value types in each column.
+    r"""Implement an analyzer that filters the data before to analyze the
+    data.
 
     Args:
-        query (``str``): Soecifies the query.
-        analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
-            or its configuration.
+        query: Soecifies the query.
+        analyzer: Specifies the analyzer or its configuration.
 
     Example usage:
 
-    .. code-block:: pycon
+    ```pycon
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from flamme.analyzer import FilteredAnalyzer, NullValueAnalyzer
+    >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NullValueAnalyzer())
+    >>> analyzer
+    FilteredAnalyzer(
+      (query): float >= 2.0
+      (analyzer): NullValueAnalyzer(figsize=None)
+    )
+    >>> df = pd.DataFrame(
+    ...     {
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...     }
+    ... )
+    >>> section = analyzer.analyze(df)
 
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> from flamme.analyzer import FilteredAnalyzer, NullValueAnalyzer
-        >>> analyzer = FilteredAnalyzer(query="float >= 2.0", analyzer=NullValueAnalyzer())
-        >>> analyzer
-        FilteredAnalyzer(
-          (query): float >= 2.0
-          (analyzer): NullValueAnalyzer(figsize=None)
-        )
-        >>> df = pd.DataFrame(
-        ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
-        ... )
-        >>> section = analyzer.analyze(df)
+    ```
     """
 
     def __init__(self, query: str, analyzer: BaseAnalyzer | dict) -> None:

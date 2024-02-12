@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze the
+temporal distribution of null values for all columns."""
+
 from __future__ import annotations
 
 __all__ = ["GlobalTemporalNullValueAnalyzer"]
@@ -16,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show the temporal distribution of null
-    values for a given column.
+    values for all columns.
 
     Args:
         dt_column: Specifies the datetime column used to analyze

@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze the number
+of null values."""
+
 from __future__ import annotations
 
 __all__ = ["TemporalNullValueAnalyzer", "NullValueAnalyzer"]

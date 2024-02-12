@@ -1,3 +1,5 @@
+r"""Contain the implementation of a parquet ingestor."""
+
 from __future__ import annotations
 
 __all__ = ["ParquetIngestor"]

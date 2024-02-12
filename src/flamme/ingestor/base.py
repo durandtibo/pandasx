@@ -1,3 +1,5 @@
+r"""Contain the base class to implement an ingestor."""
+
 from __future__ import annotations
 
 __all__ = ["BaseIngestor", "is_ingestor_config", "setup_ingestor"]

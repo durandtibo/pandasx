@@ -1,3 +1,6 @@
+r"""Contain a wrapper around a reporter to generate the report only
+once."""
+
 from __future__ import annotations
 
 __all__ = ["NoRepeatReporter"]

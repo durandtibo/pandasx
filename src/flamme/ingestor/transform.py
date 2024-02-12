@@ -1,3 +1,6 @@
+r"""Contain a wrapper around an ingestor to transform the data after
+ingestion."""
+
 from __future__ import annotations
 
 __all__ = ["TransformedIngestor"]

@@ -1,3 +1,5 @@
+r"""Implement an analyzer that generates a summary of the DataFrame."""
+
 from __future__ import annotations
 
 __all__ = ["DataFrameSummaryAnalyzer"]
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataFrameSummaryAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer to show a short summary of the DataFrame.
+    r"""Implement an analyzer to show a summary of the DataFrame.
 
     Args:
         top: Specifies the number of most frequent values to show.

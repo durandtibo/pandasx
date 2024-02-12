@@ -1,3 +1,5 @@
+r"""Contain utility functions to generate reports."""
+
 from __future__ import annotations
 
 from coola.utils import str_indent

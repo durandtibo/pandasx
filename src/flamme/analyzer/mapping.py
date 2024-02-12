@@ -1,3 +1,5 @@
+r"""Implement analyzer that combine multiple analyzers."""
+
 from __future__ import annotations
 
 __all__ = ["MappingAnalyzer"]
@@ -16,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class MappingAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer to analyze multiple analyzers.
+    r"""Implement an analyzer that combine multiple analyzers.
 
     Args:
         analyzers: Specifies the mappings to analyze.

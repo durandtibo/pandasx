@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze the data
+types of each column."""
+
 from __future__ import annotations
 
 __all__ = ["DataTypeAnalyzer"]

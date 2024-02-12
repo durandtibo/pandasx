@@ -1,3 +1,5 @@
+r"""Contain the implementation of a simple ingestor."""
+
 from __future__ import annotations
 
 __all__ = ["Ingestor"]

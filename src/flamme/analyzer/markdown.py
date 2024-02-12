@@ -1,3 +1,5 @@
+r"""Implement an analyzer that generates a markdown section."""
+
 from __future__ import annotations
 
 __all__ = ["MarkdownAnalyzer"]
@@ -12,7 +14,10 @@ if TYPE_CHECKING:
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
-    r"""Implement an analyzer that adds a mardown string to the report..
+    r"""Implement an analyzer that adds a mardown string to the report.
+
+    Args:
+        desc: Specifies the markdown description.
 
     Example usage:
 

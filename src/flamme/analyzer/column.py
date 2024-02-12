@@ -1,3 +1,5 @@
+r"""Implement an analyzer to analyze only a subset of the columns."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnSubsetAnalyzer"]

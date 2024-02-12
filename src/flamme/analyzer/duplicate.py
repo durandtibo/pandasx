@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section to analyze number of
+duplicated rows."""
+
 from __future__ import annotations
 
 __all__ = ["DuplicatedRowAnalyzer"]

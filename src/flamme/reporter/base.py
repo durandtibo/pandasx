@@ -1,3 +1,5 @@
+r"""Contain the base class to implement a reporter."""
+
 from __future__ import annotations
 
 __all__ = ["BaseReporter", "is_reporter_config", "setup_reporter"]

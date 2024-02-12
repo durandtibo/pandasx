@@ -1,3 +1,5 @@
+r"""Implement discrete values analyzers."""
+
 from __future__ import annotations
 
 __all__ = ["ColumnDiscreteAnalyzer", "ColumnTemporalDiscreteAnalyzer"]

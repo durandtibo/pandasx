@@ -1,3 +1,6 @@
+r"""Implement an analyzer that generates a section about the most
+frequent values in a given columns."""
+
 from __future__ import annotations
 
 __all__ = ["MostFrequentValuesAnalyzer"]
@@ -16,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class MostFrequentValuesAnalyzer(BaseAnalyzer):
-    r"""Implement a discrete distribution analyzer.
+    r"""Implement a most frequent values analyzer for a given column.
 
     Args:
         column: Specifies the column to analyze.
