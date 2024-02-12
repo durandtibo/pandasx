@@ -20,7 +20,7 @@ install :
 
 .PHONY : install-all
 install-all :
-	poetry install --no-interaction --all-extras --with docs
+	poetry install --no-interaction --all-extras --with docs --with plotly --with great_expectations
 
 .PHONY : update
 update :

@@ -1,3 +1,6 @@
+# noqa: INP001
+r"""Contain a demo example to generate a report."""
+
 from __future__ import annotations
 
 import logging
@@ -42,6 +45,14 @@ FIGSIZE = (14, 6)
 
 
 def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
+    r"""Create a DataFrame.
+
+    Args:
+        nrows: Specifies the number of rows.
+
+    Returns:
+        The generated DayaFrame.
+    """
     rng = np.random.default_rng(42)
     df = pd.DataFrame(
         {
@@ -67,6 +78,14 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
 
 
 def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
+    r"""Create a DataFrame.
+
+    Args:
+        nrows: Specifies the number of rows.
+
+    Returns:
+        The generated DayaFrame.
+    """
     ncols = 100
     rng = np.random.default_rng(42)
     df = pd.DataFrame(
@@ -80,6 +99,11 @@ def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
 
 
 def create_null_value_analyzer() -> BaseAnalyzer:
+    r"""Instantiate an analyzer about null values.
+
+    Returns:
+        The instantiated analyzer.
+    """
     return MappingAnalyzer(
         {
             "overall": NullValueAnalyzer(figsize=FIGSIZE),
@@ -96,6 +120,14 @@ def create_null_value_analyzer() -> BaseAnalyzer:
 
 
 def create_discrete_column_analyzer(column: str) -> BaseAnalyzer:
+    r"""Instantiate an analyzer about discrete values for a given column.
+
+    Args:
+        column: Specifies the column to analyze.
+
+    Returns:
+        The instantiated analyzer.
+    """
     return MappingAnalyzer(
         {
             "overall": ColumnDiscreteAnalyzer(column=column, figsize=FIGSIZE),
@@ -122,6 +154,20 @@ def create_continuous_column_analyzer(
     xmin: float | str | None = None,
     xmax: float | str | None = None,
 ) -> BaseAnalyzer:
+    r"""Instantiate an analyzer about continuous values for a given
+    column.
+
+    Args:
+        column: Specifies the column to analyze.
+        yscale: Specifies the y-axis scale.
+        xmin: Specifies the minimum value of the range or its
+            associated quantile.
+        xmax: Specifies the maximum value of the range or its
+            associated quantile.
+
+    Returns:
+        The instantiated analyzer.
+    """
     return MappingAnalyzer(
         {
             "overall": ColumnContinuousAnalyzer(
@@ -163,6 +209,11 @@ def create_continuous_column_analyzer(
 
 
 def create_analyzer() -> BaseAnalyzer:
+    r"""Instantiate an analyzer.
+
+    Returns:
+        The instantiated analyzer.
+    """
     columns = MappingAnalyzer(
         {
             "str": create_discrete_column_analyzer(column="str"),
@@ -199,6 +250,11 @@ def create_analyzer() -> BaseAnalyzer:
 
 
 def create_transformer() -> BaseDataFrameTransformer:
+    r"""Instantiate a ``pandas.DataFrame`` transformer.
+
+    Returns:
+        The instantiated transformer.
+    """
     return SequentialDataFrameTransformer(
         [
             ColumnSelection(
@@ -213,10 +269,20 @@ def create_transformer() -> BaseDataFrameTransformer:
 
 
 def create_transformer2() -> BaseDataFrameTransformer:
+    r"""Instantiate a ``pandas.DataFrame`` transformer.
+
+    Returns:
+        The instantiated transformer.
+    """
     return SequentialDataFrameTransformer([])
 
 
 def create_reporter() -> BaseReporter:
+    r"""Instantiate a reporter.
+
+    Returns:
+        The instantiated reporter.
+    """
     return Reporter(
         ingestor=Ingestor(df=create_dataframe(nrows=10000)),
         transformer=create_transformer(),
@@ -226,6 +292,7 @@ def create_reporter() -> BaseReporter:
 
 
 def main_report() -> None:
+    r"""Define the main function to generate a report."""
     reporter = create_reporter()
     logger.info(f"reporter:\n{reporter}")
     reporter.compute()

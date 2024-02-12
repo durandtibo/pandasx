@@ -63,6 +63,12 @@ optional = true  # Plotly is used only as a comparison with matplotlib
 [tool.poetry.group.plotly.dependencies]
 plotly = ">=5.12,<6.0"
 
+[tool.poetry.group.great_expectations]
+optional = true  # Plotly is used only as a comparison with matplotlib
+
+[tool.poetry.group.great_expectations.dependencies]
+great_expectations = ">=0.18,<1.0"
+
 [tool.poetry.group.dev.dependencies]
 black = ">=24.1"
 coverage = { extras = ["toml"], version = "^7.4" }
@@ -103,7 +109,7 @@ addopts = "--color yes --durations 10 -rf"
 
 [tool.black]
 line-length = 100
-target-version = ["py39", "py310", "py311"]
+target-version = ["py39", "py310", "py311", "py312"]
 include = '\.pyi?$'
 
 [tool.pylint.FORMAT]
@@ -119,32 +125,102 @@ wrap-descriptions = 72
 syntax = "google"
 
 [tool.ruff]
+# List of rules: https://docs.astral.sh/ruff/rules/
 lint.select = [
     "A", # builtins
     "ANN", # annotations
     "B", # bugbear
-    "BLE", # blind-except
+    "BLE", # flake8-blind-except
+    "C4", # flake8-comprehensions
+    "D", # pydocstyle
     "E", # pycodestyle (Error)
+    "EM", # flake8-errmsg
     "F", # pyflakes
+    "FA", # flake8-future-annotations
+    "FURB", # refurb
+    "ICN", # flake8-import-conventions
+    "INP", # flake8-no-pep420
+    "ISC", # flake8-implicit-str-concat
+    "LOG", # logging
     "N", # naming
+    "PD", # pandas-vet
+    "PERF", # Perflint
+    "PGH", # pygrep-hooks
+    "PIE", # flake8-pie
+    "PL", # Pylint
+    "PT", # flake8-pytest-style
     "PTH", # pathlib
+    "PYI", # flake8-pyi
+    "Q", # flake8-quotes
+    "RET", # flake8-return
+    "RSE", # flake8-raise
+    "S", # flake8-bandit
+    "SIM", # flake8-simplify
+    "T20", # flake8-print
+    "TCH", # flake8-type-checking
+    "TD", # flake8-todos
+    "TID", # flake8-tidy-imports
+    "TRY", # tryceratops
     "UP", # pyupgrade
     "W", # pycodestyle (Warning)
 ]
 lint.ignore = [
     "A003", # Class attribute `{name}` is shadowing a python builtin
-    "ANN002", # Missing type annotation for `*args`
-    "ANN003", # Missing type annotation for `**kwargs`
     "ANN101", # Missing type annotation for `self` in method
     "ANN102", # Missing type annotation for `cls` in classmethod
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed.
     "B905", # `zip()` without an explicit strict= parameter set. The `strict=` argument was added in Python 3.10
     "E501", # Line lengths are recommended to be no greater than 79 characters.
     "W505", # Doc line too long
+    "PLR0913", # Too many arguments in function definition (8 > 5)
+    "PLR2004", # Magic value used in comparison, consider replacing 0.0 with a constant variable
+    "PD901", # Avoid using the generic variable name `df` for DataFrames
+
+    # The following rules are ignored because they conflict with another library like docformatter.
+    "D102", # Missing docstring in public method
+    "D105", # Missing docstring in magic method
+    "D107", # Missing docstring in `__init__`
+    "D205", # 1 blank line required between summary line and description
+    "D209", # Multi-line docstring closing quotes should be on a separate line
 ]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-lint.fixable = ["A", "ANN", "B", "E", "F", "PTH", "W"]
+lint.fixable = [
+    "A",
+    "ANN",
+    "B",
+    "BLE",
+    "C4",
+    "D",
+    "E",
+    "EM",
+    "F",
+    "FA",
+    "FURB",
+    "ICN",
+    "INP",
+    "ISC",
+    "LOG",
+    "PD",
+    "PERF",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PTH",
+    "PYI",
+    "Q",
+    "RET",
+    "RSE",
+    "S",
+    "SIM",
+    "T20",
+    "TCH",
+    "TD",
+    "TID",
+    "TRY",
+    "W",
+]
 lint.unfixable = []
 
 lint.exclude = [
@@ -169,9 +245,20 @@ lint.exclude = [
     "venv",
 ]
 
+# Enable on top of the Google convention.
+lint.extend-select = ["D400", "D401", "D404"]
+
 line-length = 100
 target-version = "py39"
 src = ["src"]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore all directories named `tests`.
+"tests/**" = [
+    "D", # pydocstyle
+    "PL", # Pylint
+    "S101", # flake8-bandit
+]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
