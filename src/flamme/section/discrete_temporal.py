@@ -159,9 +159,9 @@ def create_temporal_figure(
     df[col_dt] = df[dt_column].dt.to_period(period).astype(str)
     df = df[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
     df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
-    df = df.set_index([col_dt, column]).unstack(fill_value=0)
+    df = df.pivot_table(index=col_dt, columns=column, values=col_count, fill_value=0, dropna=False)
 
-    labels = mixed_typed_sort(df[col_count].columns.tolist())
+    labels = mixed_typed_sort(df.columns.tolist())
     num_labels = len(labels)
     steps = df.index.tolist()
     x = np.arange(len(steps), dtype=int)
@@ -170,7 +170,7 @@ def create_temporal_figure(
     fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.get_cmap("viridis")
     for i, label in enumerate(labels):
-        count = df[col_count][label].to_numpy()
+        count = df[label].to_numpy().astype(int)
         ax.bar(x, count, label=label, bottom=bottom, width=width, color=my_cmap(i / num_labels))
         bottom += count
 
