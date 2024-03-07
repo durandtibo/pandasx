@@ -1085,13 +1085,13 @@ dev = ["flake8", "markdown", "twine", "wheel"]
 
 [[package]]
 name = "great-expectations"
-version = "0.18.9"
+version = "0.18.10"
 description = "Always know what to expect from your data."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "great_expectations-0.18.9-py3-none-any.whl", hash = "sha256:aa2709509cdbb251baca65fd2efb9c4dbdd85e1f954ceffb4d3270a01fb5e796"},
-    {file = "great_expectations-0.18.9.tar.gz", hash = "sha256:1ca9d762646b076506b7ee5ccc610944dda6049460a094100b8bdb2878653c8d"},
+    {file = "great_expectations-0.18.10-py3-none-any.whl", hash = "sha256:43a73a042ac82650880bd076461a74ec582673e65153fc796acd1baeb0748262"},
+    {file = "great_expectations-0.18.10.tar.gz", hash = "sha256:b16b1cdaee81abd5cad701d19db3756067f01c1df19644d62888e895a5668d85"},
 ]
 
 [package.dependencies]
