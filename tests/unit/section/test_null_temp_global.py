@@ -89,7 +89,7 @@ def test_column_temporal_null_value_section_get_statistics(dataframe: DataFrame)
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_temporal_null_value_section_get_statistics_empty_row(dataframe: DataFrame) -> None:
+def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
     section = GlobalTemporalNullValueSection(
         df=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",
@@ -110,9 +110,7 @@ def test_column_temporal_null_value_section_render_html_body_args(dataframe: Dat
     )
 
 
-def test_column_temporal_null_value_section_render_html_body_empty_rows(
-    dataframe: DataFrame,
-) -> None:
+def test_column_temporal_null_value_section_render_html_body_empty_rows() -> None:
     section = GlobalTemporalNullValueSection(
         df=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",

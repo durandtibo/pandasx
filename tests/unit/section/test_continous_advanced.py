@@ -12,7 +12,7 @@ from flamme.section.continuous_advanced import create_histogram_range_figure
 
 @pytest.fixture()
 def series() -> Series:
-    return Series([np.nan] + list(range(101)) + [np.nan])
+    return Series([np.nan, *list(range(101)), np.nan])
 
 
 @pytest.fixture()

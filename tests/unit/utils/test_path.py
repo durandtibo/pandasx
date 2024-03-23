@@ -20,7 +20,7 @@ from flamme.utils.path import (
 #####################################
 
 
-def test_human_file_size(tmp_path: Path) -> None:
+def test_human_file_size() -> None:
     assert isinstance(human_file_size(Path(__file__).resolve()), str)
 
 

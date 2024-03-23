@@ -42,7 +42,7 @@ def test_dataframe_summary_section_get_columns(dataframe: DataFrame) -> None:
     assert DataFrameSummarySection(dataframe).get_columns() == ("col1", "col2", "col3")
 
 
-def test_dataframe_summary_section_get_columns_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_columns_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_columns() == ()
 
 
@@ -50,7 +50,7 @@ def test_dataframe_summary_section_get_null_count(dataframe: DataFrame) -> None:
     assert DataFrameSummarySection(dataframe).get_null_count() == (1, 0, 2)
 
 
-def test_dataframe_summary_section_get_null_count_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_null_count_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_null_count() == ()
 
 
@@ -58,7 +58,7 @@ def test_dataframe_summary_section_get_nunique(dataframe: DataFrame) -> None:
     assert DataFrameSummarySection(dataframe).get_nunique() == (5, 2, 5)
 
 
-def test_dataframe_summary_section_get_nunique_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_nunique_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_nunique() == ()
 
 
@@ -70,7 +70,7 @@ def test_dataframe_summary_section_get_column_types(dataframe: DataFrame) -> Non
     )
 
 
-def test_dataframe_summary_section_get_column_types_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_column_types_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_column_types() == ()
 
 
@@ -87,7 +87,7 @@ def test_dataframe_summary_section_get_most_frequent_values(dataframe: DataFrame
     )
 
 
-def test_dataframe_summary_section_get_most_frequent_values_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_most_frequent_values_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_most_frequent_values() == ()
 
 
@@ -100,7 +100,7 @@ def test_dataframe_summary_section_get_statistics(dataframe: DataFrame) -> None:
     }
 
 
-def test_dataframe_summary_section_get_statistics_empty(dataframe: DataFrame) -> None:
+def test_dataframe_summary_section_get_statistics_empty() -> None:
     assert DataFrameSummarySection(DataFrame({})).get_statistics() == {
         "columns": (),
         "null_count": (),

@@ -80,7 +80,7 @@ def test_column_type_analyzer_top(dataframe: DataFrame, top: int) -> None:
     assert section.top == top
 
 
-def test_column_type_analyzer_top_incorrect(dataframe: DataFrame) -> None:
+def test_column_type_analyzer_top_incorrect() -> None:
     with pytest.raises(ValueError, match="Incorrect top value .*. top must be positive"):
         DataFrameSummaryAnalyzer(top=-1)
 

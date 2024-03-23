@@ -25,15 +25,15 @@ def test_column_continuous_analyzer_str() -> None:
 
 def test_column_continuous_analyzer_series() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
-    assert_series_equal(section.series, Series([np.nan] + list(range(101)) + [np.nan], name="col"))
+    assert_series_equal(section.series, Series([np.nan, *list(range(101)), np.nan], name="col"))
 
 
 def test_column_continuous_analyzer_column() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.column == "col"
@@ -41,7 +41,7 @@ def test_column_continuous_analyzer_column() -> None:
 
 def test_column_continuous_analyzer_nbins_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.nbins is None
@@ -50,7 +50,7 @@ def test_column_continuous_analyzer_nbins_default() -> None:
 @pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_column_continuous_analyzer_nbins(nbins: int) -> None:
     section = ColumnContinuousAnalyzer(column="col", nbins=nbins).analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.nbins == nbins
@@ -58,7 +58,7 @@ def test_column_continuous_analyzer_nbins(nbins: int) -> None:
 
 def test_column_continuous_analyzer_yscale_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.yscale == "auto"
@@ -67,7 +67,7 @@ def test_column_continuous_analyzer_yscale_default() -> None:
 @pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_column_continuous_analyzer_yscale(yscale: str) -> None:
     section = ColumnContinuousAnalyzer(column="col", yscale=yscale).analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.yscale == yscale
@@ -75,7 +75,7 @@ def test_column_continuous_analyzer_yscale(yscale: str) -> None:
 
 def test_column_continuous_analyzer_xmin_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.xmin == "q0"
@@ -84,7 +84,7 @@ def test_column_continuous_analyzer_xmin_default() -> None:
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None])
 def test_column_continuous_analyzer_xmin(xmin: float | str | None) -> None:
     section = ColumnContinuousAnalyzer(column="col", xmin=xmin).analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.xmin == xmin
@@ -92,7 +92,7 @@ def test_column_continuous_analyzer_xmin(xmin: float | str | None) -> None:
 
 def test_column_continuous_analyzer_xmax_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.xmax == "q1"
@@ -101,7 +101,7 @@ def test_column_continuous_analyzer_xmax_default() -> None:
 @pytest.mark.parametrize("xmax", [1.0, "q0.1", None])
 def test_column_continuous_analyzer_xmax(xmax: float | str | None) -> None:
     section = ColumnContinuousAnalyzer(column="col", xmax=xmax).analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.xmax == xmax
@@ -109,7 +109,7 @@ def test_column_continuous_analyzer_xmax(xmax: float | str | None) -> None:
 
 def test_column_continuous_analyzer_figsize_default() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.figsize is None
@@ -118,7 +118,7 @@ def test_column_continuous_analyzer_figsize_default() -> None:
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> None:
     section = ColumnContinuousAnalyzer(column="col", figsize=figsize).analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert section.figsize == figsize
@@ -126,7 +126,7 @@ def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> Non
 
 def test_column_continuous_analyzer_get_statistics() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan] + list(range(101)) + [np.nan]})
+        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
     assert isinstance(section, ColumnContinuousSection)
     assert objects_are_allclose(

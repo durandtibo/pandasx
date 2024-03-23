@@ -66,7 +66,7 @@ class SectionDict(BaseSection):
         for i, (name, section) in enumerate(self._sections.items()):
             report.append(
                 section.render_html_body(
-                    number=f"{number}{i + 1}.", tags=list(tags) + [name], depth=depth + 1
+                    number=f"{number}{i + 1}.", tags=[*list(tags), name], depth=depth + 1
                 )
             )
         return "\n".join(report)
@@ -91,7 +91,7 @@ class SectionDict(BaseSection):
         for i, (name, section) in enumerate(self._sections.items()):
             line = section.render_html_toc(
                 number=f"{number}{i + 1}.",
-                tags=list(tags) + [name],
+                tags=[*list(tags), name],
                 depth=depth,
                 max_depth=max_depth,
             )
