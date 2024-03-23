@@ -222,6 +222,7 @@ def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[flo
             column="col",
             dt_column="datetime",
             period="M",
+            figsize=figsize,
         ),
         str,
     )

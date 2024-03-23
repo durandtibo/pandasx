@@ -20,7 +20,7 @@ from flamme.section.continuous import (
 
 @pytest.fixture()
 def series() -> Series:
-    return Series([np.nan] + list(range(101)) + [np.nan])
+    return Series([np.nan, *list(range(101)), np.nan])
 
 
 @pytest.fixture()

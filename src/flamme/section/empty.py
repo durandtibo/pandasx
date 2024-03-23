@@ -22,10 +22,19 @@ class EmptySection(BaseSection):
     def get_statistics(self) -> dict:
         return {}
 
-    def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
+    def render_html_body(
+        self,
+        number: str = "",  # noqa: ARG002
+        tags: Sequence[str] = (),  # noqa: ARG002
+        depth: int = 0,  # noqa: ARG002
+    ) -> str:
         return ""
 
     def render_html_toc(
-        self, number: str = "", tags: Sequence[str] = (), depth: int = 0, max_depth: int = 1
+        self,
+        number: str = "",  # noqa: ARG002
+        tags: Sequence[str] = (),  # noqa: ARG002
+        depth: int = 0,  # noqa: ARG002
+        max_depth: int = 1,  # noqa: ARG002
     ) -> str:
         return ""

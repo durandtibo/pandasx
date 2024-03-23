@@ -88,5 +88,5 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
 
     def transform(self, df: DataFrame) -> DataFrame:
         for transformer in self._transformers:
-            df = transformer.transform(df)  # noqa: PD901
+            df = transformer.transform(df)
         return df

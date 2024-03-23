@@ -113,7 +113,7 @@ def test_auto_yscale_continuous_nbins(nbins: int) -> None:
         np.ones(100),
         np.arange(100),
         np.eye(10).flatten(),
-        np.asarray(list(range(100)) + [float("nan")]),
+        np.asarray([*list(range(100)), float("nan")]),
         np.asarray([]),
     ],
 )
@@ -187,8 +187,8 @@ def test_compute_statistics_empty(data: np.ndarray | pd.Series) -> None:
 @pytest.mark.parametrize(
     "data",
     [
-        np.asarray([np.nan] + list(range(101)) + [np.nan]),
-        pd.Series([np.nan] + list(range(101)) + [np.nan]),
+        np.asarray([np.nan, *list(range(101)), np.nan]),
+        pd.Series([np.nan, *list(range(101)), np.nan]),
     ],
 )
 def test_compute_statistics(data: np.ndarray | pd.Series) -> None:
