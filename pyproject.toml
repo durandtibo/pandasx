@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.12"
+version = "0.0.13a0"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -70,12 +70,12 @@ optional = true  # Plotly is used only as a comparison with matplotlib
 great_expectations = ">=0.18,<1.0"
 
 [tool.poetry.group.dev.dependencies]
-black = ">=24.2"
+black = ">=24.3"
 coverage = { extras = ["toml"], version = "^7.4" }
 docformatter = { extras = ["tomli"], version = "^1.7" }
 pre-commit = "^3.6"
 pygments = "^2.17"
-pytest = "^8.0"
+pytest = "^8.1"
 pytest-cov = "^4.1"
 pytest-timeout = "^2.3"
 ruff = ">=0.3,<1.0"
