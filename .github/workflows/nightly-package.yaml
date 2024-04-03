@@ -129,7 +129,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        coola-version: [ 0.5.1, 0.4.0, 0.3.1, 0.2.2 ]
+        coola-version: [ 0.6.0, 0.5.1, 0.4.0, 0.3.1, 0.2.2 ]
 
     steps:
       - name: Checkout
@@ -245,7 +245,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        numpy-version: [ 1.26.2, 1.25.2, 1.24.3, 1.23.5 ]
+        numpy-version: [ 1.26.4, 1.25.2, 1.24.3, 1.23.5 ]
         exclude:
           - numpy-version: 1.23.5
             python-version: '3.12'
@@ -370,6 +370,38 @@ jobs:
       - name: Install flamme
         run: |
           pip install flamme pyarrow==${{ matrix.pyarrow-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  scipy:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        scipy-version: [ 1.13.0, 1.12.0, 1.11.4, 1.10.1 ]
+        exclude:
+          - scipy-version: 1.10.1
+            python-version: '3.12'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme scipy==${{ matrix.scipy-version }}
 
       - name: Run some checks
         run: |
