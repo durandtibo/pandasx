@@ -44,8 +44,8 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
         ...         "col3": [None, None, None, None, None],
         ...     }
         ... )
-        >>> frame = transformer.transform(frame)
-        >>> frame
+        >>> out = transformer.transform(frame)
+        >>> out
                  col1  col2
         0    2020-1-1   1.0
         1    2020-1-2   NaN

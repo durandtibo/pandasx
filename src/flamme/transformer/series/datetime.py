@@ -31,8 +31,8 @@ class ToDatetimeSeriesTransformer(BaseSeriesTransformer):
     >>> series = pd.Series(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"])
     >>> series.dtype
     dtype('O')
-    >>> series = transformer.transform(series)
-    >>> series.dtype
+    >>> out = transformer.transform(series)
+    >>> out.dtype
     dtype('<M8[ns]')
 
     ```

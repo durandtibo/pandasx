@@ -46,8 +46,8 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     2     3    3    c      c
     3     4    4      d      d
     4     5    5      e      e
-    >>> frame = transformer.transform(frame)
-    >>> frame
+    >>> out = transformer.transform(frame)
+    >>> out
        col1 col2 col3   col4
     0     1    1    a     a
     1     2    2    b      b

@@ -26,8 +26,8 @@ class StripStringSeriesTransformer(BaseSeriesTransformer):
     >>> transformer
     StripStringSeriesTransformer()
     >>> series = pd.Series(["a ", " b", "  c  ", " d ", "e"])
-    >>> series = transformer.transform(series)
-    >>> series
+    >>> out = transformer.transform(series)
+    >>> out
     0    a
     1    b
     2    c

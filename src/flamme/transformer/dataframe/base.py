@@ -47,8 +47,8 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     col3    object
     col4    object
     dtype: object
-    >>> frame = transformer.transform(frame)
-    >>> frame.dtypes
+    >>> out = transformer.transform(frame)
+    >>> out.dtypes
     col1     int64
     col2    object
     col3     int64
@@ -81,8 +81,8 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         ...         "col4": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
-        >>> frame = transformer.transform(frame)
-        >>> frame.dtypes
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
         col1     int64
         col2    object
         col3     int64

@@ -27,9 +27,9 @@ def test_strip_str_dataframe_transformer_transform() -> None:
         }
     )
     transformer = StripString(columns=["col1", "col3"])
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, ""],
@@ -51,9 +51,9 @@ def test_strip_str_dataframe_transformer_transform_none() -> None:
         }
     )
     transformer = StripString(columns=["col1", "col3"])
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, "", None, 42, 4.2],
@@ -68,5 +68,5 @@ def test_strip_str_dataframe_transformer_transform_none() -> None:
 def test_strip_str_dataframe_transformer_transform_empty() -> None:
     frame = pd.DataFrame({})
     transformer = StripString(columns=[])
-    frame = transformer.transform(frame)
-    assert_frame_equal(frame, pd.DataFrame({}))
+    out = transformer.transform(frame)
+    assert_frame_equal(out, pd.DataFrame({}))

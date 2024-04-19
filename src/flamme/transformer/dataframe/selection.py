@@ -42,8 +42,8 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     ...         "col3": ["a", "b", "c", "d", "e"],
     ...     }
     ... )
-    >>> frame = transformer.transform(frame)
-    >>> frame
+    >>> out = transformer.transform(frame)
+    >>> out
              col1  col2
     0    2020-1-1     1
     1    2020-1-2     2

@@ -45,8 +45,8 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
         col2     int64
         col3    object
         dtype: object
-        >>> frame = transformer.transform(frame)
-        >>> frame.dtypes
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
         col1    datetime64[ns]
         col2             int64
         col3            object

@@ -28,9 +28,9 @@ def test_column_selection_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ColumnSelection(columns=["col1", "col2"])
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
@@ -42,8 +42,8 @@ def test_column_selection_dataframe_transformer_transform() -> None:
 
 def test_column_selection_dataframe_transformer_transform_empty_row() -> None:
     transformer = ColumnSelection(columns=["col1", "col2"])
-    frame = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
-    assert_frame_equal(frame, pd.DataFrame({"col1": [], "col2": []}))
+    out = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
+    assert_frame_equal(out, pd.DataFrame({"col1": [], "col2": []}))
 
 
 def test_column_selection_dataframe_transformer_transform_empty() -> None:

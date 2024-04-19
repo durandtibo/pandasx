@@ -33,9 +33,9 @@ def test_decimal_to_numeric_dataframe_transformer_transform() -> None:
         }
     )
     transformer = DecimalToNumeric()
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -57,9 +57,9 @@ def test_decimal_to_numeric_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = DecimalToNumeric(errors="coerce")
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],

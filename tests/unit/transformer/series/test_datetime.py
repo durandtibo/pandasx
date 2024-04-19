@@ -20,11 +20,11 @@ def test_to_datetime_series_transformer_str_kwargs() -> None:
 
 def test_to_datetime_series_transformer_transform() -> None:
     transformer = ToDatetime()
-    series = transformer.transform(
+    out = transformer.transform(
         pd.Series(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"])
     )
     assert_series_equal(
-        series,
+        out,
         pd.to_datetime(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"]).to_series(
             index=[0, 1, 2, 3, 4]
         ),
@@ -33,11 +33,11 @@ def test_to_datetime_series_transformer_transform() -> None:
 
 def test_to_datetime_series_transformer_transform_kwargs() -> None:
     transformer = ToDatetime(errors="coerce")
-    series = transformer.transform(
+    out = transformer.transform(
         pd.Series(["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "abc"])
     )
     assert_series_equal(
-        series,
+        out,
         pd.to_datetime(
             ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", pd.NaT],
             errors="coerce",

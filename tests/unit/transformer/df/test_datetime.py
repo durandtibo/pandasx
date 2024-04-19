@@ -34,9 +34,9 @@ def test_to_datetime_dataframe_transformer_transform() -> None:
         }
     )
     transformer = ToDatetime(columns=["col1"])
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": pd.to_datetime(
@@ -60,9 +60,9 @@ def test_to_datetime_dataframe_transformer_transform_kwargs() -> None:
         }
     )
     transformer = ToDatetime(columns=["col1", "col3"], errors="coerce", format="%Y-%m-%d")
-    frame = transformer.transform(frame)
+    out = transformer.transform(frame)
     assert_frame_equal(
-        frame,
+        out,
         pd.DataFrame(
             {
                 "col1": pd.to_datetime(

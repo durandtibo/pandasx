@@ -31,8 +31,8 @@ class ToNumericSeriesTransformer(BaseSeriesTransformer):
     >>> series = pd.Series(["1", "2", "3", "4", "5"])
     >>> series.dtype
     dtype('O')
-    >>> series = transformer.transform(series)
-    >>> series.dtype
+    >>> out = transformer.transform(series)
+    >>> out.dtype
     dtype('int64')
 
     ```
