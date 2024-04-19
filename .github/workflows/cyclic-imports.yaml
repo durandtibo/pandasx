@@ -44,7 +44,7 @@ jobs:
       - name: check flamme.transformer
         run: |
           poetry run python -c "from flamme import transformer"
-      - name: check flamme.transformer.df
+      - name: check flamme.transformer.dataframe
         run: |
           poetry run python -c "from flamme.transformer import df"
       - name: check flamme.transformer.series

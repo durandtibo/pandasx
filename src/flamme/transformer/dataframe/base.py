@@ -29,7 +29,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
 
     ```pycon
     >>> import pandas as pd
-    >>> from flamme.transformer.df import ToNumeric
+    >>> from flamme.transformer.dataframe import ToNumeric
     >>> transformer = ToNumeric(columns=["col1", "col3"])
     >>> transformer
     ToNumericDataFrameTransformer(columns=('col1', 'col3'))
@@ -71,7 +71,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
 
         ```pycon
         >>> import pandas as pd
-        >>> from flamme.transformer.df import ToNumeric
+        >>> from flamme.transformer.dataframe import ToNumeric
         >>> transformer = ToNumeric(columns=["col1", "col3"])
         >>> df = pd.DataFrame(
         ...     {
@@ -112,9 +112,9 @@ def is_dataframe_transformer_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
-    >>> from flamme.transformer.df import is_dataframe_transformer_config
+    >>> from flamme.transformer.dataframe import is_dataframe_transformer_config
     >>> is_dataframe_transformer_config(
-    ...     {"_target_": "flamme.transformer.df.ToNumeric", "columns": ["col1", "col3"]}
+    ...     {"_target_": "flamme.transformer.dataframe.ToNumeric", "columns": ["col1", "col3"]}
     ... )
     True
 
@@ -141,9 +141,9 @@ def setup_dataframe_transformer(
     Example usage:
 
     ```pycon
-    >>> from flamme.transformer.df import setup_dataframe_transformer
+    >>> from flamme.transformer.dataframe import setup_dataframe_transformer
     >>> transformer = setup_dataframe_transformer(
-    ...     {"_target_": "flamme.transformer.df.ToNumeric", "columns": ["col1", "col3"]}
+    ...     {"_target_": "flamme.transformer.dataframe.ToNumeric", "columns": ["col1", "col3"]}
     ... )
     >>> transformer
     ToNumericDataFrameTransformer(columns=('col1', 'col3'))

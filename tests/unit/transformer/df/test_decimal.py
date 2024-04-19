@@ -5,7 +5,7 @@ from decimal import Decimal
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from flamme.transformer.df import DecimalToNumeric
+from flamme.transformer.dataframe import DecimalToNumeric
 
 ##########################################################
 #     Tests for DecimalToNumericDataFrameTransformer     #

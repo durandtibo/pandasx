@@ -8,7 +8,7 @@ __all__ = ["ColumnSelectionDataFrameTransformer"]
 import logging
 from typing import TYPE_CHECKING
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -31,7 +31,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
 
     ```pycon
     >>> import pandas as pd
-    >>> from flamme.transformer.df import ColumnSelection
+    >>> from flamme.transformer.dataframe import ColumnSelection
     >>> transformer = ColumnSelection(columns=["col1", "col2"])
     >>> transformer
     ColumnSelectionDataFrameTransformer(columns=['col1', 'col2'], ignore_missing=False)

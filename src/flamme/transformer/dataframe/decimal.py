@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 import pandas as pd
 from tqdm import tqdm
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 from flamme.utils.filtering import find_columns_decimal
 
 if TYPE_CHECKING:
@@ -31,7 +31,7 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
 
         >>> from decimal import Decimal
         >>> import pandas as pd
-        >>> from flamme.transformer.df import DecimalToNumeric
+        >>> from flamme.transformer.dataframe import DecimalToNumeric
         >>> transformer = DecimalToNumericDataFrameTransformer()
         >>> transformer
         DecimalToNumericDataFrameTransformer()

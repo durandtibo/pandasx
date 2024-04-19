@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_sequence
 
-from flamme.transformer.df.base import (
+from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
@@ -32,7 +32,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
 
     ```pycon
     >>> import pandas as pd
-    >>> from flamme.transformer.df import (
+    >>> from flamme.transformer.dataframe import (
     ...     Sequential,
     ...     StripString,
     ...     ToNumeric,

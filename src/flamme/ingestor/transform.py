@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 from coola.utils import str_indent, str_mapping
 
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
-from flamme.transformer.df.base import (
+from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
@@ -34,7 +34,7 @@ class TransformedIngestor(BaseIngestor):
 
     ```pycon
     >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
-    >>> from flamme.transformer.df import ToNumeric
+    >>> from flamme.transformer.dataframe import ToNumeric
     >>> ingestor = TransformedIngestor(
     ...     ingestor=ParquetIngestor(path="/path/to/df.csv"),
     ...     transformer=ToNumeric(columns=["col1", "col3"]),

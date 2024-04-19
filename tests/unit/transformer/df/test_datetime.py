@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from flamme.transformer.df import ToDatetime
+from flamme.transformer.dataframe import ToDatetime
 
 ####################################################
 #     Tests for ToDatetimeDataFrameTransformer     #
