@@ -9,7 +9,7 @@ from objectory import OBJECT_TARGET
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter, is_reporter_config, setup_reporter
-from flamme.transformer.df import Sequential
+from flamme.transformer.dataframe import Sequential
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -27,7 +27,7 @@ def test_is_reporter_config_true() -> None:
             OBJECT_TARGET: "flamme.reporter.Reporter",
             "ingestor": {OBJECT_TARGET: "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"},
             "transformer": {
-                OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
+                OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
                 "columns": ["col1", "col3"],
             },
             "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},
@@ -65,7 +65,7 @@ def test_setup_reporter_dict() -> None:
                     "path": "/path/to/data.csv",
                 },
                 "transformer": {
-                    OBJECT_TARGET: "flamme.transformer.df.ToNumeric",
+                    OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
                     "columns": ["col1", "col3"],
                 },
                 "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},

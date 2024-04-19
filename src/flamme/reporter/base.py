@@ -21,7 +21,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
     ```pycon
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from flamme.ingestor import ParquetIngestor
-    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(
     ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
@@ -50,7 +50,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         ```pycon
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> from flamme.ingestor import ParquetIngestor
-        >>> from flamme.transformer.df import SequentialDataFrameTransformer
+        >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
         >>> from flamme.reporter import Reporter
         >>> reporter = Reporter(
         ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
@@ -92,7 +92,7 @@ def is_reporter_config(config: dict) -> bool:
     ...             "path": "/path/to/data.csv",
     ...         },
     ...         "transformer": {
-    ...             "_target_": "flamme.transformer.df.ToNumeric",
+    ...             "_target_": "flamme.transformer.dataframe.ToNumeric",
     ...             "columns": ["col1", "col3"],
     ...         },
     ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
@@ -132,7 +132,7 @@ def setup_reporter(
     ...             "path": "/path/to/data.csv",
     ...         },
     ...         "transformer": {
-    ...             "_target_": "flamme.transformer.df.ToNumeric",
+    ...             "_target_": "flamme.transformer.dataframe.ToNumeric",
     ...             "columns": ["col1", "col3"],
     ...         },
     ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},

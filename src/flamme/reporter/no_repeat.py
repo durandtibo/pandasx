@@ -31,7 +31,7 @@ class NoRepeatReporter(BaseReporter):
     ```pycon
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from flamme.ingestor import ParquetIngestor
-    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
     >>> from flamme.reporter import Reporter, NoRepeatReporter
     >>> reporter = NoRepeatReporter(
     ...     reporter=Reporter(

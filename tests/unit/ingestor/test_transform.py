@@ -7,7 +7,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
 from flamme.ingestor import ParquetIngestor, TransformedIngestor
-from flamme.transformer.df import ToNumeric
+from flamme.transformer.dataframe import ToNumeric
 
 if TYPE_CHECKING:
     from pathlib import Path

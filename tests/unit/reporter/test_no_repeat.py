@@ -9,7 +9,7 @@ from pandas import DataFrame
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.reporter import NoRepeatReporter, Reporter
-from flamme.transformer.df import Sequential
+from flamme.transformer.dataframe import Sequential
 from flamme.utils.io import load_text, save_text
 
 if TYPE_CHECKING:

@@ -8,7 +8,7 @@ __all__ = ["NullColumnDataFrameTransformer"]
 import logging
 from typing import TYPE_CHECKING
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 from flamme.utils.null import compute_null_per_col
 
 if TYPE_CHECKING:
@@ -33,7 +33,7 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
     .. code-block:: pycon
 
         >>> import pandas as pd
-        >>> from flamme.transformer.df import NullColumn
+        >>> from flamme.transformer.dataframe import NullColumn
         >>> transformer = NullColumn(threshold=1.0)
         >>> transformer
         NullColumnDataFrameTransformer(threshold=1.0)

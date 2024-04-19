@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 from tqdm import tqdm
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -27,7 +27,7 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
 
     ```pycon
     >>> import pandas as pd
-    >>> from flamme.transformer.df import StripString
+    >>> from flamme.transformer.dataframe import StripString
     >>> transformer = StripString(columns=["col1", "col3"])
     >>> transformer
     StripStringDataFrameTransformer(columns=('col1', 'col3'))

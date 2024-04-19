@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 from coola.utils import str_indent, str_mapping
 from tqdm import tqdm
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
     from pandas import DataFrame
@@ -32,7 +32,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
 
     ```pycon
     >>> import pandas as pd
-    >>> from flamme.transformer.df import Column
+    >>> from flamme.transformer.dataframe import Column
     >>> from flamme.transformer.series import ToNumeric, StripString
     >>> transformer = Column({"col2": ToNumeric(), "col3": StripString()})
     >>> transformer
@@ -110,7 +110,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
 
         ```pycon
         >>> import pandas as pd
-        >>> from flamme.transformer.df import Column
+        >>> from flamme.transformer.dataframe import Column
         >>> from flamme.transformer.series import ToNumeric, StripString
         >>> transformer = Column({"col2": ToNumeric(), "col3": StripString()})
         >>> transformer

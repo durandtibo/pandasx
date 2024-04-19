@@ -1,58 +1,55 @@
 r"""Contain ``pandas.DataFrame`` transformers to transform columns with
-numeric values."""
+datetime values."""
 
 from __future__ import annotations
 
-__all__ = ["ToNumericDataFrameTransformer"]
+__all__ = ["ToDatetimeDataFrameTransformer"]
 
 from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 from tqdm import tqdm
 
-from flamme.transformer.df.base import BaseDataFrameTransformer
+from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
 
-class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
+class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implement a transformer to convert some columns to numeric type.
 
     Args:
         columns: The columns to convert.
         **kwargs: The keyword arguments for
-            ``pandas.to_numeric``.
+            ``pandas.to_datetime``.
 
     Example usage:
 
     .. code-block:: pycon
 
         >>> import pandas as pd
-        >>> from flamme.transformer.df import ToNumeric
-        >>> transformer = ToNumeric(columns=["col1", "col3"])
+        >>> from flamme.transformer.dataframe import ToDatetime
+        >>> transformer = ToDatetime(columns=["col1"])
         >>> transformer
-        ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+        ToDatetimeDataFrameTransformer(columns=('col1',))
         >>> df = pd.DataFrame(
         ...     {
-        ...         "col1": [1, 2, 3, 4, 5],
-        ...         "col2": ["1", "2", "3", "4", "5"],
-        ...         "col3": ["1", "2", "3", "4", "5"],
-        ...         "col4": ["a", "b", "c", "d", "e"],
+        ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"],
+        ...         "col2": [1, 2, 3, 4, 5],
+        ...         "col3": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
         >>> df.dtypes
-        col1     int64
-        col2    object
+        col1    object
+        col2     int64
         col3    object
-        col4    object
         dtype: object
         >>> df = transformer.transform(df)
         >>> df.dtypes
-        col1     int64
-        col2    object
-        col3     int64
-        col4    object
+        col1    datetime64[ns]
+        col2             int64
+        col3            object
         dtype: object
     """
 
@@ -68,5 +65,5 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
 
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         for col in tqdm(self._columns, desc="Converting to numeric type"):
-            df[col] = pd.to_numeric(df[col], **self._kwargs)
+            df[col] = pd.to_datetime(df[col], **self._kwargs)
         return df

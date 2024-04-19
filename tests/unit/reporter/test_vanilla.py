@@ -9,7 +9,7 @@ from pandas import DataFrame
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter
-from flamme.transformer.df import Sequential
+from flamme.transformer.dataframe import Sequential
 
 if TYPE_CHECKING:
     from pathlib import Path

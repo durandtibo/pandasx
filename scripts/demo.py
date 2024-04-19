@@ -29,7 +29,7 @@ from flamme.analyzer import (
 )
 from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
-from flamme.transformer.df import (
+from flamme.transformer.dataframe import (
     BaseDataFrameTransformer,
     ColumnSelection,
     SequentialDataFrameTransformer,

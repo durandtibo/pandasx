@@ -13,7 +13,7 @@ from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
 from flamme.reporter.base import BaseReporter
 from flamme.reporter.utils import create_html_report
-from flamme.transformer.df.base import (
+from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
@@ -43,7 +43,7 @@ class Reporter(BaseReporter):
     ```pycon
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from flamme.ingestor import ParquetIngestor
-    >>> from flamme.transformer.df import SequentialDataFrameTransformer
+    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(
     ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
