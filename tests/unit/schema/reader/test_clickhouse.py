@@ -7,6 +7,7 @@ import pytest
 from coola import objects_are_equal
 
 from flamme.schema.reader import ClickHouseSchemaReader
+from flamme.testing import clickhouse_connect_available
 from flamme.utils.imports import is_clickhouse_connect_available
 
 if is_clickhouse_connect_available():
@@ -29,12 +30,14 @@ def table() -> pa.Table:
 ############################################
 
 
+@clickhouse_connect_available
 def test_parquet_schema_reader_str() -> None:
     assert str(
         ClickHouseSchemaReader(query="select * from source.dataset", client=Mock(spec=Client))
     ).startswith("ClickHouseSchemaReader(")
 
 
+@clickhouse_connect_available
 def test_parquet_schema_reader_read(table: pa.Table) -> None:
     schema = ClickHouseSchemaReader(
         query="select * from source.dataset",
