@@ -35,23 +35,9 @@ class ClickHouseSchemaReader(BaseSchemaReader):
     ```pycon
     >>> import pandas as pd
     >>> from flamme.schema.reader import ClickHouseSchemaReader
-    >>> reader = ClickHouseSchemaReader(
-    ...     df=pd.DataFrame(
-    ...         {
-    ...             "col1": [1, 2, 3, 4, 5],
-    ...             "col2": [1.1, 2.2, 3.3, 4.4, 5.5],
-    ...             "col4": ["a", "b", "c", "d", "e"],
-    ...         }
-    ...     )
-    ... )
-    >>> reader
-    ClickHouseSchemaReader(shape=(5, 3))
-    >>> schema = reader.read()
-    >>> schema
-    col1: int64
-    col2: double
-    col4: string
-    ...
+    >>> client = clickhouse_connect.get_client()  # doctest: +SKIP
+    >>> reader = ClickHouseSchemaReader(query="", client=client)  # doctest: +SKIP
+    >>> schema = reader.read()  # doctest: +SKIP
 
     ```
     """
