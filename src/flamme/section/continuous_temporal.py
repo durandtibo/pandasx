@@ -38,7 +38,7 @@ class ColumnTemporalContinuousSection(BaseSection):
     column with continuous values.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -52,14 +52,14 @@ class ColumnTemporalContinuousSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         column: str,
         dt_column: str,
         period: str,
         yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        self._df = df
+        self._frame = frame
         self._column = column
         self._dt_column = dt_column
         self._period = period
@@ -107,7 +107,7 @@ class ColumnTemporalContinuousSection(BaseSection):
                 "dt_column": self._dt_column,
                 "period": self._period,
                 "figure": create_temporal_figure(
-                    df=self._df,
+                    frame=self._frame,
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
@@ -115,7 +115,7 @@ class ColumnTemporalContinuousSection(BaseSection):
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_table(
-                    df=self._df,
+                    frame=self._frame,
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
@@ -146,7 +146,7 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    df: DataFrame,
+    frame: DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -157,7 +157,7 @@ def create_temporal_figure(
     distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -171,20 +171,20 @@ def create_temporal_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
-    array = df[column].to_numpy(dtype=float)
-    df = df[[column, dt_column]].copy()
-    df[dt_column] = df[dt_column].dt.to_period(period).astype(str)
-    df_group = (
-        df.groupby(dt_column)[column]
+    array = frame[column].to_numpy(dtype=float)
+    frame = frame[[column, dt_column]].copy()
+    frame[dt_column] = frame[dt_column].dt.to_period(period).astype(str)
+    frame_group = (
+        frame.groupby(dt_column)[column]
         .apply(list)
         .reset_index(name=column)
         .sort_values(by=[dt_column])
     )
 
-    data = [remove_nan(x) for x in df_group[column].tolist()]
-    labels = df_group[dt_column].tolist()
+    data = [remove_nan(x) for x in frame_group[column].tolist()]
+    labels = frame_group[dt_column].tolist()
     fig, ax = plt.subplots(figsize=figsize)
     ax.boxplot(
         data,
@@ -204,12 +204,12 @@ def create_temporal_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+def create_temporal_table(frame: DataFrame, column: str, dt_column: str, period: str) -> str:
     r"""Create a HTML representation of a table with some statistics
     about the temporal value distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -219,13 +219,13 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
     Returns:
         The HTML representation of the table.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return "<span>&#9888;</span> No table is generated because the column is empty"
-    df = df[[column, dt_column]].copy()
+    frame = frame[[column, dt_column]].copy()
     dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
-    df_stats = (
-        df.groupby(dt_col)[column]
+    frame[dt_col] = frame[dt_column].dt.to_period(period)
+    frame_stats = (
+        frame.groupby(dt_col)[column]
         .agg(
             [
                 "count",
@@ -247,7 +247,7 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
         .sort_index()
     )
 
-    rows = [create_temporal_table_row(row) for row in df_stats.itertuples()]
+    rows = [create_temporal_table_row(row) for row in frame_stats.itertuples()]
     return Template(
         """
 <details>

@@ -18,7 +18,7 @@ class SchemaReader(BaseSchemaReader):
     r"""Implement a simple DataFrame ingestor.
 
     Args:
-        df: The DataFrame to ingest.
+        frame: The DataFrame to ingest.
 
     Example usage:
 
@@ -26,7 +26,7 @@ class SchemaReader(BaseSchemaReader):
     >>> import pandas as pd
     >>> from flamme.schema.reader import SchemaReader
     >>> reader = SchemaReader(
-    ...     df=pd.DataFrame(
+    ...     frame=pd.DataFrame(
     ...         {
     ...             "col1": [1, 2, 3, 4, 5],
     ...             "col2": [1.1, 2.2, 3.3, 4.4, 5.5],
@@ -46,11 +46,11 @@ class SchemaReader(BaseSchemaReader):
     ```
     """
 
-    def __init__(self, df: DataFrame) -> None:
-        self._df = df
+    def __init__(self, frame: DataFrame) -> None:
+        self._frame = frame
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(shape={self._df.shape})"
+        return f"{self.__class__.__qualname__}(shape={self._frame.shape})"
 
     def read(self) -> pa.Schema:
-        return pa.Schema.from_pandas(self._df)
+        return pa.Schema.from_pandas(self._frame)

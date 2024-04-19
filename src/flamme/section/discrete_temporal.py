@@ -35,7 +35,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
     column with discrete values.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column of the DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -47,13 +47,13 @@ class ColumnTemporalDiscreteSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         column: str,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        self._df = df
+        self._frame = frame
         self._column = column
         self._dt_column = dt_column
         self._period = period
@@ -96,7 +96,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
                 "dt_column": self._dt_column,
                 "period": self._period,
                 "figure": create_temporal_figure(
-                    df=self._df,
+                    frame=self._frame,
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
@@ -128,7 +128,7 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    df: DataFrame,
+    frame: DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -138,7 +138,7 @@ def create_temporal_figure(
     distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -152,25 +152,27 @@ def create_temporal_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
-    df = df[[column, dt_column]].copy()
+    frame = frame[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
-    df[col_dt] = df[dt_column].dt.to_period(period).astype(str)
-    df = df[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
-    df = DataFrame({col_count: df}).reset_index().sort_values(by=[col_dt, column])
-    df = df.pivot_table(index=col_dt, columns=column, values=col_count, fill_value=0, dropna=False)
+    frame[col_dt] = frame[dt_column].dt.to_period(period).astype(str)
+    frame = frame[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
+    frame = DataFrame({col_count: frame}).reset_index().sort_values(by=[col_dt, column])
+    frame = frame.pivot_table(
+        index=col_dt, columns=column, values=col_count, fill_value=0, dropna=False
+    )
 
-    labels = mixed_typed_sort(df.columns.tolist())
+    labels = mixed_typed_sort(frame.columns.tolist())
     num_labels = len(labels)
-    steps = df.index.tolist()
+    steps = frame.index.tolist()
     x = np.arange(len(steps), dtype=int)
     bottom = np.zeros_like(x)
     width = 0.9 if len(steps) < 50 else 1
     fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.get_cmap("viridis")
     for i, label in enumerate(labels):
-        count = df[label].to_numpy().astype(int)
+        count = frame[label].to_numpy().astype(int)
         ax.bar(x, count, label=label, bottom=bottom, width=width, color=my_cmap(i / num_labels))
         bottom += count
 

@@ -30,10 +30,10 @@ class CsvIngestor(BaseIngestor):
 
     ```pycon
     >>> from flamme.ingestor import ParquetIngestor
-    >>> ingestor = ParquetIngestor(path="/path/to/df.csv")
+    >>> ingestor = ParquetIngestor(path="/path/to/frame.csv")
     >>> ingestor
-    ParquetIngestor(path=/path/to/df.csv)
-    >>> df = ingestor.ingest()  # doctest: +SKIP
+    ParquetIngestor(path=/path/to/frame.csv)
+    >>> frame = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
@@ -50,6 +50,6 @@ class CsvIngestor(BaseIngestor):
 
     def ingest(self) -> DataFrame:
         logger.info(f"Ingesting CSV data from {self._path} (size={human_file_size(self._path)})...")
-        df = read_csv(filepath_or_buffer=self._path, **self._kwargs)
-        logger.info(f"Data ingested. DataFrame shape: {df.shape}")
-        return df
+        frame = read_csv(filepath_or_buffer=self._path, **self._kwargs)
+        logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
+        return frame

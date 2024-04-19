@@ -36,14 +36,14 @@ class NullValueAnalyzer(BaseAnalyzer):
     >>> analyzer = NullValueAnalyzer()
     >>> analyzer
     NullValueAnalyzer(figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -54,12 +54,12 @@ class NullValueAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(figsize={self._figsize})"
 
-    def analyze(self, df: DataFrame) -> NullValueSection:
+    def analyze(self, frame: DataFrame) -> NullValueSection:
         logger.info("Analyzing the null value distribution of all columns...")
         return NullValueSection(
-            columns=list(df.columns),
-            null_count=df.isna().sum().to_frame("count")["count"].to_numpy(),
-            total_count=np.full((df.shape[1],), df.shape[0]),
+            columns=list(frame.columns),
+            null_count=frame.isna().sum().to_frame("count")["count"].to_numpy(),
+            total_count=np.full((frame.shape[1],), frame.shape[0]),
             figsize=self._figsize,
         )
 
@@ -85,7 +85,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     >>> analyzer = TemporalNullValueAnalyzer("datetime", period="M")
     >>> analyzer
     TemporalNullValueAnalyzer(dt_column=datetime, period=M, ncols=2, figsize=(7, 5))
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -95,7 +95,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -118,19 +118,19 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
             f"ncols={self._ncols}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> TemporalNullValueSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> TemporalNullValueSection | EmptySection:
         logger.info(
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping monthly null value analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return TemporalNullValueSection(
-            df=df,
+            frame=frame,
             dt_column=self._dt_column,
             period=self._period,
             ncols=self._ncols,

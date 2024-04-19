@@ -14,17 +14,17 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(scope="module")
-def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
     nrows = 10
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
             "col_int": np.arange(nrows, dtype=int),
             "col_str": [f"a{i}" for i in range(nrows)],
         }
     )
-    df.to_parquet(path)
+    frame.to_parquet(path)
     return path
 
 
@@ -54,8 +54,8 @@ def test_get_table_schema(table: pa.Table, tmp_path: Path) -> None:
 ################################
 
 
-def test_get_dtypes(df_path: Path) -> None:
-    assert get_dtypes(df_path) == {
+def test_get_dtypes(frame_path: Path) -> None:
+    assert get_dtypes(frame_path) == {
         "col_float": pa.float64(),
         "col_int": pa.int64(),
         "col_str": pa.string(),

@@ -27,23 +27,23 @@ def dataframe() -> DataFrame:
 ##########################################
 
 
-def test_duplicated_rows_section_df(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe)
-    assert_frame_equal(section.df, dataframe)
+def test_duplicated_rows_section_frame(dataframe: DataFrame) -> None:
+    section = DuplicatedRowSection(frame=dataframe)
+    assert_frame_equal(section.frame, dataframe)
 
 
 def test_duplicated_rows_section_column_none(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert section.columns is None
 
 
 def test_duplicated_rows_section_column(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe, columns=["col1", "col2"])
+    section = DuplicatedRowSection(frame=dataframe, columns=["col1", "col2"])
     assert section.columns == ("col1", "col2")
 
 
 def test_duplicated_rows_section_figsize_default(dataframe: DataFrame) -> None:
-    assert DuplicatedRowSection(df=dataframe, columns=["col1", "col2"]).figsize is None
+    assert DuplicatedRowSection(frame=dataframe, columns=["col1", "col2"]).figsize is None
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
@@ -51,66 +51,66 @@ def test_duplicated_rows_section_figsize(
     dataframe: DataFrame, figsize: tuple[float, float]
 ) -> None:
     assert (
-        DuplicatedRowSection(df=dataframe, columns=["col1", "col2"], figsize=figsize).figsize
+        DuplicatedRowSection(frame=dataframe, columns=["col1", "col2"], figsize=figsize).figsize
         == figsize
     )
 
 
 def test_duplicated_rows_section_get_statistics(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 3})
 
 
 def test_duplicated_rows_section_get_statistics_columns(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe, columns=["col2", "col3"])
+    section = DuplicatedRowSection(frame=dataframe, columns=["col2", "col3"])
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 2})
 
 
 def test_duplicated_rows_section_get_statistics_empty_row() -> None:
-    section = DuplicatedRowSection(df=DataFrame({"col1": [], "col2": []}))
+    section = DuplicatedRowSection(frame=DataFrame({"col1": [], "col2": []}))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})
 
 
 def test_duplicated_rows_section_get_statistics_empty_column() -> None:
-    section = DuplicatedRowSection(df=DataFrame({}))
+    section = DuplicatedRowSection(frame=DataFrame({}))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})
 
 
 def test_duplicated_rows_section_render_html_body(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_duplicated_rows_section_render_html_body_empty_row() -> None:
     section = DuplicatedRowSection(
-        df=DataFrame({"col1": [], "col2": []}),
+        frame=DataFrame({"col1": [], "col2": []}),
     )
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_duplicated_rows_section_render_html_body_empty_column() -> None:
-    section = DuplicatedRowSection(df=DataFrame({}))
+    section = DuplicatedRowSection(frame=DataFrame({}))
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_duplicated_rows_section_render_html_body_args(
     dataframe: DataFrame,
 ) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
 def test_duplicated_rows_section_render_html_toc(dataframe: DataFrame) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_duplicated_rows_section_render_html_toc_args(
     dataframe: DataFrame,
 ) -> None:
-    section = DuplicatedRowSection(df=dataframe)
+    section = DuplicatedRowSection(frame=dataframe)
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )

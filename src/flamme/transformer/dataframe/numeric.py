@@ -33,7 +33,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
         >>> transformer = ToNumeric(columns=["col1", "col3"])
         >>> transformer
         ToNumericDataFrameTransformer(columns=('col1', 'col3'))
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": [1, 2, 3, 4, 5],
         ...         "col2": ["1", "2", "3", "4", "5"],
@@ -41,14 +41,14 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
         ...         "col4": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
-        >>> df.dtypes
+        >>> frame.dtypes
         col1     int64
         col2    object
         col3    object
         col4    object
         dtype: object
-        >>> df = transformer.transform(df)
-        >>> df.dtypes
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
         col1     int64
         col2    object
         col3     int64
@@ -66,7 +66,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
             args = ", " + args
         return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
 
-    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         for col in tqdm(self._columns, desc="Converting to numeric type"):
-            df[col] = pd.to_numeric(df[col], **self._kwargs)
-        return df
+            frame[col] = pd.to_numeric(frame[col], **self._kwargs)
+        return frame

@@ -30,10 +30,10 @@ def test_duplicated_row_analyzer_str() -> None:
     assert str(DuplicatedRowAnalyzer()).startswith("DuplicatedRowAnalyzer(")
 
 
-def test_duplicated_row_analyzer_df(dataframe: DataFrame) -> None:
+def test_duplicated_row_analyzer_frame(dataframe: DataFrame) -> None:
     section = DuplicatedRowAnalyzer().analyze(dataframe)
     assert_frame_equal(
-        section.df,
+        section.frame,
         DataFrame(
             {
                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),

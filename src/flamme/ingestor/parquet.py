@@ -30,10 +30,10 @@ class ParquetIngestor(BaseIngestor):
 
     ```pycon
     >>> from flamme.ingestor import ParquetIngestor
-    >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
+    >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
     >>> ingestor
-    ParquetIngestor(path=/path/to/df.parquet)
-    >>> df = ingestor.ingest()  # doctest: +SKIP
+    ParquetIngestor(path=/path/to/frame.parquet)
+    >>> frame = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
@@ -52,6 +52,6 @@ class ParquetIngestor(BaseIngestor):
         logger.info(
             f"Ingesting parquet data from {self._path} (size={human_file_size(self._path)})..."
         )
-        df = read_parquet(path=self._path, **self._kwargs)
-        logger.info(f"Data ingested. DataFrame shape: {df.shape}")
-        return df
+        frame = read_parquet(path=self._path, **self._kwargs)
+        logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
+        return frame

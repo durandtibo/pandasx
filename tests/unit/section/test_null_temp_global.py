@@ -32,15 +32,15 @@ def dataframe() -> DataFrame:
 ####################################################
 
 
-def test_column_temporal_null_value_section_df(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
-    assert_frame_equal(section.df, dataframe)
+def test_column_temporal_null_value_section_frame(dataframe: DataFrame) -> None:
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+    assert_frame_equal(section.frame, dataframe)
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = GlobalTemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "col1": np.array([1.2, 4.2, np.nan, 2.2]),
                 "col2": np.array([np.nan, 1, np.nan, 1]),
@@ -58,7 +58,7 @@ def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
 
 @pytest.mark.parametrize("period", ["M", "D"])
 def test_column_temporal_null_value_section_period(dataframe: DataFrame, period: str) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period=period)
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period=period)
     assert section.period == period
 
 
@@ -67,13 +67,13 @@ def test_column_temporal_null_value_section_figsize(
     dataframe: DataFrame, figsize: tuple[int, int]
 ) -> None:
     section = GlobalTemporalNullValueSection(
-        df=dataframe, dt_column="datetime", period="M", figsize=figsize
+        frame=dataframe, dt_column="datetime", period="M", figsize=figsize
     )
     assert section.figsize == figsize
 
 
 def test_column_temporal_null_value_section_figsize_default(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert section.figsize is None
 
 
@@ -81,17 +81,17 @@ def test_column_temporal_null_value_section_missing_dt_column(dataframe: DataFra
     with pytest.raises(
         ValueError, match=r"Datetime column my_datetime is not in the DataFrame \(columns:"
     ):
-        GlobalTemporalNullValueSection(df=dataframe, dt_column="my_datetime", period="M")
+        GlobalTemporalNullValueSection(frame=dataframe, dt_column="my_datetime", period="M")
 
 
 def test_column_temporal_null_value_section_get_statistics(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
     section = GlobalTemporalNullValueSection(
-        df=DataFrame({"col1": [], "col2": [], "datetime": []}),
+        frame=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
@@ -99,12 +99,12 @@ def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
 
 
 def test_column_temporal_null_value_section_render_html_body(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_column_temporal_null_value_section_render_html_body_args(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
@@ -112,7 +112,7 @@ def test_column_temporal_null_value_section_render_html_body_args(dataframe: Dat
 
 def test_column_temporal_null_value_section_render_html_body_empty_rows() -> None:
     section = GlobalTemporalNullValueSection(
-        df=DataFrame({"col1": [], "col2": [], "datetime": []}),
+        frame=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
@@ -120,12 +120,12 @@ def test_column_temporal_null_value_section_render_html_body_empty_rows() -> Non
 
 
 def test_column_temporal_null_value_section_render_html_toc(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_column_temporal_null_value_section_render_html_toc_args(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(df=dataframe, dt_column="datetime", period="M")
+    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
@@ -138,7 +138,7 @@ def test_column_temporal_null_value_section_render_html_toc_args(dataframe: Data
 
 def test_create_temporal_null_figure(dataframe: DataFrame) -> None:
     assert isinstance(
-        create_temporal_null_figure(df=dataframe, dt_column="datetime", period="M"),
+        create_temporal_null_figure(frame=dataframe, dt_column="datetime", period="M"),
         str,
     )
 
@@ -146,7 +146,7 @@ def test_create_temporal_null_figure(dataframe: DataFrame) -> None:
 def test_create_temporal_null_figure_empty() -> None:
     assert isinstance(
         create_temporal_null_figure(
-            df=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
+            frame=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
             dt_column="datetime",
             period="M",
         ),
@@ -161,7 +161,7 @@ def test_create_temporal_null_figure_empty() -> None:
 
 def test_create_temporal_null_table(dataframe: DataFrame) -> None:
     assert isinstance(
-        create_temporal_null_table(df=dataframe, dt_column="datetime", period="M"),
+        create_temporal_null_table(frame=dataframe, dt_column="datetime", period="M"),
         str,
     )
 
@@ -169,7 +169,7 @@ def test_create_temporal_null_table(dataframe: DataFrame) -> None:
 def test_create_temporal_null_table_empty() -> None:
     assert isinstance(
         create_temporal_null_table(
-            df=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
+            frame=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
             dt_column="datetime",
             period="M",
         ),
@@ -184,7 +184,7 @@ def test_create_temporal_null_table_empty() -> None:
 
 def test_prepare_data(dataframe: DataFrame) -> None:
     assert objects_are_equal(
-        prepare_data(df=dataframe, dt_column="datetime", period="M"),
+        prepare_data(frame=dataframe, dt_column="datetime", period="M"),
         (
             np.array([1, 0, 2, 0]),
             np.array([2, 2, 2, 2]),
@@ -196,7 +196,7 @@ def test_prepare_data(dataframe: DataFrame) -> None:
 def test_prepare_data_empty() -> None:
     assert objects_are_equal(
         prepare_data(
-            df=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
+            frame=DataFrame({"col1": [], "col2": [], "datetime": pd.to_datetime([])}),
             dt_column="datetime",
             period="M",
         ),

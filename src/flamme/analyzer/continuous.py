@@ -49,14 +49,14 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     >>> analyzer = ColumnContinuousAnalyzer(column="float")
     >>> analyzer
     ColumnContinuousAnalyzer(column=float, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -83,17 +83,17 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, xmin={self._xmin}, xmax={self._xmax}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> ColumnContinuousSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> ColumnContinuousSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return ColumnContinuousSection(
             column=self._column,
-            series=df[self._column],
+            series=frame[self._column],
             nbins=self._nbins,
             yscale=self._yscale,
             xmin=self._xmin,
@@ -128,7 +128,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer
     ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, yscale=auto, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -138,7 +138,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -164,26 +164,26 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
         logger.info(
             f"Analyzing the temporal continuous distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return ColumnTemporalContinuousSection(
             column=self._column,
-            df=df,
+            frame=frame,
             dt_column=self._dt_column,
             period=self._period,
             yscale=self._yscale,

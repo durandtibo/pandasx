@@ -38,7 +38,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
     >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
     GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col": np.array([np.nan, 1, 0, 1]),
     ...         "datetime": pd.to_datetime(
@@ -46,7 +46,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -67,19 +67,19 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
             f"period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> GlobalTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> GlobalTemporalNullValueSection | EmptySection:
         logger.info(
             f"Analyzing the temporal null value distribution | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping temporal null value analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return GlobalTemporalNullValueSection(
-            df=df,
+            frame=frame,
             dt_column=self._dt_column,
             period=self._period,
             figsize=self._figsize,

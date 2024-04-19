@@ -45,14 +45,14 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     >>> analyzer = ColumnDiscreteAnalyzer(column="str")
     >>> analyzer
     ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, yscale=auto, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -78,17 +78,17 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             f"figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> ColumnDiscreteSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> ColumnDiscreteSection | EmptySection:
         logger.info(f"Analyzing the discrete distribution of {self._column}")
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 f"Skipping discrete distribution analysis of column {self._column} "
-                f"because it is not in the DataFrame: {sorted(df.columns)}"
+                f"because it is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return ColumnDiscreteSection(
-            counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
-            null_values=df[self._column].isna().sum(),
+            counter=Counter(frame[self._column].value_counts(dropna=self._dropna).to_dict()),
+            null_values=frame[self._column].isna().sum(),
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
@@ -120,7 +120,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer
     ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -130,7 +130,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -153,26 +153,26 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
         logger.info(
             f"Analyzing the temporal discrete distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 "Skipping temporal discrete distribution analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping temporal discrete distribution analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return ColumnTemporalDiscreteSection(
             column=self._column,
-            df=df,
+            frame=frame,
             dt_column=self._dt_column,
             period=self._period,
             figsize=self._figsize,

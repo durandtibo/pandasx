@@ -39,14 +39,14 @@ class TableOfContentAnalyzer(BaseAnalyzer):
       (analyzer): DuplicatedRowAnalyzer(columns=None, figsize=None)
       (max_toc_depth): 1
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": np.array([0, 1, 0, 1]),
     ...         "col2": np.array([1, 0, 1, 0]),
     ...         "col3": np.array([1, 1, 1, 1]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -65,7 +65,7 @@ class TableOfContentAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, df: DataFrame) -> TableOfContentSection:
+    def analyze(self, frame: DataFrame) -> TableOfContentSection:
         return TableOfContentSection(
-            section=self._analyzer.analyze(df), max_toc_depth=self._max_toc_depth
+            section=self._analyzer.analyze(frame), max_toc_depth=self._max_toc_depth
         )

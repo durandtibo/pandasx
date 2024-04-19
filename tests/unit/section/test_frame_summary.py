@@ -8,7 +8,7 @@ from jinja2 import Template
 from pandas import DataFrame
 
 from flamme.section import DataFrameSummarySection
-from flamme.section.df_summary import prepare_type_name
+from flamme.section.frame_summary import prepare_type_name
 
 NoneType = type(None)
 
@@ -24,8 +24,8 @@ def dataframe() -> DataFrame:
     )
 
 
-def test_dataframe_summary_section_df(dataframe: DataFrame) -> None:
-    assert DataFrameSummarySection(dataframe).df is dataframe
+def test_dataframe_summary_section_frame(dataframe: DataFrame) -> None:
+    assert DataFrameSummarySection(dataframe).frame is dataframe
 
 
 @pytest.mark.parametrize("top", [0, 1, 2])

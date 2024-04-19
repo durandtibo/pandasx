@@ -31,23 +31,23 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
     >>> analyzer = NullValueAnalyzer()
     >>> analyzer
     NullValueAnalyzer(figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> analyzer.analyze(df)
+    >>> analyzer.analyze(frame)
 
     ```
     """
 
-    def analyze(self, df: DataFrame) -> BaseSection:
+    def analyze(self, frame: DataFrame) -> BaseSection:
         r"""Analyze the data in a DataFrame.
 
         Args:
-            df: The DataFrame with the data to analyze.
+            frame: The DataFrame with the data to analyze.
 
         Returns:
             The section report.
@@ -59,14 +59,14 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
         >>> import pandas as pd
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
         ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
         ...         "str": np.array(["A", "B", None, np.nan]),
         ...     }
         ... )
-        >>> analyzer.analyze(df)
+        >>> analyzer.analyze(frame)
 
         ```
         """

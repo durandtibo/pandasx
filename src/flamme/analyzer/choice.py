@@ -41,25 +41,25 @@ class ChoiceAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer = ChoiceAnalyzer(
     ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()},
-    ...     selection_fn=lambda df: "null" if df.isna().values.any() else "duplicate",
+    ...     selection_fn=lambda frame: "null" if frame.isna().values.any() else "duplicate",
     ... )
     >>> analyzer
     ChoiceAnalyzer(
       (null): NullValueAnalyzer(figsize=None)
       (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
     >>> section.__class__.__qualname__
     NullValueSection
-    >>> df = pd.DataFrame({"col": np.arange(10)})
-    >>> section = analyzer.analyze(df)
+    >>> frame = pd.DataFrame({"col": np.arange(10)})
+    >>> section = analyzer.analyze(frame)
     >>> section.__class__.__qualname__
     DuplicatedRowSection
 
@@ -79,9 +79,9 @@ class ChoiceAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, df: DataFrame) -> BaseSection:
-        analyzer = self._analyzers[self._selection_fn(df)]
-        return analyzer.analyze(df)
+    def analyze(self, frame: DataFrame) -> BaseSection:
+        analyzer = self._analyzers[self._selection_fn(frame)]
+        return analyzer.analyze(frame)
 
 
 class NumUniqueSelection(Callable):
@@ -125,6 +125,6 @@ class NumUniqueSelection(Callable):
             f"small={self._small}, large={self._large})"
         )
 
-    def __call__(self, df: DataFrame) -> str:
-        nunique = df[self._column].nunique()
+    def __call__(self, frame: DataFrame) -> str:
+        nunique = frame[self._column].nunique()
         return self._small if nunique <= self._threshold else self._large

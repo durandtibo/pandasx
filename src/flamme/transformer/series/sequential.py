@@ -37,8 +37,8 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
       (1): ToNumericSeriesTransformer()
     )
     >>> series = pd.Series([" 1", "2 ", " 3 ", "4", "5"])
-    >>> series = transformer.transform(series)
-    >>> series
+    >>> out = transformer.transform(series)
+    >>> out
     0    1
     1    2
     2    3

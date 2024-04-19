@@ -33,7 +33,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     >>> transformer = ToNumeric(columns=["col1", "col3"])
     >>> transformer
     ToNumericDataFrameTransformer(columns=('col1', 'col3'))
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
@@ -41,14 +41,14 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     ...         "col4": ["a", "b", "c", "d", "e"],
     ...     }
     ... )
-    >>> df.dtypes
+    >>> frame.dtypes
     col1     int64
     col2    object
     col3    object
     col4    object
     dtype: object
-    >>> df = transformer.transform(df)
-    >>> df.dtypes
+    >>> out = transformer.transform(frame)
+    >>> out.dtypes
     col1     int64
     col2    object
     col3     int64
@@ -58,11 +58,11 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, frame: DataFrame) -> DataFrame:
         r"""Transform the data in the ``pandas.DataFrame``.
 
         Args:
-            df: The ``pandas.DataFrame`` to transform.
+            frame: The ``pandas.DataFrame`` to transform.
 
         Returns:
             The transformed DataFrame.
@@ -73,7 +73,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         >>> import pandas as pd
         >>> from flamme.transformer.dataframe import ToNumeric
         >>> transformer = ToNumeric(columns=["col1", "col3"])
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": [1, 2, 3, 4, 5],
         ...         "col2": ["1", "2", "3", "4", "5"],
@@ -81,8 +81,8 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         ...         "col4": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
-        >>> df = transformer.transform(df)
-        >>> df.dtypes
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
         col1     int64
         col2    object
         col3     int64

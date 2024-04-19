@@ -32,8 +32,8 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
     >>> series = pd.Series(["1", "2", "3", "4", "5"])
     >>> series.dtype
     dtype('O')
-    >>> series = transformer.transform(series)
-    >>> series.dtype
+    >>> out = transformer.transform(series)
+    >>> out.dtype
     dtype('int64')
 
     ```
@@ -55,8 +55,8 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         >>> from flamme.transformer.series import ToNumeric
         >>> transformer = ToNumeric()
         >>> series = pd.Series(["1", "2", "3", "4", "5"])
-        >>> series = transformer.transform(series)
-        >>> series.dtype
+        >>> out = transformer.transform(series)
+        >>> out.dtype
         dtype('int64')
 
         ```

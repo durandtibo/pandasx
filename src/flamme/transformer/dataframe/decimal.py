@@ -35,7 +35,7 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
         >>> transformer = DecimalToNumericDataFrameTransformer()
         >>> transformer
         DecimalToNumericDataFrameTransformer()
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": [1, 2, 3, 4, Decimal(5)],
         ...         "col2": [Decimal(1), Decimal(2), Decimal(3), Decimal(4), Decimal(5)],
@@ -43,14 +43,14 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
         ...         "col4": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
-        >>> df.dtypes
+        >>> frame.dtypes
         col1    object
         col2    object
         col3    object
         col4    object
         dtype: object
-        >>> df = transformer.transform(df)
-        >>> df.dtypes
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
         col1     int64
         col2   float64
         col3    object
@@ -65,8 +65,8 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
         args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
         return f"{self.__class__.__qualname__}({args})"
 
-    def transform(self, df: DataFrame) -> DataFrame:
-        columns = find_columns_decimal(df)
+    def transform(self, frame: DataFrame) -> DataFrame:
+        columns = find_columns_decimal(frame)
         for col in tqdm(columns, desc="Converting Decimal to numeric type"):
-            df[col] = pd.to_numeric(df[col], **self._kwargs)
-        return df
+            frame[col] = pd.to_numeric(frame[col], **self._kwargs)
+        return frame

@@ -16,7 +16,7 @@ class Ingestor(BaseIngestor):
     r"""Implement a simple DataFrame ingestor.
 
     Args:
-        df: The DataFrame to ingest.
+        frame: The DataFrame to ingest.
 
     Example usage:
 
@@ -24,7 +24,7 @@ class Ingestor(BaseIngestor):
     >>> import pandas as pd
     >>> from flamme.ingestor import Ingestor
     >>> ingestor = Ingestor(
-    ...     df=pd.DataFrame(
+    ...     frame=pd.DataFrame(
     ...         {
     ...             "col1": [1, 2, 3, 4, 5],
     ...             "col2": ["1", "2", "3", "4", "5"],
@@ -35,16 +35,16 @@ class Ingestor(BaseIngestor):
     ... )
     >>> ingestor
     Ingestor(shape=(5, 4))
-    >>> df = ingestor.ingest()
+    >>> frame = ingestor.ingest()
 
     ```
     """
 
-    def __init__(self, df: DataFrame) -> None:
-        self._df = df
+    def __init__(self, frame: DataFrame) -> None:
+        self._frame = frame
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(shape={self._df.shape})"
+        return f"{self.__class__.__qualname__}(shape={self._frame.shape})"
 
     def ingest(self) -> DataFrame:
-        return self._df
+        return self._frame

@@ -48,7 +48,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
       (0): StripStringDataFrameTransformer(columns=('col1', 'col3'))
       (1): ToNumericDataFrameTransformer(columns=('col1', 'col2'))
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
@@ -56,15 +56,15 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
     ...         "col4": ["a ", " b", "  c  ", "d", "e"],
     ...     }
     ... )
-    >>> df
+    >>> frame
        col1 col2   col3   col4
     0     1    1     a      a
     1     2    2      b      b
     2     3    3    c      c
     3     4    4      d      d
     4     5    5      e      e
-    >>> df = transformer.transform(df)
-    >>> df
+    >>> out = transformer.transform(frame)
+    >>> out
        col1 col2 col3   col4
     0     1    1    a     a
     1     2    2    b      b
@@ -86,7 +86,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
             args = f"\n  {str_indent(str_sequence(self._transformers))}\n"
         return f"{self.__class__.__qualname__}({args})"
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, frame: DataFrame) -> DataFrame:
         for transformer in self._transformers:
-            df = transformer.transform(df)
-        return df
+            frame = transformer.transform(frame)
+        return frame

@@ -37,14 +37,14 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
     >>> analyzer = TemporalRowCountAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
     TemporalRowCountAnalyzer(dt_column=datetime, period=M, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "datetime": pd.to_datetime(
     ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -65,19 +65,19 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
             f"period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> TemporalRowCountSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> TemporalRowCountSection | EmptySection:
         logger.info(
             f"Analyzing the number of rows | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping number of rows analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return TemporalRowCountSection(
-            df=df,
+            frame=frame,
             dt_column=self._dt_column,
             period=self._period,
             figsize=self._figsize,

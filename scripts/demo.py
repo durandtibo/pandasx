@@ -54,7 +54,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
         The generated DayaFrame.
     """
     rng = np.random.default_rng(42)
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "bool": np.random.randint(0, 2, (nrows,), dtype=bool),
             "float": np.random.randn(nrows) * 3 + 1,
@@ -64,17 +64,17 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
             "half cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
-    mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
+    mask = rng.choice([True, False], size=frame.shape, p=[0.2, 0.8])
     mask[:, 0] = rng.choice([True, False], size=(mask.shape[0]), p=[0.4, 0.6])
     mask[:, 1] = rng.choice([True, False], size=(mask.shape[0]), p=[0.8, 0.2])
     mask[:, 2] = rng.choice([True, False], size=(mask.shape[0]), p=[0.6, 0.4])
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
-    df = df.mask(mask)
-    df["discrete"] = np.random.randint(0, 1001, (nrows,))
-    df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
-    df["datetime_str"] = pd.date_range("2018-01-01", periods=nrows, freq="H").astype(str)
-    return df
+    frame = frame.mask(mask)
+    frame["discrete"] = np.random.randint(0, 1001, (nrows,))
+    frame["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
+    frame["datetime_str"] = pd.date_range("2018-01-01", periods=nrows, freq="H").astype(str)
+    return frame
 
 
 def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
@@ -88,14 +88,14 @@ def create_dataframe2(nrows: int = 1000) -> pd.DataFrame:
     """
     ncols = 100
     rng = np.random.default_rng(42)
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         rng.normal(size=(nrows, ncols)), columns=[f"feature{i}" for i in range(ncols)]
     )
-    mask = rng.choice([True, False], size=df.shape, p=[0.2, 0.8])
+    mask = rng.choice([True, False], size=frame.shape, p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
-    df = df.mask(mask)
-    df["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
-    return df
+    frame = frame.mask(mask)
+    frame["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
+    return frame
 
 
 def create_null_value_analyzer() -> BaseAnalyzer:
@@ -284,7 +284,7 @@ def create_reporter() -> BaseReporter:
         The instantiated reporter.
     """
     return Reporter(
-        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
+        ingestor=Ingestor(frame=create_dataframe(nrows=10000)),
         transformer=create_transformer(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),

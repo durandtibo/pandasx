@@ -36,8 +36,8 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
     >>> analyzer = MostFrequentValuesAnalyzer(column="str")
     >>> analyzer
     MostFrequentValuesAnalyzer(column=str, dropna=False, top=100)
-    >>> df = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
-    >>> section = analyzer.analyze(df)
+    >>> frame = pd.DataFrame({"col": np.array([np.nan, 1, 0, 1])})
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -53,16 +53,16 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
             f"dropna={self._dropna}, top={self._top:,})"
         )
 
-    def analyze(self, df: DataFrame) -> MostFrequentValuesSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> MostFrequentValuesSection | EmptySection:
         logger.info(f"Analyzing the most frequent values of {self._column}")
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 f"Skipping most frequent values analysis of column {self._column} "
-                f"because it is not in the DataFrame: {sorted(df.columns)}"
+                f"because it is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return MostFrequentValuesSection(
-            counter=Counter(df[self._column].value_counts(dropna=self._dropna).to_dict()),
+            counter=Counter(frame[self._column].value_counts(dropna=self._dropna).to_dict()),
             column=self._column,
             top=self._top,
         )

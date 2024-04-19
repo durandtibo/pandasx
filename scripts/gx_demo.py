@@ -83,8 +83,8 @@ def save_dataframe() -> Path:
     r"""Generate and save a DataFrame."""
     path = Path.cwd().joinpath("tmp/data.csv")
     logger.info(f"Creating data and saving it in {path}")
-    df = create_dataframe(nrows=100000)
-    df.to_csv(path)
+    frame = create_dataframe(nrows=100000)
+    frame.to_csv(path)
     return path
 
 

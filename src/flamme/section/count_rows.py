@@ -34,7 +34,7 @@ class TemporalRowCountSection(BaseSection):
     window.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -44,26 +44,26 @@ class TemporalRowCountSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        if dt_column not in df:
+        if dt_column not in frame:
             msg = (
                 f"Datetime column {dt_column} is not in the DataFrame "
-                f"(columns:{sorted(df.columns)})"
+                f"(columns:{sorted(frame.columns)})"
             )
             raise ValueError(msg)
-        self._df = df
+        self._frame = frame
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def dt_column(self) -> str:
@@ -100,13 +100,13 @@ class TemporalRowCountSection(BaseSection):
                 "section": number,
                 "dt_column": self._dt_column,
                 "figure": create_temporal_count_figure(
-                    df=self._df,
+                    frame=self._frame,
                     dt_column=self._dt_column,
                     period=self._period,
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_count_table(
-                    df=self._df,
+                    frame=self._frame,
                     dt_column=self._dt_column,
                     period=self._period,
                 ),
@@ -136,7 +136,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_count_figure(
-    df: DataFrame,
+    frame: DataFrame,
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -145,7 +145,7 @@ def create_temporal_count_figure(
     temporal windows.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -155,10 +155,10 @@ def create_temporal_count_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because there is no data"
 
-    counts, labels = prepare_data(df=df, dt_column=dt_column, period=period)
+    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=labels, height=counts, color="tab:blue")
     ax.set_ylabel("number of rows")
@@ -167,12 +167,12 @@ def create_temporal_count_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_count_table(df: DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_count_table(frame: DataFrame, dt_column: str, period: str) -> str:
     r"""Return a HTML representation of a figure with number of rows per
     temporal windows.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -180,9 +180,9 @@ def create_temporal_count_table(df: DataFrame, dt_column: str, period: str) -> s
     Returns:
         The HTML representation of the table.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
-    counts, labels = prepare_data(df=df, dt_column=dt_column, period=period)
+    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
     rows = []
     for label, num_rows in zip(labels, counts):
         rows.append(create_temporal_count_table_row(label=label, num_rows=num_rows))
@@ -231,14 +231,14 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
 
 
 def prepare_data(
-    df: DataFrame,
+    frame: DataFrame,
     dt_column: str,
     period: str,
 ) -> tuple[list[int], list[str]]:
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -246,15 +246,15 @@ def prepare_data(
     Returns:
         A tuple with the counts and the temporal window labels.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return [], []
 
-    df = df[[dt_column]].copy()
-    columns = df.columns.tolist()
+    frame = frame[[dt_column]].copy()
+    columns = frame.columns.tolist()
     dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
+    frame[dt_col] = frame[dt_column].dt.to_period(period)
 
-    df_count = df.groupby(dt_col)[columns].size()
-    count = df_count.to_numpy().astype(int).tolist()
-    labels = [str(dt) for dt in df_count.index]
+    frame_count = frame.groupby(dt_col)[columns].size()
+    count = frame_count.to_numpy().astype(int).tolist()
+    labels = [str(dt) for dt in frame_count.index]
     return count, labels

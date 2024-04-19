@@ -36,15 +36,15 @@ class TransformedIngestor(BaseIngestor):
     >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> ingestor = TransformedIngestor(
-    ...     ingestor=ParquetIngestor(path="/path/to/df.csv"),
+    ...     ingestor=ParquetIngestor(path="/path/to/frame.csv"),
     ...     transformer=ToNumeric(columns=["col1", "col3"]),
     ... )
     >>> ingestor
     TransformedIngestor(
-      (ingestor): ParquetIngestor(path=/path/to/df.csv)
+      (ingestor): ParquetIngestor(path=/path/to/frame.csv)
       (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
     )
-    >>> df = ingestor.ingest()  # doctest: +SKIP
+    >>> frame = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
@@ -62,5 +62,5 @@ class TransformedIngestor(BaseIngestor):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def ingest(self) -> DataFrame:
-        df = self._ingestor.ingest()
-        return self._transformer.transform(df)
+        frame = self._ingestor.ingest()
+        return self._transformer.transform(frame)

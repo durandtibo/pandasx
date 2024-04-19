@@ -36,7 +36,7 @@ class GlobalTemporalNullValueSection(BaseSection):
     values for all columns.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -46,27 +46,27 @@ class GlobalTemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        if dt_column not in df:
+        if dt_column not in frame:
             msg = (
                 f"Datetime column {dt_column} is not in the DataFrame "
-                f"(columns:{sorted(df.columns)})"
+                f"(columns:{sorted(frame.columns)})"
             )
             raise ValueError(msg)
 
-        self._df = df
+        self._frame = frame
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""``pandas.DataFrame``: The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def dt_column(self) -> str:
@@ -101,13 +101,13 @@ class GlobalTemporalNullValueSection(BaseSection):
                 "section": number,
                 "dt_column": self._dt_column,
                 "figure": create_temporal_null_figure(
-                    df=self._df,
+                    frame=self._frame,
                     dt_column=self._dt_column,
                     period=self._period,
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_null_table(
-                    df=self._df,
+                    frame=self._frame,
                     dt_column=self._dt_column,
                     period=self._period,
                 ),
@@ -137,7 +137,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    df: DataFrame,
+    frame: DataFrame,
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -146,7 +146,7 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze the
             temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -156,10 +156,10 @@ def create_temporal_null_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
 
-    num_nulls, total, labels = prepare_data(df=df, dt_column=dt_column, period=period)
+    num_nulls, total, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
 
     fig, ax = plt.subplots(figsize=figsize)
     plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
@@ -167,12 +167,12 @@ def create_temporal_null_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_null_table(frame: DataFrame, dt_column: str, period: str) -> str:
     r"""Create a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze the
             temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -180,9 +180,9 @@ def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> st
     Returns:
         The HTML representation of the table.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
-    num_nulls, totals, labels = prepare_data(df=df, dt_column=dt_column, period=period)
+    num_nulls, totals, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
     rows = []
     for label, num_null, total in zip(labels, num_nulls, totals):
         rows.append(create_temporal_null_table_row(label=label, num_nulls=num_null, total=total))
@@ -249,14 +249,14 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
 
 
 def prepare_data(
-    df: DataFrame,
+    frame: DataFrame,
     dt_column: str,
     period: str,
 ) -> tuple[np.ndarray, np.ndarray, list]:
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -275,7 +275,7 @@ def prepare_data(
     >>> import pandas as pd
     >>> from flamme.section.null_temp_global import prepare_data
     >>> num_nulls, total, labels = prepare_data(
-    ...     df=pd.DataFrame(
+    ...     frame=pd.DataFrame(
     ...         {
     ...             "col1": np.array([np.nan, 1, 0, 1]),
     ...             "col2": np.array([np.nan, 1, 0, np.nan]),
@@ -296,14 +296,14 @@ def prepare_data(
 
     ```
     """
-    df = df.copy()
-    columns = df.columns.tolist()
+    frame = frame.copy()
+    columns = frame.columns.tolist()
     columns.remove(dt_column)
     dt_col = "__datetime__"
-    df[dt_col] = df[dt_column].dt.to_period(period)
-    df.loc[:, columns] = df[columns].isna().astype(float)
+    frame[dt_col] = frame[dt_column].dt.to_period(period)
+    frame.loc[:, columns] = frame[columns].isna().astype(float)
 
-    num_nulls = df.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
-    total = df.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
+    num_nulls = frame.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
+    total = frame.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
     labels = [str(dt) for dt in num_nulls.index]
     return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels

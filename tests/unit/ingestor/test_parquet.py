@@ -13,16 +13,16 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(scope="module")
-def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    path = tmp_path_factory.mktemp("data").joinpath("df.parquet")
-    df = DataFrame(
+def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    path = tmp_path_factory.mktemp("data").joinpath("frame.parquet")
+    frame = DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    df.to_parquet(path)
+    frame.to_parquet(path)
     return path
 
 
@@ -31,17 +31,17 @@ def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
 #####################################
 
 
-def test_parquet_ingestor_str(df_path: Path) -> None:
-    assert str(ParquetIngestor(df_path)).startswith("ParquetIngestor(")
+def test_parquet_ingestor_str(frame_path: Path) -> None:
+    assert str(ParquetIngestor(frame_path)).startswith("ParquetIngestor(")
 
 
-def test_parquet_ingestor_str_with_kwargs(df_path: Path) -> None:
-    assert str(ParquetIngestor(df_path, columns=["col1", "col3"])).startswith("ParquetIngestor(")
+def test_parquet_ingestor_str_with_kwargs(frame_path: Path) -> None:
+    assert str(ParquetIngestor(frame_path, columns=["col1", "col3"])).startswith("ParquetIngestor(")
 
 
-def test_parquet_ingestor_ingest(df_path: Path) -> None:
+def test_parquet_ingestor_ingest(frame_path: Path) -> None:
     assert_frame_equal(
-        ParquetIngestor(df_path).ingest(),
+        ParquetIngestor(frame_path).ingest(),
         DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
@@ -52,9 +52,9 @@ def test_parquet_ingestor_ingest(df_path: Path) -> None:
     )
 
 
-def test_parquet_ingestor_ingest_with_kwargs(df_path: Path) -> None:
+def test_parquet_ingestor_ingest_with_kwargs(frame_path: Path) -> None:
     assert_frame_equal(
-        ParquetIngestor(df_path, columns=["col1", "col3"]).ingest(),
+        ParquetIngestor(frame_path, columns=["col1", "col3"]).ingest(),
         DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
