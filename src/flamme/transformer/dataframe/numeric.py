@@ -89,6 +89,42 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
 
         Returns:
             An instantiated ``ToNumericDataFrameTransformer``.
+
+        Example usage:
+
+        ```pycon
+
+        >>> import pandas as pd
+        >>> import pyarrow as pa
+        >>> from flamme.transformer.dataframe import ToNumeric
+        >>> transformer = ToNumeric.from_schema(
+        ...     pa.schema([("col1", pa.int64()), ("col2", pa.string()), ("col3", pa.int64())])
+        ... )
+        >>> transformer
+        ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+        >>> frame = pd.DataFrame(
+        ...     {
+        ...         "col1": [1, 2, 3, 4, 5],
+        ...         "col2": ["1", "2", "3", "4", "5"],
+        ...         "col3": ["1", "2", "3", "4", "5"],
+        ...         "col4": ["a", "b", "c", "d", "e"],
+        ...     }
+        ... )
+        >>> frame.dtypes
+        col1     int64
+        col2    object
+        col3    object
+        col4    object
+        dtype: object
+        >>> out = transformer.transform(frame)
+        >>> out.dtypes
+        col1     int64
+        col2    object
+        col3     int64
+        col4    object
+        dtype: object
+
+        ```
         """
         dtypes = get_dtypes_from_schema(schema)
         columns = sorted(find_numeric_columns_from_dtypes(dtypes))
