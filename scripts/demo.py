@@ -284,7 +284,7 @@ def create_reporter() -> BaseReporter:
         The instantiated reporter.
     """
     return Reporter(
-        ingestor=Ingestor(df=create_dataframe(nrows=10000)),
+        ingestor=Ingestor(frame=create_dataframe(nrows=10000)),
         transformer=create_transformer(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report.html"),
