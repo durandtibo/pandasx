@@ -89,11 +89,11 @@ class Reporter(BaseReporter):
 
     def compute(self) -> None:
         logger.info("Ingesting the DataFrame...")
-        df = self._ingestor.ingest()
-        logger.info(f"Transforming the DataFrame {df.shape}...")
-        df = self._transformer.transform(df)
-        logger.info(f"Analyzing the DataFrame {df.shape}...")
-        section = self._analyzer.analyze(df)
+        frame = self._ingestor.ingest()
+        logger.info(f"Transforming the DataFrame {frame.shape}...")
+        frame = self._transformer.transform(frame)
+        logger.info(f"Analyzing the DataFrame {frame.shape}...")
+        section = self._analyzer.analyze(frame)
         logger.info("Creating the HTML report...")
         report = create_html_report(
             toc=section.render_html_toc(max_depth=self._max_toc_depth),

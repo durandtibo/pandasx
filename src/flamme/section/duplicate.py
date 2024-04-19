@@ -33,7 +33,7 @@ class DuplicatedRowSection(BaseSection):
     r"""Implement a section to analyze the number of duplicated rows.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         columns: The columns used to compute the duplicated rows.
             ``None`` means all the columns.
         figsize: The figure
@@ -43,18 +43,18 @@ class DuplicatedRowSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         columns: Sequence[str] | None = None,
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        self._df = df
+        self._frame = frame
         self._columns = columns if columns is None else tuple(columns)
         self._figsize = figsize
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""``pandas.DataFrame``: The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def columns(self) -> tuple[str, ...] | None:
@@ -69,13 +69,13 @@ class DuplicatedRowSection(BaseSection):
         return self._figsize
 
     def get_statistics(self) -> dict:
-        df_no_duplicate = self._df.drop_duplicates(subset=self._columns)
-        return {"num_rows": self._df.shape[0], "num_unique_rows": df_no_duplicate.shape[0]}
+        frame_no_duplicate = self._frame.drop_duplicates(subset=self._columns)
+        return {"num_rows": self._frame.shape[0], "num_unique_rows": frame_no_duplicate.shape[0]}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the duplicated rows section using the columns: {self._columns}")
         stats = self.get_statistics()
-        columns = self._df.columns if self._columns is None else self._columns
+        columns = self._frame.columns if self._columns is None else self._columns
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,

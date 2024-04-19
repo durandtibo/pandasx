@@ -41,15 +41,15 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
       (col3): StripStringSeriesTransformer()
       (ignore_missing): False
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
     ...         "col3": [" a", "b ", " c ", "  d  ", "e"],
     ...     }
     ... )
-    >>> df = transformer.transform(df)
-    >>> df
+    >>> frame = transformer.transform(frame)
+    >>> frame
        col1  col2 col3
     0     1     1    a
     1     2     2    b
@@ -75,20 +75,20 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     def transformers(self) -> dict[str, BaseSeriesTransformer]:
         return self._columns
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, frame: DataFrame) -> DataFrame:
         for col, transformer in tqdm(self._columns.items(), desc="Transforming columns"):
-            if col not in df:
+            if col not in frame:
                 if self._ignore_missing:
                     logger.warning(
                         f"Skipping transformation for column {col} because the column is missing"
                     )
                 else:
-                    msg = f"Column {col} is not in the DataFrame (columns:{sorted(df.columns)})"
+                    msg = f"Column {col} is not in the DataFrame (columns:{sorted(frame.columns)})"
                     raise RuntimeError(msg)
             else:
                 logger.info(f"Transforming column `{col}`...")
-                df[col] = transformer.transform(df[col])
-        return df
+                frame[col] = transformer.transform(frame[col])
+        return frame
 
     def add_transformer(
         self, column: str, transformer: BaseSeriesTransformer, replace_ok: bool = False

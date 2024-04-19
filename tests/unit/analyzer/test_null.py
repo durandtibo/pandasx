@@ -92,7 +92,7 @@ def test_monthly_null_value_analyzer_str() -> None:
     )
 
 
-def test_monthly_null_value_analyzer_df() -> None:
+def test_monthly_null_value_analyzer_frame() -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
         DataFrame(
             {
@@ -106,7 +106,7 @@ def test_monthly_null_value_analyzer_df() -> None:
         )
     )
     assert_frame_equal(
-        section.df,
+        section.frame,
         DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),

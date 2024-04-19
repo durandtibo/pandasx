@@ -37,7 +37,7 @@ class ClickHouseIngestor(BaseIngestor):
     >>> import clickhouse_connect
     >>> client = clickhouse_connect.get_client()  # doctest: +SKIP
     >>> ingestor = ClickHouseIngestor(query="", client=client)  # doctest: +SKIP
-    >>> df = ingestor.ingest()  # doctest: +SKIP
+    >>> frame = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
@@ -56,7 +56,7 @@ class ClickHouseIngestor(BaseIngestor):
             f"query:\n{self._query}\n"
             "---------------------------------------------------------------------------------\n\n"
         )
-        df = self._client.query_df(query=self._query).sort_index(axis=1)
-        logger.info(f"Data ingested. DataFrame shape: {df.shape}")
-        logger.info(f"number of unique column names: {len(set(df.columns)):,}")
-        return df
+        frame = self._client.query_frame(query=self._query).sort_index(axis=1)
+        logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
+        logger.info(f"number of unique column names: {len(set(frame.columns)):,}")
+        return frame

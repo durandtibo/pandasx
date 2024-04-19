@@ -29,7 +29,7 @@ def dataframe() -> DataFrame:
 
 def test_column_temporal_discrete_section_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -39,7 +39,7 @@ def test_column_temporal_discrete_section_column(dataframe: DataFrame) -> None:
 
 def test_column_temporal_discrete_section_dt_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -49,7 +49,7 @@ def test_column_temporal_discrete_section_dt_column(dataframe: DataFrame) -> Non
 
 def test_column_temporal_discrete_section_period(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -60,7 +60,7 @@ def test_column_temporal_discrete_section_period(dataframe: DataFrame) -> None:
 def test_column_temporal_discrete_section_figsize_default(dataframe: DataFrame) -> None:
     assert (
         ColumnTemporalDiscreteSection(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -75,7 +75,7 @@ def test_column_temporal_discrete_section_figsize(
 ) -> None:
     assert (
         ColumnTemporalDiscreteSection(
-            df=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
+            frame=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
         ).figsize
         == figsize
     )
@@ -83,7 +83,7 @@ def test_column_temporal_discrete_section_figsize(
 
 def test_column_temporal_discrete_section_get_statistics(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -93,7 +93,7 @@ def test_column_temporal_discrete_section_get_statistics(dataframe: DataFrame) -
 
 def test_column_temporal_discrete_section_get_statistics_empty_row() -> None:
     section = ColumnTemporalDiscreteSection(
-        df=DataFrame({"col": [], "datetime": []}),
+        frame=DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -103,7 +103,7 @@ def test_column_temporal_discrete_section_get_statistics_empty_row() -> None:
 
 def test_column_temporal_discrete_section_get_statistics_empty_column() -> None:
     section = ColumnTemporalDiscreteSection(
-        df=DataFrame({}),
+        frame=DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -113,7 +113,7 @@ def test_column_temporal_discrete_section_get_statistics_empty_column() -> None:
 
 def test_column_temporal_discrete_section_render_html_body(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -123,7 +123,7 @@ def test_column_temporal_discrete_section_render_html_body(dataframe: DataFrame)
 
 def test_column_temporal_discrete_section_render_html_body_empty_row() -> None:
     section = ColumnTemporalDiscreteSection(
-        df=DataFrame({"col": [], "datetime": []}),
+        frame=DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -133,7 +133,7 @@ def test_column_temporal_discrete_section_render_html_body_empty_row() -> None:
 
 def test_column_temporal_discrete_section_render_html_body_empty_column() -> None:
     section = ColumnTemporalDiscreteSection(
-        df=DataFrame({}),
+        frame=DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -145,7 +145,7 @@ def test_column_temporal_discrete_section_render_html_body_args(
     dataframe: DataFrame,
 ) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -157,7 +157,7 @@ def test_column_temporal_discrete_section_render_html_body_args(
 
 def test_column_temporal_discrete_section_render_html_toc(dataframe: DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -169,7 +169,7 @@ def test_column_temporal_discrete_section_render_html_toc_args(
     dataframe: DataFrame,
 ) -> None:
     section = ColumnTemporalDiscreteSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -188,7 +188,7 @@ def test_column_temporal_discrete_section_render_html_toc_args(
 def test_create_temporal_figure(dataframe: DataFrame, column: str) -> None:
     assert isinstance(
         create_temporal_figure(
-            df=dataframe,
+            frame=dataframe,
             column=column,
             dt_column="datetime",
             period="M",
@@ -200,7 +200,7 @@ def test_create_temporal_figure(dataframe: DataFrame, column: str) -> None:
 def test_create_temporal_figure_20_values() -> None:
     assert isinstance(
         create_temporal_figure(
-            df=DataFrame(
+            frame=DataFrame(
                 {
                     "col": np.arange(20),
                     "datetime": pd.date_range(start="2020-01-03", periods=20),
@@ -218,7 +218,7 @@ def test_create_temporal_figure_20_values() -> None:
 def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
     assert isinstance(
         create_temporal_figure(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",

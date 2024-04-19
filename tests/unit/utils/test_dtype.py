@@ -8,9 +8,9 @@ import pytest
 from pandas import DataFrame, Series
 
 from flamme.utils.dtype import (
-    df_column_types,
     find_date_columns_from_dtypes,
     find_numeric_columns_from_dtypes,
+    frame_column_types,
     get_dtypes_from_schema,
     series_column_types,
 )
@@ -20,17 +20,17 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(scope="module")
-def df_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
     nrows = 10
-    df = DataFrame(
+    frame = DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
             "col_int": np.arange(nrows, dtype=int),
             "col_str": [f"a{i}" for i in range(nrows)],
         }
     )
-    df.to_parquet(path)
+    frame.to_parquet(path)
     return path
 
 
@@ -70,8 +70,8 @@ def dtypes() -> dict[str, pa.DataType]:
 ##################################
 
 
-def test_df_column_types() -> None:
-    assert df_column_types(
+def test_frame_column_types() -> None:
+    assert frame_column_types(
         DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -82,8 +82,8 @@ def test_df_column_types() -> None:
     ) == {"float": {float}, "int": {float}, "str": {str, type(None), float}}
 
 
-def test_df_column_types_empty() -> None:
-    assert df_column_types(DataFrame({})) == {}
+def test_frame_column_types_empty() -> None:
+    assert frame_column_types(DataFrame({})) == {}
 
 
 #########################################

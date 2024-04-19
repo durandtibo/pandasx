@@ -40,14 +40,14 @@ class FilteredAnalyzer(BaseAnalyzer):
       (query): float >= 2.0
       (analyzer): NullValueAnalyzer(figsize=None)
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -60,7 +60,7 @@ class FilteredAnalyzer(BaseAnalyzer):
         args = str_indent(str_mapping({"query": self._query, "analyzer": self._analyzer}))
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, df: DataFrame) -> BaseSection:
+    def analyze(self, frame: DataFrame) -> BaseSection:
         logger.info("Filtering the DataFrame...")
-        df = df.query(self._query)
-        return self._analyzer.analyze(df)
+        frame = frame.query(self._query)
+        return self._analyzer.analyze(frame)

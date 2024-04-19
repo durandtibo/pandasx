@@ -37,14 +37,14 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     >>> analyzer = DuplicatedRowAnalyzer()
     >>> analyzer
     DuplicatedRowAnalyzer(columns=None, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": np.array([0, 1, 0, 1]),
     ...         "col2": np.array([1, 0, 1, 0]),
     ...         "col3": np.array([1, 1, 1, 1]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -60,6 +60,6 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns}, figsize={self._figsize})"
 
-    def analyze(self, df: DataFrame) -> DuplicatedRowSection:
+    def analyze(self, frame: DataFrame) -> DuplicatedRowSection:
         logger.info(f"Analyzing the duplicated rows section using the columns: {self._columns}")
-        return DuplicatedRowSection(df=df, columns=self._columns, figsize=self._figsize)
+        return DuplicatedRowSection(frame=frame, columns=self._columns, figsize=self._figsize)

@@ -3,7 +3,7 @@ r"""Contain utility functions to manage data types."""
 from __future__ import annotations
 
 __all__ = [
-    "df_column_types",
+    "frame_column_types",
     "find_date_columns_from_dtypes",
     "find_numeric_columns_from_dtypes",
     "get_dtypes_from_schema",
@@ -22,11 +22,11 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def df_column_types(df: DataFrame) -> dict[str, set]:
+def frame_column_types(frame: DataFrame) -> dict[str, set]:
     r"""Return the value types per column.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
 
     Returns:
         A dictionary with the value types for each column.
@@ -36,22 +36,22 @@ def df_column_types(df: DataFrame) -> dict[str, set]:
     ```pycon
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from flamme.utils.dtype import df_column_types
-    >>> df = pd.DataFrame(
+    >>> from flamme.utils.dtype import frame_column_types
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...     }
     ... )
-    >>> coltypes = df_column_types(df)
+    >>> coltypes = frame_column_types(frame)
     >>> coltypes
     {'int': {<class 'float'>}, 'float': {<class 'float'>}}
 
     ```
     """
     types = {}
-    for col in df:
-        types[col] = series_column_types(df[col])
+    for col in frame:
+        types[col] = series_column_types(frame[col])
     return types
 
 

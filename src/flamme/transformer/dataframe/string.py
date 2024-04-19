@@ -31,7 +31,7 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     >>> transformer = StripString(columns=["col1", "col3"])
     >>> transformer
     StripStringDataFrameTransformer(columns=('col1', 'col3'))
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
@@ -39,15 +39,15 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     ...         "col4": ["a ", " b", "  c  ", "d", "e"],
     ...     }
     ... )
-    >>> df
+    >>> frame
        col1 col2   col3   col4
     0     1    1     a      a
     1     2    2      b      b
     2     3    3    c      c
     3     4    4      d      d
     4     5    5      e      e
-    >>> df = transformer.transform(df)
-    >>> df
+    >>> frame = transformer.transform(frame)
+    >>> frame
        col1 col2 col3   col4
     0     1    1    a     a
     1     2    2    b      b
@@ -64,7 +64,7 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns})"
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, frame: DataFrame) -> DataFrame:
         for col in tqdm(self._columns, desc="Striping strings"):
-            df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
-        return df
+            frame[col] = frame[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
+        return frame

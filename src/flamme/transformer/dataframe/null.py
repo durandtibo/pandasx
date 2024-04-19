@@ -37,15 +37,15 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
         >>> transformer = NullColumn(threshold=1.0)
         >>> transformer
         NullColumnDataFrameTransformer(threshold=1.0)
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
         ...         "col2": [1, None, 3, None, 5],
         ...         "col3": [None, None, None, None, None],
         ...     }
         ... )
-        >>> df = transformer.transform(df)
-        >>> df
+        >>> frame = transformer.transform(frame)
+        >>> frame
                  col1  col2
         0    2020-1-1   1.0
         1    2020-1-2   NaN
@@ -60,14 +60,14 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(threshold={self._threshold})"
 
-    def transform(self, df: DataFrame) -> DataFrame:
-        if df.shape[0] == 0:
-            return df
-        num_orig_cols = len(df.columns)
-        df_null = compute_null_per_col(df)
-        columns = df_null[df_null["null_pct"] < self._threshold]["column"].tolist()
+    def transform(self, frame: DataFrame) -> DataFrame:
+        if frame.shape[0] == 0:
+            return frame
+        num_orig_cols = len(frame.columns)
+        frame_null = compute_null_per_col(frame)
+        columns = frame_null[frame_null["null_pct"] < self._threshold]["column"].tolist()
         logger.info(
             f"Removing {num_orig_cols - len(columns):,} columns because they have too "
             f"many null values (threshold={self._threshold})..."
         )
-        return df[columns].copy()
+        return frame[columns].copy()

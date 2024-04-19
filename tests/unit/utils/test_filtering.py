@@ -16,7 +16,7 @@ from flamme.utils.filtering import (
 
 
 def test_find_columns_type_str() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -24,11 +24,11 @@ def test_find_columns_type_str() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, str) == ("col2", "col3", "col4")
+    assert find_columns_type(frame, str) == ("col2", "col3", "col4")
 
 
 def test_find_columns_type_int() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -36,11 +36,11 @@ def test_find_columns_type_int() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, int) == ("col1",)
+    assert find_columns_type(frame, int) == ("col1",)
 
 
 def test_find_columns_type_float() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -48,7 +48,7 @@ def test_find_columns_type_float() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_type(df, float) == ()
+    assert find_columns_type(frame, float) == ()
 
 
 def test_find_columns_type_empty() -> None:
@@ -61,7 +61,7 @@ def test_find_columns_type_empty() -> None:
 
 
 def test_find_columns_decimal() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, Decimal(4), Decimal(5)],
             "col2": ["1", "2", "3", "4", "5"],
@@ -69,7 +69,7 @@ def test_find_columns_decimal() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_decimal(df) == ("col1", "col3")
+    assert find_columns_decimal(frame) == ("col1", "col3")
 
 
 def test_find_columns_decimal_empty() -> None:
@@ -82,7 +82,7 @@ def test_find_columns_decimal_empty() -> None:
 
 
 def test_find_columns_str() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["1", "2", "3", "4", "5"],
@@ -90,7 +90,7 @@ def test_find_columns_str() -> None:
             "col4": ["a", "b", "c", "d", "e"],
         }
     )
-    assert find_columns_str(df) == ("col2", "col3", "col4")
+    assert find_columns_str(frame) == ("col2", "col3", "col4")
 
 
 def test_find_columns_str_empty() -> None:

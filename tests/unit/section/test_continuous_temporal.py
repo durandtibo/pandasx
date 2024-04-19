@@ -28,7 +28,7 @@ def dataframe() -> DataFrame:
 
 def test_column_temporal_continuous_section_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -38,7 +38,7 @@ def test_column_temporal_continuous_section_column(dataframe: DataFrame) -> None
 
 def test_column_temporal_continuous_section_dt_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -49,7 +49,7 @@ def test_column_temporal_continuous_section_dt_column(dataframe: DataFrame) -> N
 def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame) -> None:
     assert (
         ColumnTemporalContinuousSection(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -62,7 +62,7 @@ def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame)
 def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale: str) -> None:
     assert (
         ColumnTemporalContinuousSection(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -74,7 +74,7 @@ def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale:
 
 def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -85,7 +85,7 @@ def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None
 def test_column_temporal_continuous_section_figsize_default(dataframe: DataFrame) -> None:
     assert (
         ColumnTemporalContinuousSection(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -100,7 +100,7 @@ def test_column_temporal_continuous_section_figsize(
 ) -> None:
     assert (
         ColumnTemporalContinuousSection(
-            df=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
+            frame=dataframe, column="col", dt_column="datetime", period="M", figsize=figsize
         ).figsize
         == figsize
     )
@@ -108,7 +108,7 @@ def test_column_temporal_continuous_section_figsize(
 
 def test_column_temporal_continuous_section_get_statistics(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -118,7 +118,7 @@ def test_column_temporal_continuous_section_get_statistics(dataframe: DataFrame)
 
 def test_column_temporal_continuous_section_get_statistics_empty_row() -> None:
     section = ColumnTemporalContinuousSection(
-        df=DataFrame({"col": [], "datetime": []}),
+        frame=DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -128,7 +128,7 @@ def test_column_temporal_continuous_section_get_statistics_empty_row() -> None:
 
 def test_column_temporal_continuous_section_get_statistics_empty_column() -> None:
     section = ColumnTemporalContinuousSection(
-        df=DataFrame({}),
+        frame=DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -138,7 +138,7 @@ def test_column_temporal_continuous_section_get_statistics_empty_column() -> Non
 
 def test_column_temporal_continuous_section_render_html_body(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -148,7 +148,7 @@ def test_column_temporal_continuous_section_render_html_body(dataframe: DataFram
 
 def test_column_temporal_continuous_section_render_html_body_empty_row() -> None:
     section = ColumnTemporalContinuousSection(
-        df=DataFrame({"col": [], "datetime": []}),
+        frame=DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -158,7 +158,7 @@ def test_column_temporal_continuous_section_render_html_body_empty_row() -> None
 
 def test_column_temporal_continuous_section_render_html_body_empty_column() -> None:
     section = ColumnTemporalContinuousSection(
-        df=DataFrame({}),
+        frame=DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -170,7 +170,7 @@ def test_column_temporal_continuous_section_render_html_body_args(
     dataframe: DataFrame,
 ) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -182,7 +182,7 @@ def test_column_temporal_continuous_section_render_html_body_args(
 
 def test_column_temporal_continuous_section_render_html_toc(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -194,7 +194,7 @@ def test_column_temporal_continuous_section_render_html_toc_args(
     dataframe: DataFrame,
 ) -> None:
     section = ColumnTemporalContinuousSection(
-        df=dataframe,
+        frame=dataframe,
         column="col",
         dt_column="datetime",
         period="M",
@@ -212,7 +212,7 @@ def test_column_temporal_continuous_section_render_html_toc_args(
 def test_create_temporal_figure(dataframe: DataFrame) -> None:
     assert isinstance(
         create_temporal_figure(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -225,7 +225,7 @@ def test_create_temporal_figure(dataframe: DataFrame) -> None:
 def test_create_temporal_figure_yscale(dataframe: DataFrame, yscale: str) -> None:
     assert isinstance(
         create_temporal_figure(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",
@@ -239,7 +239,7 @@ def test_create_temporal_figure_yscale(dataframe: DataFrame, yscale: str) -> Non
 def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
     assert isinstance(
         create_temporal_figure(
-            df=dataframe,
+            frame=dataframe,
             column="col",
             dt_column="datetime",
             period="M",

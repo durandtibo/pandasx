@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
-from flamme.utils.dtype import df_column_types
+from flamme.utils.dtype import frame_column_types
 
 if TYPE_CHECKING:
     from pandas import DataFrame
@@ -30,14 +30,14 @@ class DataTypeAnalyzer(BaseAnalyzer):
     >>> analyzer = DataTypeAnalyzer()
     >>> analyzer
     DataTypeAnalyzer()
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -45,6 +45,6 @@ class DataTypeAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, df: DataFrame) -> DataTypeSection:
+    def analyze(self, frame: DataFrame) -> DataTypeSection:
         logger.info("Analyzing the data types...")
-        return DataTypeSection(dtypes=df.dtypes.to_dict(), types=df_column_types(df))
+        return DataTypeSection(dtypes=frame.dtypes.to_dict(), types=frame_column_types(frame))

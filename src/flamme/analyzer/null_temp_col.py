@@ -40,7 +40,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer
     ColumnTemporalNullValueAnalyzer(column=col, dt_column=datetime, period=M, figsize=None)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col": np.array([np.nan, 1, 0, 1]),
     ...         "datetime": pd.to_datetime(
@@ -48,7 +48,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     ...         ),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -71,25 +71,25 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, df: DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
         logger.info(
             f"Analyzing the temporal null value distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._column not in df:
+        if self._column not in frame:
             logger.info(
                 "Skipping temporal null value analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if self._dt_column not in df:
+        if self._dt_column not in frame:
             logger.info(
                 "Skipping temporal null value analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(df.columns)}"
+                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
         return ColumnTemporalNullValueSection(
-            df=df,
+            frame=frame,
             column=self._column,
             dt_column=self._dt_column,
             period=self._period,

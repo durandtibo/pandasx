@@ -182,9 +182,9 @@ def test_null_value_section_render_html_toc_args() -> None:
 ##############################################
 
 
-def test_temporal_null_value_section_df() -> None:
+def test_temporal_null_value_section_frame() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -198,7 +198,7 @@ def test_temporal_null_value_section_df() -> None:
         period="M",
     )
     assert_frame_equal(
-        section.df,
+        section.frame,
         DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -215,7 +215,7 @@ def test_temporal_null_value_section_df() -> None:
 @pytest.mark.parametrize("dt_column", ["datetime", "str"])
 def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -234,7 +234,7 @@ def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
 @pytest.mark.parametrize("period", ["M", "D"])
 def test_temporal_null_value_section_period(period: str) -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -253,7 +253,7 @@ def test_temporal_null_value_section_period(period: str) -> None:
 @pytest.mark.parametrize("ncols", [1, 2])
 def test_temporal_null_value_section_ncols(ncols: int) -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -273,7 +273,7 @@ def test_temporal_null_value_section_ncols(ncols: int) -> None:
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_temporal_null_value_section_figsize(figsize: tuple[float, float]) -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -292,7 +292,7 @@ def test_temporal_null_value_section_figsize(figsize: tuple[float, float]) -> No
 
 def test_temporal_null_value_section_figsize_default() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -310,7 +310,7 @@ def test_temporal_null_value_section_figsize_default() -> None:
 
 def test_temporal_null_value_section_get_statistics() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -328,7 +328,7 @@ def test_temporal_null_value_section_get_statistics() -> None:
 
 def test_temporal_null_value_section_get_statistics_empty_row() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
@@ -337,7 +337,7 @@ def test_temporal_null_value_section_get_statistics_empty_row() -> None:
 
 def test_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "datetime": pd.to_datetime(
                     ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
@@ -352,7 +352,7 @@ def test_temporal_null_value_section_get_statistics_only_datetime_column() -> No
 
 def test_temporal_null_value_section_render_html_body() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -370,7 +370,7 @@ def test_temporal_null_value_section_render_html_body() -> None:
 
 def test_temporal_null_value_section_render_html_body_args() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -390,7 +390,7 @@ def test_temporal_null_value_section_render_html_body_args() -> None:
 
 def test_temporal_null_value_section_render_html_body_empty() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         dt_column="datetime",
         period="M",
     )
@@ -399,7 +399,7 @@ def test_temporal_null_value_section_render_html_body_empty() -> None:
 
 def test_temporal_null_value_section_render_html_toc() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -417,7 +417,7 @@ def test_temporal_null_value_section_render_html_toc() -> None:
 
 def test_temporal_null_value_section_render_html_toc_args() -> None:
     section = TemporalNullValueSection(
-        df=DataFrame(
+        frame=DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -443,7 +443,7 @@ def test_temporal_null_value_section_render_html_toc_args() -> None:
 def test_create_temporal_null_figure() -> None:
     assert isinstance(
         create_temporal_null_figure(
-            df=DataFrame(
+            frame=DataFrame(
                 {
                     "float": np.array([1.2, 4.2, np.nan, 2.2]),
                     "int": np.array([np.nan, 1, 0, 1]),
@@ -464,7 +464,7 @@ def test_create_temporal_null_figure() -> None:
 def test_create_temporal_null_figure_ncols(ncols: int) -> None:
     assert isinstance(
         create_temporal_null_figure(
-            df=DataFrame(
+            frame=DataFrame(
                 {
                     "float": np.array([1.2, 4.2, np.nan, 2.2]),
                     "int": np.array([np.nan, 1, 0, 1]),
@@ -490,7 +490,7 @@ def test_create_temporal_null_figure_ncols(ncols: int) -> None:
 def test_prepare_data() -> None:
     assert objects_are_equal(
         prepare_data(
-            df=DataFrame(
+            frame=DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -513,7 +513,7 @@ def test_prepare_data() -> None:
 def test_prepare_data_empty() -> None:
     assert objects_are_equal(
         prepare_data(
-            df=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            frame=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
             column="col",
             dt_column="datetime",
             period="M",

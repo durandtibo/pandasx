@@ -33,20 +33,20 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
         >>> transformer = ToDatetime(columns=["col1"])
         >>> transformer
         ToDatetimeDataFrameTransformer(columns=('col1',))
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", "2021-12-31"],
         ...         "col2": [1, 2, 3, 4, 5],
         ...         "col3": ["a", "b", "c", "d", "e"],
         ...     }
         ... )
-        >>> df.dtypes
+        >>> frame.dtypes
         col1    object
         col2     int64
         col3    object
         dtype: object
-        >>> df = transformer.transform(df)
-        >>> df.dtypes
+        >>> frame = transformer.transform(frame)
+        >>> frame.dtypes
         col1    datetime64[ns]
         col2             int64
         col3            object
@@ -63,7 +63,7 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
             args = ", " + args
         return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
 
-    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         for col in tqdm(self._columns, desc="Converting to numeric type"):
-            df[col] = pd.to_datetime(df[col], **self._kwargs)
-        return df
+            frame[col] = pd.to_datetime(frame[col], **self._kwargs)
+        return frame

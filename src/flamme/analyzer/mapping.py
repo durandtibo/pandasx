@@ -47,14 +47,14 @@ class MappingAnalyzer(BaseAnalyzer):
       (null): NullValueAnalyzer(figsize=None)
       (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
     )
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "int": np.array([np.nan, 1, 0, 1]),
     ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
     ...         "str": np.array(["A", "B", None, np.nan]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -72,9 +72,9 @@ class MappingAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, df: DataFrame) -> SectionDict:
+    def analyze(self, frame: DataFrame) -> SectionDict:
         return SectionDict(
-            sections={name: analyzer.analyze(df) for name, analyzer in self._analyzers.items()},
+            sections={name: analyzer.analyze(frame) for name, analyzer in self._analyzers.items()},
             max_toc_depth=self._max_toc_depth,
         )
 
@@ -104,14 +104,14 @@ class MappingAnalyzer(BaseAnalyzer):
           (null): NullValueAnalyzer(figsize=None)
           (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
         )
-        >>> df = pd.DataFrame(
+        >>> frame = pd.DataFrame(
         ...     {
         ...         "int": np.array([np.nan, 1, 0, 1]),
         ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
         ...         "str": np.array(["A", "B", None, np.nan]),
         ...     }
         ... )
-        >>> section = analyzer.analyze(df)
+        >>> section = analyzer.analyze(frame)
 
         ```
         """

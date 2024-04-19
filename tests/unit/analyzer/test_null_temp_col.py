@@ -21,7 +21,7 @@ def test_column_temporal_null_value_analyzer_str() -> None:
     ).startswith("ColumnTemporalNullValueAnalyzer(")
 
 
-def test_column_temporal_null_value_analyzer_df() -> None:
+def test_column_temporal_null_value_analyzer_frame() -> None:
     section = ColumnTemporalNullValueAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(
@@ -35,7 +35,7 @@ def test_column_temporal_null_value_analyzer_df() -> None:
         )
     )
     assert_frame_equal(
-        section.df,
+        section.frame,
         DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),

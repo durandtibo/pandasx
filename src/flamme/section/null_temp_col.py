@@ -35,7 +35,7 @@ class ColumnTemporalNullValueSection(BaseSection):
     values for a given column.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -46,29 +46,29 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         column: str,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
     ) -> None:
-        if column not in df:
-            msg = f"Column {column} is not in the DataFrame (columns:{sorted(df.columns)})"
+        if column not in frame:
+            msg = f"Column {column} is not in the DataFrame (columns:{sorted(frame.columns)})"
             raise ValueError(msg)
-        if dt_column not in df:
-            msg = f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(df.columns)})"
+        if dt_column not in frame:
+            msg = f"Datetime column {dt_column} is not in the DataFrame (columns:{sorted(frame.columns)})"
             raise ValueError(msg)
 
-        self._df = df
+        self._frame = frame
         self._column = column
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""``pandas.DataFrame``: The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def column(self) -> str:
@@ -109,14 +109,14 @@ class ColumnTemporalNullValueSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "figure": create_temporal_null_figure(
-                    df=self._df,
+                    frame=self._frame,
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_null_table(
-                    df=self._df,
+                    frame=self._frame,
                     column=self._column,
                     dt_column=self._dt_column,
                     period=self._period,
@@ -147,7 +147,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    df: DataFrame,
+    frame: DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -157,7 +157,7 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -169,11 +169,11 @@ def create_temporal_null_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
 
     num_nulls, total, labels = prepare_data(
-        df=df, column=column, dt_column=dt_column, period=period
+        frame=frame, column=column, dt_column=dt_column, period=period
     )
 
     fig, ax = plt.subplots(figsize=figsize)
@@ -182,12 +182,12 @@ def create_temporal_null_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, period: str) -> str:
+def create_temporal_null_table(frame: DataFrame, column: str, dt_column: str, period: str) -> str:
     r"""Create a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -197,10 +197,10 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
     Returns:
         The HTML representation of the table.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
     num_nulls, totals, labels = prepare_data(
-        df=df, column=column, dt_column=dt_column, period=period
+        frame=frame, column=column, dt_column=dt_column, period=period
     )
     rows = []
     for label, num_null, total in zip(labels, num_nulls, totals):

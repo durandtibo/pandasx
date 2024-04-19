@@ -247,7 +247,7 @@ class TemporalNullValueSection(BaseSection):
     values.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -258,22 +258,22 @@ class TemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        df: DataFrame,
+        frame: DataFrame,
         dt_column: str,
         period: str,
         ncols: int = 2,
         figsize: tuple[float, float] = (7, 5),
     ) -> None:
-        self._df = df
+        self._frame = frame
         self._dt_column = dt_column
         self._period = period
         self._ncols = ncols
         self._figsize = figsize
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""``pandas.DataFrame``: The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def dt_column(self) -> str:
@@ -315,7 +315,7 @@ class TemporalNullValueSection(BaseSection):
                 "section": number,
                 "column": self._dt_column,
                 "figure": create_temporal_null_figure(
-                    df=self._df,
+                    frame=self._frame,
                     dt_column=self._dt_column,
                     period=self._period,
                     ncols=self._ncols,
@@ -344,7 +344,7 @@ The column <em>{{column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    df: DataFrame,
+    frame: DataFrame,
     dt_column: str,
     period: str,
     ncols: int = 2,
@@ -354,7 +354,7 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -365,9 +365,9 @@ def create_temporal_null_figure(
     Returns:
         The HTML representation of the figure.
     """
-    if df.shape[0] == 0:
+    if frame.shape[0] == 0:
         return ""
-    columns = sorted([col for col in df.columns if col != dt_column])
+    columns = sorted([col for col in frame.columns if col != dt_column])
     nrows = math.ceil(len(columns) / ncols)
     fig, axes = plt.subplots(
         nrows=nrows, ncols=ncols, figsize=(figsize[0] * ncols, figsize[1] * nrows)
@@ -378,7 +378,7 @@ def create_temporal_null_figure(
         ax.set_title(f"column: {column}")
 
         num_nulls, total, labels = prepare_data(
-            df=df, column=column, dt_column=dt_column, period=period
+            frame=frame, column=column, dt_column=dt_column, period=period
         )
         plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
         readable_xticklabels(ax, max_num_xticks=100 // ncols)
@@ -408,7 +408,7 @@ def plot_temporal_null_total(
 
 
 def prepare_data(
-    df: DataFrame,
+    frame: DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -416,7 +416,7 @@ def prepare_data(
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         column: The column to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
@@ -436,7 +436,7 @@ def prepare_data(
     >>> import pandas as pd
     >>> from flamme.section.null_temp_col import prepare_data
     >>> num_nulls, total, labels = prepare_data(
-    ...     df=pd.DataFrame(
+    ...     frame=pd.DataFrame(
     ...         {
     ...             "col": np.array([np.nan, 1, 0, 1]),
     ...             "datetime": pd.to_datetime(
@@ -457,7 +457,7 @@ def prepare_data(
 
     ```
     """
-    dataframe = df[[column, dt_column]].copy()
+    dataframe = frame[[column, dt_column]].copy()
     dt_col = "__datetime__"
     dataframe[dt_col] = dataframe[dt_column].dt.to_period(period)
 

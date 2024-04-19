@@ -28,8 +28,8 @@ class MarkdownAnalyzer(BaseAnalyzer):
     >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
     >>> analyzer
     MarkdownAnalyzer()
-    >>> df = pd.DataFrame({})
-    >>> section = analyzer.analyze(df)
+    >>> frame = pd.DataFrame({})
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -40,5 +40,5 @@ class MarkdownAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, df: DataFrame) -> MarkdownSection:  # noqa: ARG002
+    def analyze(self, frame: DataFrame) -> MarkdownSection:  # noqa: ARG002
         return MarkdownSection(desc=self._desc)

@@ -32,14 +32,14 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
     >>> analyzer = DataFrameSummaryAnalyzer()
     >>> analyzer
     DataFrameSummaryAnalyzer(top=5, sort=False)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": np.array([0, 1, 0, 1]),
     ...         "col2": np.array([1, 0, 1, 0]),
     ...         "col3": np.array([1, 1, 1, 1]),
     ...     }
     ... )
-    >>> section = analyzer.analyze(df)
+    >>> section = analyzer.analyze(frame)
 
     ```
     """
@@ -54,8 +54,8 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(top={self._top:,}, sort={self._sort})"
 
-    def analyze(self, df: DataFrame) -> DataFrameSummarySection:
+    def analyze(self, frame: DataFrame) -> DataFrameSummarySection:
         logger.info("Analyzing the DataFrame...")
         if self._sort:
-            df = df.reindex(sorted(df.columns), axis=1)
-        return DataFrameSummarySection(df=df, top=self._top)
+            frame = frame.reindex(sorted(frame.columns), axis=1)
+        return DataFrameSummarySection(frame=frame, top=self._top)

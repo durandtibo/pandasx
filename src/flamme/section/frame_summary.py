@@ -32,42 +32,44 @@ class DataFrameSummarySection(BaseSection):
     r"""Implement a section that returns a summary of a DataFrame.
 
     Args:
-        df: The DataFrame to analyze.
+        frame: The DataFrame to analyze.
         top: The number of most frequent values to show.
     """
 
-    def __init__(self, df: DataFrame, top: int = 5) -> None:
-        self._df = df
+    def __init__(self, frame: DataFrame, top: int = 5) -> None:
+        self._frame = frame
         if top < 0:
             msg = f"Incorrect top value ({top}). top must be positive"
             raise ValueError(msg)
         self._top = top
 
     @property
-    def df(self) -> DataFrame:
+    def frame(self) -> DataFrame:
         r"""The DataFrame to analyze."""
-        return self._df
+        return self._frame
 
     @property
     def top(self) -> int:
         return self._top
 
     def get_columns(self) -> tuple[str, ...]:
-        return tuple(self._df.columns)
+        return tuple(self._frame.columns)
 
     def get_null_count(self) -> tuple[int, ...]:
-        return tuple(self._df.isna().sum().to_frame("__count__")["__count__"].astype(int).tolist())
+        return tuple(
+            self._frame.isna().sum().to_frame("__count__")["__count__"].astype(int).tolist()
+        )
 
     def get_nunique(self) -> tuple[int, ...]:
-        return tuple(self._df.nunique(dropna=False).astype(int).tolist())
+        return tuple(self._frame.nunique(dropna=False).astype(int).tolist())
 
     def get_column_types(self) -> tuple[set[type], ...]:
-        return tuple(series_column_types(self._df[col]) for col in self.df)
+        return tuple(series_column_types(self._frame[col]) for col in self.frame)
 
     def get_most_frequent_values(self, top: int = 5) -> tuple[tuple[tuple[Any, int], ...], ...]:
         value_counts = []
-        for col in self.df:
-            values = self._df[col].value_counts(dropna=False, sort=True).head(top)
+        for col in self.frame:
+            values = self._frame[col].value_counts(dropna=False, sort=True).head(top)
             value_counts.append(tuple((val, c) for val, c in zip(values.index, values.to_list())))
         return tuple(value_counts)
 
@@ -89,8 +91,8 @@ class DataFrameSummarySection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "table": self._create_table(),
-                "nrows": f"{self._df.shape[0]:,}",
-                "ncols": f"{self._df.shape[1]:,}",
+                "nrows": f"{self._frame.shape[0]:,}",
+                "ncols": f"{self._frame.shape[1]:,}",
             }
         )
 
@@ -128,7 +130,7 @@ This section shows a short summary of each column.
 """
 
     def _create_table(self) -> str:
-        total = self._df.shape[0]
+        total = self._frame.shape[0]
         return create_table(
             columns=self.get_columns(),
             null_count=self.get_null_count(),

@@ -33,9 +33,9 @@ def test_global_temporal_null_value_analyzer_str() -> None:
     )
 
 
-def test_global_temporal_null_value_analyzer_df(dataframe: DataFrame) -> None:
+def test_global_temporal_null_value_analyzer_frame(dataframe: DataFrame) -> None:
     section = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert_frame_equal(section.df, dataframe)
+    assert_frame_equal(section.frame, dataframe)
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])

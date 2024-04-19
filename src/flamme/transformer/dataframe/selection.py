@@ -35,15 +35,15 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     >>> transformer = ColumnSelection(columns=["col1", "col2"])
     >>> transformer
     ColumnSelectionDataFrameTransformer(columns=['col1', 'col2'], ignore_missing=False)
-    >>> df = pd.DataFrame(
+    >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
     ...         "col2": [1, 2, 3, 4, 5],
     ...         "col3": ["a", "b", "c", "d", "e"],
     ...     }
     ... )
-    >>> df = transformer.transform(df)
-    >>> df
+    >>> frame = transformer.transform(frame)
+    >>> frame
              col1  col2
     0    2020-1-1     1
     1    2020-1-2     2
@@ -64,18 +64,20 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
             f"ignore_missing={self._ignore_missing})"
         )
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, frame: DataFrame) -> DataFrame:
         columns = []
         for col in self._columns:
-            if col not in df:
+            if col not in frame:
                 if self._ignore_missing:
                     logger.warning(f"Column `{col}` is not in the DataFrame")
                 else:
-                    msg = f"Column `{col}` is not in the DataFrame (columns:{sorted(df.columns)})"
+                    msg = (
+                        f"Column `{col}` is not in the DataFrame (columns:{sorted(frame.columns)})"
+                    )
                     raise RuntimeError(msg)
             else:
                 columns.append(col)
         logger.info(f"Selecting {len(columns):,} columns: {columns}")
-        out = df[columns].copy()
+        out = frame[columns].copy()
         logger.info(f"DataFrame shape after the column selection: {out.shape}")
         return out

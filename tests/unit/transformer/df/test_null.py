@@ -15,7 +15,7 @@ def test_null_column_dataframe_transformer_str() -> None:
 
 
 def test_null_column_dataframe_transformer_transform_threshold_1() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
             "col2": [1, None, 3, None, 5],
@@ -23,9 +23,9 @@ def test_null_column_dataframe_transformer_transform_threshold_1() -> None:
         }
     )
     transformer = NullColumn(threshold=1.0)
-    df = transformer.transform(df)
+    frame = transformer.transform(frame)
     assert_frame_equal(
-        df,
+        frame,
         pd.DataFrame(
             {
                 "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
@@ -36,7 +36,7 @@ def test_null_column_dataframe_transformer_transform_threshold_1() -> None:
 
 
 def test_null_column_dataframe_transformer_transform_threshold_0_4() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
             "col2": [1, None, 3, None, 5],
@@ -44,14 +44,14 @@ def test_null_column_dataframe_transformer_transform_threshold_0_4() -> None:
         }
     )
     transformer = NullColumn(threshold=0.4)
-    df = transformer.transform(df)
+    frame = transformer.transform(frame)
     assert_frame_equal(
-        df, pd.DataFrame({"col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None]})
+        frame, pd.DataFrame({"col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None]})
     )
 
 
 def test_null_column_dataframe_transformer_transform_threshold_0_2() -> None:
-    df = pd.DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": ["2020-1-1", "2020-1-2", "2020-1-31", "2020-12-31", None],
             "col2": [1, None, 3, None, 5],
@@ -59,17 +59,17 @@ def test_null_column_dataframe_transformer_transform_threshold_0_2() -> None:
         }
     )
     transformer = NullColumn(threshold=0.2)
-    df = transformer.transform(df)
-    assert df.shape == (5, 0)
+    frame = transformer.transform(frame)
+    assert frame.shape == (5, 0)
 
 
 def test_null_column_dataframe_transformer_transform_empty_row() -> None:
     transformer = NullColumn(threshold=0.5)
-    df = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
-    assert_frame_equal(df, pd.DataFrame({"col1": [], "col2": [], "col3": []}))
+    frame = transformer.transform(pd.DataFrame({"col1": [], "col2": [], "col3": []}))
+    assert_frame_equal(frame, pd.DataFrame({"col1": [], "col2": [], "col3": []}))
 
 
 def test_null_column_dataframe_transformer_transform_empty() -> None:
     transformer = NullColumn(threshold=0.5)
-    df = transformer.transform(pd.DataFrame({}))
-    assert_frame_equal(df, pd.DataFrame({}))
+    frame = transformer.transform(pd.DataFrame({}))
+    assert_frame_equal(frame, pd.DataFrame({}))

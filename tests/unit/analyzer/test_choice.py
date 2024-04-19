@@ -14,8 +14,8 @@ from flamme.section import DuplicatedRowSection, NullValueSection
 ####################################
 
 
-def selection_fn(df: DataFrame) -> str:
-    return "null" if df.isna().to_numpy().any() else "duplicate"
+def selection_fn(frame: DataFrame) -> str:
+    return "null" if frame.isna().to_numpy().any() else "duplicate"
 
 
 def test_mapping_analyzer_str() -> None:
@@ -85,7 +85,7 @@ def test_num_unique_selection_str() -> None:
 
 
 @pytest.mark.parametrize(
-    "df",
+    "frame",
     [
         DataFrame({"col": []}),
         DataFrame({"col": np.ones(100)}),
@@ -93,15 +93,15 @@ def test_num_unique_selection_str() -> None:
         DataFrame({"col": np.arange(100)}),
     ],
 )
-def test_num_unique_selection_call_small(df: DataFrame) -> None:
-    assert NumUniqueSelection(column="col")(df) == "small"
+def test_num_unique_selection_call_small(frame: DataFrame) -> None:
+    assert NumUniqueSelection(column="col")(frame) == "small"
 
 
 @pytest.mark.parametrize(
-    "df", [DataFrame({"col": np.arange(101)}), DataFrame({"col": np.arange(201)})]
+    "frame", [DataFrame({"col": np.arange(101)}), DataFrame({"col": np.arange(201)})]
 )
-def test_num_unique_selection_call_large(df: DataFrame) -> None:
-    assert NumUniqueSelection(column="col")(df) == "large"
+def test_num_unique_selection_call_large(frame: DataFrame) -> None:
+    assert NumUniqueSelection(column="col")(frame) == "large"
 
 
 @pytest.mark.parametrize("small", ["discrete", "bear"])

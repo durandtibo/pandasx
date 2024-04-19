@@ -39,9 +39,9 @@ def test_temporal_row_count_analyzer_str() -> None:
     )
 
 
-def test_temporal_row_count_analyzer_df(dataframe: DataFrame) -> None:
+def test_temporal_row_count_analyzer_frame(dataframe: DataFrame) -> None:
     section = TemporalRowCountAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert_frame_equal(section.df, dataframe)
+    assert_frame_equal(section.frame, dataframe)
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])

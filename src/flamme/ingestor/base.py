@@ -24,10 +24,10 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
     ```pycon
     >>> from flamme.ingestor import ParquetIngestor
-    >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
+    >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
     >>> ingestor
-    ParquetIngestor(path=/path/to/df.parquet)
-    >>> df = ingestor.ingest()  # doctest: +SKIP
+    ParquetIngestor(path=/path/to/frame.parquet)
+    >>> frame = ingestor.ingest()  # doctest: +SKIP
 
     ```
     """
@@ -42,8 +42,8 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
 
         ```pycon
         >>> from flamme.ingestor import ParquetIngestor
-        >>> ingestor = ParquetIngestor(path="/path/to/df.parquet")
-        >>> df = ingestor.ingest()  # doctest: +SKIP
+        >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
+        >>> frame = ingestor.ingest()  # doctest: +SKIP
 
         ```
         """
