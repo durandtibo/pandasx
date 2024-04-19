@@ -43,7 +43,7 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         r"""Transform a ``pandas.Series``.
 
         Args:
-            series: Specifies the ``pandas.Series`` to transform.
+            series: The ``pandas.Series`` to transform.
 
         Returns:
             The transformed ``pandas.Series``.
@@ -73,7 +73,7 @@ def is_series_transformer_config(config: dict) -> bool:
     the class.
 
     Args:
-        config: Specifies the configuration to check.
+        config: The configuration to check.
 
     Returns:
         ``True`` if the input configuration is a configuration

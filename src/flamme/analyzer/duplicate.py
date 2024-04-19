@@ -23,9 +23,9 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show the number of duplicated rows.
 
     Args:
-        columns: Specifies the columns used to compute the duplicated
+        columns: The columns used to compute the duplicated
             rows. ``None`` means all the columns.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:

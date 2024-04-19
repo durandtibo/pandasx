@@ -17,7 +17,7 @@ class ToDatetimeSeriesTransformer(BaseSeriesTransformer):
     datetime type.
 
     Args:
-        **kwargs: Specifies the keyword arguments for
+        **kwargs: The keyword arguments for
             ``pandas.to_datetime``.
 
     Example usage:

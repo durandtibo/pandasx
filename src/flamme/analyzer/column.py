@@ -27,7 +27,7 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
 
     Args:
         columns: Soecifies the columns to select.
-        analyzer (``BaseAnalyzer`` or dict): Specifies the analyzer
+        analyzer: The analyzer
             or its configuration.
 
     Example usage:

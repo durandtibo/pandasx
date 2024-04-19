@@ -22,7 +22,7 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
     columns that have too many null values.
 
     Args:
-        threshold (float): Specifies the maximum percentage of null
+        threshold (float): The maximum percentage of null
             values to keep columns. If the proportion of null vallues
             is greater or equal to this threshold value, the column
             is removed. If set to ``1.0``, it removes all the columns

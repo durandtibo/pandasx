@@ -22,8 +22,7 @@ class ParquetIngestor(BaseIngestor):
     r"""Implement a parquet DataFrame ingestor.
 
     Args:
-        path (``pathlib.Path`` or str): Specifies the path to the
-            parquet file to ingest.
+        path: The path to the parquet file to ingest.
         **kwargs: Additional keyword arguments for
             ``pandas.read_parquet``.
 

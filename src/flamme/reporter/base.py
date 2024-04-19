@@ -74,7 +74,7 @@ def is_reporter_config(config: dict) -> bool:
     the class.
 
     Args:
-        config: Specifies the configuration to check.
+        config: The configuration to check.
 
     Returns:
         bool: ``True`` if the input configuration is a configuration

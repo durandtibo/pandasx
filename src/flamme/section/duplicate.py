@@ -33,11 +33,10 @@ class DuplicatedRowSection(BaseSection):
     r"""Implement a section to analyze the number of duplicated rows.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        columns (``Sequence`` or ``None``): Specifies the columns used
-            to compute the duplicated rows. ``None`` means all the
-            columns.
-        figsize: Specifies the figure
+        df: The DataFrame to analyze.
+        columns: The columns used to compute the duplicated rows.
+            ``None`` means all the columns.
+        figsize: The figure
             size in inches. The first dimension is the width and the
             second is the height.
     """
@@ -136,8 +135,8 @@ def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:
     r"""Create a table with information about duplicated rows.
 
     Args:
-        num_rows (int): Specifies the number of rows.
-        num_unique_rows (int): Specifies the number of unique rows.
+        num_rows (int): The number of rows.
+        num_unique_rows (int): The number of unique rows.
 
     Returns:
         The HTML representation of the table.

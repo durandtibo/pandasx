@@ -26,8 +26,8 @@ class SectionDict(BaseSection):
     r"""Implement a section to manage a dictionary of sections.
 
     Args:
-        sections: Specifies the dictionary of sections.
-        max_toc_depth: Specifies the maximum level to show in the
+        sections: The dictionary of sections.
+        max_toc_depth: The maximum level to show in the
             table of content. Set this value to ``0`` to not show
             the table of content at the beginning of the section.
     """

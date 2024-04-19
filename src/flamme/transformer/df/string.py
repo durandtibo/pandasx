@@ -21,7 +21,7 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implement a transformer to strip the strings of some columns.
 
     Args:
-        columns: Specifies the columns to process.
+        columns: The columns to process.
 
     Example usage:
 

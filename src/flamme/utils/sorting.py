@@ -29,7 +29,7 @@ def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
     numerical values, so it is possible to sort a list with NaNs.
 
     Args:
-        iterable: Specifies the data to sort.
+        iterable: The data to sort.
         reverse: If set to ``True``, then the list elements are sorted
             as if each comparison were reversed.
 

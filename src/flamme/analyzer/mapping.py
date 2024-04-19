@@ -21,10 +21,10 @@ class MappingAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer that combine multiple analyzers.
 
     Args:
-        analyzers: Specifies the mappings to analyze.
+        analyzers: The mappings to analyze.
             The key of each analyzer is used to organize the metrics
             and report.
-        max_toc_depth: Specifies the maximum level to show in the
+        max_toc_depth: The maximum level to show in the
             table of content. Set this value to ``0`` to not show
             the table of content at the beginning of the section.
 
@@ -82,8 +82,8 @@ class MappingAnalyzer(BaseAnalyzer):
         r"""Add an analyzer to the current analyzer.
 
         Args:
-            key: Specifies the key of the analyzer.
-            analyzer: Specifies the analyzer to add.
+            key: The key of the analyzer.
+            analyzer: The analyzer to add.
             replace_ok: If ``False``, ``KeyError`` is raised if an
                 analyzer with the same key exists. If ``True``,
                 the new analyzer will replace the existing analyzer.

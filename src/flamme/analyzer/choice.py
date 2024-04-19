@@ -22,9 +22,8 @@ class ChoiceAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to analyze multiple analyzers.
 
     Args:
-        analyzers (``Mapping``): Specifies the mappings to analyze.
-            The key of each analyzer is used to organize the metrics
-            and report.
+        analyzers: The mappings to analyze. The key of each analyzer
+            is used to organize the metrics and report.
         selection_fn: Specifies a callable with the selection logic.
             The callable returns the key of the analyzer to use based
             on the data in the input DataFrame.
@@ -90,11 +89,11 @@ class NumUniqueSelection(Callable):
     in a column.
 
     Args:
-        column: Specifies the column to check.
-        threshold: Specifies the threshold of number of unique values.
-        small: Specifies the string to return if the number of unique
+        column: The column to check.
+        threshold: The threshold of number of unique values.
+        small: The string to return if the number of unique
             values is lower than the threshold.
-        large: Specifies the string to return if the number of unique
+        large: The string to return if the number of unique
             values is greater than the threshold.
 
     Example usage:

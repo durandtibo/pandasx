@@ -16,7 +16,7 @@ class Ingestor(BaseIngestor):
     r"""Implement a simple DataFrame ingestor.
 
     Args:
-        df: Specifies the DataFrame to ingest.
+        df: The DataFrame to ingest.
 
     Example usage:
 

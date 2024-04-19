@@ -35,15 +35,13 @@ class ColumnTemporalNullValueSection(BaseSection):
     values for a given column.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
-            daily.
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height.
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
     """
 
     def __init__(
@@ -159,15 +157,14 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
 
     Returns:
         The HTML representation of the figure.
@@ -190,11 +187,11 @@ def create_temporal_null_table(df: DataFrame, column: str, dt_column: str, perio
     distribution of null values.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
 
     Returns:
@@ -240,9 +237,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Create the HTML code of a new table row.
 
     Args:
-        label: Specifies the label of the row.
-        num_nulls: Specifies the number of null values.
-        total: Specifies the total number of values.
+        label: The label of the row.
+        num_nulls: The number of null values.
+        total: The total number of values.
 
     Returns:
         The HTML code of a row.

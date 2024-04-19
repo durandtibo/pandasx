@@ -47,7 +47,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
         r"""Analyze the data in a DataFrame.
 
         Args:
-            df: Specifies the DataFrame with the data to analyze.
+            df: The DataFrame with the data to analyze.
 
         Returns:
             The section report.
@@ -82,7 +82,7 @@ def is_analyzer_config(config: dict) -> bool:
     the class.
 
     Args:
-        config: Specifies the configuration to check.
+        config: The configuration to check.
 
     Returns:
         ``True`` if the input configuration is a configuration

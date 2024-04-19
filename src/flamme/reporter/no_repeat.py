@@ -23,8 +23,8 @@ class NoRepeatReporter(BaseReporter):
     r"""Implement a reporter that computes the report only once.
 
     Args:
-        reporter: Specifies the reporter or its configuration.
-        report_path: Specifies the path where to save the HTML report.
+        reporter: The reporter or its configuration.
+        report_path: The path where to save the HTML report.
 
     Example usage:
 

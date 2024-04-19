@@ -31,10 +31,10 @@ class MostFrequentValuesSection(BaseSection):
     given columns.
 
     Args:
-        counter: Specifies the counter with the number of occurrences
+        counter: The counter with the number of occurrences
             for all values.
-        column: Specifies the column name.
-        top: Specifies the maximum number of values to show.
+        column: The column name.
+        top: The maximum number of values to show.
     """
 
     def __init__(self, counter: Counter, column: str, top: int = 100) -> None:
@@ -120,9 +120,9 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
 
     Args:
         value: Specifies a string representation of the value.
-        count: Specifies the number of occurrences of the value.
-        total: Specifies the total number of occurrences.
-        cumcount: Specifies the cumulative number of occurrences.
+        count: The number of occurrences of the value.
+        total: The total number of occurrences.
+        cumcount: The cumulative number of occurrences.
 
     Returns:
         The HTML code of a row.

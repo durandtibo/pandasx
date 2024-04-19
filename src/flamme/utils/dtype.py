@@ -26,7 +26,7 @@ def df_column_types(df: DataFrame) -> dict[str, set]:
     r"""Return the value types per column.
 
     Args:
-        df: Specifies the DataFrame to analyze.
+        df: The DataFrame to analyze.
 
     Returns:
         A dictionary with the value types for each column.
@@ -59,7 +59,7 @@ def series_column_types(series: Series) -> set[type]:
     r"""Return the value types in a ``pandas.Series``.
 
     Args:
-        series: Specifies the DataFrame to analyze.
+        series: The DataFrame to analyze.
 
     Returns:
         A dictionary with the value types for each column.
@@ -115,7 +115,7 @@ def get_dtypes_from_schema(schema: pa.Schema) -> dict[str, pa.DataType]:
     r"""Return the column data types from the schema.
 
     Args:
-        schema: Specifies the table schema.
+        schema: The table schema.
 
     Returns:
         The mapping of column names and data types.

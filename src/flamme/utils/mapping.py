@@ -9,7 +9,7 @@ def sort_by_keys(mapping: dict) -> dict:
     r"""Sorts a dictionary by keys.
 
     Args:
-        mapping: Specifies the dictionary to sort.
+        mapping: The dictionary to sort.
 
     Returns:
         dict: The sorted dictionary.

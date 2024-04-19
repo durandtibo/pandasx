@@ -22,11 +22,11 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
     values for all columns.
 
     Args:
-        dt_column: Specifies the datetime column used to analyze
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:

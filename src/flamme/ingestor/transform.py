@@ -26,7 +26,7 @@ class TransformedIngestor(BaseIngestor):
     r"""Implement an ingestor that also transforms the DataFrame.
 
     Args:
-        ingestor: Specifies the base ingestor.
+        ingestor: The base ingestor.
         transformer: Specifies a ``pandas.DataFrame`` transformer or
             its configuration.
 

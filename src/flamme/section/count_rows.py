@@ -34,11 +34,11 @@ class TemporalRowCountSection(BaseSection):
     window.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        figsize: Specifies the figure size in inches. The first
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -145,11 +145,11 @@ def create_temporal_count_figure(
     temporal windows.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        figsize: Specifies the figure size in inches. The first
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
@@ -172,10 +172,10 @@ def create_temporal_count_table(df: DataFrame, dt_column: str, period: str) -> s
     temporal windows.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
+        period: The temporal period e.g. monthly or daily.
 
     Returns:
         The HTML representation of the table.
@@ -214,8 +214,8 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
     r"""Return the HTML code of a table row.
 
     Args:
-        label: Specifies the label i.e. temporal window.
-        num_rows: Specifies the number of rows for the given temporal
+        label: The label i.e. temporal window.
+        num_rows: The number of rows for the given temporal
             window.
 
     Returns:
@@ -238,10 +238,10 @@ def prepare_data(
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
+        period: The temporal period e.g. monthly or daily.
 
     Returns:
         A tuple with the counts and the temporal window labels.

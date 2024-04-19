@@ -36,14 +36,11 @@ class NullValueSection(BaseSection):
     r"""Implement a section that analyzes the number of null values.
 
     Args:
-        columns: Specifies the column names.
-        null_count (``numpy.ndarray``): Specifies the number of null
-            values for each column.
-        total_count (``numpy.ndarray``): Specifies the total number
-            of values for each column.
-        figsize: Specifies the figure
-            size in inches. The first dimension is the width and the
-            second is the height.
+        columns: The column names.
+        null_count: The number of null values for each column.
+        total_count: The total number of values for each column.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
     """
 
     def __init__(
@@ -219,9 +216,9 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
     r"""Create the HTML code of a new table row.
 
     Args:
-        column: Specifies the column name.
-        null_count (int): Specifies the number of null values.
-        total_count (int): Specifies the total number of rows.
+        column: The column name.
+        null_count (int): The number of null values.
+        total_count (int): The total number of rows.
 
     Returns:
         The HTML code of a row.
@@ -250,16 +247,13 @@ class TemporalNullValueSection(BaseSection):
     values.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
-            daily.
-        ncols: Specifies the number of columns.
-            Default: ``2``
-        figsize (``tuple``, optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``(7, 5)``
+        period: The temporal period e.g. monthly or daily.
+        ncols: The number of columns.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
     """
 
     def __init__(
@@ -360,16 +354,13 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
-            daily.
-        ncols: Specifies the number of columns.
-            Default: ``2``
-        figsize (``tuple``, optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height. Default: ``(7, 5)``
+        period: The temporal period e.g. monthly or daily.
+        ncols: The number of columns.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
 
     Returns:
         The HTML representation of the figure.
@@ -425,11 +416,11 @@ def prepare_data(
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
 
     Returns:

@@ -15,7 +15,7 @@ def remove_nan(data: T) -> T:
     r"""Remove the NaN values from the input sequence.
 
     Args:
-        data: Specifies the input sequence.
+        data: The input sequence.
 
     Returns:
         The input sequence without NaN values.
@@ -41,7 +41,7 @@ def sortnan(iterable: Iterable[bool | float], /, *, reverse: bool = False) -> li
     sorted.
 
     Args:
-        iterable: Specifies the numeric values to sort.
+        iterable: The numeric values to sort.
         reverse: If set to ``True``, then the list elements are sorted
             as if each comparison were reversed.
 

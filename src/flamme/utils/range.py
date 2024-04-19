@@ -15,11 +15,11 @@ def find_range(
     r"""Find a valid range of value.
 
     Args:
-        values: Specifies the values used to find the quantiles.
-        xmin: Specifies the minimum value of the range or its
+        values: The values used to find the quantiles.
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
 

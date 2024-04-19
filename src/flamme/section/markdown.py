@@ -30,7 +30,7 @@ class MarkdownSection(BaseSection):
     r"""Implement a section that converts a markdown string into HTML.
 
     Args:
-        desc: Specifies the markdown string to convert.
+        desc: The markdown string to convert.
     """
 
     def __init__(self, desc: str) -> None:

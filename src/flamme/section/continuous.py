@@ -41,19 +41,19 @@ class ColumnContinuousSection(BaseSection):
     values.
 
     Args:
-        series: Specifies the series/column to analyze.
-        column: Specifies the column name.
-        nbins: Specifies the number of bins in the histogram.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        series: The series/column to analyze.
+        column: The column name.
+        nbins: The number of bins in the histogram.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        xmin: Specifies the minimum value of the range or its
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -182,14 +182,14 @@ def create_boxplot_figure(
     r"""Create the HTML code of a boxplot figure.
 
     Args:
-        series: Specifies the series/column to analyze.
-        xmin: Specifies the minimum value of the range or its
+        series: The series/column to analyze.
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
@@ -230,20 +230,20 @@ def create_histogram_figure(
     r"""Create the HTML code of a histogram figure.
 
     Args:
-        series: Specifies the series/column to analyze.
-        column: Specifies the column name.
+        series: The series/column to analyze.
+        column: The column name.
         stats: Specifies a dictionary with the statistics.
-        nbins: Specifies the number of bins in the histogram.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        nbins: The number of bins in the histogram.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'`` scale is chosen based on the
             distribution.
-        xmin: Specifies the minimum value of the range or its
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
@@ -333,16 +333,16 @@ def add_cdf_plot(
     r"""Add the cumulative distribution function (CDF) plot.
 
     Args:
-        ax: Specifies the axes of the matplotlib figure to update.
-        array: Specifies the array with the data.
-        nbins: Specifies the number of bins to use to plot the CDF.
-        xmin: Specifies the minimum value of the range or its
+        ax: The axes of the matplotlib figure to update.
+        array: The array with the data.
+        nbins: The number of bins to use to plot the CDF.
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        color: Specifies the plot color.
+        color: The plot color.
     """
     nbins = nbins or 1000
     array = nonnan(array)
@@ -367,7 +367,7 @@ def create_stats_table(stats: dict, column: str) -> str:
 
     Args:
         stats: Specifies a dictionary with the statistics.
-        column: Specifies the column name.
+        column: The column name.
 
     Returns:
         The HTML code of the table.

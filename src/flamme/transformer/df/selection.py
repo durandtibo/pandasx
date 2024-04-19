@@ -23,7 +23,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     of columns.
 
     Args:
-        columns: Specifies the columns to keep.
+        columns: The columns to keep.
         ignore_missing: If ``False``, an exception is raised if a
             column is missing, otherwise a warning message is shown.
 

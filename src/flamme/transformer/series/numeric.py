@@ -17,7 +17,7 @@ class ToNumericSeriesTransformer(BaseSeriesTransformer):
     ``pandas.Series`` to numeric type.
 
     Args:
-        **kwargs: Specifies the keyword arguments for
+        **kwargs: The keyword arguments for
             ``pandas.to_numeric``.
 
     Example usage:

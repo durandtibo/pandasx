@@ -9,8 +9,8 @@ def human_byte(size: float, decimal: int = 2) -> str:
     r"""Return a human-readable string representation of byte sizes.
 
     Args:
-        size: Specifies the number of bytes.
-        decimal: Specifies the number of decimal digits.
+        size: The number of bytes.
+        decimal: The number of decimal digits.
 
     Returns:
         The human-readable string representation of byte sizes.

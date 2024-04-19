@@ -21,12 +21,12 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-        column: Specifies the column name.
-        nbins: Specifies the number of bins in the histogram.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        column: The column name.
+        nbins: The number of bins in the histogram.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:

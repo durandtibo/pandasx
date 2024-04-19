@@ -9,8 +9,8 @@ def create_html_report(toc: str, body: str) -> str:
     r"""Create a HTML report.
 
     Args:
-        toc: Specifies the table of contents of the report.
-        body: Specifies the body of the report
+        toc: The table of contents of the report.
+        body: The body of the report
 
     Returns:
         The HTML report.

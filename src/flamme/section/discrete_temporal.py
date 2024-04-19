@@ -35,13 +35,13 @@ class ColumnTemporalDiscreteSection(BaseSection):
     column with discrete values.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column of the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column of the DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -138,15 +138,15 @@ def create_temporal_figure(
     distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
         log_y (bool, optional): If ``True``, it represents the bars
             with a log scale. Default: ``False``
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:

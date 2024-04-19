@@ -11,7 +11,7 @@ def nonnan(array: np.ndarray) -> np.ndarray:
     r"""Return the non-NaN values of an array.
 
     Args:
-        array: Specifies the input array.
+        array: The input array.
 
     Returns:
         A 1d array with the non-NaN values of the input array.

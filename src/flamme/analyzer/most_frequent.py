@@ -22,10 +22,10 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
     r"""Implement a most frequent values analyzer for a given column.
 
     Args:
-        column: Specifies the column to analyze.
+        column: The column to analyze.
         dropna: If ``True``, the NaN values are not included in the
             analysis.
-        top: Specifies the maximum number of values to show.
+        top: The maximum number of values to show.
 
     Example usage:
 

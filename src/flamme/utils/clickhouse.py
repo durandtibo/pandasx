@@ -19,8 +19,8 @@ def get_table_schema(client: Client, table: str) -> pa.Schema:
     r"""Return the table schema.
 
     Args:
-        client: Specifies the clickhouse client.
-        table: Specifies the table.
+        client: The clickhouse client.
+        table: The table.
 
     Returns:
         The table schema.
