@@ -26,7 +26,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     ``pandas.Series`` transformers on some columns.
 
     Args:
-        columns: Specifies the ``pandas.Series`` transformers.
+        columns: The ``pandas.Series`` transformers.
 
     Example usage:
 
@@ -96,8 +96,8 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
         r"""Add a transformer to the current analyzer.
 
         Args:
-            column: Specifies the column of the transformer.
-            transformer: Specifies the transformer to add.
+            column: The column of the transformer.
+            transformer: The transformer to add.
             replace_ok: If ``False``, ``KeyError`` is raised if a
                 transformer with the same key exists. If ``True``,
                 the new transformer will replace the existing

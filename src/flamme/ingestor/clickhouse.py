@@ -25,8 +25,8 @@ class ClickHouseIngestor(BaseIngestor):
     r"""Implement a clickhouse DataFrame ingestor.
 
     Args:
-        query: Specifies the query to get the data.
-        client: Specifies the clickhouse client or its configuration.
+        query: The query to get the data.
+        client: The clickhouse client or its configuration.
             Please check the documentation of
             ``clickhouse_connect.get_client`` to get more information.
 

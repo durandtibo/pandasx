@@ -20,7 +20,7 @@ def figure2html(fig: plt.Figure, close_fig: bool = False) -> str:
     HTML file.
 
     Args:
-        fig: Specifies the figure to convert.
+        fig: The figure to convert.
         close_fig: If ``True``, the figure is closed after it is
             converted to HTML format.
 
@@ -57,9 +57,9 @@ def readable_xticklabels(
     if the tick labels are dense.
 
     Args:
-        ax: Specifies the figure axes to update.
-        max_num_xticks: Specifies the maximum number of ticks to show
-            in the figure.
+        ax: The figure axes to update.
+        max_num_xticks: The maximum number of ticks to show in the
+            figure.
         xticklabel_max_len: If a tick label has a length greater than
             this value, the tick labels are rotated vertically.
         xticklabel_min: If the number of ticks is lower than this

@@ -14,7 +14,7 @@ def load_text(path: Path) -> str:
     r"""Read the data from a given text file.
 
     Args:
-        path: Specifies the path where to the text file.
+        path: The path where to the text file.
 
     Returns:
         The data from the text file.
@@ -37,9 +37,8 @@ def save_text(to_save: str, path: Path) -> None:
     r"""Save the given data in a text file.
 
     Args:
-        to_save: Specifies the data to write in a text file.
-        path: Specifies the path where to write the
-            text file.
+        to_save: The data to write in a text file.
+        path: The path where to write the text file.
 
     Example usage:
 

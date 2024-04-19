@@ -36,11 +36,11 @@ class GlobalTemporalNullValueSection(BaseSection):
     values for all columns.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        figsize: Specifies the figure size in inches. The first
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -146,11 +146,11 @@ def create_temporal_null_figure(
     value distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze the
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze the
             temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        figsize: Specifies the figure size in inches. The first
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
@@ -172,10 +172,10 @@ def create_temporal_null_table(df: DataFrame, dt_column: str, period: str) -> st
     distribution of null values.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze the
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze the
             temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
+        period: The temporal period e.g. monthly or daily.
 
     Returns:
         The HTML representation of the table.
@@ -218,9 +218,9 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     r"""Create the HTML code of a new table row.
 
     Args:
-        label: Specifies the label of the row.
-        num_nulls: Specifies the number of null values.
-        total: Specifies the total number of values.
+        label: The label of the row.
+        num_nulls: The number of null values.
+        total: The total number of values.
 
     Returns:
         The HTML code of a row.
@@ -256,10 +256,10 @@ def prepare_data(
     r"""Prepare the data to create the figure and table.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
+        period: The temporal period e.g. monthly or daily.
 
     Returns:
         A tuple with 3 values. The first value is a numpy NDArray

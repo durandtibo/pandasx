@@ -25,15 +25,15 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     r"""Implement a discrete distribution analyzer.
 
     Args:
-        column: Specifies the column to analyze.
+        column: The column to analyze.
         dropna: If ``True``, the NaN values are not included in the
             analysis.
-        max_rows: Specifies the maximum number of rows to show in the
+        max_rows: The maximum number of rows to show in the
             table.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'`` scale is chosen based on the
             distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:
@@ -101,14 +101,13 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     discrete values.
 
     Args:
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
-        figsize (``tuple`` , optional): Specifies the figure size in
-            inches. The first dimension is the width and the second is
-            the height.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
 
     Example usage:
 

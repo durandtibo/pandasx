@@ -20,7 +20,7 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show a summary of the DataFrame.
 
     Args:
-        top: Specifies the number of most frequent values to show.
+        top: The number of most frequent values to show.
         sort: If ``True``, sort the columns by alphabetical order.
 
     Example usage:

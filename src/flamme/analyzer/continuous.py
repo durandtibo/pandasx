@@ -25,18 +25,18 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-        column: Specifies the column name.
-        nbins: Specifies the number of bins in the histogram.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        column: The column name.
+        nbins: The number of bins in the histogram.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        xmin: Specifies the minimum value of the range or its
+        xmin: The minimum value of the range or its
             associated quantile. ``q0.1`` means the 10% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: Specifies the maximum value of the range or its
+        xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:
@@ -107,14 +107,14 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     continuous values.
 
     Args:
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        period: The temporal period e.g. monthly or daily.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:

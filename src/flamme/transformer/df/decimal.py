@@ -22,7 +22,7 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
     ``Decimal`` objects to floats.
 
     Args:
-        **kwargs: Specifies the keyword arguments for
+        **kwargs: The keyword arguments for
             ``pandas.to_numeric``.
 
     Example usage:

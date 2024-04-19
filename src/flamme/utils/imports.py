@@ -70,7 +70,7 @@ def clickhouse_connect_available(fn: Callable[..., Any]) -> Callable[..., Any]:
     ``clickhouse_connect`` package is installed.
 
     Args:
-        fn: Specifies the function to execute.
+        fn: The function to execute.
 
     Returns:
         A wrapper around ``fn`` if ``clickhouse_connect`` package is

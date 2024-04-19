@@ -24,7 +24,7 @@ class NullValueAnalyzer(BaseAnalyzer):
     r"""Implement a null value analyzer.
 
     Args:
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:
@@ -69,11 +69,11 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     values.
 
     Args:
-        dt_column: Specifies the datetime column used to analyze
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        ncols: Specifies the number of columns.
-        figsize: Specifies the figure size in inches. The first
+        period: The temporal period e.g. monthly or daily.
+        ncols: The number of columns.
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Example usage:

@@ -68,8 +68,8 @@ class Column(BaseColumn):
     Args:
         can_be_null: ``True`` if the column can have null values,
             otherwise ``False``.
-        analyzer: Specifies the column analyzer or its configuration.
-        transformer: Specifies the column  transformer or its
+        analyzer: The column analyzer or its configuration.
+        transformer: The column  transformer or its
         `configuration.
 
     Example usage:

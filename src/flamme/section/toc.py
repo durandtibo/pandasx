@@ -17,8 +17,8 @@ class TableOfContentSection(BaseSection):
     before the section.
 
     Args:
-        section: Specifies the section.
-        max_toc_depth: Specifies the maximum level to show in the
+        section: The section.
+        max_toc_depth: The maximum level to show in the
             table of content.
     """
 

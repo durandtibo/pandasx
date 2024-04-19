@@ -16,7 +16,7 @@ def configure_logging(level: int = logging.INFO) -> None:
     r"""Configure the logging module with a colored formatter.
 
     Args:
-        level: Specifies the lower level.
+        level: The lower level.
     """
     handler = colorlog.StreamHandler()
     formatter = colorlog.ColoredFormatter(

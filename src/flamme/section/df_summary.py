@@ -32,8 +32,8 @@ class DataFrameSummarySection(BaseSection):
     r"""Implement a section that returns a summary of a DataFrame.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        top: Specifies the number of most frequent values to show.
+        df: The DataFrame to analyze.
+        top: The number of most frequent values to show.
     """
 
     def __init__(self, df: DataFrame, top: int = 5) -> None:
@@ -198,12 +198,12 @@ def create_table_row(
     r"""Create the HTML code of a new table row.
 
     Args:
-        column: Specifies the column name.
-        null: Specifies the number of null values.
-        nunique: Specifies the number of unique values.
-        types: Specifies the types in th column.
-        most_frequent_values: Specifies the most frequent values.
-        total: Specifies the total number of rows.
+        column: The column name.
+        null: The number of null values.
+        nunique: The number of unique values.
+        types: The types in th column.
+        most_frequent_values: The most frequent values.
+        total: The total number of rows.
 
     Returns:
         The HTML code of a row.
@@ -246,7 +246,7 @@ def prepare_type_name(typ: type) -> str:
     r"""Return a compact type name when possible.
 
     Args:
-        typ: Specifies the input type.
+        typ: The input type.
 
     Returns:
         The compact type name.

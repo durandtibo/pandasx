@@ -20,8 +20,8 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implement a transformer to convert some columns to numeric type.
 
     Args:
-        columns: Specifies the columns to convert.
-        **kwargs: Specifies the keyword arguments for
+        columns: The columns to convert.
+        **kwargs: The keyword arguments for
             ``pandas.to_numeric``.
 
     Example usage:

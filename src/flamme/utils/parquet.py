@@ -20,7 +20,7 @@ def get_table_schema(path: Path | str) -> pa.Schema:
     r"""Return the table schema.
 
     Args:
-        path: Specifies the path to the parquet file.
+        path: The path to the parquet file.
 
     Returns:
         The table schema.
@@ -32,7 +32,7 @@ def get_dtypes(path: Path | str) -> dict[str, pa.DataType]:
     r"""Return the column data types from the schema.
 
     Args:
-        path: Specifies the path to the schema.
+        path: The path to the schema.
 
     Returns:
         The mapping of column names and data types.

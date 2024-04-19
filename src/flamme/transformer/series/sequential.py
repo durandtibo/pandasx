@@ -22,7 +22,7 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
     several transformers.
 
     Args:
-        transformers: Specifies the transformers or their
+        transformers: The transformers or their
             configurations.
 
     Example usage:

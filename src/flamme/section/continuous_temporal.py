@@ -38,15 +38,15 @@ class ColumnTemporalContinuousSection(BaseSection):
     column with continuous values.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        period: The temporal period e.g. monthly or daily.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -157,15 +157,15 @@ def create_temporal_figure(
     distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or daily.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        period: The temporal period e.g. monthly or daily.
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
@@ -209,11 +209,11 @@ def create_temporal_table(df: DataFrame, column: str, dt_column: str, period: st
     about the temporal value distribution.
 
     Args:
-        df: Specifies the DataFrame to analyze.
-        column: Specifies the column to analyze.
-        dt_column: Specifies the datetime column used to analyze
+        df: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
             the temporal distribution.
-        period: Specifies the temporal period e.g. monthly or
+        period: The temporal period e.g. monthly or
             daily.
 
     Returns:

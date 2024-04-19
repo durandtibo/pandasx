@@ -30,7 +30,7 @@ def tags2id(tags: Sequence[str]) -> str:
     a HTML file.
 
     Args:
-        tags: Specifies the sequence of tags.
+        tags: The sequence of tags.
 
     Returns:
         The generated ID from the tags.
@@ -42,7 +42,7 @@ def tags2title(tags: Sequence[str]) -> str:
     r"""Convert a sequence of tags to a string that can be used as title.
 
     Args:
-        tags: Specifies the sequence of tags.
+        tags: The sequence of tags.
 
     Returns:
         The generated title from the tags.
@@ -54,7 +54,7 @@ def valid_h_tag(index: int) -> int:
     r"""Return a valid number of a h HTML tag.
 
     Args:
-        index: Specifies the original value.
+        index: The original value.
 
     Returns:
         A valid value.
@@ -68,10 +68,10 @@ def render_html_toc(
     r"""Return the HTML table of content (TOC) associated to the section.
 
     Args:
-        number: Specifies the section number associated to the section.
-        tags: Specifies the tags associated to the section.
-        depth: Specifies the depth in the report.
-        max_depth: Specifies the maximum depth to generate in the TOC.
+        number: The section number associated to the section.
+        tags: The tags associated to the section.
+        depth: The depth in the report.
+        max_depth: The maximum depth to generate in the TOC.
 
     Returns:
         The HTML table of content associated to the section.
@@ -86,8 +86,8 @@ def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
     r"""Find a good scale for y-axis based on the data distribution.
 
     Args:
-        array: Specifies the data to use to find the scale.
-        nbins: Specifies the number of bins in the histogram.
+        array: The data to use to find the scale.
+        nbins: The number of bins in the histogram.
 
     Returns:
         The scale for y-axis.
@@ -118,7 +118,7 @@ def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
     r"""Return several descriptive statistics for the input data.
 
     Args:
-        data: Specifies the data to analyze.
+        data: The data to analyze.
 
     Returns:
         The descriptive statistics for the input data.

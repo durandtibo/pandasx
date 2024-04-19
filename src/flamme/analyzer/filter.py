@@ -26,7 +26,7 @@ class FilteredAnalyzer(BaseAnalyzer):
 
     Args:
         query: Soecifies the query.
-        analyzer: Specifies the analyzer or its configuration.
+        analyzer: The analyzer or its configuration.
 
     Example usage:
 

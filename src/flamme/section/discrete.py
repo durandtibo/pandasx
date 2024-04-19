@@ -34,16 +34,16 @@ class ColumnDiscreteSection(BaseSection):
     values.
 
     Args:
-        counter: Specifies the counter that represents the discrete
+        counter: The counter that represents the discrete
             distribution.
-        null_values: Specifies the number of null values.
-        column: Specifies the column name.
-        max_rows: Specifies the maximum number of rows to show in the
+        null_values: The number of null values.
+        column: The column name.
+        max_rows: The maximum number of rows to show in the
             table.
-        yscale: Specifies the y-axis scale. If ``'auto'``, the
+        yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'`` scale is chosen based on the
             distribution.
-        figsize: Specifies the figure size in inches. The first
+        figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
     """
 
@@ -243,8 +243,8 @@ def create_table_row(column: str, count: int) -> str:
     r"""Create the HTML code of a new table row.
 
     Args:
-        column: Specifies the column name.
-        count (int): Specifies the count for the column.
+        column: The column name.
+        count (int): The count for the column.
 
     Returns:
         The HTML code of a row.

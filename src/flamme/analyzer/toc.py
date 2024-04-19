@@ -23,8 +23,8 @@ class TableOfContentAnalyzer(BaseAnalyzer):
     to the generated section report.
 
     Args:
-        analyzer: Specifies the analyzer or its configuration.
-        max_toc_depth: Specifies the maximum level to show in the
+        analyzer: The analyzer or its configuration.
+        max_toc_depth: The maximum level to show in the
             table of content.
 
     Example usage:

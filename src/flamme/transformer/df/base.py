@@ -62,7 +62,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
         r"""Transform the data in the ``pandas.DataFrame``.
 
         Args:
-            df: Specifies the ``pandas.DataFrame`` to transform.
+            df: The ``pandas.DataFrame`` to transform.
 
         Returns:
             The transformed DataFrame.
@@ -103,7 +103,7 @@ def is_dataframe_transformer_config(config: dict) -> bool:
     the class.
 
     Args:
-        config: Specifies the configuration to check.
+        config: The configuration to check.
 
     Returns:
         ``True`` if the input configuration is a configuration

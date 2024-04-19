@@ -18,8 +18,8 @@ def human_file_size(path: Path | str, decimal: int = 2) -> str:
     r"""Get a human-readable representation of a file size.
 
     Args:
-        path: Specifies the path to the file.
-        decimal: Specifies the number of decimal digits.
+        path: The path to the file.
+        decimal: The number of decimal digits.
 
     Returns:
         The file size in a human-readable format.
@@ -40,7 +40,7 @@ def sanitize_path(path: Path | str) -> Path:
     r"""Sanitize a given path.
 
     Args:
-        path: Specifies the path to sanitize.
+        path: The path to sanitize.
 
     Returns:
         The sanitized path.
@@ -76,11 +76,11 @@ def find_files(
     careful if you are using a path with symbolic links.
 
     Args:
-        path: Specifies the path where to look for the parquet files.
-        filter_fn: Specifies the path filtering function. The function
+        path: The path where to look for the parquet files.
+        filter_fn: The path filtering function. The function
             should return ``True`` for the path to find, and
             ``False`` otherwise.
-        recursive: Specifies if it should also check the sub-folders.
+        recursive: Indicate if it should also check the sub-folders.
 
     Returns:
         The tuple of path of parquet files.
@@ -107,7 +107,7 @@ def find_parquet_files(path: Path | str, recursive: bool = True) -> list[Path]:
     careful if you are using a path with symbolic links.
 
     Args:
-        path: Specifies the path where to look for the parquet files.
+        path: The path where to look for the parquet files.
         recursive: Specifies if it should also check the sub-folders.
 
     Returns:

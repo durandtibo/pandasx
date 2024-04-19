@@ -30,12 +30,12 @@ class Reporter(BaseReporter):
     r"""Implement a simple reporter.
 
     Args:
-        ingestor: Specifies the ingestor or its configuration.
+        ingestor: The ingestor or its configuration.
         transformer: Specifies a ``pandas.DataFrame`` transformer or
             its configuration.
-        ingestor: Specifies the analyzer or its configuration.
-        report_path: Specifies the path where to save the HTML report.
-        max_toc_depth: Specifies the maximum level to show in the
+        ingestor: The analyzer or its configuration.
+        report_path: The path where to save the HTML report.
+        max_toc_depth: The maximum level to show in the
             table of content.
 
     Example usage:

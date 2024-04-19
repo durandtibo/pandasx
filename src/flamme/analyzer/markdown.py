@@ -17,7 +17,7 @@ class MarkdownAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer that adds a mardown string to the report.
 
     Args:
-        desc: Specifies the markdown description.
+        desc: The markdown description.
 
     Example usage:
 

@@ -32,8 +32,8 @@ class DataTypeSection(BaseSection):
     r"""Implement a section that analyzes the data type of each column.
 
     Args:
-        dtypes: Specifies the data type for each column.
-        types: Specifies the types of the values in each
+        dtypes: The data type for each column.
+        types: The types of the values in each
             column. A column can contain multiple types. The keys are
             the column names.
     """
@@ -121,9 +121,9 @@ def create_table_row(column: str, dtype: np.dtype, types: set) -> str:
     r"""Create the HTML code of a new table row.
 
     Args:
-        column: Specifies the column name.
-        dtype (``numpy.ndtype``): Specifies the column data type.
-        types (set): Specifies the types in th column.
+        column: The column name.
+        dtype: The column data type.
+        types: The types in th column.
 
     Returns:
         The HTML code of a row.

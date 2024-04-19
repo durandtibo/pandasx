@@ -27,9 +27,9 @@ class BaseSection(ABC):
         r"""Return the HTML body associated to the section.
 
         Args:
-            number: Specifies the section number.
-            tags: Specifies the tags associated to the section.
-            depth: Specifies the depth in the report.
+            number: The section number.
+            tags: The tags associated to the section.
+            depth: The depth in the report.
 
         Returns:
             The HTML body associated to the section.
@@ -43,11 +43,11 @@ class BaseSection(ABC):
         section.
 
         Args:
-            number: Specifies the section number associated to the
+            number: The section number associated to the
                 section.
-            tags: Specifies the tags associated to the section.
-            depth: Specifies the depth in the report.
-            max_depth: Specifies the maximum depth to generate in the TOC.
+            tags: The tags associated to the section.
+            depth: The depth in the report.
+            max_depth: The maximum depth to generate in the TOC.
 
         Returns:
             The HTML table of content associated to the section.
