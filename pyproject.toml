@@ -54,8 +54,9 @@ all = ["clickhouse-connect"]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
+mike = "^2.0"
 mkdocs-material = "^9.5"
-mkdocstrings = "^0.24"
+mkdocstrings = { extras = ["python"], version = "^0.24" }
 
 [tool.poetry.group.plotly]
 optional = true  # Plotly is used only as a comparison with matplotlib
