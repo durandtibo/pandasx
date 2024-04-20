@@ -33,8 +33,8 @@ def test_clickhouse_ingestor_ingest() -> None:
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    client_mock = Mock(spec=Client, query_frame=Mock(return_value=frame))
+    client_mock = Mock(spec=Client, query_df=Mock(return_value=frame))
     ingestor = ClickHouseIngestor(query="select * from source.dataset", client=client_mock)
     out = ingestor.ingest()
     assert_frame_equal(out, frame)
-    client_mock.query_frame.assert_called_once_with(query="select * from source.dataset")
+    client_mock.query_df.assert_called_once_with(query="select * from source.dataset")

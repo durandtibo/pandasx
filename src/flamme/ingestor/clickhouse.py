@@ -56,7 +56,7 @@ class ClickHouseIngestor(BaseIngestor):
             f"query:\n{self._query}\n"
             "---------------------------------------------------------------------------------\n\n"
         )
-        frame = self._client.query_frame(query=self._query).sort_index(axis=1)
+        frame = self._client.query_df(query=self._query).sort_index(axis=1)
         logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
         logger.info(f"number of unique column names: {len(set(frame.columns)):,}")
         return frame
