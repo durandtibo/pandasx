@@ -38,6 +38,12 @@ jobs:
       - name: check flamme.reporter
         run: |
           poetry run python -c "from flamme import reporter"
+      - name: check flamme.schema
+        run: |
+          poetry run python -c "from flamme import schema"
+      - name: check flamme.schema.reader
+        run: |
+          poetry run python -c "from flamme.schema import reader"
       - name: check flamme.section
         run: |
           poetry run python -c "from flamme import section"
