@@ -83,7 +83,6 @@ def test_dataframe_summary_section_get_most_frequent_values(dataframe: DataFrame
             (("B", 2), ("A", 1), (None, 1), (np.nan, 1), ("C", 1)),
         ),
         equal_nan=True,
-        show_difference=True,
     )
 
 

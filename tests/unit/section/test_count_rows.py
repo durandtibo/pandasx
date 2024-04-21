@@ -253,5 +253,4 @@ def test_prepare_data_empty() -> None:
     assert objects_are_equal(
         prepare_data(frame=DataFrame({"datetime": []}), dt_column="datetime", period="M"),
         ([], []),
-        show_difference=True,
     )

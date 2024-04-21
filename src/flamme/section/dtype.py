@@ -23,7 +23,8 @@ from flamme.section.utils import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import numpy as np
+    from numpy.typing import DTypeLike
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class DataTypeSection(BaseSection):
             the column names.
     """
 
-    def __init__(self, dtypes: dict[str, np.dtype], types: dict[str, set]) -> None:
+    def __init__(self, dtypes: dict[str, DTypeLike], types: dict[str, set]) -> None:
         self._dtypes = dtypes
         self._types = types
 
@@ -117,7 +118,7 @@ This section analyzes the values types for each column.
         ).render({"rows": rows})
 
 
-def create_table_row(column: str, dtype: np.dtype, types: set) -> str:
+def create_table_row(column: str, dtype: DTypeLike, types: set) -> str:
     r"""Create the HTML code of a new table row.
 
     Args:
