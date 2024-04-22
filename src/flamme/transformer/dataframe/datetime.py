@@ -71,7 +71,7 @@ class ToDatetimeDataFrameTransformer(BaseDataFrameTransformer):
         return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
 
     def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
-        for col in tqdm(self._columns, desc="Converting to numeric type"):
+        for col in tqdm(self._columns, desc="Converting to datetime"):
             frame[col] = pd.to_datetime(frame[col], **self._kwargs)
         return frame
 
