@@ -271,6 +271,7 @@ def prepare_data(
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.section.null_temp_global import prepare_data
@@ -296,14 +297,13 @@ def prepare_data(
 
     ```
     """
-    frame = frame.copy()
     columns = frame.columns.tolist()
     columns.remove(dt_column)
     dt_col = "__datetime__"
-    frame[dt_col] = frame[dt_column].dt.to_period(period)
-    frame.loc[:, columns] = frame[columns].isna().astype(float)
+    frame_na = frame[columns].isna().astype(float).copy()
+    frame_na[dt_col] = frame[dt_column].dt.to_period(period)
 
-    num_nulls = frame.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
-    total = frame.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
+    num_nulls = frame_na.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
+    total = frame_na.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
     labels = [str(dt) for dt in num_nulls.index]
     return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels
