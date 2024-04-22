@@ -271,6 +271,7 @@ def prepare_data(
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.section.null_temp_global import prepare_data
