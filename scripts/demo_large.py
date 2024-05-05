@@ -49,7 +49,7 @@ def create_dataframe(nrows: int = 1000, ncols: int = 100) -> pd.DataFrame:
     """
     rng = np.random.default_rng(42)
     frame = pd.DataFrame(
-        rng.normal(size=(nrows, ncols)), columns=[f"feature{i}" for i in range(ncols)]
+        rng.normal(size=(nrows, ncols)), columns=[f"feature{i:04}" for i in range(ncols)]
     )
     mask = rng.choice([True, False], size=frame.shape, p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
@@ -178,7 +178,7 @@ def create_reporter() -> BaseReporter:
         The instantiated reporter.
     """
     return Reporter(
-        ingestor=Ingestor(frame=create_dataframe(nrows=10000, ncols=10)),
+        ingestor=Ingestor(frame=create_dataframe(nrows=10000, ncols=500)),
         transformer=create_transformer(),
         analyzer=create_analyzer(),
         report_path=Path.cwd().joinpath("tmp/report_large.html"),
