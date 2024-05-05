@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.13"
+version = "0.0.14a0"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -54,9 +54,9 @@ all = ["clickhouse-connect"]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-mike = "^2.0"
+mike = "^2.1"
 mkdocs-material = "^9.5"
-mkdocstrings = { extras = ["python"], version = ">=0.24,<0.26" }
+mkdocstrings = { extras = ["python"], version = "^0.25" }
 
 [tool.poetry.group.plotly]
 optional = true  # Plotly is used only as a comparison with matplotlib
@@ -76,7 +76,7 @@ coverage = { extras = ["toml"], version = "^7.5" }
 docformatter = { extras = ["tomli"], version = "^1.7" }
 pre-commit = "^3.7"
 pygments = "^2.17"
-pytest = "^8.1"
+pytest = "^8.2"
 pytest-cov = "^5.0"
 pytest-timeout = "^2.3"
 ruff = ">=0.4,<1.0"
