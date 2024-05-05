@@ -21,10 +21,10 @@ from flamme.analyzer import (
     DataFrameSummaryAnalyzer,
     DataTypeAnalyzer,
     DuplicatedRowAnalyzer,
-    GlobalTemporalNullValueAnalyzer,
     MappingAnalyzer,
     MostFrequentValuesAnalyzer,
     NullValueAnalyzer,
+    TemporalNullValueAnalyzer,
     TemporalRowCountAnalyzer,
 )
 from flamme.ingestor import Ingestor
@@ -86,7 +86,7 @@ def create_null_value_analyzer() -> BaseAnalyzer:
     return MappingAnalyzer(
         {
             "overall": NullValueAnalyzer(figsize=FIGSIZE),
-            "temporal": GlobalTemporalNullValueAnalyzer(
+            "temporal": TemporalNullValueAnalyzer(
                 dt_column="datetime", period="M", figsize=FIGSIZE
             ),
             "monthly": AllColumnsTemporalNullValueAnalyzer(

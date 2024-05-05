@@ -3,6 +3,7 @@ r"""Contain sections."""
 from __future__ import annotations
 
 __all__ = [
+    "AllColumnsTemporalNullValueSection",
     "BaseSection",
     "ColumnContinuousAdvancedSection",
     "ColumnContinuousSection",
@@ -14,13 +15,12 @@ __all__ = [
     "DataTypeSection",
     "DuplicatedRowSection",
     "EmptySection",
-    "TemporalNullValueSection",
     "MarkdownSection",
     "MostFrequentValuesSection",
     "NullValueSection",
     "SectionDict",
     "TableOfContentSection",
-    "AllColumnsTemporalNullValueSection",
+    "TemporalNullValueSection",
     "TemporalRowCountSection",
 ]
 
