@@ -9,7 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import EmptySection, GlobalTemporalNullValueSection
+from flamme.section import EmptySection, TemporalNullValueSection
 
 if TYPE_CHECKING:
     from pandas import DataFrame
@@ -67,7 +67,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
             f"period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> GlobalTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> TemporalNullValueSection | EmptySection:
         logger.info(
             f"Analyzing the temporal null value distribution | "
             f"datetime column: {self._dt_column} | period: {self._period}"
@@ -78,7 +78,7 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        return GlobalTemporalNullValueSection(
+        return TemporalNullValueSection(
             frame=frame,
             dt_column=self._dt_column,
             period=self._period,

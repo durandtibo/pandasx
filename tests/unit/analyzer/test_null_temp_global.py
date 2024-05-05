@@ -8,7 +8,7 @@ from pandas import DataFrame
 from pandas._testing import assert_frame_equal
 
 from flamme.analyzer import GlobalTemporalNullValueAnalyzer
-from flamme.section import EmptySection, GlobalTemporalNullValueSection
+from flamme.section import EmptySection, TemporalNullValueSection
 
 
 @pytest.fixture()
@@ -80,7 +80,7 @@ def test_global_temporal_null_value_analyzer_figsize_default(dataframe: DataFram
 
 def test_global_temporal_null_value_analyzer_get_statistics(dataframe: DataFrame) -> None:
     section = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert isinstance(section, GlobalTemporalNullValueSection)
+    assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
@@ -88,7 +88,7 @@ def test_global_temporal_null_value_analyzer_get_statistics_empty_rows() -> None
     section = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
         DataFrame({"col": [], "datetime": []})
     )
-    assert isinstance(section, GlobalTemporalNullValueSection)
+    assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 

@@ -8,12 +8,12 @@ __all__ = ["AllColumnsTemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
 from coola.utils import str_indent
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
 from flamme.section.base import BaseSection
+from flamme.section.null_temp import plot_temporal_null_total
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -26,7 +26,7 @@ from flamme.utils.figure import figure2html, readable_xticklabels
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from matplotlib.axes import Axes
+    import numpy as np
     from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
@@ -218,27 +218,6 @@ def create_temporal_null_figures(
     return figures
 
 
-def plot_temporal_null_total(
-    ax: Axes, num_nulls: np.ndarray, total: np.ndarray, labels: list
-) -> None:
-    color = "tab:blue"
-    x = np.arange(len(labels))
-    ax.set_ylabel("number of null/total values", color=color)
-    ax.tick_params(axis="y", labelcolor=color)
-    ax.bar(x=x, height=total, color="tab:cyan", alpha=0.5, label="total")
-    ax.bar(x=x, height=num_nulls, color=color, alpha=0.8, label="null")
-    ax.legend()
-
-    ax2 = ax.twinx()
-    color = "black"
-    ax2.set_ylabel("percentage", color=color)
-    ax2.tick_params(axis="y", labelcolor=color)
-    ax2.plot(x, num_nulls / total, "o-", color=color)
-
-    ax.set_xticks(x, labels=labels)
-    ax.set_xlim(-0.5, len(labels) - 0.5)
-
-
 def prepare_data(
     frame: DataFrame,
     column: str,
@@ -265,6 +244,7 @@ def prepare_data(
     Example usage:
 
     ```pycon
+    >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.section.null_temp_all import prepare_data
     >>> num_nulls, total, labels = prepare_data(

@@ -8,8 +8,8 @@ from jinja2 import Template
 from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
-from flamme.section import GlobalTemporalNullValueSection
-from flamme.section.null_temp_global import (
+from flamme.section import TemporalNullValueSection
+from flamme.section.null_temp import (
     create_temporal_null_figure,
     create_temporal_null_table,
     prepare_data,
@@ -27,19 +27,19 @@ def dataframe() -> DataFrame:
     )
 
 
-####################################################
-#     Tests for GlobalTemporalNullValueSection     #
-####################################################
+##############################################
+#     Tests for TemporalNullValueSection     #
+##############################################
 
 
-def test_column_temporal_null_value_section_frame(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_frame(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert_frame_equal(section.frame, dataframe)
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])
-def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
-    section = GlobalTemporalNullValueSection(
+def test_temporal_null_value_section_dt_column(dt_column: str) -> None:
+    section = TemporalNullValueSection(
         frame=DataFrame(
             {
                 "col1": np.array([1.2, 4.2, np.nan, 2.2]),
@@ -57,40 +57,40 @@ def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
 
 
 @pytest.mark.parametrize("period", ["M", "D"])
-def test_column_temporal_null_value_section_period(dataframe: DataFrame, period: str) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period=period)
+def test_temporal_null_value_section_period(dataframe: DataFrame, period: str) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period=period)
     assert section.period == period
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_column_temporal_null_value_section_figsize(
+def test_temporal_null_value_section_figsize(
     dataframe: DataFrame, figsize: tuple[int, int]
 ) -> None:
-    section = GlobalTemporalNullValueSection(
+    section = TemporalNullValueSection(
         frame=dataframe, dt_column="datetime", period="M", figsize=figsize
     )
     assert section.figsize == figsize
 
 
-def test_column_temporal_null_value_section_figsize_default(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_figsize_default(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert section.figsize is None
 
 
-def test_column_temporal_null_value_section_missing_dt_column(dataframe: DataFrame) -> None:
+def test_temporal_null_value_section_missing_dt_column(dataframe: DataFrame) -> None:
     with pytest.raises(
         ValueError, match=r"Datetime column my_datetime is not in the DataFrame \(columns:"
     ):
-        GlobalTemporalNullValueSection(frame=dataframe, dt_column="my_datetime", period="M")
+        TemporalNullValueSection(frame=dataframe, dt_column="my_datetime", period="M")
 
 
-def test_column_temporal_null_value_section_get_statistics(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_get_statistics(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
-    section = GlobalTemporalNullValueSection(
+def test_temporal_null_value_section_get_statistics_empty_row() -> None:
+    section = TemporalNullValueSection(
         frame=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",
         period="M",
@@ -98,20 +98,20 @@ def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_temporal_null_value_section_render_html_body(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_render_html_body(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_temporal_null_value_section_render_html_body_args(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_render_html_body_args(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
-def test_column_temporal_null_value_section_render_html_body_empty_rows() -> None:
-    section = GlobalTemporalNullValueSection(
+def test_temporal_null_value_section_render_html_body_empty_rows() -> None:
+    section = TemporalNullValueSection(
         frame=DataFrame({"col1": [], "col2": [], "datetime": []}),
         dt_column="datetime",
         period="M",
@@ -119,13 +119,13 @@ def test_column_temporal_null_value_section_render_html_body_empty_rows() -> Non
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_temporal_null_value_section_render_html_toc(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_render_html_toc(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_column_temporal_null_value_section_render_html_toc_args(dataframe: DataFrame) -> None:
-    section = GlobalTemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
+def test_temporal_null_value_section_render_html_toc_args(dataframe: DataFrame) -> None:
+    section = TemporalNullValueSection(frame=dataframe, dt_column="datetime", period="M")
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
