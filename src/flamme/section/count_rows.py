@@ -189,7 +189,7 @@ def create_temporal_count_table(frame: DataFrame, dt_column: str, period: str) -
     return Template(
         """
 <details>
-    <summary>Statistics per period</summary>
+    <summary>[show statistics per temporal period]</summary>
 
     <p>The following table shows some statistics for each period.
 

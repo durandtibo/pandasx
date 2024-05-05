@@ -130,11 +130,10 @@ This section analyzes the number and proportion of null values for the {{num_col
 columns.
 In the following histogram, the columns are sorted by ascending order of null values.
 
-
 {{bar_figure}}
 
 <details>
-    <summary>Show analysis per column</summary>
+    <summary>[show statistics per column]</summary>
 
     <p style="margin-top: 1rem;">
     The following tables show the number and proportion of null values for the {{num_columns}}
@@ -159,6 +158,7 @@ In the following histogram, the columns are sorted by ascending order of null va
         </div>
     </div>
 </details>
+
 <p style="margin-top: 1rem;">
 """
 
@@ -340,6 +340,8 @@ This section analyzes the monthly distribution of null values.
 The column <em>{{column}}</em> is used as the temporal column.
 
 {{figure}}
+
+<p style="margin-top: 1rem;">
 """
 
 

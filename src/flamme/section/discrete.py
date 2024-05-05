@@ -170,7 +170,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
         return Template(
             """
 <details>
-    <summary>Show head and tail values</summary>
+    <summary>[show head and tail values]</summary>
 
     <div class="row">
       <div class="col">
