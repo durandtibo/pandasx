@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from flamme.analyzer import (
+    AllColumnsTemporalNullValueAnalyzer,
     BaseAnalyzer,
     ColumnContinuousAdvancedAnalyzer,
     ColumnContinuousAnalyzer,
@@ -21,7 +22,6 @@ from flamme.analyzer import (
     MappingAnalyzer,
     MostFrequentValuesAnalyzer,
     NullValueAnalyzer,
-    TemporalNullValueAnalyzer,
     TemporalRowCountAnalyzer,
 )
 from flamme.ingestor import Ingestor
@@ -70,9 +70,11 @@ def create_null_value_analyzer() -> BaseAnalyzer:
             "temporal": GlobalTemporalNullValueAnalyzer(
                 dt_column="datetime", period="M", figsize=FIGSIZE
             ),
-            "monthly": TemporalNullValueAnalyzer(dt_column="datetime", period="M", figsize=(7, 4)),
-            "weekly": TemporalNullValueAnalyzer(dt_column="datetime", period="W"),
-            "daily": TemporalNullValueAnalyzer(
+            "monthly": AllColumnsTemporalNullValueAnalyzer(
+                dt_column="datetime", period="M", figsize=(7, 4)
+            ),
+            "weekly": AllColumnsTemporalNullValueAnalyzer(dt_column="datetime", period="W"),
+            "daily": AllColumnsTemporalNullValueAnalyzer(
                 dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
             ),
         }
