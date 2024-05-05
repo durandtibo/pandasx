@@ -20,7 +20,7 @@ __all__ = [
     "NullValueSection",
     "SectionDict",
     "TableOfContentSection",
-    "TemporalNullValueSection",
+    "AllColumnsTemporalNullValueSection",
     "TemporalRowCountSection",
 ]
 
@@ -38,7 +38,8 @@ from flamme.section.frame_summary import DataFrameSummarySection
 from flamme.section.mapping import SectionDict
 from flamme.section.markdown import MarkdownSection
 from flamme.section.most_frequent import MostFrequentValuesSection
-from flamme.section.null import NullValueSection, TemporalNullValueSection
+from flamme.section.null import NullValueSection
+from flamme.section.null_temp_all import AllColumnsTemporalNullValueSection
 from flamme.section.null_temp_col import ColumnTemporalNullValueSection
 from flamme.section.null_temp_global import GlobalTemporalNullValueSection
 from flamme.section.toc import TableOfContentSection

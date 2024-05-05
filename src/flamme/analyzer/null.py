@@ -11,8 +11,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import EmptySection
-from flamme.section.null import NullValueSection, TemporalNullValueSection
+from flamme.section import (
+    AllColumnsTemporalNullValueSection,
+    EmptySection,
+    NullValueSection,
+)
 
 if TYPE_CHECKING:
     from pandas import DataFrame
@@ -118,7 +121,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
             f"ncols={self._ncols}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> TemporalNullValueSection | EmptySection:
+    def analyze(self, frame: DataFrame) -> AllColumnsTemporalNullValueSection | EmptySection:
         logger.info(
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"
@@ -129,7 +132,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        return TemporalNullValueSection(
+        return AllColumnsTemporalNullValueSection(
             frame=frame,
             dt_column=self._dt_column,
             period=self._period,
