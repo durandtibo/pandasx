@@ -12,7 +12,7 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 
 from flamme.section.base import BaseSection
-from flamme.section.null import plot_temporal_null_total
+from flamme.section.null_temp_all import plot_temporal_null_total
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,

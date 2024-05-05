@@ -8,7 +8,11 @@ from pandas import DataFrame
 from pandas._testing import assert_frame_equal
 
 from flamme.analyzer import NullValueAnalyzer, TemporalNullValueAnalyzer
-from flamme.section import EmptySection, NullValueSection, TemporalNullValueSection
+from flamme.section import (
+    AllColumnsTemporalNullValueSection,
+    EmptySection,
+    NullValueSection,
+)
 
 #######################################
 #     Tests for NullValueAnalyzer     #
@@ -201,7 +205,7 @@ def test_monthly_null_value_analyzer_get_statistics() -> None:
             }
         )
     )
-    assert isinstance(section, TemporalNullValueSection)
+    assert isinstance(section, AllColumnsTemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
@@ -209,7 +213,7 @@ def test_monthly_null_value_analyzer_get_statistics_empty() -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
         DataFrame({"float": [], "int": [], "str": [], "datetime": []})
     )
-    assert isinstance(section, TemporalNullValueSection)
+    assert isinstance(section, AllColumnsTemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
 
 
