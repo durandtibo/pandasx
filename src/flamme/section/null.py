@@ -6,10 +6,10 @@ from __future__ import annotations
 __all__ = ["NullValueSection", "TemporalNullValueSection"]
 
 import logging
-import math
 from typing import TYPE_CHECKING
 
 import numpy as np
+from coola.utils import str_indent
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from pandas import DataFrame
@@ -367,23 +367,63 @@ def create_temporal_null_figure(
     """
     if frame.shape[0] == 0:
         return ""
-    columns = sorted([col for col in frame.columns if col != dt_column])
-    nrows = math.ceil(len(columns) / ncols)
-    fig, axes = plt.subplots(
-        nrows=nrows, ncols=ncols, figsize=(figsize[0] * ncols, figsize[1] * nrows)
+    figures = create_temporal_null_figures(
+        frame=frame, dt_column=dt_column, period=period, figsize=figsize
     )
+    # figures = list(map(str, range(len(figures))))
 
-    for i, column in enumerate(columns):
-        ax = axes[i // ncols, i % ncols] if ncols > 1 else axes[i]
+    columns = []
+    for i in range(ncols):
+        figs = str_indent("\n".join(figures[i::ncols]))
+        columns.append(f'<div class="col">\n  {figs}\n</div>')
+
+    return Template(
+        """
+    <div class="container-fluid text-center">
+      <div class="row align-items-start">
+        {{columns}}
+      </div>
+    </div>
+    """
+    ).render({"columns": "\n".join(columns)})
+
+
+def create_temporal_null_figures(
+    frame: DataFrame,
+    dt_column: str,
+    period: str,
+    figsize: tuple[float, float] = (7, 5),
+) -> list[str]:
+    r"""Create a HTML representation of each figure with the temporal
+    null value distribution.
+
+    Args:
+        frame: The DataFrame to analyze.
+        dt_column: The datetime column used to analyze
+            the temporal distribution.
+        period: The temporal period e.g. monthly or daily.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
+
+    Returns:
+        The HTML representations of the figures.
+    """
+    if frame.shape[0] == 0:
+        return []
+    columns = sorted([col for col in frame.columns if col != dt_column])
+    figures = []
+    for column in columns:
+        fig, ax = plt.subplots(figsize=figsize)
         ax.set_title(f"column: {column}")
 
         num_nulls, total, labels = prepare_data(
             frame=frame, column=column, dt_column=dt_column, period=period
         )
         plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
-        readable_xticklabels(ax, max_num_xticks=100 // ncols)
+        readable_xticklabels(ax, max_num_xticks=50)
+        figures.append(figure2html(fig, close_fig=True))
 
-    return figure2html(fig, close_fig=True)
+    return figures
 
 
 def plot_temporal_null_total(
