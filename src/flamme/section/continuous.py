@@ -375,7 +375,7 @@ def create_stats_table(stats: dict, column: str) -> str:
     return Template(
         """
 <details>
-    <summary>Statistics</summary>
+    <summary>[show statistics]</summary>
 
     <p>The following table shows some statistics about the distribution for column {{column}}.
 

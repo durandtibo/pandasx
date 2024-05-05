@@ -8,7 +8,7 @@ from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
 from flamme.section import DuplicatedRowSection
-from flamme.section.duplicate import create_duplicate_table
+from flamme.section.duplicate import create_duplicate_histogram, create_duplicate_table
 
 
 @pytest.fixture()
@@ -114,6 +114,15 @@ def test_duplicated_rows_section_render_html_toc_args(
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+################################################
+#     Tests for create_duplicate_histogram     #
+################################################
+
+
+def test_create_duplicate_histogram() -> None:
+    assert isinstance(create_duplicate_histogram(num_rows=100, num_unique_rows=10), str)
 
 
 ############################################

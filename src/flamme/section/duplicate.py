@@ -88,11 +88,6 @@ class DuplicatedRowSection(BaseSection):
                 "table": create_duplicate_table(
                     num_rows=stats["num_rows"], num_unique_rows=stats["num_unique_rows"]
                 ),
-                "figure": create_duplicate_histogram(
-                    num_rows=stats["num_rows"],
-                    num_unique_rows=stats["num_unique_rows"],
-                    figsize=self._figsize,
-                ),
             }
         )
 
@@ -108,12 +103,11 @@ class DuplicatedRowSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section shows the number of duplicated rows using {{num_columns}} columns:
-<em>{{columns}}</em>.
+This section shows the number of unique and duplicated rows when considering the following
+{{num_columns}} columns: <em>{{columns}}</em>.
 
 {{table}}
 
-{{figure}}
 <p style="margin-top: 1rem;">
 """
 
