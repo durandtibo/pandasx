@@ -87,8 +87,34 @@ The following is the corresponding `flamme` versions and tested dependencies.
 | `flamme` | `coola`      | `jinja2`     | `markdown`   | `matplotlib` | `numpy`       | `objectory`  | `pandas`     | `pyarrow`      | `scipy`       | `tqdm`         | `python`      |
 |----------|--------------|--------------|--------------|--------------|---------------|--------------|--------------|----------------|---------------|----------------|---------------|
 | `main`   | `>=0.2,<1.0` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.4,<3.0` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<5.0`  | `>=3.9,<3.13` |
+| `0.0.13` | `>=0.2,<1.0` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.4,<3.0` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<5.0`  | `>=3.9,<3.13` |
 | `0.0.12` | `>=0.2,<0.3` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.4,<3.0` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<4.67` | `>=3.9,<3.13` |
 | `0.0.11` | `>=0.2,<0.3` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.4,<3.0` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<4.67` | `>=3.9,<3.13` |
 | `0.0.10` | `>=0.2,<0.3` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.3,<2.2` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<4.67` | `>=3.9,<3.13` |
 | `0.0.9`  | `>=0.2,<0.3` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.3,<2.2` | `>=10.0,<15.0` | `>=1.10,<2.0` | `>=4.65,<4.67` | `>=3.9,<3.13` |
 | `0.0.8`  | `>=0.2,<0.3` | `>=3.0,<3.2` | `>=3.4,<3.6` | `>=3.6,<4.0` | `>=1.23,<2.0` | `>=0.1,<0.2` | `>=1.3,<2.2` | `>=10.0,<15.0` |               | `>=4.65,<4.67` | `>=3.9,<3.12` |
+
+
+## Contributing
+
+Please check the instructions in [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+
+## Suggestions and Communication
+
+Everyone is welcome to contribute to the community.
+If you have any questions or suggestions, you can
+submit [Github Issues](https://github.com/durandtibo/flamme/issues).
+We will reply to you as soon as possible. Thank you very much.
+
+## API stability
+
+:warning: While `flamme` is in development stage, no API is guaranteed to be stable from one
+release to the next.
+In fact, it is very likely that the API will change multiple times before a stable 1.0.0 release.
+In practice, this means that upgrading `flamme` to a new version will possibly break any code that
+was using the old version of `flamme`.
+
+## License
+
+`flamme` is licensed under BSD 3-Clause "New" or "Revised" license available in [LICENSE](LICENSE)
+file.
