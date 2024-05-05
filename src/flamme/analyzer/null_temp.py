@@ -3,7 +3,7 @@ temporal distribution of null values for all columns."""
 
 from __future__ import annotations
 
-__all__ = ["GlobalTemporalNullValueAnalyzer"]
+__all__ = ["TemporalNullValueAnalyzer"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
+class TemporalNullValueAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show the temporal distribution of null
     values for all columns.
 
@@ -34,10 +34,10 @@ class GlobalTemporalNullValueAnalyzer(BaseAnalyzer):
     ```pycon
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from flamme.analyzer import GlobalTemporalNullValueAnalyzer
-    >>> analyzer = GlobalTemporalNullValueAnalyzer(dt_column="datetime", period="M")
+    >>> from flamme.analyzer import TemporalNullValueAnalyzer
+    >>> analyzer = TemporalNullValueAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
-    GlobalTemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
+    TemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
     >>> frame = pd.DataFrame(
     ...     {
     ...         "col": np.array([np.nan, 1, 0, 1]),
