@@ -14,7 +14,7 @@ __all__ = [
     "DataTypeSection",
     "DuplicatedRowSection",
     "EmptySection",
-    "GlobalTemporalNullValueSection",
+    "TemporalNullValueSection",
     "MarkdownSection",
     "MostFrequentValuesSection",
     "NullValueSection",
@@ -39,7 +39,7 @@ from flamme.section.mapping import SectionDict
 from flamme.section.markdown import MarkdownSection
 from flamme.section.most_frequent import MostFrequentValuesSection
 from flamme.section.null import NullValueSection
+from flamme.section.null_temp import TemporalNullValueSection
 from flamme.section.null_temp_all import AllColumnsTemporalNullValueSection
 from flamme.section.null_temp_col import ColumnTemporalNullValueSection
-from flamme.section.null_temp_global import GlobalTemporalNullValueSection
 from flamme.section.toc import TableOfContentSection
