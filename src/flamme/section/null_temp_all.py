@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from coola.utils import str_indent
 from jinja2 import Template
 from matplotlib import pyplot as plt
+from tqdm import tqdm
 
 from flamme.section.base import BaseSection
 from flamme.section.null_temp import plot_temporal_null_total
@@ -204,7 +205,7 @@ def create_temporal_null_figures(
         return []
     columns = sorted([col for col in frame.columns if col != dt_column])
     figures = []
-    for column in columns:
+    for column in tqdm(columns, desc="generating figures"):
         fig, ax = plt.subplots(figsize=figsize)
         ax.set_title(f"column: {column}")
 
