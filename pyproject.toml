@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.14a0"
+version = "0.0.14a1"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
