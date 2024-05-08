@@ -30,7 +30,7 @@ class ContentSection(BaseSection):
     r"""Implement a section that generates the given custom content.
 
     Args:
-        content: The column names.
+        content: The content to use in the HTML code.
     """
 
     def __init__(self, content: str) -> None:
