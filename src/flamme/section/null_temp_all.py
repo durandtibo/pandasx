@@ -39,6 +39,8 @@ class AllColumnsTemporalNullValueSection(BaseSection):
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze. A plot is generated
+            for each column.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -50,21 +52,28 @@ class AllColumnsTemporalNullValueSection(BaseSection):
     def __init__(
         self,
         frame: DataFrame,
+        columns: Sequence[str],
         dt_column: str,
         period: str,
         ncols: int = 2,
         figsize: tuple[float, float] = (7, 5),
     ) -> None:
         self._frame = frame
+        self._columns = tuple(columns)
         self._dt_column = dt_column
         self._period = period
-        self._ncols = ncols
+        self._ncols = min(ncols, len(self._columns))
         self._figsize = figsize
 
     @property
     def frame(self) -> DataFrame:
-        r"""``pandas.DataFrame``: The DataFrame to analyze."""
+        r"""The DataFrame to analyze."""
         return self._frame
+
+    @property
+    def columns(self) -> tuple[str, ...]:
+        r"""The columns to analyze."""
+        return self._columns
 
     @property
     def dt_column(self) -> str:
@@ -94,8 +103,8 @@ class AllColumnsTemporalNullValueSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(
-            "Rendering the temporal null value distribution of all columns | "
-            f"datetime column: {self._dt_column} | period: {self._period}"
+            f"Rendering the temporal null value distribution of the following columns: "
+            f"{self._columns}\ndatetime column: {self._dt_column} | period: {self._period}"
         )
         return Template(self._create_template()).render(
             {
@@ -107,6 +116,7 @@ class AllColumnsTemporalNullValueSection(BaseSection):
                 "column": self._dt_column,
                 "figure": create_temporal_null_figure(
                     frame=self._frame,
+                    columns=self._columns,
                     dt_column=self._dt_column,
                     period=self._period,
                     ncols=self._ncols,
@@ -127,7 +137,7 @@ class AllColumnsTemporalNullValueSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the monthly distribution of null values.
+This section analyzes the temporal distribution of null values.
 The column <em>{{column}}</em> is used as the temporal column.
 
 {{figure}}
@@ -138,6 +148,7 @@ The column <em>{{column}}</em> is used as the temporal column.
 
 def create_temporal_null_figure(
     frame: DataFrame,
+    columns: Sequence[str],
     dt_column: str,
     period: str,
     ncols: int = 2,
@@ -148,6 +159,8 @@ def create_temporal_null_figure(
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze. A plot is generated
+            for each column.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -161,14 +174,13 @@ def create_temporal_null_figure(
     if frame.shape[0] == 0:
         return ""
     figures = create_temporal_null_figures(
-        frame=frame, dt_column=dt_column, period=period, figsize=figsize
+        frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
     )
-    # figures = list(map(str, range(len(figures))))
 
-    columns = []
+    cols = []
     for i in range(ncols):
         figs = str_indent("\n".join(figures[i::ncols]))
-        columns.append(f'<div class="col">\n  {figs}\n</div>')
+        cols.append(f'<div class="col">\n  {figs}\n</div>')
 
     return Template(
         """
@@ -178,11 +190,12 @@ def create_temporal_null_figure(
       </div>
     </div>
     """
-    ).render({"columns": "\n".join(columns)})
+    ).render({"columns": "\n".join(cols)})
 
 
 def create_temporal_null_figures(
     frame: DataFrame,
+    columns: Sequence[str],
     dt_column: str,
     period: str,
     figsize: tuple[float, float] = (7, 5),
@@ -192,6 +205,8 @@ def create_temporal_null_figures(
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze. A plot is generated
+            for each column.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -203,7 +218,7 @@ def create_temporal_null_figures(
     """
     if frame.shape[0] == 0:
         return []
-    columns = sorted([col for col in frame.columns if col != dt_column])
+
     figures = []
     for column in tqdm(columns, desc="generating figures"):
         fig, ax = plt.subplots(figsize=figsize)
