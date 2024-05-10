@@ -88,8 +88,10 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     @property
     def figsize(self) -> tuple[float, float]:
-        r"""tuple: The figure size in inches. The first dimension is
-        the width and the second is the height."""
+        r"""The figure size in inches.
+
+        The first dimension is the width and the second is the height.
+        """
         return self._figsize
 
     def get_statistics(self) -> dict:

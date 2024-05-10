@@ -86,8 +86,10 @@ class NullValueSection(BaseSection):
 
     @property
     def figsize(self) -> tuple[float, float] | None:
-        r"""tuple: The individual figure size in pixels. The first
-        dimension is the width and the second is the height."""
+        r"""The individual figure size in pixels.
+
+        The first dimension is the width and the second is the height.
+        """
         return self._figsize
 
     def get_statistics(self) -> dict:

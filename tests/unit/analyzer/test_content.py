@@ -24,17 +24,17 @@ def dataframe() -> DataFrame:
 #####################################
 
 
-def test_duplicated_row_analyzer_str() -> None:
+def test_content_analyzer_str() -> None:
     assert str(ContentAnalyzer(content="meow")).startswith("ContentAnalyzer(")
 
 
-def test_duplicated_row_analyzer_get_statistics(dataframe: DataFrame) -> None:
+def test_content_analyzer_get_statistics(dataframe: DataFrame) -> None:
     section = ContentAnalyzer(content="meow").analyze(dataframe)
     assert isinstance(section, ContentSection)
     assert section.get_statistics() == {}
 
 
-def test_duplicated_row_analyzer_get_statistics_empty_rows() -> None:
+def test_content_analyzer_get_statistics_empty_rows() -> None:
     section = ContentAnalyzer(content="meow").analyze(DataFrame({"col1": [], "col2": []}))
     assert isinstance(section, ContentSection)
     assert section.get_statistics() == {}

@@ -6,6 +6,7 @@ from coola import objects_are_allclose
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from pandas import Series
+from pandas.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
@@ -58,8 +59,14 @@ def stats() -> dict:
 #############################################
 
 
+def test_column_continuous_section_str(series: Series) -> None:
+    assert str(ColumnContinuousSection(series=series, column="col")).startswith(
+        "ColumnContinuousSection("
+    )
+
+
 def test_column_continuous_section_series(series: Series) -> None:
-    assert ColumnContinuousSection(series=series, column="col").series.equals(series)
+    assert_series_equal(ColumnContinuousSection(series=series, column="col").series, series)
 
 
 def test_column_continuous_section_column(series: Series) -> None:

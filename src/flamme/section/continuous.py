@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
@@ -55,6 +56,32 @@ class ColumnContinuousSection(BaseSection):
             ``0`` is the minimum value and ``1`` is the maximum value.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.section import ColumnContinuousSection
+    >>> section = ColumnContinuousSection(
+    ...     series=pd.Series([np.nan, *list(range(101)), np.nan]), column="col"
+    ... )
+    >>> section
+    ColumnContinuousSection(
+      (column): col
+      (nbins): None
+      (yscale): auto
+      (xmin): None
+      (xmax): None
+      (figsize): None
+    )
+    >>> section.get_statistics()
+    {'count': 103, 'num_nulls': 2, 'nunique': 102, 'mean': 50.0, 'std': 29.30...,
+     'skewness': 0.0, 'kurtosis': -1.200235294117647, 'min': 0.0,
+     'q001': 0.1, 'q01': 1.0, 'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0,
+     'q75': 75.0, 'q90': 90.0, 'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0,
+     '>0': 100, '<0': 0, '=0': 1, 'num_non_nulls': 101}
+
+    ```
     """
 
     def __init__(
@@ -74,6 +101,21 @@ class ColumnContinuousSection(BaseSection):
         self._xmin = xmin
         self._xmax = xmax
         self._figsize = figsize
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "column": self._column,
+                    "nbins": self._nbins,
+                    "yscale": self._yscale,
+                    "xmin": self._xmin,
+                    "xmax": self._xmax,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def column(self) -> str:
@@ -101,8 +143,10 @@ class ColumnContinuousSection(BaseSection):
 
     @property
     def figsize(self) -> tuple[float, float] | None:
-        r"""tuple: The individual figure size in pixels. The first
-        dimension is the width and the second is the height."""
+        r"""The individual figure size in pixels.
+
+        The first dimension is the width and the second is the height.
+        """
         return self._figsize
 
     def get_statistics(self) -> dict[str, float]:

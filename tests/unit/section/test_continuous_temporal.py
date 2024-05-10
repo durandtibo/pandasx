@@ -26,6 +26,17 @@ def dataframe() -> DataFrame:
 #####################################################
 
 
+def test_column_temporal_continuous_section_str(dataframe: DataFrame) -> None:
+    assert str(
+        ColumnTemporalContinuousSection(
+            frame=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+    ).startswith("ColumnTemporalContinuousSection(")
+
+
 def test_column_temporal_continuous_section_column(dataframe: DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
