@@ -3,7 +3,7 @@ r"""Contain DataFrame analyzers."""
 from __future__ import annotations
 
 __all__ = [
-    "AllColumnsTemporalNullValueAnalyzer",
+    "ColumnTemporalNullValueAnalyzer",
     "BaseAnalyzer",
     "ChoiceAnalyzer",
     "ColumnContinuousAdvancedAnalyzer",
@@ -51,5 +51,5 @@ from flamme.analyzer.markdown import MarkdownAnalyzer
 from flamme.analyzer.most_frequent import MostFrequentValuesAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer
 from flamme.analyzer.null_temp import TemporalNullValueAnalyzer
-from flamme.analyzer.null_temp_all import AllColumnsTemporalNullValueAnalyzer
+from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.toc import TableOfContentAnalyzer

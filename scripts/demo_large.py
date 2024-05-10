@@ -9,21 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from flamme.analyzer import (
-    AllColumnsTemporalNullValueAnalyzer,
-    BaseAnalyzer,
-    ColumnContinuousAdvancedAnalyzer,
-    ColumnContinuousAnalyzer,
-    ColumnTemporalContinuousAnalyzer,
-    DataFrameSummaryAnalyzer,
-    DataTypeAnalyzer,
-    DuplicatedRowAnalyzer,
-    MappingAnalyzer,
-    MostFrequentValuesAnalyzer,
-    NullValueAnalyzer,
-    TemporalNullValueAnalyzer,
-    TemporalRowCountAnalyzer,
-)
+from flamme import analyzer as fa
 from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
 from flamme.transformer.dataframe import (
@@ -58,23 +44,23 @@ def create_dataframe(nrows: int = 1000, ncols: int = 100) -> pd.DataFrame:
     return frame
 
 
-def create_null_value_analyzer() -> BaseAnalyzer:
+def create_null_value_analyzer() -> fa.BaseAnalyzer:
     r"""Instantiate an analyzer about null values.
 
     Returns:
         The instantiated analyzer.
     """
-    return MappingAnalyzer(
+    return fa.MappingAnalyzer(
         {
-            "overall": NullValueAnalyzer(figsize=FIGSIZE),
-            "temporal": TemporalNullValueAnalyzer(
+            "overall": fa.NullValueAnalyzer(figsize=FIGSIZE),
+            "temporal": fa.TemporalNullValueAnalyzer(
                 dt_column="datetime", period="M", figsize=FIGSIZE
             ),
-            "monthly": AllColumnsTemporalNullValueAnalyzer(
+            "monthly": fa.ColumnTemporalNullValueAnalyzer(
                 dt_column="datetime", period="M", figsize=(7, 4)
             ),
-            "weekly": AllColumnsTemporalNullValueAnalyzer(dt_column="datetime", period="W"),
-            "daily": AllColumnsTemporalNullValueAnalyzer(
+            "weekly": fa.ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="W"),
+            "daily": fa.ColumnTemporalNullValueAnalyzer(
                 dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
             ),
         }
@@ -86,7 +72,7 @@ def create_continuous_column_analyzer(
     yscale: str = "linear",
     xmin: float | str | None = None,
     xmax: float | str | None = None,
-) -> BaseAnalyzer:
+) -> fa.BaseAnalyzer:
     r"""Instantiate an analyzer about continuous values for a given
     column.
 
@@ -101,9 +87,9 @@ def create_continuous_column_analyzer(
     Returns:
         The instantiated analyzer.
     """
-    return MappingAnalyzer(
+    return fa.MappingAnalyzer(
         {
-            "overall": ColumnContinuousAnalyzer(
+            "overall": fa.ColumnContinuousAnalyzer(
                 column=column,
                 yscale=yscale,
                 nbins=100,
@@ -111,53 +97,53 @@ def create_continuous_column_analyzer(
                 xmin=xmin,
                 xmax=xmax,
             ),
-            "monthly": ColumnTemporalContinuousAnalyzer(
+            "monthly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
                 period="M",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
-            "weekly": ColumnTemporalContinuousAnalyzer(
+            "weekly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
                 period="W",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
-            "daily": ColumnTemporalContinuousAnalyzer(
+            "daily": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
                 period="D",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
-            "advanced": ColumnContinuousAdvancedAnalyzer(
+            "advanced": fa.ColumnContinuousAdvancedAnalyzer(
                 column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
             ),
-            "most frequent": MostFrequentValuesAnalyzer(column=column, top=10),
+            "most frequent": fa.MostFrequentValuesAnalyzer(column=column, top=10),
         },
         max_toc_depth=1,
     )
 
 
-def create_analyzer() -> BaseAnalyzer:
+def create_analyzer() -> fa.BaseAnalyzer:
     r"""Instantiate an analyzer.
 
     Returns:
         The instantiated analyzer.
     """
-    columns = MappingAnalyzer({})
-    return MappingAnalyzer(
+    columns = fa.MappingAnalyzer({})
+    return fa.MappingAnalyzer(
         {
-            "summary": DataFrameSummaryAnalyzer(),
-            "monthly count": TemporalRowCountAnalyzer(
+            "summary": fa.DataFrameSummaryAnalyzer(),
+            "monthly count": fa.TemporalRowCountAnalyzer(
                 dt_column="datetime",
                 period="M",
                 figsize=FIGSIZE,
             ),
-            "duplicate": DuplicatedRowAnalyzer(),
-            "column type": DataTypeAnalyzer(),
+            "duplicate": fa.DuplicatedRowAnalyzer(),
+            "column type": fa.DataTypeAnalyzer(),
             "null values": create_null_value_analyzer(),
             "columns": columns,
         }

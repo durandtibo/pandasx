@@ -3,7 +3,7 @@ r"""Contain sections."""
 from __future__ import annotations
 
 __all__ = [
-    "AllColumnsTemporalNullValueSection",
+    "ColumnTemporalNullValueSection",
     "BaseSection",
     "ColumnContinuousAdvancedSection",
     "ColumnContinuousSection",
@@ -41,5 +41,5 @@ from flamme.section.markdown import MarkdownSection
 from flamme.section.most_frequent import MostFrequentValuesSection
 from flamme.section.null import NullValueSection
 from flamme.section.null_temp import TemporalNullValueSection
-from flamme.section.null_temp_all import AllColumnsTemporalNullValueSection
+from flamme.section.null_temp_col import ColumnTemporalNullValueSection
 from flamme.section.toc import TableOfContentSection

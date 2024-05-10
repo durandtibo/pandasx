@@ -7,8 +7,8 @@ from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
 from pandas.testing import assert_frame_equal
 
-from flamme.section import AllColumnsTemporalNullValueSection
-from flamme.section.null_temp_all import (
+from flamme.section import ColumnTemporalNullValueSection
+from flamme.section.null_temp_col import (
     create_table_section,
     create_temporal_null_figure,
     create_temporal_null_figures,
@@ -30,13 +30,13 @@ def dataframe() -> pd.DataFrame:
     )
 
 
-########################################################
-#     Tests for AllColumnsTemporalNullValueSection     #
-########################################################
+####################################################
+#     Tests for ColumnTemporalNullValueSection     #
+####################################################
 
 
-def test_all_columns_temporal_null_value_section_frame(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_frame(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -45,8 +45,8 @@ def test_all_columns_temporal_null_value_section_frame(dataframe: pd.DataFrame) 
     assert_frame_equal(section.frame, dataframe)
 
 
-def test_all_columns_temporal_null_value_section_columns(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_columns(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -56,10 +56,10 @@ def test_all_columns_temporal_null_value_section_columns(dataframe: pd.DataFrame
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "str"])
-def test_all_columns_temporal_null_value_section_dt_column(
+def test_column_temporal_null_value_section_dt_column(
     dataframe: pd.DataFrame, dt_column: str
 ) -> None:
-    section = AllColumnsTemporalNullValueSection(
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column=dt_column,
@@ -69,10 +69,8 @@ def test_all_columns_temporal_null_value_section_dt_column(
 
 
 @pytest.mark.parametrize("period", ["M", "D"])
-def test_all_columns_temporal_null_value_section_period(
-    dataframe: pd.DataFrame, period: str
-) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_period(dataframe: pd.DataFrame, period: str) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -82,8 +80,8 @@ def test_all_columns_temporal_null_value_section_period(
 
 
 @pytest.mark.parametrize("ncols", [1, 2])
-def test_all_columns_temporal_null_value_section_ncols(dataframe: pd.DataFrame, ncols: int) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_ncols(dataframe: pd.DataFrame, ncols: int) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -94,10 +92,10 @@ def test_all_columns_temporal_null_value_section_ncols(dataframe: pd.DataFrame, 
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_all_columns_temporal_null_value_section_figsize(
+def test_column_temporal_null_value_section_figsize(
     dataframe: pd.DataFrame, figsize: tuple[float, float]
 ) -> None:
-    section = AllColumnsTemporalNullValueSection(
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -107,8 +105,8 @@ def test_all_columns_temporal_null_value_section_figsize(
     assert section.figsize == figsize
 
 
-def test_all_columns_temporal_null_value_section_figsize_default(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_figsize_default(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -117,8 +115,8 @@ def test_all_columns_temporal_null_value_section_figsize_default(dataframe: pd.D
     assert section.figsize == (7, 5)
 
 
-def test_all_columns_temporal_null_value_section_get_statistics(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_get_statistics(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -127,8 +125,8 @@ def test_all_columns_temporal_null_value_section_get_statistics(dataframe: pd.Da
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_all_columns_temporal_null_value_section_get_statistics_empty_row() -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
+    section = ColumnTemporalNullValueSection(
         frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -137,8 +135,8 @@ def test_all_columns_temporal_null_value_section_get_statistics_empty_row() -> N
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_all_columns_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
+    section = ColumnTemporalNullValueSection(
         frame=pd.DataFrame(
             {
                 "datetime": pd.to_datetime(
@@ -153,8 +151,8 @@ def test_all_columns_temporal_null_value_section_get_statistics_only_datetime_co
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_all_columns_temporal_null_value_section_render_html_body(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_render_html_body(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -163,10 +161,10 @@ def test_all_columns_temporal_null_value_section_render_html_body(dataframe: pd.
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_all_columns_temporal_null_value_section_render_html_body_args(
+def test_column_temporal_null_value_section_render_html_body_args(
     dataframe: pd.DataFrame,
 ) -> None:
-    section = AllColumnsTemporalNullValueSection(
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -177,8 +175,8 @@ def test_all_columns_temporal_null_value_section_render_html_body_args(
     )
 
 
-def test_all_columns_temporal_null_value_section_render_html_body_empty() -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_render_html_body_empty() -> None:
+    section = ColumnTemporalNullValueSection(
         frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -187,8 +185,8 @@ def test_all_columns_temporal_null_value_section_render_html_body_empty() -> Non
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_all_columns_temporal_null_value_section_render_html_toc(dataframe: pd.DataFrame) -> None:
-    section = AllColumnsTemporalNullValueSection(
+def test_column_temporal_null_value_section_render_html_toc(dataframe: pd.DataFrame) -> None:
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
@@ -197,10 +195,10 @@ def test_all_columns_temporal_null_value_section_render_html_toc(dataframe: pd.D
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_all_columns_temporal_null_value_section_render_html_toc_args(
+def test_column_temporal_null_value_section_render_html_toc_args(
     dataframe: pd.DataFrame,
 ) -> None:
-    section = AllColumnsTemporalNullValueSection(
+    section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
