@@ -31,10 +31,25 @@ class ContentSection(BaseSection):
 
     Args:
         content: The content to use in the HTML code.
+
+    Example usage:
+
+    ```pycon
+    >>> from flamme.section import ContentSection
+    >>> section = ContentSection(content="meow")
+    >>> section
+    ContentSection()
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(self, content: str) -> None:
         self._content = str(content)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}()"
 
     def get_statistics(self) -> dict:
         return {}

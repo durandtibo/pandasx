@@ -5,6 +5,7 @@ import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from pandas import Series
+from pandas.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousAdvancedSection
 from flamme.section.continuous_advanced import create_histogram_range_figure
@@ -50,8 +51,14 @@ def stats() -> dict:
 #####################################################
 
 
+def test_column_continuous_advanced_section_str(series: Series) -> None:
+    assert str(ColumnContinuousAdvancedSection(series=series, column="col")).startswith(
+        "ColumnContinuousAdvancedSection("
+    )
+
+
 def test_column_continuous_advanced_section_series(series: Series) -> None:
-    assert ColumnContinuousAdvancedSection(series=series, column="col").series.equals(series)
+    assert_series_equal(ColumnContinuousAdvancedSection(series=series, column="col").series, series)
 
 
 def test_column_continuous_advanced_section_column(series: Series) -> None:

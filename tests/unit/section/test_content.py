@@ -10,6 +10,10 @@ from flamme.section import ContentSection
 ####################################
 
 
+def test_content_section_str() -> None:
+    assert str(ContentSection(content="meow")).startswith("ContentSection(")
+
+
 def test_content_section_get_statistics() -> None:
     section = ContentSection(content="meow")
     assert objects_are_allclose(
