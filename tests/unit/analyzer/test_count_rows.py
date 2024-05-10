@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 from coola import objects_are_equal
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from flamme.analyzer import TemporalRowCountAnalyzer
 from flamme.section import EmptySection, TemporalRowCountSection

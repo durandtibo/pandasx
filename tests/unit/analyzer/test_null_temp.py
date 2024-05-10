@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from coola import objects_are_equal
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from flamme.analyzer import TemporalNullValueAnalyzer
 from flamme.section import EmptySection, TemporalNullValueSection
