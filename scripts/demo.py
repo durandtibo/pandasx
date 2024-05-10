@@ -19,6 +19,7 @@ from flamme.analyzer import (
     ColumnTemporalDiscreteAnalyzer,
     ColumnTemporalNullValueAnalyzer,
     ContentAnalyzer,
+    DataFrameSummaryAnalyzer,
     DataTypeAnalyzer,
     DuplicatedRowAnalyzer,
     MappingAnalyzer,
@@ -214,7 +215,7 @@ def create_analyzer() -> BaseAnalyzer:
     return MappingAnalyzer(
         {
             "query": ContentAnalyzer(content="blablabla..."),
-            "summary": pd.DataFrameSummaryAnalyzer(),
+            "summary": DataFrameSummaryAnalyzer(),
             "monthly count": TemporalRowCountAnalyzer(
                 dt_column="datetime",
                 period="M",
