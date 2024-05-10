@@ -8,10 +8,14 @@ __all__ = ["TemporalNullValueAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+from coola.utils import repr_indent, repr_mapping
+
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, TemporalNullValueSection
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from pandas import DataFrame
 
 logger = logging.getLogger(__name__)
@@ -37,7 +41,12 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     >>> from flamme.analyzer import TemporalNullValueAnalyzer
     >>> analyzer = TemporalNullValueAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
-    TemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
+    TemporalNullValueAnalyzer(
+      (columns): None
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
     >>> frame = pd.DataFrame(
     ...     {
     ...         "col": np.array([np.nan, 1, 0, 1]),
@@ -55,17 +64,26 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         self,
         dt_column: str,
         period: str,
+        columns: Sequence[str] | None = None,
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._dt_column = dt_column
         self._period = period
+        self._columns = columns
         self._figsize = figsize
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__qualname__}(dt_column={self._dt_column}, "
-            f"period={self._period}, figsize={self._figsize})"
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "columns": self._columns,
+                    "dt_column": self._dt_column,
+                    "period": self._period,
+                    "figsize": self._figsize,
+                }
+            )
         )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, frame: DataFrame) -> TemporalNullValueSection | EmptySection:
         logger.info(
@@ -78,8 +96,14 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
+        columns = self._columns
+        if columns is None:
+            # Exclude the datetime column because it does not make sense to analyze it because
+            # we cannot know the date/time if the value is null.
+            columns = sorted([col for col in frame.columns if col != self._dt_column])
         return TemporalNullValueSection(
             frame=frame,
+            columns=columns,
             dt_column=self._dt_column,
             period=self._period,
             figsize=self._figsize,
