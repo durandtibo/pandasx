@@ -273,7 +273,7 @@ def prepare_data(
     ```pycon
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from flamme.section.null_temp_all import prepare_data
+    >>> from flamme.section.null_temp_col import prepare_data
     >>> num_nulls, total, labels = prepare_data(
     ...     frame=pd.DataFrame(
     ...         {
