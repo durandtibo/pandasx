@@ -326,7 +326,7 @@ def prepare_data(
     ...             ),
     ...         }
     ...     ),
-    ...     columns=['col1', 'col2'],
+    ...     columns=["col1", "col2"],
     ...     dt_column="datetime",
     ...     period="M",
     ... )
