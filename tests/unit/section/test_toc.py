@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 from coola import objects_are_equal
 from jinja2 import Template
-from pandas import DataFrame
 
 from flamme.section import DuplicatedRowSection, TableOfContentSection
 
 
 @pytest.fixture()
-def dataframe() -> DataFrame:
-    return DataFrame(
+def dataframe() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "col1": np.array([1.2, 4.2, 4.2, 2.2]),
             "col2": np.array([1, 1, 1, 1]),
@@ -25,27 +25,29 @@ def dataframe() -> DataFrame:
 ###########################################
 
 
-def test_table_of_content_section_get_statistics(dataframe: DataFrame) -> None:
+def test_table_of_content_section_get_statistics(dataframe: pd.DataFrame) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 3})
 
 
-def test_table_of_content_section_get_statistics_columns(dataframe: DataFrame) -> None:
+def test_table_of_content_section_get_statistics_columns(dataframe: pd.DataFrame) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe, columns=["col2", "col3"]))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 2})
 
 
 def test_table_of_content_section_get_statistics_empty_row() -> None:
-    section = TableOfContentSection(DuplicatedRowSection(frame=DataFrame({"col1": [], "col2": []})))
+    section = TableOfContentSection(
+        DuplicatedRowSection(frame=pd.DataFrame({"col1": [], "col2": []}))
+    )
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})
 
 
 def test_table_of_content_section_get_statistics_empty_column() -> None:
-    section = TableOfContentSection(DuplicatedRowSection(frame=DataFrame({})))
+    section = TableOfContentSection(DuplicatedRowSection(frame=pd.DataFrame({})))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 0, "num_unique_rows": 0})
 
 
-def test_table_of_content_section_render_html_body(dataframe: DataFrame) -> None:
+def test_table_of_content_section_render_html_body(dataframe: pd.DataFrame) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert isinstance(Template(section.render_html_body()).render(), str)
 
@@ -53,19 +55,19 @@ def test_table_of_content_section_render_html_body(dataframe: DataFrame) -> None
 def test_table_of_content_section_render_html_body_empty_row() -> None:
     section = TableOfContentSection(
         DuplicatedRowSection(
-            frame=DataFrame({"col1": [], "col2": []}),
+            frame=pd.DataFrame({"col1": [], "col2": []}),
         )
     )
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_table_of_content_section_render_html_body_empty_column() -> None:
-    section = TableOfContentSection(DuplicatedRowSection(frame=DataFrame({})))
+    section = TableOfContentSection(DuplicatedRowSection(frame=pd.DataFrame({})))
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_table_of_content_section_render_html_body_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert isinstance(
@@ -73,13 +75,13 @@ def test_table_of_content_section_render_html_body_args(
     )
 
 
-def test_table_of_content_section_render_html_toc(dataframe: DataFrame) -> None:
+def test_table_of_content_section_render_html_toc(dataframe: pd.DataFrame) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_table_of_content_section_render_html_toc_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert isinstance(

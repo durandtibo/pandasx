@@ -4,14 +4,13 @@ import pandas as pd
 import pyarrow as pa
 import pytest
 from coola import objects_are_equal
-from pandas import DataFrame
 
 from flamme.schema.reader import SchemaReader
 
 
 @pytest.fixture(scope="module")
 def frame() -> pd.DataFrame:
-    return DataFrame(
+    return pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],

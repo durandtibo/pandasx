@@ -13,7 +13,7 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    from pandas import Series
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def transform(self, series: Series) -> Series:
+    def transform(self, series: pd.Series) -> pd.Series:
         r"""Transform a ``pandas.Series``.
 
         Args:

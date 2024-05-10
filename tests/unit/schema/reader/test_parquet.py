@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import pyarrow as pa
 import pytest
 from coola import objects_are_equal
-from pandas import DataFrame
 
 from flamme.schema.reader import ParquetSchemaReader
 
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="module")
 def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("data").joinpath("data.parquet")
-    frame = DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],

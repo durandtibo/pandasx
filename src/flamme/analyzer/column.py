@@ -15,7 +15,7 @@ from flamme.utils import setup_object
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
 
     from flamme.section import BaseSection
 
@@ -66,7 +66,7 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: DataFrame) -> BaseSection:
+    def analyze(self, frame: pd.DataFrame) -> BaseSection:
         logger.info(f"Selecting a {len(self._columns):,} columns: {self._columns}")
         frame = frame[self._columns]
         return self._analyzer.analyze(frame)

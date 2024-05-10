@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
-from pandas import DataFrame
+import pandas as pd
 
 from flamme.analyzer import MarkdownAnalyzer
 from flamme.section import MarkdownSection
@@ -17,7 +17,7 @@ def test_markdown_analyzer_str() -> None:
 
 def test_markdown_analyzer_get_statistics() -> None:
     section = MarkdownAnalyzer(desc="hello cats!").analyze(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -30,6 +30,6 @@ def test_markdown_analyzer_get_statistics() -> None:
 
 
 def test_markdown_analyzer_get_statistics_empty() -> None:
-    section = MarkdownAnalyzer(desc="hello cats!").analyze(DataFrame({}))
+    section = MarkdownAnalyzer(desc="hello cats!").analyze(pd.DataFrame({}))
     assert isinstance(section, MarkdownSection)
     assert section.get_statistics() == {}

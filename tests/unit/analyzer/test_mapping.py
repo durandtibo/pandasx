@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 from coola import objects_are_allclose
-from pandas import DataFrame
 
 from flamme.analyzer import (
     DataTypeAnalyzer,
@@ -42,7 +42,7 @@ def test_mapping_analyzer_get_statistics() -> None:
             "section2": NullValueAnalyzer(),
         }
     ).analyze(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -75,7 +75,7 @@ def test_mapping_analyzer_get_statistics_empty() -> None:
             "section2": NullValueAnalyzer(),
         }
     ).analyze(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([]),
                 "int": np.array([]),
@@ -110,7 +110,7 @@ def test_mapping_analyzer_max_toc_depth(max_toc_depth: int) -> None:
         },
         max_toc_depth=max_toc_depth,
     ).analyze(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),

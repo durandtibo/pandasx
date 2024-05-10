@@ -11,11 +11,12 @@ from flamme.ingestor.base import BaseIngestor
 from flamme.utils import setup_object
 
 if TYPE_CHECKING:
+    import pandas as pd
+
     from flamme.utils.imports import is_clickhouse_connect_available
 
     if is_clickhouse_connect_available():
         import clickhouse_connect
-    from pandas import DataFrame
 
 
 logger = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ class ClickHouseIngestor(BaseIngestor):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def ingest(self) -> DataFrame:
+    def ingest(self) -> pd.DataFrame:
         logger.info(
             f"Ingesting data from clickhouse... \n\n"
             "---------------------------------------------------------------------------------\n"

@@ -10,7 +10,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import MarkdownSection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
@@ -40,5 +40,5 @@ class MarkdownAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: DataFrame) -> MarkdownSection:  # noqa: ARG002
+    def analyze(self, frame: pd.DataFrame) -> MarkdownSection:  # noqa: ARG002
         return MarkdownSection(desc=self._desc)

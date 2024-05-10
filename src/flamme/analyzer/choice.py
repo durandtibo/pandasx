@@ -13,7 +13,8 @@ from coola.utils import str_indent, str_mapping
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+
+    import pandas as pd
 
     from flamme.section import BaseSection
 
@@ -67,7 +68,9 @@ class ChoiceAnalyzer(BaseAnalyzer):
     """
 
     def __init__(
-        self, analyzers: Mapping[str, BaseAnalyzer | dict], selection_fn: Callable[[DataFrame], str]
+        self,
+        analyzers: Mapping[str, BaseAnalyzer | dict],
+        selection_fn: Callable[[pd.DataFrame], str],
     ) -> None:
         self._analyzers = {name: setup_analyzer(analyzer) for name, analyzer in analyzers.items()}
         self._selection_fn = selection_fn
@@ -79,7 +82,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, frame: DataFrame) -> BaseSection:
+    def analyze(self, frame: pd.DataFrame) -> BaseSection:
         analyzer = self._analyzers[self._selection_fn(frame)]
         return analyzer.analyze(frame)
 
@@ -125,6 +128,6 @@ class NumUniqueSelection(Callable):
             f"small={self._small}, large={self._large})"
         )
 
-    def __call__(self, frame: DataFrame) -> str:
+    def __call__(self, frame: pd.DataFrame) -> str:
         nunique = frame[self._column].nunique()
         return self._small if nunique <= self._threshold else self._large

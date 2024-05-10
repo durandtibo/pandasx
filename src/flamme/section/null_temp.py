@@ -25,8 +25,9 @@ from flamme.utils.figure import figure2html, readable_xticklabels
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import pandas as pd
     from matplotlib.axes import Axes
-    from pandas import DataFrame
+
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ class TemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         columns: Sequence[str],
         dt_column: str,
         period: str,
@@ -66,7 +67,7 @@ class TemporalNullValueSection(BaseSection):
         self._figsize = figsize
 
     @property
-    def frame(self) -> DataFrame:
+    def frame(self) -> pd.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -148,7 +149,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -183,7 +184,7 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_table(
-    frame: DataFrame, columns: Sequence[str], dt_column: str, period: str
+    frame: pd.DataFrame, columns: Sequence[str], dt_column: str, period: str
 ) -> str:
     r"""Create a HTML representation of a table with the temporal
     distribution of null values.
@@ -290,7 +291,7 @@ def plot_temporal_null_total(
 
 
 def prepare_data(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,

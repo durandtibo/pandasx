@@ -24,7 +24,8 @@ from flamme.utils.figure import figure2html, readable_xticklabels
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ class TemporalRowCountSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
@@ -61,7 +62,7 @@ class TemporalRowCountSection(BaseSection):
         self._figsize = figsize
 
     @property
-    def frame(self) -> DataFrame:
+    def frame(self) -> pd.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -136,7 +137,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_count_figure(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -167,7 +168,7 @@ def create_temporal_count_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_count_table(frame: DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_count_table(frame: pd.DataFrame, dt_column: str, period: str) -> str:
     r"""Return a HTML representation of a figure with number of rows per
     temporal windows.
 
@@ -231,7 +232,7 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
 
 
 def prepare_data(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     dt_column: str,
     period: str,
 ) -> tuple[list[int], list[str]]:

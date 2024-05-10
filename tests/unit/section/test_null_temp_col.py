@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
-from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
 from flamme.section import ColumnTemporalNullValueSection
@@ -21,7 +20,7 @@ from flamme.section.null_temp_col import (
 
 def test_column_temporal_null_value_section_frame() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -35,7 +34,7 @@ def test_column_temporal_null_value_section_frame() -> None:
     )
     assert_frame_equal(
         section.frame,
-        DataFrame(
+        pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -49,7 +48,7 @@ def test_column_temporal_null_value_section_frame() -> None:
 @pytest.mark.parametrize("column", ["col1", "col2"])
 def test_column_temporal_null_value_section_column(column: str) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col1": np.array([1.2, 4.2, np.nan, 2.2]),
                 "col2": np.array([np.nan, 1, 0, 1]),
@@ -68,7 +67,7 @@ def test_column_temporal_null_value_section_column(column: str) -> None:
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])
 def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -87,7 +86,7 @@ def test_column_temporal_null_value_section_dt_column(dt_column: str) -> None:
 @pytest.mark.parametrize("period", ["M", "D"])
 def test_column_temporal_null_value_section_period(period: str) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -105,7 +104,7 @@ def test_column_temporal_null_value_section_period(period: str) -> None:
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_null_value_section_figsize(figsize: tuple[int, int]) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -123,7 +122,7 @@ def test_column_temporal_null_value_section_figsize(figsize: tuple[int, int]) ->
 
 def test_column_temporal_null_value_section_figsize_default() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -141,7 +140,7 @@ def test_column_temporal_null_value_section_figsize_default() -> None:
 def test_column_temporal_null_value_section_missing_column() -> None:
     with pytest.raises(ValueError, match=r"Column my_col is not in the DataFrame \(columns:"):
         ColumnTemporalNullValueSection(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -160,7 +159,7 @@ def test_column_temporal_null_value_section_missing_dt_column() -> None:
         ValueError, match=r"Datetime column my_datetime is not in the DataFrame \(columns:"
     ):
         ColumnTemporalNullValueSection(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -176,7 +175,7 @@ def test_column_temporal_null_value_section_missing_dt_column() -> None:
 
 def test_column_temporal_null_value_section_get_statistics() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -193,7 +192,7 @@ def test_column_temporal_null_value_section_get_statistics() -> None:
 
 def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -203,7 +202,7 @@ def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
 
 def test_column_temporal_null_value_section_render_html_body() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -220,7 +219,7 @@ def test_column_temporal_null_value_section_render_html_body() -> None:
 
 def test_column_temporal_null_value_section_render_html_body_args() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -239,7 +238,7 @@ def test_column_temporal_null_value_section_render_html_body_args() -> None:
 
 def test_column_temporal_null_value_section_render_html_body_empty_rows() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -249,7 +248,7 @@ def test_column_temporal_null_value_section_render_html_body_empty_rows() -> Non
 
 def test_column_temporal_null_value_section_render_html_toc() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -266,7 +265,7 @@ def test_column_temporal_null_value_section_render_html_toc() -> None:
 
 def test_column_temporal_null_value_section_render_html_toc_args() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "col": np.array([1.2, 4.2, np.nan, 2.2]),
                 "datetime": pd.to_datetime(
@@ -291,7 +290,7 @@ def test_column_temporal_null_value_section_render_html_toc_args() -> None:
 def test_create_temporal_null_figure() -> None:
     assert isinstance(
         create_temporal_null_figure(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -310,7 +309,7 @@ def test_create_temporal_null_figure() -> None:
 def test_create_temporal_null_figure_empty() -> None:
     assert isinstance(
         create_temporal_null_figure(
-            frame=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
             column="col",
             dt_column="datetime",
             period="M",
@@ -327,7 +326,7 @@ def test_create_temporal_null_figure_empty() -> None:
 def test_create_temporal_null_table() -> None:
     assert isinstance(
         create_temporal_null_table(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -346,7 +345,7 @@ def test_create_temporal_null_table() -> None:
 def test_create_temporal_null_table_empty() -> None:
     assert isinstance(
         create_temporal_null_table(
-            frame=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
             column="col",
             dt_column="datetime",
             period="M",

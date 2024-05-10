@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import pytest
-from pandas import DataFrame
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.ingestor import ParquetIngestor
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="module")
 def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("data").joinpath("frame.parquet")
-    frame = DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],

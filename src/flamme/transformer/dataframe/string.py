@@ -14,7 +14,7 @@ from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class StripStringDataFrameTransformer(BaseDataFrameTransformer):
@@ -64,7 +64,7 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns})"
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         for col in tqdm(self._columns, desc="Striping strings"):
             frame[col] = frame[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
         return frame

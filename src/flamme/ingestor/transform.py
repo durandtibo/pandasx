@@ -17,7 +17,7 @@ from flamme.transformer.dataframe.base import (
 )
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +61,6 @@ class TransformedIngestor(BaseIngestor):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def ingest(self) -> DataFrame:
+    def ingest(self) -> pd.DataFrame:
         frame = self._ingestor.ingest()
         return self._transformer.transform(frame)

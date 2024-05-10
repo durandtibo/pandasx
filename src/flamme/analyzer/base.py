@@ -12,7 +12,8 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+
+    import pandas as pd
 
     from flamme.section import BaseSection
 
@@ -43,7 +44,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def analyze(self, frame: DataFrame) -> BaseSection:
+    def analyze(self, frame: pd.DataFrame) -> BaseSection:
         r"""Analyze the data in a DataFrame.
 
         Args:

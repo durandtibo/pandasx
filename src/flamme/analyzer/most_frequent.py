@@ -13,7 +13,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, MostFrequentValuesSection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
             f"dropna={self._dropna}, top={self._top:,})"
         )
 
-    def analyze(self, frame: DataFrame) -> MostFrequentValuesSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> MostFrequentValuesSection | EmptySection:
         logger.info(f"Analyzing the most frequent values of {self._column}")
         if self._column not in frame:
             logger.info(

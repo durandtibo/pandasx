@@ -4,12 +4,13 @@ from __future__ import annotations
 
 __all__ = ["Ingestor"]
 
+
 from typing import TYPE_CHECKING
 
 from flamme.ingestor.base import BaseIngestor
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class Ingestor(BaseIngestor):
@@ -40,11 +41,11 @@ class Ingestor(BaseIngestor):
     ```
     """
 
-    def __init__(self, frame: DataFrame) -> None:
+    def __init__(self, frame: pd.DataFrame) -> None:
         self._frame = frame
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(shape={self._frame.shape})"
 
-    def ingest(self) -> DataFrame:
+    def ingest(self) -> pd.DataFrame:
         return self._frame

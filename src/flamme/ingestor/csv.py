@@ -7,7 +7,7 @@ __all__ = ["CsvIngestor"]
 import logging
 from typing import TYPE_CHECKING, Any
 
-from pandas import DataFrame, read_csv
+import pandas as pd
 
 from flamme.ingestor.base import BaseIngestor
 from flamme.utils.path import human_file_size, sanitize_path
@@ -48,8 +48,8 @@ class CsvIngestor(BaseIngestor):
             args = ", " + args
         return f"{self.__class__.__qualname__}(path={self._path}{args})"
 
-    def ingest(self) -> DataFrame:
+    def ingest(self) -> pd.DataFrame:
         logger.info(f"Ingesting CSV data from {self._path} (size={human_file_size(self._path)})...")
-        frame = read_csv(filepath_or_buffer=self._path, **self._kwargs)
+        frame = pd.read_csv(filepath_or_buffer=self._path, **self._kwargs)
         logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
         return frame

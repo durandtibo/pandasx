@@ -16,7 +16,7 @@ from flamme.section import AllColumnsTemporalNullValueSection, EmptySection
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class AllColumnsTemporalNullValueAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: DataFrame) -> AllColumnsTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> AllColumnsTemporalNullValueSection | EmptySection:
         logger.info(
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"

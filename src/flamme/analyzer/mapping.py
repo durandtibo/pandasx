@@ -14,7 +14,7 @@ from flamme.section import SectionDict
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class MappingAnalyzer(BaseAnalyzer):
@@ -72,7 +72,7 @@ class MappingAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, frame: DataFrame) -> SectionDict:
+    def analyze(self, frame: pd.DataFrame) -> SectionDict:
         return SectionDict(
             sections={name: analyzer.analyze(frame) for name, analyzer in self._analyzers.items()},
             max_toc_depth=self._max_toc_depth,

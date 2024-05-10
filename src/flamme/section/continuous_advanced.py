@@ -35,7 +35,8 @@ from flamme.utils.range import find_range
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import Series
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +82,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
 
     def __init__(
         self,
-        series: Series,
+        series: pd.Series,
         column: str,
         nbins: int | None = None,
         yscale: str = "auto",
@@ -119,7 +120,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
         return self._nbins
 
     @property
-    def series(self) -> Series:
+    def series(self) -> pd.Series:
         return self._series
 
     @property
@@ -226,7 +227,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_histogram_range_figure(
-    series: Series,
+    series: pd.Series,
     column: str,
     nbins: int | None = None,
     yscale: str = "auto",

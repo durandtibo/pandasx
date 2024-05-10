@@ -11,7 +11,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataFrameSummarySection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(top={self._top:,}, sort={self._sort})"
 
-    def analyze(self, frame: DataFrame) -> DataFrameSummarySection:
+    def analyze(self, frame: pd.DataFrame) -> DataFrameSummarySection:
         logger.info("Analyzing the DataFrame...")
         if self._sort:
             frame = frame.reindex(sorted(frame.columns), axis=1)

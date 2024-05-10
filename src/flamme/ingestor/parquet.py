@@ -7,7 +7,7 @@ __all__ = ["ParquetIngestor"]
 import logging
 from typing import TYPE_CHECKING, Any
 
-from pandas import DataFrame, read_parquet
+import pandas as pd
 
 from flamme.ingestor.base import BaseIngestor
 from flamme.utils.path import human_file_size, sanitize_path
@@ -48,10 +48,10 @@ class ParquetIngestor(BaseIngestor):
             args = ", " + args
         return f"{self.__class__.__qualname__}(path={self._path}{args})"
 
-    def ingest(self) -> DataFrame:
+    def ingest(self) -> pd.DataFrame:
         logger.info(
             f"Ingesting parquet data from {self._path} (size={human_file_size(self._path)})..."
         )
-        frame = read_parquet(path=self._path, **self._kwargs)
+        frame = pd.read_parquet(path=self._path, **self._kwargs)
         logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
         return frame

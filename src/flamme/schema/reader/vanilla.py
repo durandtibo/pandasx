@@ -11,7 +11,7 @@ import pyarrow as pa
 from flamme.schema.reader.base import BaseSchemaReader
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class SchemaReader(BaseSchemaReader):
@@ -46,7 +46,7 @@ class SchemaReader(BaseSchemaReader):
     ```
     """
 
-    def __init__(self, frame: DataFrame) -> None:
+    def __init__(self, frame: pd.DataFrame) -> None:
         self._frame = frame
 
     def __repr__(self) -> str:

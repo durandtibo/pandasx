@@ -12,7 +12,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, TemporalRowCountSection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
             f"period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> TemporalRowCountSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> TemporalRowCountSection | EmptySection:
         logger.info(
             f"Analyzing the number of rows | "
             f"datetime column: {self._dt_column} | period: {self._period}"

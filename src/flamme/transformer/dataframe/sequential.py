@@ -17,7 +17,7 @@ from flamme.transformer.dataframe.base import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
 
 
 class SequentialDataFrameTransformer(BaseDataFrameTransformer):
@@ -86,7 +86,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
             args = f"\n  {str_indent(str_sequence(self._transformers))}\n"
         return f"{self.__class__.__qualname__}({args})"
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         for transformer in self._transformers:
             frame = transformer.transform(frame)
         return frame

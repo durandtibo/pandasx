@@ -11,7 +11,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnContinuousAdvancedSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnContinuousAdvancedSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in frame:
             logger.info(

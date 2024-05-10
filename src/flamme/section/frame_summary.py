@@ -23,7 +23,8 @@ from flamme.utils.dtype import series_column_types
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class DataFrameSummarySection(BaseSection):
         top: The number of most frequent values to show.
     """
 
-    def __init__(self, frame: DataFrame, top: int = 5) -> None:
+    def __init__(self, frame: pd.DataFrame, top: int = 5) -> None:
         self._frame = frame
         if top < 0:
             msg = f"Incorrect top value ({top}). top must be positive"
@@ -44,7 +45,7 @@ class DataFrameSummarySection(BaseSection):
         self._top = top
 
     @property
-    def frame(self) -> DataFrame:
+    def frame(self) -> pd.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 

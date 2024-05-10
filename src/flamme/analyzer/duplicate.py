@@ -14,7 +14,8 @@ from flamme.section import DuplicatedRowSection
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,6 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns}, figsize={self._figsize})"
 
-    def analyze(self, frame: DataFrame) -> DuplicatedRowSection:
+    def analyze(self, frame: pd.DataFrame) -> DuplicatedRowSection:
         logger.info(f"Analyzing the duplicated rows section using the columns: {self._columns}")
         return DuplicatedRowSection(frame=frame, columns=self._columns, figsize=self._figsize)

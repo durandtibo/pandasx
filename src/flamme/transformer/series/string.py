@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 from flamme.transformer.series.base import BaseSeriesTransformer
 
 if TYPE_CHECKING:
-    from pandas import Series
+    import pandas as pd
 
 
 class StripStringSeriesTransformer(BaseSeriesTransformer):
@@ -41,5 +41,5 @@ class StripStringSeriesTransformer(BaseSeriesTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def transform(self, series: Series) -> Series:
+    def transform(self, series: pd.Series) -> pd.Series:
         return series.apply(lambda x: x.strip() if isinstance(x, str) else x)

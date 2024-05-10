@@ -5,15 +5,14 @@ import pandas as pd
 import pytest
 from coola import objects_are_equal
 from jinja2 import Template
-from pandas import DataFrame
 
 from flamme.section import ColumnTemporalContinuousSection
 from flamme.section.continuous_temporal import create_temporal_figure
 
 
 @pytest.fixture()
-def dataframe() -> DataFrame:
-    return DataFrame(
+def dataframe() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "col": np.array([1.2, 4.2, np.nan, 2.2]),
             "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
@@ -26,7 +25,7 @@ def dataframe() -> DataFrame:
 #####################################################
 
 
-def test_column_temporal_continuous_section_str(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_str(dataframe: pd.DataFrame) -> None:
     assert str(
         ColumnTemporalContinuousSection(
             frame=dataframe,
@@ -37,7 +36,7 @@ def test_column_temporal_continuous_section_str(dataframe: DataFrame) -> None:
     ).startswith("ColumnTemporalContinuousSection(")
 
 
-def test_column_temporal_continuous_section_column(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_column(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -47,7 +46,7 @@ def test_column_temporal_continuous_section_column(dataframe: DataFrame) -> None
     assert section.column == "col"
 
 
-def test_column_temporal_continuous_section_dt_column(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_dt_column(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -57,7 +56,7 @@ def test_column_temporal_continuous_section_dt_column(dataframe: DataFrame) -> N
     assert section.dt_column == "datetime"
 
 
-def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_yscale_default(dataframe: pd.DataFrame) -> None:
     assert (
         ColumnTemporalContinuousSection(
             frame=dataframe,
@@ -70,7 +69,7 @@ def test_column_temporal_continuous_section_yscale_default(dataframe: DataFrame)
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
-def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale: str) -> None:
+def test_column_temporal_continuous_section_yscale(dataframe: pd.DataFrame, yscale: str) -> None:
     assert (
         ColumnTemporalContinuousSection(
             frame=dataframe,
@@ -83,7 +82,7 @@ def test_column_temporal_continuous_section_yscale(dataframe: DataFrame, yscale:
     )
 
 
-def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_period(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -93,7 +92,7 @@ def test_column_temporal_continuous_section_period(dataframe: DataFrame) -> None
     assert section.period == "M"
 
 
-def test_column_temporal_continuous_section_figsize_default(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_figsize_default(dataframe: pd.DataFrame) -> None:
     assert (
         ColumnTemporalContinuousSection(
             frame=dataframe,
@@ -107,7 +106,7 @@ def test_column_temporal_continuous_section_figsize_default(dataframe: DataFrame
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_continuous_section_figsize(
-    dataframe: DataFrame, figsize: tuple[float, float]
+    dataframe: pd.DataFrame, figsize: tuple[float, float]
 ) -> None:
     assert (
         ColumnTemporalContinuousSection(
@@ -117,7 +116,7 @@ def test_column_temporal_continuous_section_figsize(
     )
 
 
-def test_column_temporal_continuous_section_get_statistics(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_get_statistics(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -129,7 +128,7 @@ def test_column_temporal_continuous_section_get_statistics(dataframe: DataFrame)
 
 def test_column_temporal_continuous_section_get_statistics_empty_row() -> None:
     section = ColumnTemporalContinuousSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -139,7 +138,7 @@ def test_column_temporal_continuous_section_get_statistics_empty_row() -> None:
 
 def test_column_temporal_continuous_section_get_statistics_empty_column() -> None:
     section = ColumnTemporalContinuousSection(
-        frame=DataFrame({}),
+        frame=pd.DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -147,7 +146,7 @@ def test_column_temporal_continuous_section_get_statistics_empty_column() -> Non
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_continuous_section_render_html_body(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_render_html_body(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -159,7 +158,7 @@ def test_column_temporal_continuous_section_render_html_body(dataframe: DataFram
 
 def test_column_temporal_continuous_section_render_html_body_empty_row() -> None:
     section = ColumnTemporalContinuousSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -169,7 +168,7 @@ def test_column_temporal_continuous_section_render_html_body_empty_row() -> None
 
 def test_column_temporal_continuous_section_render_html_body_empty_column() -> None:
     section = ColumnTemporalContinuousSection(
-        frame=DataFrame({}),
+        frame=pd.DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -178,7 +177,7 @@ def test_column_temporal_continuous_section_render_html_body_empty_column() -> N
 
 
 def test_column_temporal_continuous_section_render_html_body_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
@@ -191,7 +190,7 @@ def test_column_temporal_continuous_section_render_html_body_args(
     )
 
 
-def test_column_temporal_continuous_section_render_html_toc(dataframe: DataFrame) -> None:
+def test_column_temporal_continuous_section_render_html_toc(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
         column="col",
@@ -202,7 +201,7 @@ def test_column_temporal_continuous_section_render_html_toc(dataframe: DataFrame
 
 
 def test_column_temporal_continuous_section_render_html_toc_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = ColumnTemporalContinuousSection(
         frame=dataframe,
@@ -220,7 +219,7 @@ def test_column_temporal_continuous_section_render_html_toc_args(
 ###########################################
 
 
-def test_create_temporal_figure(dataframe: DataFrame) -> None:
+def test_create_temporal_figure(dataframe: pd.DataFrame) -> None:
     assert isinstance(
         create_temporal_figure(
             frame=dataframe,
@@ -233,7 +232,7 @@ def test_create_temporal_figure(dataframe: DataFrame) -> None:
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
-def test_create_temporal_figure_yscale(dataframe: DataFrame, yscale: str) -> None:
+def test_create_temporal_figure_yscale(dataframe: pd.DataFrame, yscale: str) -> None:
     assert isinstance(
         create_temporal_figure(
             frame=dataframe,
@@ -247,7 +246,9 @@ def test_create_temporal_figure_yscale(dataframe: DataFrame, yscale: str) -> Non
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
+def test_create_temporal_figure_figsize(
+    dataframe: pd.DataFrame, figsize: tuple[float, float]
+) -> None:
     assert isinstance(
         create_temporal_figure(
             frame=dataframe,

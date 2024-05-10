@@ -14,7 +14,8 @@ from tqdm import tqdm
 from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+
+    import pandas as pd
 
     from flamme.transformer.series.base import BaseSeriesTransformer
 
@@ -75,7 +76,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     def transformers(self) -> dict[str, BaseSeriesTransformer]:
         return self._columns
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         for col, transformer in tqdm(self._columns.items(), desc="Transforming columns"):
             if col not in frame:
                 if self._ignore_missing:

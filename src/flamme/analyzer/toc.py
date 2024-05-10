@@ -13,7 +13,7 @@ from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section.toc import TableOfContentSection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ class TableOfContentAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: DataFrame) -> TableOfContentSection:
+    def analyze(self, frame: pd.DataFrame) -> TableOfContentSection:
         return TableOfContentSection(
             section=self._analyzer.analyze(frame), max_toc_depth=self._max_toc_depth
         )
