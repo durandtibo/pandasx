@@ -1,9 +1,9 @@
 r"""Implement an analyzer that generates a section to analyze the number
-of null values for all columns."""
+of null values for each column."""
 
 from __future__ import annotations
 
-__all__ = ["AllColumnsTemporalNullValueAnalyzer"]
+__all__ = ["ColumnTemporalNullValueAnalyzer"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 from coola.utils import repr_indent, repr_mapping
 
 from flamme.analyzer.base import BaseAnalyzer
-from flamme.section import AllColumnsTemporalNullValueSection, EmptySection
+from flamme.section import ColumnTemporalNullValueSection, EmptySection
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AllColumnsTemporalNullValueAnalyzer(BaseAnalyzer):
+class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     r"""Implement an analyzer to show the temporal distribution of null
     values for all columns.
 
@@ -42,10 +42,10 @@ class AllColumnsTemporalNullValueAnalyzer(BaseAnalyzer):
     ```pycon
     >>> import numpy as np
     >>> import pandas as pd
-    >>> from flamme.analyzer import AllColumnsTemporalNullValueAnalyzer
-    >>> analyzer = AllColumnsTemporalNullValueAnalyzer("datetime", period="M")
+    >>> from flamme.analyzer import ColumnTemporalNullValueAnalyzer
+    >>> analyzer = ColumnTemporalNullValueAnalyzer("datetime", period="M")
     >>> analyzer
-    AllColumnsTemporalNullValueAnalyzer(
+    ColumnTemporalNullValueAnalyzer(
       (columns): None
       (dt_column): datetime
       (period): M
@@ -95,7 +95,7 @@ class AllColumnsTemporalNullValueAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: pd.DataFrame) -> AllColumnsTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
         logger.info(
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"
@@ -111,7 +111,7 @@ class AllColumnsTemporalNullValueAnalyzer(BaseAnalyzer):
             # Exclude the datetime column because it does not make sense to analyze it because
             # we cannot know the date/time if the value is null.
             columns = sorted([col for col in frame.columns if col != self._dt_column])
-        return AllColumnsTemporalNullValueSection(
+        return ColumnTemporalNullValueSection(
             frame=frame,
             columns=columns,
             dt_column=self._dt_column,

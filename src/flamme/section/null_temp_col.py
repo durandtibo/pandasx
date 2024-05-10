@@ -1,9 +1,9 @@
 r"""Contain the implementation of sections to analyze the number null
-values for all columns."""
+values for each column."""
 
 from __future__ import annotations
 
-__all__ = ["AllColumnsTemporalNullValueSection"]
+__all__ = ["ColumnTemporalNullValueSection"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AllColumnsTemporalNullValueSection(BaseSection):
+class ColumnTemporalNullValueSection(BaseSection):
     r"""Implement a section to analyze the temporal distribution of null
     values for all columns.
 
@@ -88,12 +88,12 @@ class AllColumnsTemporalNullValueSection(BaseSection):
 
     @property
     def ncols(self) -> int:
-        r"""int: The number of columns to show the figures."""
+        r"""The number of columns to show the figures."""
         return self._ncols
 
     @property
     def figsize(self) -> tuple[float, float] | None:
-        r"""Tuple or ``None``: The individual figure size in pixels.
+        r"""The individual figure size in pixels.
 
         The first dimension is the width and the second is the height.
         """
