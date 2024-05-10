@@ -9,8 +9,11 @@ from pandas.testing import assert_frame_equal
 
 from flamme.section import AllColumnsTemporalNullValueSection
 from flamme.section.null_temp_all import (
+    create_table_section,
     create_temporal_null_figure,
     create_temporal_null_figures,
+    create_temporal_null_table,
+    create_temporal_null_table_row,
     prepare_data,
 )
 
@@ -332,3 +335,84 @@ def test_prepare_data_empty() -> None:
             [],
         ),
     )
+
+
+#########################################
+#    Tests for create_table_section     #
+#########################################
+
+
+def test_create_table_section() -> None:
+    assert isinstance(
+        create_table_section(
+            frame=pd.DataFrame(
+                {
+                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            columns=["col"],
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+def test_create_table_section_empty() -> None:
+    assert (
+        create_table_section(
+            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            columns=["col"],
+            dt_column="datetime",
+            period="M",
+        )
+        == ""
+    )
+
+
+###############################################
+#    Tests for create_temporal_null_table     #
+###############################################
+
+
+def test_create_temporal_null_table() -> None:
+    assert isinstance(
+        create_temporal_null_table(
+            frame=pd.DataFrame(
+                {
+                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
+                    "datetime": pd.to_datetime(
+                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+                    ),
+                }
+            ),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        ),
+        str,
+    )
+
+
+def test_create_temporal_null_table_empty() -> None:
+    assert (
+        create_temporal_null_table(
+            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+        == ""
+    )
+
+
+###################################################
+#    Tests for create_temporal_null_table_row     #
+###################################################
+
+
+def testcreate_temporal_null_table_row() -> None:
+    assert isinstance(create_temporal_null_table_row(label="meow", num_nulls=5, total=42), str)
