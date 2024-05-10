@@ -8,6 +8,8 @@ __all__ = ["TemporalNullValueAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+from coola.utils import repr_indent, repr_mapping
+
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, TemporalNullValueSection
 
@@ -39,7 +41,12 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     >>> from flamme.analyzer import TemporalNullValueAnalyzer
     >>> analyzer = TemporalNullValueAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
-    TemporalNullValueAnalyzer(dt_column=datetime, period=M, figsize=None)
+    TemporalNullValueAnalyzer(
+      (columns): None
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
     >>> frame = pd.DataFrame(
     ...     {
     ...         "col": np.array([np.nan, 1, 0, 1]),
@@ -66,10 +73,17 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         self._figsize = figsize
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__qualname__}(dt_column={self._dt_column}, "
-            f"period={self._period}, figsize={self._figsize})"
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "columns": self._columns,
+                    "dt_column": self._dt_column,
+                    "period": self._period,
+                    "figsize": self._figsize,
+                }
+            )
         )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, frame: DataFrame) -> TemporalNullValueSection | EmptySection:
         logger.info(
