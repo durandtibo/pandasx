@@ -12,7 +12,6 @@ __all__ = [
     "ColumnSubsetAnalyzer",
     "ColumnTemporalContinuousAnalyzer",
     "ColumnTemporalDiscreteAnalyzer",
-    "ColumnTemporalNullValueAnalyzer",
     "ContentAnalyzer",
     "DataFrameSummaryAnalyzer",
     "DataTypeAnalyzer",
@@ -53,5 +52,4 @@ from flamme.analyzer.most_frequent import MostFrequentValuesAnalyzer
 from flamme.analyzer.null import NullValueAnalyzer
 from flamme.analyzer.null_temp import TemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_all import AllColumnsTemporalNullValueAnalyzer
-from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.toc import TableOfContentAnalyzer
