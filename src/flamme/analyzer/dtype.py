@@ -13,7 +13,7 @@ from flamme.section import DataTypeSection
 from flamme.utils.dtype import frame_column_types
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +45,6 @@ class DataTypeAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: DataFrame) -> DataTypeSection:
+    def analyze(self, frame: pd.DataFrame) -> DataTypeSection:
         logger.info("Analyzing the data types...")
         return DataTypeSection(dtypes=frame.dtypes.to_dict(), types=frame_column_types(frame))

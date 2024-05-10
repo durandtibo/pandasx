@@ -13,7 +13,8 @@ from coola.utils import str_indent, str_mapping
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+
+    import pandas as pd
 
     from flamme.section import BaseSection
 
@@ -60,7 +61,7 @@ class FilteredAnalyzer(BaseAnalyzer):
         args = str_indent(str_mapping({"query": self._query, "analyzer": self._analyzer}))
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: DataFrame) -> BaseSection:
+    def analyze(self, frame: pd.DataFrame) -> BaseSection:
         logger.info("Filtering the DataFrame...")
         frame = frame.query(self._query)
         return self._analyzer.analyze(frame)

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 from coola import objects_are_allclose
-from pandas import DataFrame
 
 from flamme.analyzer import ChoiceAnalyzer, DuplicatedRowAnalyzer, NullValueAnalyzer
 from flamme.analyzer.choice import NumUniqueSelection
@@ -14,7 +14,7 @@ from flamme.section import DuplicatedRowSection, NullValueSection
 ####################################
 
 
-def selection_fn(frame: DataFrame) -> str:
+def selection_fn(frame: pd.DataFrame) -> str:
     return "null" if frame.isna().to_numpy().any() else "duplicate"
 
 
@@ -51,7 +51,7 @@ def test_mapping_analyzer_get_statistics_null() -> None:
             "duplicate": DuplicatedRowAnalyzer(),
         },
         selection_fn=selection_fn,
-    ).analyze(DataFrame({"col": np.asarray([1.2, 4.2, np.nan, 2.2])}))
+    ).analyze(pd.DataFrame({"col": np.asarray([1.2, 4.2, np.nan, 2.2])}))
     assert isinstance(section, NullValueSection)
     assert objects_are_allclose(
         section.get_statistics(),
@@ -70,7 +70,7 @@ def test_mapping_analyzer_get_statistics_duplicate() -> None:
             "duplicate": DuplicatedRowAnalyzer(),
         },
         selection_fn=selection_fn,
-    ).analyze(DataFrame({"col": np.asarray([1.2, 4.2, 1.2, 2.2])}))
+    ).analyze(pd.DataFrame({"col": np.asarray([1.2, 4.2, 1.2, 2.2])}))
     assert isinstance(section, DuplicatedRowSection)
     assert objects_are_allclose(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 3})
 
@@ -87,20 +87,20 @@ def test_num_unique_selection_str() -> None:
 @pytest.mark.parametrize(
     "frame",
     [
-        DataFrame({"col": []}),
-        DataFrame({"col": np.ones(100)}),
-        DataFrame({"col": np.arange(10)}),
-        DataFrame({"col": np.arange(100)}),
+        pd.DataFrame({"col": []}),
+        pd.DataFrame({"col": np.ones(100)}),
+        pd.DataFrame({"col": np.arange(10)}),
+        pd.DataFrame({"col": np.arange(100)}),
     ],
 )
-def test_num_unique_selection_call_small(frame: DataFrame) -> None:
+def test_num_unique_selection_call_small(frame: pd.DataFrame) -> None:
     assert NumUniqueSelection(column="col")(frame) == "small"
 
 
 @pytest.mark.parametrize(
-    "frame", [DataFrame({"col": np.arange(101)}), DataFrame({"col": np.arange(201)})]
+    "frame", [pd.DataFrame({"col": np.arange(101)}), pd.DataFrame({"col": np.arange(201)})]
 )
-def test_num_unique_selection_call_large(frame: DataFrame) -> None:
+def test_num_unique_selection_call_large(frame: pd.DataFrame) -> None:
     assert NumUniqueSelection(column="col")(frame) == "large"
 
 
@@ -108,11 +108,11 @@ def test_num_unique_selection_call_large(frame: DataFrame) -> None:
 @pytest.mark.parametrize("large", ["continuous", "meow"])
 def test_num_unique_selection_small(small: str, large: str) -> None:
     select = NumUniqueSelection(column="col", small=small, large=large)
-    assert select(DataFrame({"col": np.arange(10)})) == small
-    assert select(DataFrame({"col": np.arange(101)})) == large
+    assert select(pd.DataFrame({"col": np.arange(10)})) == small
+    assert select(pd.DataFrame({"col": np.arange(101)})) == large
 
 
 def test_num_unique_selection_call_threshold_10() -> None:
     select = NumUniqueSelection(column="col", threshold=10)
-    assert select(DataFrame({"col": np.arange(10)})) == "small"
-    assert select(DataFrame({"col": np.arange(11)})) == "large"
+    assert select(pd.DataFrame({"col": np.arange(10)})) == "small"
+    assert select(pd.DataFrame({"col": np.arange(11)})) == "large"

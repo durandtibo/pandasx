@@ -5,16 +5,13 @@ from __future__ import annotations
 
 __all__ = ["DecimalToNumericDataFrameTransformer"]
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import pandas as pd
 from tqdm import tqdm
 
 from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 from flamme.utils.filtering import find_columns_decimal
-
-if TYPE_CHECKING:
-    from pandas import DataFrame
 
 
 class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
@@ -65,7 +62,7 @@ class DecimalToNumericDataFrameTransformer(BaseDataFrameTransformer):
         args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
         return f"{self.__class__.__qualname__}({args})"
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         columns = find_columns_decimal(frame)
         for col in tqdm(columns, desc="Converting Decimal to numeric type"):
             frame[col] = pd.to_numeric(frame[col], **self._kwargs)

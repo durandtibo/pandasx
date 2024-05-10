@@ -8,9 +8,9 @@ __all__ = ["NullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
+import pandas as pd
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -207,8 +207,8 @@ In the following histogram, the columns are sorted by ascending order of null va
 """
         ).render({"rows": rows})
 
-    def _get_dataframe(self) -> DataFrame:
-        return DataFrame(
+    def _get_dataframe(self) -> pd.DataFrame:
+        return pd.DataFrame(
             {"column": self._columns, "null": self._null_count, "total": self._total_count}
         )
 

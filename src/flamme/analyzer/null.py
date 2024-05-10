@@ -14,7 +14,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import NullValueSection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class NullValueAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(figsize={self._figsize})"
 
-    def analyze(self, frame: DataFrame) -> NullValueSection:
+    def analyze(self, frame: pd.DataFrame) -> NullValueSection:
         logger.info("Analyzing the null value distribution of all columns...")
         return NullValueSection(
             columns=list(frame.columns),

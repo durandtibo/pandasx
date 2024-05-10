@@ -5,15 +5,14 @@ import pandas as pd
 import pytest
 from coola import objects_are_equal
 from jinja2 import Template
-from pandas import DataFrame
 
 from flamme.section import ColumnTemporalDiscreteSection
 from flamme.section.discrete_temporal import create_temporal_figure
 
 
 @pytest.fixture()
-def dataframe() -> DataFrame:
-    return DataFrame(
+def dataframe() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "col": np.array([1, 42, np.nan, 22]),
             "col2": ["a", "b", 1, "a"],
@@ -27,7 +26,7 @@ def dataframe() -> DataFrame:
 ###################################################
 
 
-def test_column_temporal_discrete_section_column(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_column(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -37,7 +36,7 @@ def test_column_temporal_discrete_section_column(dataframe: DataFrame) -> None:
     assert section.column == "col"
 
 
-def test_column_temporal_discrete_section_dt_column(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_dt_column(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -47,7 +46,7 @@ def test_column_temporal_discrete_section_dt_column(dataframe: DataFrame) -> Non
     assert section.dt_column == "datetime"
 
 
-def test_column_temporal_discrete_section_period(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_period(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -57,7 +56,7 @@ def test_column_temporal_discrete_section_period(dataframe: DataFrame) -> None:
     assert section.period == "M"
 
 
-def test_column_temporal_discrete_section_figsize_default(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_figsize_default(dataframe: pd.DataFrame) -> None:
     assert (
         ColumnTemporalDiscreteSection(
             frame=dataframe,
@@ -71,7 +70,7 @@ def test_column_temporal_discrete_section_figsize_default(dataframe: DataFrame) 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_discrete_section_figsize(
-    dataframe: DataFrame, figsize: tuple[float, float]
+    dataframe: pd.DataFrame, figsize: tuple[float, float]
 ) -> None:
     assert (
         ColumnTemporalDiscreteSection(
@@ -81,7 +80,7 @@ def test_column_temporal_discrete_section_figsize(
     )
 
 
-def test_column_temporal_discrete_section_get_statistics(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_get_statistics(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -93,7 +92,7 @@ def test_column_temporal_discrete_section_get_statistics(dataframe: DataFrame) -
 
 def test_column_temporal_discrete_section_get_statistics_empty_row() -> None:
     section = ColumnTemporalDiscreteSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -103,7 +102,7 @@ def test_column_temporal_discrete_section_get_statistics_empty_row() -> None:
 
 def test_column_temporal_discrete_section_get_statistics_empty_column() -> None:
     section = ColumnTemporalDiscreteSection(
-        frame=DataFrame({}),
+        frame=pd.DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -111,7 +110,7 @@ def test_column_temporal_discrete_section_get_statistics_empty_column() -> None:
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_discrete_section_render_html_body(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_render_html_body(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -123,7 +122,7 @@ def test_column_temporal_discrete_section_render_html_body(dataframe: DataFrame)
 
 def test_column_temporal_discrete_section_render_html_body_empty_row() -> None:
     section = ColumnTemporalDiscreteSection(
-        frame=DataFrame({"col": [], "datetime": []}),
+        frame=pd.DataFrame({"col": [], "datetime": []}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -133,7 +132,7 @@ def test_column_temporal_discrete_section_render_html_body_empty_row() -> None:
 
 def test_column_temporal_discrete_section_render_html_body_empty_column() -> None:
     section = ColumnTemporalDiscreteSection(
-        frame=DataFrame({}),
+        frame=pd.DataFrame({}),
         column="col",
         dt_column="datetime",
         period="M",
@@ -142,7 +141,7 @@ def test_column_temporal_discrete_section_render_html_body_empty_column() -> Non
 
 
 def test_column_temporal_discrete_section_render_html_body_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
@@ -155,7 +154,7 @@ def test_column_temporal_discrete_section_render_html_body_args(
     )
 
 
-def test_column_temporal_discrete_section_render_html_toc(dataframe: DataFrame) -> None:
+def test_column_temporal_discrete_section_render_html_toc(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
         column="col",
@@ -166,7 +165,7 @@ def test_column_temporal_discrete_section_render_html_toc(dataframe: DataFrame) 
 
 
 def test_column_temporal_discrete_section_render_html_toc_args(
-    dataframe: DataFrame,
+    dataframe: pd.DataFrame,
 ) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,
@@ -185,7 +184,7 @@ def test_column_temporal_discrete_section_render_html_toc_args(
 
 
 @pytest.mark.parametrize("column", ["col", "col2"])
-def test_create_temporal_figure(dataframe: DataFrame, column: str) -> None:
+def test_create_temporal_figure(dataframe: pd.DataFrame, column: str) -> None:
     assert isinstance(
         create_temporal_figure(
             frame=dataframe,
@@ -200,7 +199,7 @@ def test_create_temporal_figure(dataframe: DataFrame, column: str) -> None:
 def test_create_temporal_figure_20_values() -> None:
     assert isinstance(
         create_temporal_figure(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.arange(20),
                     "datetime": pd.date_range(start="2020-01-03", periods=20),
@@ -215,7 +214,9 @@ def test_create_temporal_figure_20_values() -> None:
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_create_temporal_figure_figsize(dataframe: DataFrame, figsize: tuple[float, float]) -> None:
+def test_create_temporal_figure_figsize(
+    dataframe: pd.DataFrame, figsize: tuple[float, float]
+) -> None:
     assert isinstance(
         create_temporal_figure(
             frame=dataframe,

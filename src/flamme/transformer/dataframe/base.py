@@ -17,7 +17,7 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         r"""Transform the data in the ``pandas.DataFrame``.
 
         Args:

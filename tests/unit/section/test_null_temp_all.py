@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
-from pandas import DataFrame
 from pandas.testing import assert_frame_equal
 
 from flamme.section import AllColumnsTemporalNullValueSection
@@ -18,7 +17,7 @@ from flamme.section.null_temp_all import (
 
 @pytest.fixture()
 def dataframe() -> pd.DataFrame:
-    return DataFrame(
+    return pd.DataFrame(
         {
             "float": np.array([1.2, 4.2, np.nan, 2.2]),
             "int": np.array([np.nan, 1, 0, 1]),
@@ -127,7 +126,7 @@ def test_all_columns_temporal_null_value_section_get_statistics(dataframe: pd.Da
 
 def test_all_columns_temporal_null_value_section_get_statistics_empty_row() -> None:
     section = AllColumnsTemporalNullValueSection(
-        frame=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         columns=["float", "int", "str"],
         dt_column="datetime",
         period="M",
@@ -137,7 +136,7 @@ def test_all_columns_temporal_null_value_section_get_statistics_empty_row() -> N
 
 def test_all_columns_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
     section = AllColumnsTemporalNullValueSection(
-        frame=DataFrame(
+        frame=pd.DataFrame(
             {
                 "datetime": pd.to_datetime(
                     ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
@@ -177,7 +176,7 @@ def test_all_columns_temporal_null_value_section_render_html_body_args(
 
 def test_all_columns_temporal_null_value_section_render_html_body_empty() -> None:
     section = AllColumnsTemporalNullValueSection(
-        frame=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
         columns=["float", "int", "str"],
         dt_column="datetime",
         period="M",
@@ -270,7 +269,7 @@ def test_create_temporal_null_figures_subset(dataframe: pd.DataFrame) -> None:
 def test_create_temporal_null_figures_empty() -> None:
     assert (
         create_temporal_null_figures(
-            frame=DataFrame({}),
+            frame=pd.DataFrame({}),
             columns=[],
             dt_column="datetime",
             period="M",
@@ -282,7 +281,7 @@ def test_create_temporal_null_figures_empty() -> None:
 def test_create_temporal_null_figures_empty_rows() -> None:
     assert (
         create_temporal_null_figures(
-            frame=DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+            frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
             columns=["float", "int", "str"],
             dt_column="datetime",
             period="M",
@@ -299,7 +298,7 @@ def test_create_temporal_null_figures_empty_rows() -> None:
 def test_prepare_data() -> None:
     assert objects_are_equal(
         prepare_data(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col": np.array([1.2, 4.2, np.nan, 2.2]),
                     "datetime": pd.to_datetime(
@@ -322,7 +321,7 @@ def test_prepare_data() -> None:
 def test_prepare_data_empty() -> None:
     assert objects_are_equal(
         prepare_data(
-            frame=DataFrame({"col": [], "datetime": pd.to_datetime([])}),
+            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
             column="col",
             dt_column="datetime",
             period="M",

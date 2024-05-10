@@ -24,7 +24,8 @@ from flamme.utils.figure import figure2html
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +44,7 @@ class DuplicatedRowSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         columns: Sequence[str] | None = None,
         figsize: tuple[float, float] | None = None,
     ) -> None:
@@ -52,7 +53,7 @@ class DuplicatedRowSection(BaseSection):
         self._figsize = figsize
 
     @property
-    def frame(self) -> DataFrame:
+    def frame(self) -> pd.DataFrame:
         r"""``pandas.DataFrame``: The DataFrame to analyze."""
         return self._frame
 

@@ -4,8 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from coola import objects_are_equal
-from pandas import DataFrame
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from flamme.analyzer import AllColumnsTemporalNullValueAnalyzer
 from flamme.section import AllColumnsTemporalNullValueSection, EmptySection
@@ -13,7 +12,7 @@ from flamme.section import AllColumnsTemporalNullValueSection, EmptySection
 
 @pytest.fixture()
 def dataframe() -> pd.DataFrame:
-    return DataFrame(
+    return pd.DataFrame(
         {
             "float": np.array([1.2, 4.2, np.nan, 2.2]),
             "int": np.array([np.nan, 1, 0, 1]),
@@ -115,7 +114,7 @@ def test_all_columns_temporal_null_value_analyzer_get_statistics(dataframe: pd.D
 
 def test_all_columns_temporal_null_value_analyzer_get_statistics_empty() -> None:
     section = AllColumnsTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
-        DataFrame({"float": [], "int": [], "str": [], "datetime": []})
+        pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []})
     )
     assert isinstance(section, AllColumnsTemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -123,7 +122,7 @@ def test_all_columns_temporal_null_value_analyzer_get_statistics_empty() -> None
 
 def test_all_columns_temporal_null_value_analyzer_get_statistics_missing_empty_column() -> None:
     section = AllColumnsTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
-        DataFrame({})
+        pd.DataFrame({})
     )
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})

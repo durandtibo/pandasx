@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
+import pandas as pd
 import pyarrow as pa
 import pytest
-from pandas import DataFrame, Series
 
 from flamme.utils.dtype import (
     find_date_columns_from_dtypes,
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp").joinpath("data.parquet")
     nrows = 10
-    frame = DataFrame(
+    frame = pd.DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
             "col_int": np.arange(nrows, dtype=int),
@@ -72,7 +72,7 @@ def dtypes() -> dict[str, pa.DataType]:
 
 def test_frame_column_types() -> None:
     assert frame_column_types(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -83,7 +83,7 @@ def test_frame_column_types() -> None:
 
 
 def test_frame_column_types_empty() -> None:
-    assert frame_column_types(DataFrame({})) == {}
+    assert frame_column_types(pd.DataFrame({})) == {}
 
 
 #########################################
@@ -92,7 +92,7 @@ def test_frame_column_types_empty() -> None:
 
 
 def test_series_column_types() -> None:
-    assert series_column_types(Series(["abc", 1, 4.2, np.nan, None])) == {
+    assert series_column_types(pd.Series(["abc", 1, 4.2, np.nan, None])) == {
         float,
         str,
         int,
@@ -101,7 +101,7 @@ def test_series_column_types() -> None:
 
 
 def test_series_column_types_empty() -> None:
-    assert series_column_types(Series([], dtype=object)) == set()
+    assert series_column_types(pd.Series([], dtype=object)) == set()
 
 
 ######################################################

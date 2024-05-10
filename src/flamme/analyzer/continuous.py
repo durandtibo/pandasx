@@ -15,7 +15,7 @@ from flamme.section import (
 )
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, xmin={self._xmin}, xmax={self._xmax}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnContinuousSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnContinuousSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -164,7 +164,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
         logger.info(
             f"Analyzing the temporal continuous distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"

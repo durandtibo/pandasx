@@ -5,10 +5,10 @@ from __future__ import annotations
 __all__ = ["compute_null_per_col"]
 
 import numpy as np
-from pandas import DataFrame
+import pandas as pd
 
 
-def compute_null_per_col(frame: DataFrame) -> DataFrame:
+def compute_null_per_col(frame: pd.DataFrame) -> pd.DataFrame:
     r"""Return the number and percentage of null values per column.
 
     Args:
@@ -44,7 +44,7 @@ def compute_null_per_col(frame: DataFrame) -> DataFrame:
     total_count = np.full((frame.shape[1],), frame.shape[0]).astype(int)
     with np.errstate(invalid="ignore"):
         null_pct = null_count.astype(float) / total_count.astype(float)
-    return DataFrame(
+    return pd.DataFrame(
         {
             "column": list(frame.columns),
             "null": null_count,

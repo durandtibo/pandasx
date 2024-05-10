@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     import pandas as pd
-    from pandas import DataFrame
+
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +84,7 @@ class ColumnTemporalContinuousSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         column: str,
         dt_column: str,
         period: str,
@@ -194,7 +194,7 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -252,7 +252,7 @@ def create_temporal_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_table(frame: DataFrame, column: str, dt_column: str, period: str) -> str:
+def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, period: str) -> str:
     r"""Create a HTML representation of a table with some statistics
     about the temporal value distribution.
 

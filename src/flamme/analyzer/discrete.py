@@ -16,7 +16,7 @@ from flamme.section import (
 )
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             f"figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnDiscreteSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnDiscreteSection | EmptySection:
         logger.info(f"Analyzing the discrete distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -153,7 +153,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
         logger.info(
             f"Analyzing the temporal discrete distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"

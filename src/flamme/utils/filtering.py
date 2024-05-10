@@ -14,10 +14,10 @@ from typing import TYPE_CHECKING
 from flamme.utils.dtype import frame_column_types
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 
-def find_columns_type(frame: DataFrame, cls: type) -> tuple[str, ...]:
+def find_columns_type(frame: pd.DataFrame, cls: type) -> tuple[str, ...]:
     r"""Find the list of columns that contains a given type.
 
     Args:
@@ -49,7 +49,7 @@ def find_columns_type(frame: DataFrame, cls: type) -> tuple[str, ...]:
     return tuple(col for col, tps in types.items() if cls in tps)
 
 
-def find_columns_decimal(frame: DataFrame) -> tuple[str, ...]:
+def find_columns_decimal(frame: pd.DataFrame) -> tuple[str, ...]:
     r"""Find the list of columns that contains the type string.
 
     Args:
@@ -80,7 +80,7 @@ def find_columns_decimal(frame: DataFrame) -> tuple[str, ...]:
     return find_columns_type(frame, Decimal)
 
 
-def find_columns_str(frame: DataFrame) -> tuple[str, ...]:
+def find_columns_str(frame: pd.DataFrame) -> tuple[str, ...]:
     r"""Find the list of columns that contains the type string.
 
     Args:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pandas import DataFrame
+import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from flamme.ingestor import Ingestor
@@ -13,7 +13,7 @@ from flamme.ingestor import Ingestor
 def test_ingestor_str() -> None:
     assert str(
         Ingestor(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
                     "col2": ["a", "b", "c", "d", "e"],
@@ -27,7 +27,7 @@ def test_ingestor_str() -> None:
 def test_ingestor_ingest() -> None:
     assert_frame_equal(
         Ingestor(
-            frame=DataFrame(
+            frame=pd.DataFrame(
                 {
                     "col1": [1, 2, 3, 4, 5],
                     "col2": ["a", "b", "c", "d", "e"],
@@ -35,7 +35,7 @@ def test_ingestor_ingest() -> None:
                 }
             )
         ).ingest(),
-        DataFrame(
+        pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5],
                 "col2": ["a", "b", "c", "d", "e"],

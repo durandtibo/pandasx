@@ -4,8 +4,8 @@ import tarfile
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pandas as pd
 import pytest
-from pandas import DataFrame
 
 from flamme.utils.io import save_text
 from flamme.utils.path import (
@@ -115,10 +115,10 @@ def parquet_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp")
     save_text("text", path.joinpath("a.txt"))
     path.joinpath("subfolder", "sub").mkdir(parents=True, exist_ok=True)
-    DataFrame({}).to_parquet(path.joinpath("data.parquet"))
-    DataFrame({}).to_parquet(path.joinpath("data2.snappy.parquet"))
-    DataFrame({}).to_parquet(path.joinpath("subfolder", "data.parquet"))
-    DataFrame({}).to_parquet(path.joinpath("subfolder", "sub", "data.parquet"))
+    pd.DataFrame({}).to_parquet(path.joinpath("data.parquet"))
+    pd.DataFrame({}).to_parquet(path.joinpath("data2.snappy.parquet"))
+    pd.DataFrame({}).to_parquet(path.joinpath("subfolder", "data.parquet"))
+    pd.DataFrame({}).to_parquet(path.joinpath("subfolder", "sub", "data.parquet"))
     return path
 
 

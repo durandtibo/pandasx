@@ -1,13 +1,19 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 from coola import objects_are_allclose, objects_are_equal
-from pandas import DataFrame, Series
 from pandas.testing import assert_series_equal
 
 from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
+
+
+@pytest.fixture()
+def dataframe() -> pd.DataFrame:
+    return pd.DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
+
 
 ######################################################
 #     Tests for ColumnContinuousAdvancedAnalyzer     #
@@ -20,77 +26,61 @@ def test_column_continuous_analyzer_str() -> None:
     )
 
 
-def test_column_continuous_analyzer_series() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_series(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
-    assert_series_equal(section.series, Series([np.nan, *list(range(101)), np.nan], name="col"))
+    assert_series_equal(section.series, pd.Series([np.nan, *list(range(101)), np.nan], name="col"))
 
 
-def test_column_continuous_analyzer_column() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_column(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.column == "col"
 
 
-def test_column_continuous_analyzer_nbins_default() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_nbins_default(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.nbins is None
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
-def test_column_continuous_analyzer_nbins(nbins: int) -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col", nbins=nbins).analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_nbins(nbins: int, dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col", nbins=nbins).analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.nbins == nbins
 
 
-def test_column_continuous_analyzer_yscale_default() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_yscale_default(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.yscale == "auto"
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
-def test_column_continuous_analyzer_yscale(yscale: str) -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col", yscale=yscale).analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_yscale(yscale: str, dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col", yscale=yscale).analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.yscale == yscale
 
 
-def test_column_continuous_analyzer_figsize_default() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_figsize_default(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.figsize is None
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col", figsize=figsize).analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_figsize(
+    figsize: tuple[float, float], dataframe: pd.DataFrame
+) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col", figsize=figsize).analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert section.figsize == figsize
 
 
-def test_column_continuous_analyzer_get_statistics() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(
-        DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
-    )
+def test_column_continuous_analyzer_get_statistics(dataframe: pd.DataFrame) -> None:
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert objects_are_allclose(
         section.get_statistics(),
@@ -125,7 +115,7 @@ def test_column_continuous_analyzer_get_statistics() -> None:
 
 
 def test_column_continuous_analyzer_get_statistics_empty() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(DataFrame({"col": []}))
+    section = ColumnContinuousAdvancedAnalyzer(column="col").analyze(pd.DataFrame({"col": []}))
     assert isinstance(section, ColumnContinuousAdvancedSection)
     assert objects_are_allclose(
         section.get_statistics(),
@@ -160,6 +150,6 @@ def test_column_continuous_analyzer_get_statistics_empty() -> None:
 
 
 def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
-    section = ColumnContinuousAdvancedAnalyzer(column="col2").analyze(DataFrame({"col": []}))
+    section = ColumnContinuousAdvancedAnalyzer(column="col2").analyze(pd.DataFrame({"col": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})

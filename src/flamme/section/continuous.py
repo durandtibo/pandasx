@@ -31,8 +31,9 @@ from flamme.utils.range import find_range
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import pandas as pd
     from matplotlib.axes import Axes
-    from pandas import Series
+
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,7 @@ class ColumnContinuousSection(BaseSection):
 
     def __init__(
         self,
-        series: Series,
+        series: pd.Series,
         column: str,
         nbins: int | None = None,
         yscale: str = "auto",
@@ -130,7 +131,7 @@ class ColumnContinuousSection(BaseSection):
         return self._nbins
 
     @property
-    def series(self) -> Series:
+    def series(self) -> pd.Series:
         return self._series
 
     @property
@@ -218,7 +219,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_boxplot_figure(
-    series: Series,
+    series: pd.Series,
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
@@ -262,7 +263,7 @@ def create_boxplot_figure(
 
 
 def create_histogram_figure(
-    series: Series,
+    series: pd.Series,
     column: str,
     stats: dict,
     nbins: int | None = None,

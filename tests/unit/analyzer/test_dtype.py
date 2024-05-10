@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 from coola import objects_are_equal
-from pandas import DataFrame
 
 from flamme.analyzer import DataTypeAnalyzer
 from flamme.section import DataTypeSection
@@ -18,7 +18,7 @@ def test_column_type_analyzer_str() -> None:
 
 def test_column_type_analyzer_get_statistics() -> None:
     section = DataTypeAnalyzer().analyze(
-        DataFrame(
+        pd.DataFrame(
             {
                 "float": np.array([1.2, 4.2, np.nan, 2.2]),
                 "int": np.array([np.nan, 1, 0, 1]),
@@ -35,13 +35,13 @@ def test_column_type_analyzer_get_statistics() -> None:
 
 def test_column_type_analyzer_get_statistics_empty() -> None:
     section = DataTypeAnalyzer().analyze(
-        DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
+        pd.DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
     )
     assert isinstance(section, DataTypeSection)
     assert objects_are_equal(section.get_statistics(), {"float": set(), "int": set(), "str": set()})
 
 
 def test_column_type_analyzer_get_statistics_empty_no_column() -> None:
-    section = DataTypeAnalyzer().analyze(DataFrame({}))
+    section = DataTypeAnalyzer().analyze(pd.DataFrame({}))
     assert isinstance(section, DataTypeSection)
     assert objects_are_equal(section.get_statistics(), {})

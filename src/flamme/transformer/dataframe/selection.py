@@ -13,7 +13,8 @@ from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
             f"ignore_missing={self._ignore_missing})"
         )
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         columns = []
         for col in self._columns:
             if col not in frame:

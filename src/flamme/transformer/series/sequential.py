@@ -14,7 +14,7 @@ from flamme.transformer.series import BaseSeriesTransformer, setup_series_transf
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from pandas import Series
+    import pandas as pd
 
 
 class SequentialSeriesTransformer(BaseSeriesTransformer):
@@ -60,7 +60,7 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
             args = f"\n  {str_indent(str_sequence(self._transformers))}\n"
         return f"{self.__class__.__qualname__}({args})"
 
-    def transform(self, series: Series) -> Series:
+    def transform(self, series: pd.Series) -> pd.Series:
         for transformer in self._transformers:
             series = transformer.transform(series)
         return series

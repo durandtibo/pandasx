@@ -16,13 +16,13 @@ from typing import TYPE_CHECKING
 import pyarrow as pa
 
 if TYPE_CHECKING:
+    import pandas as pd
 
-    from pandas import DataFrame, Series
 
 logger = logging.getLogger(__name__)
 
 
-def frame_column_types(frame: DataFrame) -> dict[str, set]:
+def frame_column_types(frame: pd.DataFrame) -> dict[str, set]:
     r"""Return the value types per column.
 
     Args:
@@ -55,7 +55,7 @@ def frame_column_types(frame: DataFrame) -> dict[str, set]:
     return types
 
 
-def series_column_types(series: Series) -> set[type]:
+def series_column_types(series: pd.Series) -> set[type]:
     r"""Return the value types in a ``pandas.Series``.
 
     Args:

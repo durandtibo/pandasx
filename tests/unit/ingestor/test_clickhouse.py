@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-from pandas import DataFrame
+import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from flamme.ingestor import ClickHouseIngestor
@@ -26,7 +26,7 @@ def test_clickhouse_ingestor_str() -> None:
 
 @clickhouse_connect_available
 def test_clickhouse_ingestor_ingest() -> None:
-    frame = DataFrame(
+    frame = pd.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],

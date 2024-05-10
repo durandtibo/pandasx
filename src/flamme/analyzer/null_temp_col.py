@@ -12,7 +12,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnTemporalNullValueSection, EmptySection
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
         logger.info(
             f"Analyzing the temporal null value distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"

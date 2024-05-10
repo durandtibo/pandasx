@@ -12,7 +12,7 @@ from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 from flamme.utils.null import compute_null_per_col
 
 if TYPE_CHECKING:
-    from pandas import DataFrame
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class NullColumnDataFrameTransformer(BaseDataFrameTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(threshold={self._threshold})"
 
-    def transform(self, frame: DataFrame) -> DataFrame:
+    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
         if frame.shape[0] == 0:
             return frame
         num_orig_cols = len(frame.columns)

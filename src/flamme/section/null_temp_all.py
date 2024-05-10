@@ -28,7 +28,8 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     import numpy as np
-    from pandas import DataFrame
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class AllColumnsTemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         columns: Sequence[str],
         dt_column: str,
         period: str,
@@ -66,7 +67,7 @@ class AllColumnsTemporalNullValueSection(BaseSection):
         self._figsize = figsize
 
     @property
-    def frame(self) -> DataFrame:
+    def frame(self) -> pd.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -147,7 +148,7 @@ The column <em>{{column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -194,7 +195,7 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_figures(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -235,7 +236,7 @@ def create_temporal_null_figures(
 
 
 def prepare_data(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     column: str,
     dt_column: str,
     period: str,

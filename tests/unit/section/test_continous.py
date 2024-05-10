@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import Series
 from pandas.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousSection
@@ -20,8 +20,8 @@ from flamme.section.continuous import (
 
 
 @pytest.fixture()
-def series() -> Series:
-    return Series([np.nan, *list(range(101)), np.nan])
+def series() -> pd.Series:
+    return pd.Series([np.nan, *list(range(101)), np.nan])
 
 
 @pytest.fixture()
@@ -59,72 +59,72 @@ def stats() -> dict:
 #############################################
 
 
-def test_column_continuous_section_str(series: Series) -> None:
+def test_column_continuous_section_str(series: pd.Series) -> None:
     assert str(ColumnContinuousSection(series=series, column="col")).startswith(
         "ColumnContinuousSection("
     )
 
 
-def test_column_continuous_section_series(series: Series) -> None:
+def test_column_continuous_section_series(series: pd.Series) -> None:
     assert_series_equal(ColumnContinuousSection(series=series, column="col").series, series)
 
 
-def test_column_continuous_section_column(series: Series) -> None:
+def test_column_continuous_section_column(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").column == "col"
 
 
-def test_column_continuous_section_yscale_default(series: Series) -> None:
+def test_column_continuous_section_yscale_default(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").yscale == "auto"
 
 
 @pytest.mark.parametrize("yscale", ["log", "linear"])
-def test_column_continuous_section_yscale(series: Series, yscale: str) -> None:
+def test_column_continuous_section_yscale(series: pd.Series, yscale: str) -> None:
     assert ColumnContinuousSection(series=series, column="col", yscale=yscale).yscale == yscale
 
 
-def test_column_continuous_section_nbins_default(series: Series) -> None:
+def test_column_continuous_section_nbins_default(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").nbins is None
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
-def test_column_continuous_section_nbins(series: Series, nbins: int) -> None:
+def test_column_continuous_section_nbins(series: pd.Series, nbins: int) -> None:
     assert ColumnContinuousSection(series=series, column="col", nbins=nbins).nbins == nbins
 
 
-def test_column_continuous_section_xmin_default(series: Series) -> None:
+def test_column_continuous_section_xmin_default(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").xmin is None
 
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1"])
-def test_column_continuous_section_xmin(series: Series, xmin: float | str) -> None:
+def test_column_continuous_section_xmin(series: pd.Series, xmin: float | str) -> None:
     assert ColumnContinuousSection(series=series, column="col", xmin=xmin).xmin == xmin
 
 
-def test_column_continuous_section_xmax_default(series: Series) -> None:
+def test_column_continuous_section_xmax_default(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").xmax is None
 
 
 @pytest.mark.parametrize("xmax", [5.0, "q0.9"])
-def test_column_continuous_section_xmax(series: Series, xmax: float | str) -> None:
+def test_column_continuous_section_xmax(series: pd.Series, xmax: float | str) -> None:
     assert ColumnContinuousSection(series=series, column="col", xmax=xmax).xmax == xmax
 
 
-def test_column_continuous_section_figsize_default(series: Series) -> None:
+def test_column_continuous_section_figsize_default(series: pd.Series) -> None:
     assert ColumnContinuousSection(series=series, column="col").figsize is None
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
-def test_column_continuous_section_figsize(series: Series, figsize: tuple[float, float]) -> None:
+def test_column_continuous_section_figsize(series: pd.Series, figsize: tuple[float, float]) -> None:
     assert ColumnContinuousSection(series=series, column="col", figsize=figsize).figsize == figsize
 
 
-def test_column_continuous_section_get_statistics(series: Series, stats: dict) -> None:
+def test_column_continuous_section_get_statistics(series: pd.Series, stats: dict) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert objects_are_allclose(section.get_statistics(), stats, atol=1e-2)
 
 
 def test_column_continuous_section_get_statistics_empty_row() -> None:
-    section = ColumnContinuousSection(series=Series([], dtype=object), column="col")
+    section = ColumnContinuousSection(series=pd.Series([], dtype=object), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -158,7 +158,7 @@ def test_column_continuous_section_get_statistics_empty_row() -> None:
 
 
 def test_column_continuous_section_get_statistics_single_value() -> None:
-    section = ColumnContinuousSection(series=Series([1, 1, 1, 1, 1]), column="col")
+    section = ColumnContinuousSection(series=pd.Series([1, 1, 1, 1, 1]), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -192,7 +192,9 @@ def test_column_continuous_section_get_statistics_single_value() -> None:
 
 
 def test_column_continuous_section_get_statistics_only_nans() -> None:
-    section = ColumnContinuousSection(series=Series([np.nan, np.nan, np.nan, np.nan]), column="col")
+    section = ColumnContinuousSection(
+        series=pd.Series([np.nan, np.nan, np.nan, np.nan]), column="col"
+    )
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -225,12 +227,12 @@ def test_column_continuous_section_get_statistics_only_nans() -> None:
     )
 
 
-def test_column_continuous_section_render_html_body(series: Series) -> None:
+def test_column_continuous_section_render_html_body(series: pd.Series) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_continuous_section_render_html_body_args(series: Series) -> None:
+def test_column_continuous_section_render_html_body_args(series: pd.Series) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
@@ -238,16 +240,16 @@ def test_column_continuous_section_render_html_body_args(series: Series) -> None
 
 
 def test_column_continuous_section_render_html_body_empty() -> None:
-    section = ColumnContinuousSection(series=Series([], dtype=object), column="col")
+    section = ColumnContinuousSection(series=pd.Series([], dtype=object), column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_continuous_section_render_html_toc(series: Series) -> None:
+def test_column_continuous_section_render_html_toc(series: pd.Series) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_column_continuous_section_render_html_toc_args(series: Series) -> None:
+def test_column_continuous_section_render_html_toc_args(series: pd.Series) -> None:
     section = ColumnContinuousSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
@@ -259,22 +261,22 @@ def test_column_continuous_section_render_html_toc_args(series: Series) -> None:
 ##########################################
 
 
-def test_create_boxplot_figure(series: Series) -> None:
+def test_create_boxplot_figure(series: pd.Series) -> None:
     assert isinstance(create_boxplot_figure(series=series), str)
 
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
-def test_create_boxplot_figure_xmin(series: Series, xmin: float | str | None) -> None:
+def test_create_boxplot_figure_xmin(series: pd.Series, xmin: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmin=xmin), str)
 
 
 @pytest.mark.parametrize("xmax", [1.0, "q0.9", None, "q0"])
-def test_create_boxplot_figure_xmax(series: Series, xmax: float | str | None) -> None:
+def test_create_boxplot_figure_xmax(series: pd.Series, xmax: float | str | None) -> None:
     assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (7.5, 3.5)])
-def test_create_boxplot_figure_figsize(series: Series, figsize: tuple[float, float]) -> None:
+def test_create_boxplot_figure_figsize(series: pd.Series, figsize: tuple[float, float]) -> None:
     assert isinstance(create_boxplot_figure(series=series, figsize=figsize), str)
 
 
@@ -283,19 +285,19 @@ def test_create_boxplot_figure_figsize(series: Series, figsize: tuple[float, flo
 ############################################
 
 
-def test_create_histogram_figure(series: Series, stats: dict) -> None:
+def test_create_histogram_figure(series: pd.Series, stats: dict) -> None:
     assert isinstance(create_histogram_figure(series=series, column="col", stats=stats), str)
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
-def test_create_histogram_figure_nbins(series: Series, stats: dict, nbins: int) -> None:
+def test_create_histogram_figure_nbins(series: pd.Series, stats: dict, nbins: int) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, nbins=nbins), str
     )
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
-def test_create_histogram_figure_yscale(series: Series, stats: dict, yscale: str) -> None:
+def test_create_histogram_figure_yscale(series: pd.Series, stats: dict, yscale: str) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, yscale=yscale), str
     )
@@ -303,7 +305,7 @@ def test_create_histogram_figure_yscale(series: Series, stats: dict, yscale: str
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_histogram_figure_xmin(
-    series: Series, stats: dict, xmin: float | str | None
+    series: pd.Series, stats: dict, xmin: float | str | None
 ) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, xmin=xmin), str
@@ -312,7 +314,7 @@ def test_create_histogram_figure_xmin(
 
 @pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
 def test_create_histogram_figure_xmax(
-    series: Series, stats: dict, xmax: float | str | None
+    series: pd.Series, stats: dict, xmax: float | str | None
 ) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, xmax=xmax), str
@@ -321,7 +323,7 @@ def test_create_histogram_figure_xmax(
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_figure_figsize(
-    series: Series, stats: dict, figsize: tuple[float, float]
+    series: pd.Series, stats: dict, figsize: tuple[float, float]
 ) -> None:
     assert isinstance(
         create_histogram_figure(series=series, column="col", stats=stats, figsize=figsize), str

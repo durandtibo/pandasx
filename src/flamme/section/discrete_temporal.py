@@ -9,9 +9,9 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+import pandas as pd
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from pandas import DataFrame
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -47,7 +47,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
 
     def __init__(
         self,
-        frame: DataFrame,
+        frame: pd.DataFrame,
         column: str,
         dt_column: str,
         period: str,
@@ -130,7 +130,7 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    frame: DataFrame,
+    frame: pd.DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -160,7 +160,7 @@ def create_temporal_figure(
     col_dt, col_count = "__datetime__", "__count__"
     frame[col_dt] = frame[dt_column].dt.to_period(period).astype(str)
     frame = frame[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
-    frame = DataFrame({col_count: frame}).reset_index().sort_values(by=[col_dt, column])
+    frame = pd.DataFrame({col_count: frame}).reset_index().sort_values(by=[col_dt, column])
     frame = frame.pivot_table(
         index=col_dt, columns=column, values=col_count, fill_value=0, dropna=False
     )

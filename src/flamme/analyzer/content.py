@@ -12,7 +12,7 @@ from flamme.section import ContentSection
 
 if TYPE_CHECKING:
 
-    from pandas import DataFrame
+    import pandas as pd
 
     from flamme.section import BaseSection
 
@@ -52,6 +52,6 @@ class ContentAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: DataFrame) -> BaseSection:  # noqa: ARG002
+    def analyze(self, frame: pd.DataFrame) -> BaseSection:  # noqa: ARG002
         logger.info("Generating the given custom content...")
         return ContentSection(content=self._content)
