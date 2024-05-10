@@ -47,6 +47,7 @@ class TemporalNullValueSection(BaseSection):
     def __init__(
         self,
         frame: DataFrame,
+        columns: Sequence[str],
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
@@ -59,14 +60,20 @@ class TemporalNullValueSection(BaseSection):
             raise ValueError(msg)
 
         self._frame = frame
+        self._columns = tuple(columns)
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
 
     @property
     def frame(self) -> DataFrame:
-        r"""``pandas.DataFrame``: The DataFrame to analyze."""
+        r"""The DataFrame to analyze."""
         return self._frame
+
+    @property
+    def columns(self) -> tuple[str, ...]:
+        r"""The columns to analyze."""
+        return self._columns
 
     @property
     def dt_column(self) -> str:
@@ -102,12 +109,14 @@ class TemporalNullValueSection(BaseSection):
                 "dt_column": self._dt_column,
                 "figure": create_temporal_null_figure(
                     frame=self._frame,
+                    columns=self._columns,
                     dt_column=self._dt_column,
                     period=self._period,
                     figsize=self._figsize,
                 ),
                 "table": create_temporal_null_table(
                     frame=self._frame,
+                    columns=self._columns,
                     dt_column=self._dt_column,
                     period=self._period,
                 ),
@@ -138,6 +147,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 def create_temporal_null_figure(
     frame: DataFrame,
+    columns: Sequence[str],
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -147,6 +157,7 @@ def create_temporal_null_figure(
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze.
         dt_column: The datetime column used to analyze the
             temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -159,7 +170,9 @@ def create_temporal_null_figure(
     if frame.shape[0] == 0:
         return ""
 
-    num_nulls, total, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
+    num_nulls, total, labels = prepare_data(
+        frame=frame, columns=columns, dt_column=dt_column, period=period
+    )
 
     fig, ax = plt.subplots(figsize=figsize)
     plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
@@ -167,12 +180,15 @@ def create_temporal_null_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_null_table(frame: DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_null_table(
+    frame: DataFrame, columns: Sequence[str], dt_column: str, period: str
+) -> str:
     r"""Create a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze.
         dt_column: The datetime column used to analyze the
             temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -182,7 +198,9 @@ def create_temporal_null_table(frame: DataFrame, dt_column: str, period: str) ->
     """
     if frame.shape[0] == 0:
         return ""
-    num_nulls, totals, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
+    num_nulls, totals, labels = prepare_data(
+        frame=frame, columns=columns, dt_column=dt_column, period=period
+    )
     rows = []
     for label, num_null, total in zip(labels, num_nulls, totals):
         rows.append(create_temporal_null_table_row(label=label, num_nulls=num_null, total=total))
@@ -271,6 +289,7 @@ def plot_temporal_null_total(
 
 def prepare_data(
     frame: DataFrame,
+    columns: Sequence[str],
     dt_column: str,
     period: str,
 ) -> tuple[np.ndarray, np.ndarray, list]:
@@ -278,6 +297,7 @@ def prepare_data(
 
     Args:
         frame: The DataFrame to analyze.
+        columns: The list of columns to analyze.
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
@@ -318,8 +338,7 @@ def prepare_data(
 
     ```
     """
-    columns = frame.columns.tolist()
-    columns.remove(dt_column)
+    columns = list(columns)
     dt_col = "__datetime__"
     frame_na = frame[columns].isna().astype(float).copy()
     frame_na[dt_col] = frame[dt_column].dt.to_period(period)

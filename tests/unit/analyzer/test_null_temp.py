@@ -22,9 +22,9 @@ def dataframe() -> DataFrame:
     )
 
 
-#####################################################
+###############################################
 #     Tests for TemporalNullValueAnalyzer     #
-#####################################################
+###############################################
 
 
 def test_temporal_null_value_analyzer_str() -> None:
@@ -38,20 +38,22 @@ def test_temporal_null_value_analyzer_frame(dataframe: DataFrame) -> None:
     assert_frame_equal(section.frame, dataframe)
 
 
+def test_temporal_null_value_analyzer_columns(dataframe: DataFrame) -> None:
+    section = TemporalNullValueAnalyzer(
+        dt_column="datetime", period="M", columns=("col1",)
+    ).analyze(dataframe)
+    assert section.columns == ("col1",)
+
+
+def test_temporal_null_value_analyzer_columns_none(dataframe: DataFrame) -> None:
+    section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
+    assert section.columns == ("col1", "col2")
+
+
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])
-def test_temporal_null_value_analyzer_dt_column(dt_column: str) -> None:
-    section = TemporalNullValueAnalyzer(dt_column=dt_column, period="M").analyze(
-        DataFrame(
-            {
-                "col1": np.array([1.2, 4.2, np.nan, 2.2]),
-                "col2": np.array([np.nan, 1, np.nan, 1]),
-                "datetime": pd.to_datetime(
-                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                ),
-                "date": pd.to_datetime(["2021-01-03", "2021-02-03", "2021-03-03", "2021-04-03"]),
-            }
-        )
-    )
+def test_temporal_null_value_analyzer_dt_column(dataframe: pd.DataFrame, dt_column: str) -> None:
+    dataframe["date"] = pd.to_datetime(["2021-01-03", "2021-02-03", "2021-03-03", "2021-04-03"])
+    section = TemporalNullValueAnalyzer(dt_column=dt_column, period="M").analyze(dataframe)
     assert section.dt_column == dt_column
 
 
