@@ -69,7 +69,7 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     @property
     def frame(self) -> pd.DataFrame:
-        r"""``pandas.DataFrame``: The DataFrame to analyze."""
+        r"""The DataFrame to analyze."""
         return self._frame
 
     @property

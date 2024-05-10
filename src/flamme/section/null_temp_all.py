@@ -123,6 +123,12 @@ class AllColumnsTemporalNullValueSection(BaseSection):
                     ncols=self._ncols,
                     figsize=self._figsize,
                 ),
+                "table": create_table_section(
+                    frame=self._frame,
+                    columns=self._columns,
+                    dt_column=self._dt_column,
+                    period=self._period,
+                ),
             }
         )
 
@@ -142,6 +148,10 @@ This section analyzes the temporal distribution of null values.
 The column <em>{{column}}</em> is used as the temporal column.
 
 {{figure}}
+
+<p style="margin-top: 1rem;">
+
+{{table}}
 
 <p style="margin-top: 1rem;">
 """
@@ -297,3 +307,126 @@ def prepare_data(
     total = dataframe.groupby(dt_col)[null_col].count().sort_index()
     labels = [str(dt) for dt in num_nulls.index]
     return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels
+
+
+def create_table_section(
+    frame: pd.DataFrame, columns: Sequence[str], dt_column: str, period: str
+) -> str:
+    r"""Create a HTML representation of a table with the temporal
+    distribution of null values.
+
+    Args:
+        frame: The DataFrame to analyze.
+        columns: The list of columns to analyze.
+        dt_column: The datetime column used to analyze
+            the temporal distribution.
+        period: The temporal period e.g. monthly or
+            daily.
+
+    Returns:
+        The HTML representation of the table.
+    """
+    if frame.shape[0] == 0:
+        return ""
+    tables = []
+    for column in columns:
+        table = create_temporal_null_table(
+            frame=frame, column=column, dt_column=dt_column, period=period
+        )
+        tables.append(f'<p style="margin-top: 1rem;">\n\n{table}\n')
+    return Template(
+        """
+<details>
+    <summary>[show statistics per temporal period]</summary>
+
+    <p style="margin-top: 1rem;">
+    The following table shows some statistics for each period of column {{column}}.
+
+    {{tables}}
+</details>
+"""
+    ).render({"tables": "\n".join(tables)})
+
+
+def create_temporal_null_table(
+    frame: pd.DataFrame, column: str, dt_column: str, period: str
+) -> str:
+    r"""Create a HTML representation of a table with the temporal
+    distribution of null values.
+
+    Args:
+        frame: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to analyze
+            the temporal distribution.
+        period: The temporal period e.g. monthly or
+            daily.
+
+    Returns:
+        The HTML representation of the table.
+    """
+    if frame.shape[0] == 0:
+        return ""
+    num_nulls, totals, labels = prepare_data(
+        frame=frame, column=column, dt_column=dt_column, period=period
+    )
+    rows = []
+    for label, num_null, total in zip(labels, num_nulls, totals):
+        rows.append(create_temporal_null_table_row(label=label, num_nulls=num_null, total=total))
+    return Template(
+        """
+<table class="table table-hover table-responsive w-auto" >
+    <thead class="thead table-group-divider">
+        <tr>
+            <th colspan="6" style="text-align: center">column: {{column}}</th>
+        </tr>
+        <tr>
+            <th>period</th>
+            <th>number of null values</th>
+            <th>number of non-null values</th>
+            <th>total number of values</th>
+            <th>percentage of null values</th>
+            <th>percentage of non-null values</th>
+        </tr>
+    </thead>
+    <tbody class="tbody table-group-divider">
+        {{rows}}
+        <tr class="table-group-divider"></tr>
+    </tbody>
+</table>
+"""
+    ).render({"rows": "\n".join(rows), "column": column, "period": period})
+
+
+def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> str:
+    r"""Create the HTML code of a new table row.
+
+    Args:
+        label: The label of the row.
+        num_nulls: The number of null values.
+        total: The total number of values.
+
+    Returns:
+        The HTML code of a row.
+    """
+    num_non_nulls = total - num_nulls
+    return Template(
+        """<tr>
+    <th>{{label}}</th>
+    <td {{num_style}}>{{num_nulls}}</td>
+    <td {{num_style}}>{{num_non_nulls}}</td>
+    <td {{num_style}}>{{total}}</td>
+    <td {{num_style}}>{{num_nulls_pct}}</td>
+    <td {{num_style}}>{{num_non_nulls_pct}}</td>
+</tr>"""
+    ).render(
+        {
+            "num_style": 'style="text-align: right;"',
+            "label": label,
+            "num_nulls": f"{num_nulls:,}",
+            "num_non_nulls": f"{num_non_nulls:,}",
+            "total": f"{total:,}",
+            "num_nulls_pct": f"{100 * num_nulls / total:.2f}%",
+            "num_non_nulls_pct": f"{100 * num_non_nulls / total:.2f}%",
+        }
+    )
