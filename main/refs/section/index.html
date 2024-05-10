@@ -1,0 +1,4835 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://durandtibo.github.io/flamme/main/refs/section/">
+      
+      
+        <link rel="prev" href="../schema/">
+      
+      
+        <link rel="next" href="../transformer/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
+    
+    
+      
+        <title>section - flamme</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flamme.section" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../..">
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="flamme" class="md-header__button md-logo" aria-label="flamme" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            flamme
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              section
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/durandtibo/flamme" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    durandtibo/flamme
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../get_started/" class="md-tabs__link">
+        
+  
+    
+  
+  Get Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../analyzer/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://github.com/durandtibo/flamme" class="md-tabs__link">
+        
+  
+    
+  
+  GitHub
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="flamme" class="md-nav__button md-logo" aria-label="flamme" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    flamme
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/durandtibo/flamme" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    durandtibo/flamme
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../get_started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analyzer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    analyzer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingestor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ingestor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reporter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    reporter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    section
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    section
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flamme.section" class="md-nav__link">
+    <span class="md-ellipsis">
+      section
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.get_statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.render_html_body" class="md-nav__link">
+    <span class="md-ellipsis">
+      render_html_body
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.render_html_toc" class="md-nav__link">
+    <span class="md-ellipsis">
+      render_html_toc
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousAdvancedSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnContinuousAdvancedSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnContinuousAdvancedSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousAdvancedSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnContinuousSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnContinuousSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnDiscreteSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnDiscreteSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnDiscreteSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnDiscreteSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalContinuousSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalContinuousSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalContinuousSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalContinuousSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalDiscreteSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalDiscreteSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalDiscreteSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalDiscreteSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalNullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalNullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.ncols" class="md-nav__link">
+    <span class="md-ellipsis">
+      ncols
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ContentSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ContentSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataFrameSummarySection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataFrameSummarySection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DataFrameSummarySection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataFrameSummarySection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataTypeSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataTypeSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DuplicatedRowSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DuplicatedRowSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.EmptySection" class="md-nav__link">
+    <span class="md-ellipsis">
+      EmptySection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.MarkdownSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      MarkdownSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.MostFrequentValuesSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      MostFrequentValuesSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      NullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.null_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      null_count
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.total_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      total_count
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.SectionDict" class="md-nav__link">
+    <span class="md-ellipsis">
+      SectionDict
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TableOfContentSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TableOfContentSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalNullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemporalNullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalRowCountSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemporalRowCountSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    transformer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/durandtibo/flamme" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GitHub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flamme.section" class="md-nav__link">
+    <span class="md-ellipsis">
+      section
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.get_statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.render_html_body" class="md-nav__link">
+    <span class="md-ellipsis">
+      render_html_body
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.BaseSection.render_html_toc" class="md-nav__link">
+    <span class="md-ellipsis">
+      render_html_toc
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousAdvancedSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnContinuousAdvancedSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnContinuousAdvancedSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousAdvancedSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnContinuousSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnContinuousSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnContinuousSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnDiscreteSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnDiscreteSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnDiscreteSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnDiscreteSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalContinuousSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalContinuousSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalContinuousSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalContinuousSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalDiscreteSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalDiscreteSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalDiscreteSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalDiscreteSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColumnTemporalNullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnTemporalNullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.ncols" class="md-nav__link">
+    <span class="md-ellipsis">
+      ncols
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ColumnTemporalNullValueSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.ContentSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      ContentSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataFrameSummarySection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataFrameSummarySection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DataFrameSummarySection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataFrameSummarySection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DataTypeSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataTypeSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      DuplicatedRowSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DuplicatedRowSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.DuplicatedRowSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.EmptySection" class="md-nav__link">
+    <span class="md-ellipsis">
+      EmptySection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.MarkdownSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      MarkdownSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.MostFrequentValuesSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      MostFrequentValuesSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      NullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.null_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      null_count
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.NullValueSection.total_count" class="md-nav__link">
+    <span class="md-ellipsis">
+      total_count
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.SectionDict" class="md-nav__link">
+    <span class="md-ellipsis">
+      SectionDict
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TableOfContentSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TableOfContentSection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalNullValueSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemporalNullValueSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalNullValueSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalRowCountSection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TemporalRowCountSection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.dt_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      dt_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.figsize" class="md-nav__link">
+    <span class="md-ellipsis">
+      figsize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flamme.section.TemporalRowCountSection.period" class="md-nav__link">
+    <span class="md-ellipsis">
+      period
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>section</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="flamme.section" class="doc doc-heading">
+          <span class="doc doc-object-name doc-module-name">flamme.section</span>
+
+
+<a href="#flamme.section" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents first">
+  
+      <p>Contain sections.</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.BaseSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.BaseSection</span>
+
+
+<a href="#flamme.section.BaseSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+  
+      <p>Define the base class to manage sections.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="flamme.section.BaseSection.get_statistics" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">flamme.section.BaseSection.get_statistics</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+<a href="#flamme.section.BaseSection.get_statistics" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">get_statistics</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">dict</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Return the statistics associated to the section.</p>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The statistics.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="flamme.section.BaseSection.render_html_body" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">flamme.section.BaseSection.render_html_body</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+<a href="#flamme.section.BaseSection.render_html_body" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">render_html_body</span><span class="p">(</span>
+    <span class="n">number</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n"><span title="collections.abc.Sequence">Sequence</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">depth</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Return the HTML body associated to the section.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>number</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The section number.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>tags</code></td>
+          <td>
+                <code><span title="collections.abc.Sequence">Sequence</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The tags associated to the section.</p>
+            </div>
+          </td>
+          <td>
+                <code>()</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The depth in the report.</p>
+            </div>
+          </td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The HTML body associated to the section.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="flamme.section.BaseSection.render_html_toc" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">flamme.section.BaseSection.render_html_toc</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+<a href="#flamme.section.BaseSection.render_html_toc" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">render_html_toc</span><span class="p">(</span>
+    <span class="n">number</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n"><span title="collections.abc.Sequence">Sequence</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">depth</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Return the HTML table of content (TOC) associated to the
+section.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>number</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The section number associated to the
+section.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>tags</code></td>
+          <td>
+                <code><span title="collections.abc.Sequence">Sequence</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The tags associated to the section.</p>
+            </div>
+          </td>
+          <td>
+                <code>()</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The depth in the report.</p>
+            </div>
+          </td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>max_depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum depth to generate in the TOC.</p>
+            </div>
+          </td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><span class="doc-section-title">Returns:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The HTML table of content associated to the section.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnContinuousAdvancedSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnContinuousAdvancedSection</span>
+
+
+<a href="#flamme.section.ColumnContinuousAdvancedSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes a continuous distribution of
+values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>series</code></td>
+          <td>
+                <code><span title="pandas.Series">Series</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The series/column to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column name.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>nbins</code></td>
+          <td>
+                <code>int | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of bins in the histogram.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>yscale</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The y-axis scale. If <code>'auto'</code>, the
+<code>'linear'</code> or <code>'log'/'symlog'</code> scale is chosen based
+on the distribution.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;auto&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Example usage:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">flamme.section</span> <span class="kn">import</span> <span class="n">ColumnContinuousSection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span> <span class="o">=</span> <span class="n">ColumnContinuousAdvancedSection</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">series</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]),</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;col&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span>
+<span class="go">ColumnContinuousAdvancedSection(</span>
+<span class="go">  (column): col</span>
+<span class="go">  (nbins): None</span>
+<span class="go">  (yscale): auto</span>
+<span class="go">  (figsize): None</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span><span class="o">.</span><span class="n">get_statistics</span><span class="p">()</span>
+<span class="go">{&#39;count&#39;: 103, &#39;num_nulls&#39;: 2, &#39;nunique&#39;: 102, &#39;mean&#39;: 50.0, &#39;std&#39;: 29.30...,</span>
+<span class="go"> &#39;skewness&#39;: 0.0, &#39;kurtosis&#39;: -1.200235294117647, &#39;min&#39;: 0.0,</span>
+<span class="go"> &#39;q001&#39;: 0.1, &#39;q01&#39;: 1.0, &#39;q05&#39;: 5.0, &#39;q10&#39;: 10.0, &#39;q25&#39;: 25.0, &#39;median&#39;: 50.0,</span>
+<span class="go"> &#39;q75&#39;: 75.0, &#39;q90&#39;: 90.0, &#39;q95&#39;: 95.0, &#39;q99&#39;: 99.0, &#39;q999&#39;: 99.9, &#39;max&#39;: 100.0,</span>
+<span class="go"> &#39;&gt;0&#39;: 100, &#39;&lt;0&#39;: 0, &#39;=0&#39;: 1, &#39;num_non_nulls&#39;: 101}</span>
+</code></pre></div>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnContinuousAdvancedSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnContinuousAdvancedSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnContinuousAdvancedSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnContinuousSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnContinuousSection</span>
+
+
+<a href="#flamme.section.ColumnContinuousSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes a continuous distribution of
+values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>series</code></td>
+          <td>
+                <code><span title="pandas.Series">Series</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The series/column to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column name.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>nbins</code></td>
+          <td>
+                <code>int | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of bins in the histogram.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>yscale</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The y-axis scale. If <code>'auto'</code>, the
+<code>'linear'</code> or <code>'log'/'symlog'</code> scale is chosen based
+on the distribution.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;auto&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>xmin</code></td>
+          <td>
+                <code>float | str | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The minimum value of the range or its
+associated quantile. <code>q0.1</code> means the 10% quantile.
+<code>0</code> is the minimum value and <code>1</code> is the maximum value.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>xmax</code></td>
+          <td>
+                <code>float | str | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum value of the range or its
+associated quantile. <code>q0.9</code> means the 90% quantile.
+<code>0</code> is the minimum value and <code>1</code> is the maximum value.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Example usage:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">flamme.section</span> <span class="kn">import</span> <span class="n">ColumnContinuousSection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span> <span class="o">=</span> <span class="n">ColumnContinuousSection</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">series</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]),</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;col&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span>
+<span class="go">ColumnContinuousSection(</span>
+<span class="go">  (column): col</span>
+<span class="go">  (nbins): None</span>
+<span class="go">  (yscale): auto</span>
+<span class="go">  (xmin): None</span>
+<span class="go">  (xmax): None</span>
+<span class="go">  (figsize): None</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span><span class="o">.</span><span class="n">get_statistics</span><span class="p">()</span>
+<span class="go">{&#39;count&#39;: 103, &#39;num_nulls&#39;: 2, &#39;nunique&#39;: 102, &#39;mean&#39;: 50.0, &#39;std&#39;: 29.30...,</span>
+<span class="go"> &#39;skewness&#39;: 0.0, &#39;kurtosis&#39;: -1.200235294117647, &#39;min&#39;: 0.0,</span>
+<span class="go"> &#39;q001&#39;: 0.1, &#39;q01&#39;: 1.0, &#39;q05&#39;: 5.0, &#39;q10&#39;: 10.0, &#39;q25&#39;: 25.0, &#39;median&#39;: 50.0,</span>
+<span class="go"> &#39;q75&#39;: 75.0, &#39;q90&#39;: 90.0, &#39;q95&#39;: 95.0, &#39;q99&#39;: 99.0, &#39;q999&#39;: 99.9, &#39;max&#39;: 100.0,</span>
+<span class="go"> &#39;&gt;0&#39;: 100, &#39;&lt;0&#39;: 0, &#39;=0&#39;: 1, &#39;num_non_nulls&#39;: 101}</span>
+</code></pre></div>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnContinuousSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnContinuousSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnContinuousSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnDiscreteSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnDiscreteSection</span>
+
+
+<a href="#flamme.section.ColumnDiscreteSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes a discrete distribution of
+values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>counter</code></td>
+          <td>
+                <code><span title="collections.Counter">Counter</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The counter that represents the discrete
+distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>null_values</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of null values.</p>
+            </div>
+          </td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column name.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;N/A&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>max_rows</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum number of rows to show in the
+table.</p>
+            </div>
+          </td>
+          <td>
+                <code>20</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>yscale</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The y-axis scale. If <code>'auto'</code>, the
+<code>'linear'</code> or <code>'log'</code> scale is chosen based on the
+distribution.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;auto&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnDiscreteSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnDiscreteSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnDiscreteSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnTemporalContinuousSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnTemporalContinuousSection</span>
+
+
+<a href="#flamme.section.ColumnTemporalContinuousSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes the temporal distribution of a
+column with continuous values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>dt_column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The datetime column used to analyze
+the temporal distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>period</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The temporal period e.g. monthly or daily.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>yscale</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The y-axis scale. If <code>'auto'</code>, the
+<code>'linear'</code> or <code>'log'/'symlog'</code> scale is chosen based
+on the distribution.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;auto&#39;</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Example usage:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">flamme.section</span> <span class="kn">import</span> <span class="n">ColumnContinuousSection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span> <span class="o">=</span> <span class="n">ColumnTemporalContinuousSection</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">frame</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;col&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">]),</span>
+<span class="gp">... </span>            <span class="s2">&quot;datetime&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="s2">&quot;2020-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-02-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-03-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-04-03&quot;</span><span class="p">]</span>
+<span class="gp">... </span>            <span class="p">),</span>
+<span class="gp">... </span>        <span class="p">}</span>
+<span class="gp">... </span>    <span class="p">),</span>
+<span class="gp">... </span>    <span class="n">column</span><span class="o">=</span><span class="s2">&quot;col&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dt_column</span><span class="o">=</span><span class="s2">&quot;datetime&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">period</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span>
+<span class="go">ColumnTemporalContinuousSection(</span>
+<span class="go">  (column): col</span>
+<span class="go">  (dt_column): datetime</span>
+<span class="go">  (period): M</span>
+<span class="go">  (yscale): auto</span>
+<span class="go">  (figsize): None</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span><span class="o">.</span><span class="n">get_statistics</span><span class="p">()</span>
+<span class="go">{}</span>
+</code></pre></div>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalContinuousSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalContinuousSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalContinuousSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnTemporalDiscreteSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnTemporalDiscreteSection</span>
+
+
+<a href="#flamme.section.ColumnTemporalDiscreteSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes the temporal distribution of a
+column with discrete values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column of the DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>dt_column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The datetime column used to analyze
+the temporal distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>period</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The temporal period e.g. monthly or
+daily.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalDiscreteSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalDiscreteSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalDiscreteSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ColumnTemporalNullValueSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ColumnTemporalNullValueSection</span>
+
+
+<a href="#flamme.section.ColumnTemporalNullValueSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section to analyze the temporal distribution of null
+values for all columns.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>columns</code></td>
+          <td>
+                <code><span title="collections.abc.Sequence">Sequence</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The list of columns to analyze. A plot is generated
+for each column.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>dt_column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The datetime column used to analyze
+the temporal distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>period</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The temporal period e.g. monthly or daily.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>ncols</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of columns.</p>
+            </div>
+          </td>
+          <td>
+                <code>2</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first dimension
+is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>(7, 5)</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.columns" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.columns</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.columns" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">columns</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The columns to analyze.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.dt_column" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.dt_column</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.dt_column" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">dt_column</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The datetime column.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.frame" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.frame</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.frame" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">frame</span><span class="p">:</span> <span class="n"><span title="pandas.DataFrame">DataFrame</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The DataFrame to analyze.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.ncols" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.ncols</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.ncols" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">ncols</span><span class="p">:</span> <span class="n">int</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The number of columns to show the figures.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.ColumnTemporalNullValueSection.period" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.ColumnTemporalNullValueSection.period</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.ColumnTemporalNullValueSection.period" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">period</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The temporal period used to analyze the data.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.ContentSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.ContentSection</span>
+
+
+<a href="#flamme.section.ContentSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that generates the given custom content.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>content</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The content to use in the HTML code.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+      <p>Example usage:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">flamme.section</span> <span class="kn">import</span> <span class="n">ContentSection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span> <span class="o">=</span> <span class="n">ContentSection</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span>
+<span class="go">ContentSection()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">section</span><span class="o">.</span><span class="n">get_statistics</span><span class="p">()</span>
+<span class="go">{}</span>
+</code></pre></div>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.DataFrameSummarySection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.DataFrameSummarySection</span>
+
+
+<a href="#flamme.section.DataFrameSummarySection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that returns a summary of a DataFrame.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>top</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of most frequent values to show.</p>
+            </div>
+          </td>
+          <td>
+                <code>5</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.DataFrameSummarySection.frame" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.DataFrameSummarySection.frame</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.DataFrameSummarySection.frame" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">frame</span><span class="p">:</span> <span class="n"><span title="pandas.DataFrame">DataFrame</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The DataFrame to analyze.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.DataTypeSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.DataTypeSection</span>
+
+
+<a href="#flamme.section.DataTypeSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes the data type of each column.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>dtypes</code></td>
+          <td>
+                <code>dict[str, <span title="numpy.typing.DTypeLike">DTypeLike</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data type for each column.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>types</code></td>
+          <td>
+                <code>dict[str, set]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The types of the values in each
+column. A column can contain multiple types. The keys are
+the column names.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.DuplicatedRowSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.DuplicatedRowSection</span>
+
+
+<a href="#flamme.section.DuplicatedRowSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section to analyze the number of duplicated rows.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>columns</code></td>
+          <td>
+                <code><span title="collections.abc.Sequence">Sequence</span>[str] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The columns used to compute the duplicated rows.
+<code>None</code> means all the columns.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure
+size in inches. The first dimension is the width and the
+second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.DuplicatedRowSection.columns" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.DuplicatedRowSection.columns</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.DuplicatedRowSection.columns" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">columns</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Tuple or <code>None</code>: The columns used to compute the
+duplicated rows.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.DuplicatedRowSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.DuplicatedRowSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.DuplicatedRowSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.DuplicatedRowSection.frame" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.DuplicatedRowSection.frame</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.DuplicatedRowSection.frame" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">frame</span><span class="p">:</span> <span class="n"><span title="pandas.DataFrame">DataFrame</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The DataFrame to analyze.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.EmptySection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.EmptySection</span>
+
+
+<a href="#flamme.section.EmptySection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement an empty section.</p>
+<p>This section is implemented to deal with missing columns or to skip
+some analyses.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.MarkdownSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.MarkdownSection</span>
+
+
+<a href="#flamme.section.MarkdownSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that converts a markdown string into HTML.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>desc</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The markdown string to convert.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.MostFrequentValuesSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.MostFrequentValuesSection</span>
+
+
+<a href="#flamme.section.MostFrequentValuesSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes the most frequent values for a
+given columns.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>counter</code></td>
+          <td>
+                <code><span title="collections.Counter">Counter</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The counter with the number of occurrences
+for all values.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column name.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>top</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum number of values to show.</p>
+            </div>
+          </td>
+          <td>
+                <code>100</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.NullValueSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.NullValueSection</span>
+
+
+<a href="#flamme.section.NullValueSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section that analyzes the number of null values.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>columns</code></td>
+          <td>
+                <code><span title="collections.abc.Sequence">Sequence</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The column names.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>null_count</code></td>
+          <td>
+                <code><span title="numpy.ndarray">ndarray</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of null values for each column.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>total_count</code></td>
+          <td>
+                <code><span title="numpy.ndarray">ndarray</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The total number of values for each column.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first dimension
+is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.NullValueSection.columns" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.NullValueSection.columns</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.NullValueSection.columns" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">columns</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Tuple: The columns used to compute the duplicated rows.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.NullValueSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.NullValueSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.NullValueSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.NullValueSection.null_count" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.NullValueSection.null_count</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.NullValueSection.null_count" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">null_count</span><span class="p">:</span> <span class="n"><span title="numpy.ndarray">ndarray</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p><code>numpy.ndarray</code>: The number of null values for each
+column.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.NullValueSection.total_count" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.NullValueSection.total_count</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.NullValueSection.total_count" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">total_count</span><span class="p">:</span> <span class="n"><span title="numpy.ndarray">ndarray</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p><code>numpy.ndarray</code>: The total number of values for each
+column.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.SectionDict" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.SectionDict</span>
+
+
+<a href="#flamme.section.SectionDict" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section to manage a dictionary of sections.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>sections</code></td>
+          <td>
+                <code>dict[str, <a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The dictionary of sections.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>max_toc_depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum level to show in the
+table of content. Set this value to <code>0</code> to not show
+the table of content at the beginning of the section.</p>
+            </div>
+          </td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.TableOfContentSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.TableOfContentSection</span>
+
+
+<a href="#flamme.section.TableOfContentSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a wrapper section that generates a table of content
+before the section.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>section</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The section.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>max_toc_depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum level to show in the
+table of content.</p>
+            </div>
+          </td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.TemporalNullValueSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.TemporalNullValueSection</span>
+
+
+<a href="#flamme.section.TemporalNullValueSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section to analyze the temporal distribution of null
+values for all columns.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>dt_column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The datetime column used to analyze
+the temporal distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>period</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The temporal period e.g. monthly or daily.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalNullValueSection.columns" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalNullValueSection.columns</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalNullValueSection.columns" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">columns</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The columns to analyze.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalNullValueSection.dt_column" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalNullValueSection.dt_column</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalNullValueSection.dt_column" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">dt_column</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The datetime column.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalNullValueSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalNullValueSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalNullValueSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalNullValueSection.frame" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalNullValueSection.frame</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalNullValueSection.frame" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">frame</span><span class="p">:</span> <span class="n"><span title="pandas.DataFrame">DataFrame</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The DataFrame to analyze.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalNullValueSection.period" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalNullValueSection.period</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalNullValueSection.period" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">period</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The temporal period used to analyze the data.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="flamme.section.TemporalRowCountSection" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">flamme.section.TemporalRowCountSection</span>
+
+
+<a href="#flamme.section.TemporalRowCountSection" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="flamme.section.base.BaseSection" href="#flamme.section.BaseSection">BaseSection</a></code></p>
+
+  
+      <p>Implement a section to analyze the number of rows per temporal
+window.</p>
+
+
+
+  <p><span class="doc-section-title">Parameters:</span></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="doc-section-item">
+          <td><code>frame</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The DataFrame to analyze.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>dt_column</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The datetime column used to analyze
+the temporal distribution.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>period</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The temporal period e.g. monthly or daily.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>figsize</code></td>
+          <td>
+                <code>tuple[float, float] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The figure size in inches. The first
+dimension is the width and the second is the height.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalRowCountSection.dt_column" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalRowCountSection.dt_column</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalRowCountSection.dt_column" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">dt_column</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The datetime column.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalRowCountSection.figsize" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalRowCountSection.figsize</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalRowCountSection.figsize" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">figsize</span><span class="p">:</span> <span class="n">tuple</span><span class="p">[</span><span class="n">float</span><span class="p">,</span> <span class="n">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The individual figure size in pixels.</p>
+<p>The first dimension is the width and the second is the height.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalRowCountSection.frame" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalRowCountSection.frame</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalRowCountSection.frame" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">frame</span><span class="p">:</span> <span class="n"><span title="pandas.DataFrame">DataFrame</span></span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The DataFrame to analyze.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="flamme.section.TemporalRowCountSection.period" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">flamme.section.TemporalRowCountSection.period</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#flamme.section.TemporalRowCountSection.period" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">period</span><span class="p">:</span> <span class="n">str</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The temporal period used to analyze the data.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 - present Thibaut Durand
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"method": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      
+    
+  </body>
+</html>
