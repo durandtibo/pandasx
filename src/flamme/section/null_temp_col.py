@@ -8,7 +8,7 @@ __all__ = ["ColumnTemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
-from coola.utils import str_indent
+from coola.utils import repr_indent, repr_mapping, str_indent
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from tqdm import tqdm
@@ -48,6 +48,38 @@ class ColumnTemporalNullValueSection(BaseSection):
         ncols: The number of columns.
         figsize: The figure size in inches. The first dimension
             is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import ColumnTemporalNullValueSection
+    >>> dataframe = pd.DataFrame(
+    ...     {
+    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...         "int": np.array([np.nan, 1, 0, 1]),
+    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...         "datetime": pd.to_datetime(
+    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...         ),
+    ...     }
+    ... )
+    >>> section = ColumnTemporalNullValueSection(
+    ...     frame=dataframe, columns=["float", "int", "str"], dt_column="datetime", period="M"
+    ... )
+    >>> section
+    ColumnTemporalNullValueSection(
+      (columns): ('float', 'int', 'str')
+      (dt_column): datetime
+      (period): M
+      (ncols): 2
+      (figsize): (7, 5)
+    )
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(
@@ -65,6 +97,20 @@ class ColumnTemporalNullValueSection(BaseSection):
         self._period = period
         self._ncols = min(ncols, len(self._columns))
         self._figsize = figsize
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "columns": self._columns,
+                    "dt_column": self._dt_column,
+                    "period": self._period,
+                    "ncols": self._ncols,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def frame(self) -> pd.DataFrame:

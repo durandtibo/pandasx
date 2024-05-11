@@ -12,6 +12,16 @@ from flamme.section import NullValueSection
 ######################################
 
 
+def test_null_value_section_str() -> None:
+    assert str(
+        NullValueSection(
+            columns=["col1", "col2", "col3"],
+            null_count=np.array([0, 1, 2]),
+            total_count=np.array([5, 5, 5]),
+        )
+    ).startswith("NullValueSection(")
+
+
 def test_null_value_section_incorrect_null_count_size() -> None:
     with pytest.raises(RuntimeError, match=r"columns \(3\) and null_count \(2\) do not match"):
         NullValueSection(

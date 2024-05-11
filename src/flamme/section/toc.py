@@ -6,6 +6,8 @@ __all__ = ["TableOfContentSection"]
 
 from typing import TYPE_CHECKING
 
+from coola.utils import repr_indent, repr_mapping
+
 from flamme.section.base import BaseSection
 
 if TYPE_CHECKING:
@@ -20,11 +22,47 @@ class TableOfContentSection(BaseSection):
         section: The section.
         max_toc_depth: The maximum level to show in the
             table of content.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import TableOfContentSection, DuplicatedRowSection
+    >>> section = TableOfContentSection(
+    ...     DuplicatedRowSection(
+    ...         frame=pd.DataFrame(
+    ...             {
+    ...                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
+    ...                 "col2": np.array([1, 1, 1, 1]),
+    ...                 "col3": np.array([1, 2, 2, 2]),
+    ...             }
+    ...         )
+    ...     )
+    ... )
+    >>> section
+    TableOfContentSection(
+      (section): DuplicatedRowSection(
+          (columns): None
+          (figsize): None
+        )
+      (max_toc_depth): 1
+    )
+    >>> section.get_statistics()
+    {'num_rows': 4, 'num_unique_rows': 3}
+
+    ```
     """
 
     def __init__(self, section: BaseSection, max_toc_depth: int = 1) -> None:
         self._section = section
         self._max_toc_depth = int(max_toc_depth)
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping({"section": self._section, "max_toc_depth": self._max_toc_depth})
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def get_statistics(self) -> dict:
         return self._section.get_statistics()
