@@ -41,6 +41,36 @@ class TemporalRowCountSection(BaseSection):
         period: The temporal period e.g. monthly or daily.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.section import TemporalRowCountSection
+    >>> section = TemporalRowCountSection(
+    ...     frame=pd.DataFrame(
+    ...         {
+    ...             "datetime": pd.to_datetime(
+    ...                 [
+    ...                     "2020-01-03",
+    ...                     "2020-01-04",
+    ...                     "2020-01-05",
+    ...                     "2020-02-03",
+    ...                     "2020-03-03",
+    ...                     "2020-04-03",
+    ...                 ]
+    ...             )
+    ...         }
+    ...     ),
+    ...     dt_column="datetime",
+    ...     period="M",
+    ... )
+    >>> section
+    TemporalRowCountSection(dt_column=datetime, period=M, figsize=None)
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(
@@ -60,6 +90,12 @@ class TemporalRowCountSection(BaseSection):
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__qualname__}(dt_column={self._dt_column}, period={self._period}, "
+            f"figsize={self._figsize})"
+        )
 
     @property
     def frame(self) -> pd.DataFrame:

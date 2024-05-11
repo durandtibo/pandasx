@@ -37,6 +37,12 @@ def dataframe() -> pd.DataFrame:
 #############################################
 
 
+def test_column_temporal_row_count_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(
+        TemporalRowCountSection(frame=dataframe, dt_column="datetime", period="M")
+    ).startswith("TemporalRowCountSection(")
+
+
 def test_column_temporal_row_count_section_frame(dataframe: pd.DataFrame) -> None:
     section = TemporalRowCountSection(frame=dataframe, dt_column="datetime", period="M")
     assert_frame_equal(

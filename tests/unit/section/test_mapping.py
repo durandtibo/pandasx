@@ -58,6 +58,17 @@ def sections() -> dict:
 #################################
 
 
+def test_capacity_distribution_section_str() -> None:
+    assert str(
+        SectionDict(
+            {
+                "metric1": Mock(spec=BaseSection, get_statistics=Mock(return_value={"acc": 42})),
+                "metric2": Mock(spec=BaseSection, get_statistics=Mock(return_value={"ap": 12})),
+            }
+        )
+    ).startswith("SectionDict(")
+
+
 def test_capacity_distribution_section_sections() -> None:
     sections = SectionDict(
         {

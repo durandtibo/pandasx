@@ -7,7 +7,7 @@ __all__ = ["SectionDict"]
 
 from typing import TYPE_CHECKING
 
-from coola.utils import str_indent
+from coola.utils import repr_indent, repr_mapping, str_indent
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -30,11 +30,50 @@ class SectionDict(BaseSection):
         max_toc_depth: The maximum level to show in the
             table of content. Set this value to ``0`` to not show
             the table of content at the beginning of the section.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> from flamme.section import SectionDict, ContentSection, TemporalRowCountSection
+    >>> frame = pd.DataFrame(
+    ...     {
+    ...         "datetime": pd.to_datetime(
+    ...             [
+    ...                 "2020-01-03",
+    ...                 "2020-01-04",
+    ...                 "2020-01-05",
+    ...                 "2020-02-03",
+    ...                 "2020-03-03",
+    ...                 "2020-04-03",
+    ...             ]
+    ...         )
+    ...     }
+    ... )
+    >>> section = SectionDict(
+    ...     {
+    ...         "content": ContentSection("meow"),
+    ...         "rows": TemporalRowCountSection(frame, dt_column="datetime", period="M"),
+    ...     }
+    ... )
+    >>> section
+    SectionDict(
+      (content): ContentSection()
+      (rows): TemporalRowCountSection(dt_column=datetime, period=M, figsize=None)
+    )
+    >>> section.get_statistics()
+    {'content': {}, 'rows': {}}
+
+    ```
     """
 
     def __init__(self, sections: dict[str, BaseSection], max_toc_depth: int = 0) -> None:
         self._sections = sections
         self._max_toc_depth = max_toc_depth
+
+    def __repr__(self) -> str:
+        args = repr_indent(repr_mapping(self._sections))
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def sections(self) -> dict[str, BaseSection]:

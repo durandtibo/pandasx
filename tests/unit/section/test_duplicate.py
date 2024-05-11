@@ -27,6 +27,10 @@ def dataframe() -> pd.DataFrame:
 ##########################################
 
 
+def test_duplicated_rows_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(DuplicatedRowSection(frame=dataframe)).startswith("DuplicatedRowSection(")
+
+
 def test_duplicated_rows_section_frame(dataframe: pd.DataFrame) -> None:
     section = DuplicatedRowSection(frame=dataframe)
     assert_frame_equal(section.frame, dataframe)

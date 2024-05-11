@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -45,6 +46,25 @@ class ColumnDiscreteSection(BaseSection):
             distribution.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> from collections import Counter
+    >>> from flamme.section import ColumnDiscreteSection
+    >>> section = ColumnDiscreteSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
+    >>> section
+    ColumnDiscreteSection(
+      (null_values): 0
+      (column): col
+      (yscale): auto
+      (max_rows): 20
+      (figsize): None
+    )
+    >>> section.get_statistics()
+    {'most_common': [('c', 6), ('a', 4), ('b', 2)], 'nunique': 3, 'total': 12}
+
+    ```
     """
 
     def __init__(
@@ -64,6 +84,20 @@ class ColumnDiscreteSection(BaseSection):
         self._figsize = figsize
 
         self._total = sum(self._counter.values())
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "null_values": self._null_values,
+                    "column": self._column,
+                    "yscale": self._yscale,
+                    "max_rows": self._max_rows,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def figsize(self) -> tuple[float, float] | None:
