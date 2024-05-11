@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import pandas as pd
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -40,6 +41,28 @@ class NullValueSection(BaseSection):
         total_count: The total number of values for each column.
         figsize: The figure size in inches. The first dimension
             is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import numpy as np
+    >>> from flamme.section import NullValueSection
+    >>> section = NullValueSection(
+    ...     columns=["col1", "col2", "col3"],
+    ...     null_count=np.array([0, 1, 2]),
+    ...     total_count=np.array([5, 5, 5]),
+    ... )
+    >>> section
+    NullValueSection(
+      (columns): ('col1', 'col2', 'col3')
+      (null_count): array([0, 1, 2])
+      (total_count): array([5, 5, 5])
+      (figsize): None
+    )
+    >>> section.get_statistics()
+    {'columns': ('col1', 'col2', 'col3'), 'null_count': (0, 1, 2), 'total_count': (5, 5, 5)}
+
+    ```
     """
 
     def __init__(
@@ -67,21 +90,32 @@ class NullValueSection(BaseSection):
             )
             raise RuntimeError(msg)
 
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "columns": self._columns,
+                    "null_count": self._null_count,
+                    "total_count": self._total_count,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
+
     @property
     def columns(self) -> tuple[str, ...]:
-        r"""Tuple: The columns used to compute the duplicated rows."""
+        r"""The columns used to compute the duplicated rows."""
         return self._columns
 
     @property
     def null_count(self) -> np.ndarray:
-        r"""``numpy.ndarray``: The number of null values for each
-        column."""
+        r"""The number of null values for each column."""
         return self._null_count
 
     @property
     def total_count(self) -> np.ndarray:
-        r"""``numpy.ndarray``: The total number of values for each
-        column."""
+        r"""The total number of values for each column."""
         return self._total_count
 
     @property

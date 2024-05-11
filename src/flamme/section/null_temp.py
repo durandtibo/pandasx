@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -43,6 +44,38 @@ class TemporalNullValueSection(BaseSection):
         period: The temporal period e.g. monthly or daily.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import TemporalNullValueSection
+    >>> section = TemporalNullValueSection(
+    ...     frame=pd.DataFrame(
+    ...         {
+    ...             "col1": np.array([1.2, 4.2, np.nan, 2.2]),
+    ...             "col2": np.array([np.nan, 1, np.nan, 1]),
+    ...             "datetime": pd.to_datetime(
+    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...             ),
+    ...         }
+    ...     ),
+    ...     columns=["col1", "col2"],
+    ...     dt_column="datetime",
+    ...     period="M",
+    ... )
+    >>> section
+    TemporalNullValueSection(
+      (columns): ('col1', 'col2')
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(
@@ -65,6 +98,19 @@ class TemporalNullValueSection(BaseSection):
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "columns": self._columns,
+                    "dt_column": self._dt_column,
+                    "period": self._period,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def frame(self) -> pd.DataFrame:

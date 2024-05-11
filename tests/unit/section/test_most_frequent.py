@@ -12,6 +12,12 @@ from flamme.section import MostFrequentValuesSection
 ###############################################
 
 
+def test_most_frequent_values_section_str() -> None:
+    assert str(
+        MostFrequentValuesSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
+    ).startswith("MostFrequentValuesSection(")
+
+
 def test_most_frequent_values_section_get_statistics() -> None:
     section = MostFrequentValuesSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
     assert objects_are_allclose(

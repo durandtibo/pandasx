@@ -9,6 +9,10 @@ from flamme.section import MarkdownSection
 #####################################
 
 
+def test_markdown_section_str() -> None:
+    assert str(MarkdownSection(desc="meow")).startswith("MarkdownSection(")
+
+
 def test_markdown_section_get_statistics() -> None:
     section = MarkdownSection(desc="### Hello Cat!")
     assert section.get_statistics() == {}

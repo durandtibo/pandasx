@@ -31,6 +31,14 @@ def dataframe() -> pd.DataFrame:
 ##############################################
 
 
+def test_temporal_null_value_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(
+        TemporalNullValueSection(
+            frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="M"
+        )
+    ).startswith("TemporalNullValueSection(")
+
+
 def test_temporal_null_value_section_frame(dataframe: pd.DataFrame) -> None:
     section = TemporalNullValueSection(
         frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="M"

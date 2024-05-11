@@ -25,6 +25,12 @@ def dataframe() -> pd.DataFrame:
 ###########################################
 
 
+def test_table_of_content_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(TableOfContentSection(DuplicatedRowSection(frame=dataframe))).startswith(
+        "TableOfContentSection("
+    )
+
+
 def test_table_of_content_section_get_statistics(dataframe: pd.DataFrame) -> None:
     section = TableOfContentSection(DuplicatedRowSection(frame=dataframe))
     assert objects_are_equal(section.get_statistics(), {"num_rows": 4, "num_unique_rows": 3})

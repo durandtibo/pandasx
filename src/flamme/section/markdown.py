@@ -31,10 +31,25 @@ class MarkdownSection(BaseSection):
 
     Args:
         desc: The markdown string to convert.
+
+    Example usage:
+
+    ```pycon
+    >>> from flamme.section import MarkdownSection
+    >>> section = MarkdownSection(desc="meow")
+    >>> section
+    MarkdownSection()
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(self, desc: str) -> None:
         self._desc = str(desc)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}()"
 
     def get_statistics(self) -> dict:
         return {}

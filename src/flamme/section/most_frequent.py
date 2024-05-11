@@ -8,6 +8,7 @@ __all__ = ["MostFrequentValuesSection"]
 import logging
 from typing import TYPE_CHECKING
 
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 
 from flamme.section.base import BaseSection
@@ -35,6 +36,26 @@ class MostFrequentValuesSection(BaseSection):
             for all values.
         column: The column name.
         top: The maximum number of values to show.
+
+    Example usage:
+
+    ```pycon
+    >>> from collections import Counter
+    >>> from flamme.section import MostFrequentValuesSection
+    >>> section = MostFrequentValuesSection(
+    ...     counter=Counter({"a": 4, "b": 2, "c": 6}), column="col"
+    ... )
+    >>> section
+    MostFrequentValuesSection(
+      (counter): Counter({'c': 6, 'a': 4, 'b': 2})
+      (column): col
+      (top): 100
+      (total): 12
+    )
+    >>> section.get_statistics()
+    {'most_common': [('c', 6), ('a', 4), ('b', 2)]}
+
+    ```
     """
 
     def __init__(self, counter: Counter, column: str, top: int = 100) -> None:
@@ -43,6 +64,19 @@ class MostFrequentValuesSection(BaseSection):
         self._top = top
 
         self._total = sum(self._counter.values())
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "counter": self._counter,
+                    "column": self._column,
+                    "top": self._top,
+                    "total": self._total,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def get_statistics(self) -> dict:
         return {"most_common": list(self._counter.most_common(self._top))}
