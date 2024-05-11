@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -43,6 +44,38 @@ class ColumnTemporalDiscreteSection(BaseSection):
             daily.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import ColumnTemporalDiscreteSection
+    >>> section = ColumnTemporalDiscreteSection(
+    ...     frame=pd.DataFrame(
+    ...         {
+    ...             "col": np.array([1, 42, np.nan, 22]),
+    ...             "col2": ["a", "b", 1, "a"],
+    ...             "datetime": pd.to_datetime(
+    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
+    ...             ),
+    ...         }
+    ...     ),
+    ...     column="col",
+    ...     dt_column="datetime",
+    ...     period="M",
+    ... )
+    >>> section
+    ColumnTemporalDiscreteSection(
+      (column): col
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
 
     def __init__(
@@ -58,6 +91,19 @@ class ColumnTemporalDiscreteSection(BaseSection):
         self._dt_column = dt_column
         self._period = period
         self._figsize = figsize
+
+    def __repr__(self) -> str:
+        args = repr_indent(
+            repr_mapping(
+                {
+                    "column": self._column,
+                    "dt_column": self._dt_column,
+                    "period": self._period,
+                    "figsize": self._figsize,
+                }
+            )
+        )
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
     def column(self) -> str:

@@ -26,6 +26,17 @@ def dataframe() -> pd.DataFrame:
 ###################################################
 
 
+def test_column_temporal_discrete_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(
+        ColumnTemporalDiscreteSection(
+            frame=dataframe,
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+    ).startswith("ColumnTemporalDiscreteSection(")
+
+
 def test_column_temporal_discrete_section_column(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,

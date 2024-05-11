@@ -14,6 +14,12 @@ from flamme.section.discrete import create_histogram
 ###########################################
 
 
+def test_column_discrete_section_str() -> None:
+    assert str(
+        ColumnDiscreteSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
+    ).startswith("ColumnDiscreteSection(")
+
+
 def test_column_discrete_section_figsize_default() -> None:
     assert (
         ColumnDiscreteSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col").figsize

@@ -9,6 +9,7 @@ import copy
 import logging
 from typing import TYPE_CHECKING
 
+from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 
 from flamme.section.base import BaseSection
@@ -37,6 +38,29 @@ class DataTypeSection(BaseSection):
         types: The types of the values in each
             column. A column can contain multiple types. The keys are
             the column names.
+
+    Example usage:
+
+    ```pycon
+    >>> import numpy as np
+    >>> from flamme.section import DataTypeSection
+    >>> section = DataTypeSection(
+    ...     dtypes={
+    ...         "float": np.dtype("float64"),
+    ...         "int": np.dtype("float64"),
+    ...         "str": np.dtype("O"),
+    ...     },
+    ...     types={"float": {float}, "int": {int}, "str": {str, type(None)}},
+    ... )
+    >>> section
+    DataTypeSection(
+      (dtypes): {'float': dtype('float64'), 'int': dtype('float64'), 'str': dtype('O')}
+      (types): {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+    )
+    >>> section.get_statistics()
+    {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+
+    ```
     """
 
     def __init__(self, dtypes: dict[str, DTypeLike], types: dict[str, set]) -> None:
@@ -52,6 +76,10 @@ class DataTypeSection(BaseSection):
                 f"({len(tkeys)}): {tkeys}\n"
             )
             raise RuntimeError(msg)
+
+    def __repr__(self) -> str:
+        args = repr_indent(repr_mapping({"dtypes": self._dtypes, "types": self._types}))
+        return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def get_statistics(self) -> dict:
         return copy.deepcopy(self._types)

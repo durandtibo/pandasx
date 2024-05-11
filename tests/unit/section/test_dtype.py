@@ -12,6 +12,15 @@ from flamme.section import DataTypeSection
 #####################################
 
 
+def test_data_type_section_str() -> None:
+    assert str(
+        DataTypeSection(
+            dtypes={"float": dtype("float64"), "int": dtype("float64"), "str": dtype("O")},
+            types={"float": {float}, "int": {int}, "str": {str, type(None)}},
+        )
+    ).startswith("DataTypeSection(")
+
+
 def test_data_type_section_incorrect_different_key() -> None:
     with pytest.raises(RuntimeError, match="The keys of dtypes and types do not match:"):
         DataTypeSection(

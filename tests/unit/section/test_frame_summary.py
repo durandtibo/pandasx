@@ -23,6 +23,15 @@ def dataframe() -> pd.DataFrame:
     )
 
 
+#############################################
+#     Tests for DataFrameSummarySection     #
+#############################################
+
+
+def test_dataframe_summary_section_str(dataframe: pd.DataFrame) -> None:
+    assert str(DataFrameSummarySection(dataframe)).startswith("DataFrameSummarySection(")
+
+
 def test_dataframe_summary_section_frame(dataframe: pd.DataFrame) -> None:
     assert DataFrameSummarySection(dataframe).frame is dataframe
 

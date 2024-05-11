@@ -10,6 +10,10 @@ from flamme.section import EmptySection
 ##################################
 
 
+def test_column_type_section_str() -> None:
+    assert str(EmptySection()).startswith("EmptySection(")
+
+
 def test_column_type_section_get_statistics() -> None:
     section = EmptySection()
     assert objects_are_allclose(section.get_statistics(), {})

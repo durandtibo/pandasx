@@ -35,6 +35,26 @@ class DataFrameSummarySection(BaseSection):
     Args:
         frame: The DataFrame to analyze.
         top: The number of most frequent values to show.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import DataFrameSummarySection
+    >>> section = DataFrameSummarySection(
+    ...     frame=pd.DataFrame(
+    ...         {
+    ...             "col1": np.array([1.2, 4.2, 4.2, 2.2]),
+    ...             "col2": np.array([1, 1, 1, 1]),
+    ...             "col3": np.array([1, 2, 2, 2]),
+    ...         }
+    ...     )
+    ... )
+    >>> section
+    DataFrameSummarySection(top=5)
+    >>> section.get_statistics()
+    {'columns': ('col1', 'col2', 'col3'), 'null_count': (0, 0, 0), 'nunique': (3, 1, 2), 'column_types': ({<class 'float'>}, {<class 'int'>}, {<class 'int'>})}
     """
 
     def __init__(self, frame: pd.DataFrame, top: int = 5) -> None:
@@ -43,6 +63,9 @@ class DataFrameSummarySection(BaseSection):
             msg = f"Incorrect top value ({top}). top must be positive"
             raise ValueError(msg)
         self._top = top
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}(top={self._top})"
 
     @property
     def frame(self) -> pd.DataFrame:

@@ -17,7 +17,24 @@ class EmptySection(BaseSection):
 
     This section is implemented to deal with missing columns or to skip
     some analyses.
+
+    Example usage:
+
+    ```pycon
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> from flamme.section import EmptySection
+    >>> section = EmptySection()
+    >>> section
+    EmptySection()
+    >>> section.get_statistics()
+    {}
+
+    ```
     """
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__qualname__}()"
 
     def get_statistics(self) -> dict:
         return {}
