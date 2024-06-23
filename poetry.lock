@@ -977,13 +977,13 @@ devel = ["colorama", "json-spec", "jsonschema", "pylint", "pytest", "pytest-benc
 
 [[package]]
 name = "feu"
-version = "0.0.5"
+version = "0.0.6"
 description = "A light library to help to manage packages"
 optional = false
 python-versions = "<3.13,>=3.9"
 files = [
-    {file = "feu-0.0.5-py3-none-any.whl", hash = "sha256:312bf3d63baa917482a0331e1d1bb24b31ba898c23753be023a050714d962a49"},
-    {file = "feu-0.0.5.tar.gz", hash = "sha256:796e6893152e56288ce2e7c0c6e526f4c8041305d7acfe4f5e205ffce185be93"},
+    {file = "feu-0.0.6-py3-none-any.whl", hash = "sha256:12ab0e4cd2d8f360d07b6b72b732d8a7d59357de0718587423328358a3c5b495"},
+    {file = "feu-0.0.6.tar.gz", hash = "sha256:62cec3aab71df7f8ce0f78a67b7277c53700ff230817c808835df897c92ad8f1"},
 ]
 
 [package.dependencies]
@@ -1337,13 +1337,13 @@ files = [
 
 [[package]]
 name = "importlib-metadata"
-version = "7.2.0"
+version = "7.2.1"
 description = "Read metadata from Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "importlib_metadata-7.2.0-py3-none-any.whl", hash = "sha256:04e4aad329b8b948a5711d394fa8759cb80f009225441b4f2a02bd4d8e5f426c"},
-    {file = "importlib_metadata-7.2.0.tar.gz", hash = "sha256:3ff4519071ed42740522d494d04819b666541b9752c43012f85afb2cc220fcc6"},
+    {file = "importlib_metadata-7.2.1-py3-none-any.whl", hash = "sha256:ffef94b0b66046dd8ea2d619b701fe978d9264d38f3998bc4c27ec3b146a87c8"},
+    {file = "importlib_metadata-7.2.1.tar.gz", hash = "sha256:509ecb2ab77071db5137c655e24ceb3eee66e7bbc6574165d0d114d9fc4bbe68"},
 ]
 
 [package.dependencies]
@@ -4492,4 +4492,4 @@ all = ["clickhouse-connect"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "2508a64f38c63335b78ef6558d269ad3541298ea126688a0fea7e291cac95f4b"
+content-hash = "abbff126bdc6b0a769714c3ffb881c93db7c7ca63010a7235352908ce14e004a"

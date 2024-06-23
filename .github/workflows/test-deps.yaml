@@ -202,7 +202,7 @@ jobs:
 
       - name: Install matplotlib
         run: |
-          poetry run pip install matplotlib==${{ matrix.matplotlib-version }}
+          poetry run python -c "from feu import install_package; install_package('matplotlib', '${{ matrix.matplotlib-version }}')"
 
       - name: Show installed packages
         run: |
@@ -344,7 +344,7 @@ jobs:
 
       - name: Install pandas
         run: |
-          poetry run pip install pandas==${{ matrix.pandas-version }}
+          poetry run python -c "from feu import install_package; install_package('pandas', '${{ matrix.pandas-version }}')"
 
       - name: Show installed packages
         run: |
@@ -395,7 +395,7 @@ jobs:
 
       - name: Install pyarrow
         run: |
-          poetry run pip install pyarrow==${{ matrix.pyarrow-version }}
+          poetry run python -c "from feu import install_package; install_package('pyarrow', '${{ matrix.pyarrow-version }}')"
 
       - name: Show installed packages
         run: |
@@ -440,7 +440,7 @@ jobs:
 
       - name: Install scipy
         run: |
-          poetry run pip install scipy==${{ matrix.scipy-version }}
+          poetry run python -c "from feu import install_package; install_package('scipy', '${{ matrix.scipy-version }}')"
 
       - name: Show installed packages
         run: |
