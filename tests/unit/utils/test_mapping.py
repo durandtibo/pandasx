@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from flamme.utils.mapping import sort_by_keys
 
 ##################################

@@ -51,4 +51,8 @@ def find_range(
         xmin = quantiles[0]
     if isinstance(xmax, str):
         xmax = quantiles[-1]
+    if isinstance(xmin, np.number):
+        xmin = xmin.item()
+    if isinstance(xmax, np.number):
+        xmax = xmax.item()
     return (xmin, xmax)
