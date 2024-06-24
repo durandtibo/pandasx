@@ -9,6 +9,7 @@ from pandas.testing import assert_frame_equal
 
 from flamme.section import ColumnTemporalNullValueSection
 from flamme.section.null_temp_col import (
+    add_column_to_figure,
     create_table_section,
     create_temporal_null_figure,
     create_temporal_null_figures,
@@ -300,6 +301,32 @@ def test_create_temporal_null_figures_empty_rows() -> None:
         )
         == []
     )
+
+
+##########################################
+#     Tests for add_column_to_figure     #
+##########################################
+
+
+def test_add_column_to_figure() -> None:
+    assert objects_are_equal(
+        add_column_to_figure(columns=["col1", "col2"], figures=["fig1", "fig2"]),
+        [
+            '<div style="text-align:center">col1\nfig1</div>',
+            '<div style="text-align:center">col2\nfig2</div>',
+        ],
+    )
+
+
+def test_add_column_to_figure_empty() -> None:
+    assert objects_are_equal(add_column_to_figure(columns=[], figures=[]), [])
+
+
+def test_add_column_to_figure_incorrect_sizes() -> None:
+    with pytest.raises(
+        RuntimeError, match="The number of column names is different from the number of figures:"
+    ):
+        add_column_to_figure(columns=["col1", "col2"], figures=["fig1", "fig2", "fig3"])
 
 
 #################################
