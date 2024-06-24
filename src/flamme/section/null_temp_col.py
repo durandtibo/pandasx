@@ -233,12 +233,6 @@ def create_temporal_null_figure(
         frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
     )
     figures = add_column_to_figure(columns=columns, figures=figures)
-
-    cols = []
-    for i in range(ncols):
-        figs = str_indent("\n<hr>\n".join(figures[i::ncols]))
-        cols.append(f'<div class="col">\n  {figs}\n</div>')
-
     return Template(
         """
     <div class="container-fluid text-center">
@@ -247,7 +241,7 @@ def create_temporal_null_figure(
       </div>
     </div>
     """
-    ).render({"columns": "\n".join(cols)})
+    ).render({"columns": "\n".join(split_figures_by_column(figures=figures, ncols=ncols))})
 
 
 def create_temporal_null_figures(
@@ -315,6 +309,23 @@ def add_column_to_figure(columns: Sequence[str], figures: Sequence[str]) -> list
     for col, figure in zip(columns, figures):
         outputs.append(f'<div style="text-align:center">{col}\n{figure}</div>')
     return outputs
+
+
+def split_figures_by_column(figures: Sequence[str], ncols: int) -> list[str]:
+    r"""Split the figures into multiple columns.
+
+    Args:
+        figures: The HTML representations of each figure.
+        ncols: The number of columns.
+
+    Returns:
+        The columns.
+    """
+    cols = []
+    for i in range(ncols):
+        figs = str_indent("\n<hr>\n".join(figures[i::ncols]))
+        cols.append(f'<div class="col">\n  {figs}\n</div>')
+    return cols
 
 
 def prepare_data(

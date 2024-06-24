@@ -16,6 +16,7 @@ from flamme.section.null_temp_col import (
     create_temporal_null_table,
     create_temporal_null_table_row,
     prepare_data,
+    split_figures_by_column,
 )
 
 
@@ -327,6 +328,52 @@ def test_add_column_to_figure_incorrect_sizes() -> None:
         RuntimeError, match="The number of column names is different from the number of figures:"
     ):
         add_column_to_figure(columns=["col1", "col2"], figures=["fig1", "fig2", "fig3"])
+
+
+############################################
+#    Tests for split_figures_by_column     #
+############################################
+
+
+def test_split_figures_by_column_ncols_1() -> None:
+    assert objects_are_equal(
+        split_figures_by_column(figures=["fig1", "fig2", "fig3"], ncols=1),
+        ['<div class="col">\n  fig1\n  <hr>\n  fig2\n  <hr>\n  fig3\n</div>'],
+    )
+
+
+def test_split_figures_by_column_ncols_2() -> None:
+    assert objects_are_equal(
+        split_figures_by_column(figures=["fig1", "fig2", "fig3"], ncols=2),
+        ['<div class="col">\n  fig1\n  <hr>\n  fig3\n</div>', '<div class="col">\n  fig2\n</div>'],
+    )
+
+
+def test_split_figures_by_column_ncols_3() -> None:
+    assert objects_are_equal(
+        split_figures_by_column(figures=["fig1", "fig2", "fig3"], ncols=3),
+        [
+            '<div class="col">\n  fig1\n</div>',
+            '<div class="col">\n  fig2\n</div>',
+            '<div class="col">\n  fig3\n</div>',
+        ],
+    )
+
+
+def test_split_figures_by_column_empty_ncols_1() -> None:
+    assert objects_are_equal(
+        split_figures_by_column(figures=[], ncols=1), ['<div class="col">\n  \n</div>']
+    )
+
+
+def test_split_figures_by_column_empty_ncols_2() -> None:
+    assert objects_are_equal(
+        split_figures_by_column(figures=[], ncols=2),
+        [
+            '<div class="col">\n  \n</div>',
+            '<div class="col">\n  \n</div>',
+        ],
+    )
 
 
 #################################
