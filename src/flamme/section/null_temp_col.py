@@ -30,7 +30,6 @@ if TYPE_CHECKING:
     import numpy as np
     import pandas as pd
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -233,12 +232,7 @@ def create_temporal_null_figure(
     figures = create_temporal_null_figures(
         frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
     )
-
-    cols = []
-    for i in range(ncols):
-        figs = str_indent("\n".join(figures[i::ncols]))
-        cols.append(f'<div class="col">\n  {figs}\n</div>')
-
+    figures = add_column_to_figure(columns=columns, figures=figures)
     return Template(
         """
     <div class="container-fluid text-center">
@@ -247,7 +241,7 @@ def create_temporal_null_figure(
       </div>
     </div>
     """
-    ).render({"columns": "\n".join(cols)})
+    ).render({"columns": "\n".join(split_figures_by_column(figures=figures, ncols=ncols))})
 
 
 def create_temporal_null_figures(
@@ -289,6 +283,49 @@ def create_temporal_null_figures(
         figures.append(figure2html(fig, close_fig=True))
 
     return figures
+
+
+def add_column_to_figure(columns: Sequence[str], figures: Sequence[str]) -> list[str]:
+    r"""Add the column name to the HTML representation of the figure.
+
+    Args:
+        columns: The column names.
+        figures: The HTML representations of each figure.
+
+    Returns:
+        The updated HTML representations of each figure.
+
+    Raises:
+        RuntimeError: if the number of column names is different from
+            the number of figures.
+    """
+    if len(columns) != len(figures):
+        msg = (
+            f"The number of column names is different from the number of figures: "
+            f"{len(columns):,} vs{len(figures):,}"
+        )
+        raise RuntimeError(msg)
+    outputs = []
+    for col, figure in zip(columns, figures):
+        outputs.append(f'<div style="text-align:center">{col}\n{figure}</div>')
+    return outputs
+
+
+def split_figures_by_column(figures: Sequence[str], ncols: int) -> list[str]:
+    r"""Split the figures into multiple columns.
+
+    Args:
+        figures: The HTML representations of each figure.
+        ncols: The number of columns.
+
+    Returns:
+        The columns.
+    """
+    cols = []
+    for i in range(ncols):
+        figs = str_indent("\n<hr>\n".join(figures[i::ncols]))
+        cols.append(f'<div class="col">\n  {figs}\n</div>')
+    return cols
 
 
 def prepare_data(
