@@ -313,8 +313,8 @@ def test_add_column_to_figure() -> None:
     assert objects_are_equal(
         add_column_to_figure(columns=["col1", "col2"], figures=["fig1", "fig2"]),
         [
-            '<div style="text-align:center">col1\nfig1</div>',
-            '<div style="text-align:center">col2\nfig2</div>',
+            '<div style="text-align:center">(0) col1\nfig1</div>',
+            '<div style="text-align:center">(1) col2\nfig2</div>',
         ],
     )
 

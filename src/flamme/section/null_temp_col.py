@@ -306,8 +306,8 @@ def add_column_to_figure(columns: Sequence[str], figures: Sequence[str]) -> list
         )
         raise RuntimeError(msg)
     outputs = []
-    for col, figure in zip(columns, figures):
-        outputs.append(f'<div style="text-align:center">{col}\n{figure}</div>')
+    for i, (col, figure) in enumerate(zip(columns, figures)):
+        outputs.append(f'<div style="text-align:center">({i}) {col}\n{figure}</div>')
     return outputs
 
 
