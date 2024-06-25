@@ -229,7 +229,8 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install flamme matplotlib==${{ matrix.matplotlib-version }}
+          pip install flamme feu
+          python -c "from feu import install_package; install_package('matplotlib', '${{ matrix.matplotlib-version }}')"
 
       - name: Run some checks
         run: |
@@ -331,7 +332,8 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install flamme pandas==${{ matrix.pandas-version }}
+          pip install flamme feu
+          python -c "from feu import install_package; install_package('pandas', '${{ matrix.pandas-version }}')"
 
       - name: Run some checks
         run: |
@@ -369,7 +371,8 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install flamme pyarrow==${{ matrix.pyarrow-version }}
+          pip install flamme feu
+          python -c "from feu import install_package; install_package('pyarrow', '${{ matrix.pyarrow-version }}')"
 
       - name: Run some checks
         run: |
@@ -385,7 +388,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        scipy-version: [ 1.13.1, 1.12.0, 1.11.4, 1.10.1 ]
+        scipy-version: [ 1.14.0, 1.13.1, 1.12.0, 1.11.4, 1.10.1 ]
         exclude:
           - scipy-version: 1.10.1
             python-version: '3.12'
