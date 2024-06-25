@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.15"
+version = "0.0.16a0"
 description = "A library to generate custom reports of pandas DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -63,12 +63,6 @@ optional = true  # Plotly is used only as a comparison with matplotlib
 
 [tool.poetry.group.plotly.dependencies]
 plotly = ">=5.12,<6.0"
-
-[tool.poetry.group.great_expectations]
-optional = true  # Plotly is used only as a comparison with matplotlib
-
-[tool.poetry.group.great_expectations.dependencies]
-great_expectations = ">=0.18,<1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=24.4"
