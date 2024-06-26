@@ -49,7 +49,8 @@ def main() -> None:
     figures."""
     lines = []
     for size in [1000, 10000, 100000, 1000000]:
-        data = np.random.randn(size)
+        rng = np.random.default_rng(12345)
+        data = rng.normal(size=size)
         figm = matplotlib_histogram(data)
         figp = plotly_histogram(data)
         lines.append(f"<h2>size={size:,}</h2>")
