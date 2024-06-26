@@ -345,7 +345,7 @@ def test_create_stats_table(stats: dict[str, float]) -> None:
 
 
 def test_add_axvline_quantile() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     add_axvline_quantile(ax, x=1.0, label="my_label")
 
 
@@ -355,7 +355,7 @@ def test_add_axvline_quantile() -> None:
 
 
 def test_add_axvline_median() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     add_axvline_median(ax, x=1.0)
 
 
@@ -365,10 +365,10 @@ def test_add_axvline_median() -> None:
 
 
 def test_add_cdf_plot_empty() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     add_cdf_plot(ax, array=np.asarray([]), nbins=10)
 
 
 def test_add_cdf_plot() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     add_cdf_plot(ax, array=np.arange(101), nbins=10)

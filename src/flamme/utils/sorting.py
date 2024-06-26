@@ -52,7 +52,7 @@ def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
     typed_data = defaultdict(list)
     for v in iterable:
         t = type(v)
-        if t in (float, int, bool):  # group the numeric types
+        if t in {float, int, bool}:  # group the numeric types
             t = float
         typed_data[t].append(v)
     output = []
@@ -60,6 +60,6 @@ def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
     # to sort the types.
     typed_data = dict(sorted(typed_data.items(), key=lambda x: x[0].__qualname__))
     for typ, values in typed_data.items():
-        sort_fn = sortnan if typ == float else sorted
+        sort_fn = sortnan if typ is float else sorted
         output.extend(sort_fn(values, reverse=reverse))
     return output

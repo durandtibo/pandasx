@@ -2,7 +2,7 @@ r"""Contain utility functions to manage paths."""
 
 from __future__ import annotations
 
-__all__ = ["human_file_size", "sanitize_path", "find_files", "find_parquet_files"]
+__all__ = ["find_files", "find_parquet_files", "human_file_size", "sanitize_path"]
 
 from pathlib import Path
 from typing import TYPE_CHECKING

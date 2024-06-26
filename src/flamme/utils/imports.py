@@ -4,8 +4,8 @@ from __future__ import annotations
 
 __all__ = [
     "check_clickhouse_connect",
-    "is_clickhouse_connect_available",
     "clickhouse_connect_available",
+    "is_clickhouse_connect_available",
 ]
 
 from importlib.util import find_spec

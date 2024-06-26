@@ -8,7 +8,7 @@ repos:
     rev: v3.16.0
     hooks:
       - id: pyupgrade
-        args: [--py39-plus]
+        args: [ --py39-plus ]
   - repo: https://github.com/PyCQA/docformatter
     rev: v1.7.5
     hooks:
@@ -56,4 +56,4 @@ repos:
     hooks:
       - id: ruff
         types_or: [ python, pyi, jupyter ]
-        args: [--fix, --unsafe-fixes]
+        args: [ --fix, --unsafe-fixes ]
