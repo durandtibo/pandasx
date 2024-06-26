@@ -3,9 +3,9 @@ r"""Contain utility functions to manage data types."""
 from __future__ import annotations
 
 __all__ = [
-    "frame_column_types",
     "find_date_columns_from_dtypes",
     "find_numeric_columns_from_dtypes",
+    "frame_column_types",
     "get_dtypes_from_schema",
     "series_column_types",
 ]

@@ -2,7 +2,7 @@ r"""Contain some clickhouse utility functions."""
 
 from __future__ import annotations
 
-__all__ = ["get_table_schema", "get_dtypes"]
+__all__ = ["get_dtypes", "get_table_schema"]
 
 
 from typing import TYPE_CHECKING

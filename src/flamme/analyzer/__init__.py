@@ -3,7 +3,6 @@ r"""Contain DataFrame analyzers."""
 from __future__ import annotations
 
 __all__ = [
-    "ColumnTemporalNullValueAnalyzer",
     "BaseAnalyzer",
     "ChoiceAnalyzer",
     "ColumnContinuousAdvancedAnalyzer",
@@ -12,6 +11,7 @@ __all__ = [
     "ColumnSubsetAnalyzer",
     "ColumnTemporalContinuousAnalyzer",
     "ColumnTemporalDiscreteAnalyzer",
+    "ColumnTemporalNullValueAnalyzer",
     "ContentAnalyzer",
     "DataFrameSummaryAnalyzer",
     "DataTypeAnalyzer",

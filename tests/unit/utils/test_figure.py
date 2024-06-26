@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture()
 def axes() -> Axes:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     ax.hist(np.arange(10), bins=10)
     return ax
 

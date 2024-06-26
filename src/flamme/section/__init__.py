@@ -3,13 +3,13 @@ r"""Contain sections."""
 from __future__ import annotations
 
 __all__ = [
-    "ColumnTemporalNullValueSection",
     "BaseSection",
     "ColumnContinuousAdvancedSection",
     "ColumnContinuousSection",
     "ColumnDiscreteSection",
     "ColumnTemporalContinuousSection",
     "ColumnTemporalDiscreteSection",
+    "ColumnTemporalNullValueSection",
     "ContentSection",
     "DataFrameSummarySection",
     "DataTypeSection",

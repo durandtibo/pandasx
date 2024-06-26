@@ -38,10 +38,10 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     rng = np.random.default_rng(42)
     frame = pd.DataFrame(
         {
-            "bool": np.random.randint(0, 2, (nrows,), dtype=bool),
-            "float": np.random.randn(nrows) * 3 + 1,
-            "int": np.random.randint(0, 10, (nrows,)),
-            "str": np.random.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
+            "bool": rng.integers(low=0, high=2, size=(nrows,), dtype=bool),
+            "float": rng.normal(size=(nrows,)) * 3 + 1,
+            "int": rng.integers(low=0, high=10, size=(nrows,)),
+            "str": rng.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
             "cauchy": rng.standard_cauchy(size=(nrows,)),
             "half cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
@@ -53,7 +53,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
     frame = frame.mask(mask)
-    frame["discrete"] = np.random.randint(0, 1001, (nrows,))
+    frame["discrete"] = rng.integers(low=0, high=1001, size=(nrows,))
     frame["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
     frame["datetime_str"] = pd.date_range("2018-01-01", periods=nrows, freq="H").astype(str)
     return frame
