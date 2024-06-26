@@ -95,6 +95,7 @@ def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.section.utils import auto_yscale_continuous
     >>> auto_yscale_continuous(np.arange(100))
@@ -126,6 +127,7 @@ def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.section.utils import compute_statistics
     >>> compute_statistics(np.arange(101))

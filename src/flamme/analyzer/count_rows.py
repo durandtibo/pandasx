@@ -31,6 +31,7 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.analyzer import TemporalRowCountAnalyzer

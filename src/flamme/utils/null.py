@@ -21,6 +21,7 @@ def compute_null_per_col(frame: pd.DataFrame) -> pd.DataFrame:
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.utils.null import compute_null_per_col
     >>> frame = compute_null_per_col(

@@ -50,6 +50,7 @@ class ColumnDiscreteSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> from collections import Counter
     >>> from flamme.section import ColumnDiscreteSection
     >>> section = ColumnDiscreteSection(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")

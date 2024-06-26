@@ -31,6 +31,7 @@ class ColumnSelectionDataFrameTransformer(BaseDataFrameTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.dataframe import ColumnSelection
     >>> transformer = ColumnSelection(columns=["col1", "col2"])

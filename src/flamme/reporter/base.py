@@ -19,6 +19,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
     Example usage:
 
     ```pycon
+
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from flamme.ingestor import ParquetIngestor
     >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
@@ -48,6 +49,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         Example usage:
 
         ```pycon
+
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> from flamme.ingestor import ParquetIngestor
         >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
@@ -83,6 +85,7 @@ def is_reporter_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.reporter import is_reporter_config
     >>> is_reporter_config(
     ...     {
@@ -123,6 +126,7 @@ def setup_reporter(
     Example usage:
 
     ```pycon
+
     >>> from flamme.reporter import setup_reporter
     >>> reporter = setup_reporter(
     ...     {

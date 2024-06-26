@@ -33,6 +33,7 @@ class TransformedIngestor(BaseIngestor):
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> ingestor = TransformedIngestor(

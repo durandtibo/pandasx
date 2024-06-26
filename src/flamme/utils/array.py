@@ -19,6 +19,7 @@ def nonnan(array: np.ndarray) -> np.ndarray:
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.utils.array import nonnan
     >>> nonnan(np.asarray([1, 2, float("nan"), 5, 6]))

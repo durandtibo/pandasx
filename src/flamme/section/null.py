@@ -45,6 +45,7 @@ class NullValueSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.section import NullValueSection
     >>> section = NullValueSection(

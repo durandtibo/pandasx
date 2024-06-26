@@ -31,6 +31,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.dataframe import (
     ...     Sequential,

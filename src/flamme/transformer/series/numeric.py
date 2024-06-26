@@ -23,6 +23,7 @@ class ToNumericSeriesTransformer(BaseSeriesTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.series import ToNumeric
     >>> transformer = ToNumeric()

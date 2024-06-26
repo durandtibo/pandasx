@@ -34,6 +34,7 @@ def frame_column_types(frame: pd.DataFrame) -> dict[str, set]:
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.utils.dtype import frame_column_types
@@ -67,6 +68,7 @@ def series_column_types(series: pd.Series) -> set[type]:
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.utils.dtype import series_column_types
@@ -123,6 +125,7 @@ def get_dtypes_from_schema(schema: pa.Schema) -> dict[str, pa.DataType]:
     Example usage:
 
     ```pycon
+
     >>> import pyarrow
     >>> from flamme.utils.dtype import get_dtypes_from_schema
     >>> schema = pyarrow.schema([("number", pyarrow.int32()), ("string", pyarrow.string())])

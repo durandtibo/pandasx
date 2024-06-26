@@ -40,6 +40,7 @@ class MostFrequentValuesSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> from collections import Counter
     >>> from flamme.section import MostFrequentValuesSection
     >>> section = MostFrequentValuesSection(

@@ -23,6 +23,7 @@ def remove_nan(data: T) -> T:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.mathnan import remove_nan
     >>> data = [float("nan"), float("-inf"), -2, 1.2]
     >>> remove_nan(data)
@@ -51,6 +52,7 @@ def sortnan(iterable: Iterable[bool | float], /, *, reverse: bool = False) -> li
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.mathnan import sortnan
     >>> x = [4, float("nan"), 2, 1.2, 7.9, -2]
     >>> sorted(x)

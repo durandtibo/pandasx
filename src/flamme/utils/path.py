@@ -27,6 +27,7 @@ def human_file_size(path: Path | str, decimal: int = 2) -> str:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.path import human_file_size
     >>> human_file_size("README.md")
     '...B'
@@ -48,6 +49,7 @@ def sanitize_path(path: Path | str) -> Path:
     Example usage:
 
     ```pycon
+
     >>> from pathlib import Path
     >>> from flamme.utils.path import sanitize_path
     >>> sanitize_path("something")
@@ -88,6 +90,7 @@ def find_files(
     Example usage:
 
     ```pycon
+
     >>> from pathlib import Path
     >>> from flamme.utils.path import find_files
     >>> find_files(Path("something"), filter_fn=lambda path: path.name.endswith(".txt"))
@@ -116,6 +119,7 @@ def find_parquet_files(path: Path | str, recursive: bool = True) -> list[Path]:
     Example usage:
 
     ```pycon
+
     >>> from pathlib import Path
     >>> from flamme.utils.path import find_parquet_files
     >>> find_parquet_files(Path("something"))

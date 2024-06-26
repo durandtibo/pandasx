@@ -35,6 +35,7 @@ class ContentSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> from flamme.section import ContentSection
     >>> section = ContentSection(content="meow")
     >>> section

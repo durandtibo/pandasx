@@ -24,6 +24,7 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.series import ToNumeric
     >>> transformer = ToNumeric()
@@ -51,6 +52,7 @@ class BaseSeriesTransformer(ABC, metaclass=AbstractFactory):
         Example usage:
 
         ```pycon
+
         >>> import pandas as pd
         >>> from flamme.transformer.series import ToNumeric
         >>> transformer = ToNumeric()
@@ -82,6 +84,7 @@ def is_series_transformer_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.transformer.series import is_series_transformer_config
     >>> is_series_transformer_config({"_target_": "flamme.transformer.series.ToNumeric"})
     True
@@ -109,6 +112,7 @@ def setup_series_transformer(
     Example usage:
 
     ```pycon
+
     >>> from flamme.transformer.series import setup_series_transformer
     >>> transformer = setup_series_transformer(
     ...     {"_target_": "flamme.transformer.series.ToNumeric"}
