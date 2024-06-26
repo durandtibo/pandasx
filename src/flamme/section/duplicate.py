@@ -45,6 +45,7 @@ class DuplicatedRowSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> import numpy as np
     >>> from flamme.section import DuplicatedRowSection

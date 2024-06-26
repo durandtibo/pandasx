@@ -28,6 +28,7 @@ class SequentialSeriesTransformer(BaseSeriesTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.series import Sequential, StripString, ToNumeric
     >>> transformer = Sequential([StripString(), ToNumeric()])

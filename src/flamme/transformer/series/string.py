@@ -20,6 +20,7 @@ class StripStringSeriesTransformer(BaseSeriesTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.series import StripString
     >>> transformer = StripString()

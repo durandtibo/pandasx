@@ -94,6 +94,7 @@ def is_schema_reader_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.schema.reader import is_schema_reader_config
     >>> is_schema_reader_config(
     ...     {"_target_": "flamme.schema.reader.ParquetSchemaReader", "path": "/path/to/data.parquet"}
@@ -122,6 +123,7 @@ def setup_schema_reader(
     Example usage:
 
     ```pycon
+
     >>> from flamme.schema.reader import setup_schema_reader
     >>> reader = setup_schema_reader(
     ...     {"_target_": "flamme.schema.reader.ParquetSchemaReader", "path": "/path/to/data.parquet"}

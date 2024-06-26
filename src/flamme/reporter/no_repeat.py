@@ -29,6 +29,7 @@ class NoRepeatReporter(BaseReporter):
     Example usage:
 
     ```pycon
+
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from flamme.ingestor import ParquetIngestor
     >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer

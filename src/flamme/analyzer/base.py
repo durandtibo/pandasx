@@ -26,6 +26,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.analyzer import NullValueAnalyzer
@@ -56,6 +57,7 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
         Example usage:
 
         ```pycon
+
         >>> import numpy as np
         >>> import pandas as pd
         >>> from flamme.analyzer import NullValueAnalyzer
@@ -92,6 +94,7 @@ def is_analyzer_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.analyzer import is_analyzer_config
     >>> is_analyzer_config({"_target_": "flamme.analyzer.NullValueAnalyzer"})
     True
@@ -118,6 +121,7 @@ def setup_analyzer(
     Example usage:
 
     ```pycon
+
     >>> from flamme.analyzer import setup_analyzer
     >>> analyzer = setup_analyzer({"_target_": "flamme.analyzer.NullValueAnalyzer"})
     >>> analyzer

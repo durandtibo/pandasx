@@ -23,6 +23,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import ParquetIngestor
     >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
     >>> ingestor
@@ -41,6 +42,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
         Example usage:
 
         ```pycon
+
         >>> from flamme.ingestor import ParquetIngestor
         >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
         >>> frame = ingestor.ingest()  # doctest: +SKIP
@@ -68,6 +70,7 @@ def is_ingestor_config(config: dict) -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import is_ingestor_config
     >>> is_ingestor_config(
     ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}
@@ -96,6 +99,7 @@ def setup_ingestor(
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import setup_ingestor
     >>> ingestor = setup_ingestor(
     ...     {"_target_": "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"}

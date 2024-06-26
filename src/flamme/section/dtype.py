@@ -42,6 +42,7 @@ class DataTypeSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.section import DataTypeSection
     >>> section = DataTypeSection(

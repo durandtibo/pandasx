@@ -29,6 +29,7 @@ def find_range(
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from flamme.utils.range import find_range
     >>> data = np.arange(101)

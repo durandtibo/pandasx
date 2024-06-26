@@ -22,6 +22,7 @@ class Ingestor(BaseIngestor):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.ingestor import Ingestor
     >>> ingestor = Ingestor(

@@ -33,6 +33,7 @@ def is_clickhouse_connect_available() -> bool:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.imports import is_clickhouse_connect_available
     >>> is_clickhouse_connect_available()
 
@@ -51,6 +52,7 @@ def check_clickhouse_connect() -> None:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.imports import check_clickhouse_connect
     >>> check_clickhouse_connect()
 
@@ -79,6 +81,7 @@ def clickhouse_connect_available(fn: Callable[..., Any]) -> Callable[..., Any]:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.imports import clickhouse_connect_available
     >>> @clickhouse_connect_available
     ... def my_function(n: int = 0) -> int:

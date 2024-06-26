@@ -35,6 +35,7 @@ class MarkdownSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> from flamme.section import MarkdownSection
     >>> section = MarkdownSection(desc="meow")
     >>> section

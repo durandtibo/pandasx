@@ -21,6 +21,7 @@ class BaseColumn:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.columns import Column
     >>> from flamme.analyzer import ColumnContinuousAnalyzer
     >>> from flamme.transformer.series import ToNumeric
@@ -75,6 +76,7 @@ class Column(BaseColumn):
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.columns import Column
     >>> from flamme.analyzer import ColumnContinuousAnalyzer
     >>> from flamme.transformer.series import ToNumeric

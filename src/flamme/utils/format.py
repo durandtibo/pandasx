@@ -18,6 +18,7 @@ def human_byte(size: float, decimal: int = 2) -> str:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.format import human_byte
     >>> human_byte(2)
     '2.00 B'

@@ -34,6 +34,7 @@ class ClickHouseIngestor(BaseIngestor):
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import ClickHouseIngestor
     >>> import clickhouse_connect
     >>> client = clickhouse_connect.get_client()  # doctest: +SKIP

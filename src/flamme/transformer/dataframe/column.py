@@ -32,6 +32,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.transformer.dataframe import Column
     >>> from flamme.transformer.series import ToNumeric, StripString
@@ -110,6 +111,7 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
         Example usage:
 
         ```pycon
+
         >>> import pandas as pd
         >>> from flamme.transformer.dataframe import Column
         >>> from flamme.transformer.series import ToNumeric, StripString

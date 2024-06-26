@@ -22,6 +22,7 @@ def load_text(path: Path) -> str:
     Example usage:
 
     ```pycon
+
     >>> from pathlib import Path
     >>> from flamme.utils.io import load_text
     >>> data = load_text(Path("/path/to/data.txt"))  # xdoctest: +SKIP()
@@ -43,6 +44,7 @@ def save_text(to_save: str, path: Path) -> None:
     Example usage:
 
     ```pycon
+
     >>> from pathlib import Path
     >>> from flamme.utils.io import save_text
     >>> save_text("abc", Path("/path/to/data.txt"))  # xdoctest: +SKIP()

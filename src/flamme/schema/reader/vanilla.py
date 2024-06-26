@@ -23,6 +23,7 @@ class SchemaReader(BaseSchemaReader):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.schema.reader import SchemaReader
     >>> reader = SchemaReader(

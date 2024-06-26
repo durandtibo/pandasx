@@ -32,6 +32,7 @@ def figure2html(fig: plt.Figure, reactive: bool = True, close_fig: bool = False)
     Example usage:
 
     ```pycon
+
     >>> from matplotlib import pyplot as plt
     >>> from flamme.utils.figure import figure2html
     >>> fig, ax = plt.subplots()
@@ -71,6 +72,7 @@ def readable_xticklabels(
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> from matplotlib import pyplot as plt
     >>> from flamme.utils.figure import readable_xticklabels

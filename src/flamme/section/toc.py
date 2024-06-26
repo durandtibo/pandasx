@@ -26,6 +26,7 @@ class TableOfContentSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> import numpy as np
     >>> from flamme.section import TableOfContentSection, DuplicatedRowSection

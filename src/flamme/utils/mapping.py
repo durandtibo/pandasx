@@ -17,6 +17,7 @@ def sort_by_keys(mapping: dict) -> dict:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.mapping import sort_by_keys
     >>> sort_by_keys({"dog": 1, "cat": 5, "fish": 2})
     {'cat': 5, 'dog': 1, 'fish': 2}

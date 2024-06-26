@@ -33,6 +33,7 @@ class ClickHouseSchemaReader(BaseSchemaReader):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.schema.reader import ClickHouseSchemaReader
     >>> client = clickhouse_connect.get_client()  # doctest: +SKIP

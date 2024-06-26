@@ -51,6 +51,7 @@ class ColumnTemporalNullValueSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> import numpy as np
     >>> from flamme.section import ColumnTemporalNullValueSection
@@ -354,6 +355,7 @@ def prepare_data(
     Example usage:
 
     ```pycon
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.section.null_temp_col import prepare_data

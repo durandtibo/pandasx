@@ -29,6 +29,7 @@ class ParquetIngestor(BaseIngestor):
     Example usage:
 
     ```pycon
+
     >>> from flamme.ingestor import ParquetIngestor
     >>> ingestor = ParquetIngestor(path="/path/to/frame.parquet")
     >>> ingestor

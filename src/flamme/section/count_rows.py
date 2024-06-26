@@ -45,6 +45,7 @@ class TemporalRowCountSection(BaseSection):
     Example usage:
 
     ```pycon
+
     >>> import pandas as pd
     >>> from flamme.section import TemporalRowCountSection
     >>> section = TemporalRowCountSection(

@@ -39,6 +39,7 @@ def mixed_typed_sort(iterable: Iterable, /, *, reverse: bool = False) -> list:
     Example usage:
 
     ```pycon
+
     >>> from flamme.utils.sorting import mixed_typed_sort
     >>> x = [1, "c", "a", "b", 4, -2]
     >>> mixed_typed_sort(x)
