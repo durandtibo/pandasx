@@ -28,6 +28,9 @@ class ColumnDataFrameTransformer(BaseDataFrameTransformer):
 
     Args:
         columns: The ``pandas.Series`` transformers.
+        ignore_missing: If ``False``, an exception is raised if a
+            column is missing, otherwise just a warning message is
+            shown.
 
     Example usage:
 

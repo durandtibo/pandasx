@@ -43,7 +43,7 @@ class TransformedIngestor(BaseIngestor):
     >>> ingestor
     TransformedIngestor(
       (ingestor): ParquetIngestor(path=/path/to/frame.csv)
-      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
     )
     >>> frame = ingestor.ingest()  # doctest: +SKIP
 

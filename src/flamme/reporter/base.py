@@ -146,7 +146,7 @@ def setup_reporter(
     >>> reporter
     Reporter(
       (ingestor): CsvIngestor(path=/path/to/data.csv)
-      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
       (analyzer): NullValueAnalyzer(figsize=None)
       (report_path): /path/to/report.html
       (max_toc_depth): 6

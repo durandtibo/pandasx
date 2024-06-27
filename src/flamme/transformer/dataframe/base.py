@@ -33,7 +33,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> transformer = ToNumeric(columns=["col1", "col3"])
     >>> transformer
-    ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+    ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
     >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
@@ -150,7 +150,7 @@ def setup_dataframe_transformer(
     ...     {"_target_": "flamme.transformer.dataframe.ToNumeric", "columns": ["col1", "col3"]}
     ... )
     >>> transformer
-    ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+    ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
 
     ```
     """
