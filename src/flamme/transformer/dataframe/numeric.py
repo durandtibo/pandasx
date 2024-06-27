@@ -27,6 +27,9 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
 
     Args:
         columns: The columns to convert.
+        ignore_missing: If ``False``, an exception is raised if a
+            column is missing, otherwise just a warning message is
+            shown.
         **kwargs: The keyword arguments for ``pandas.to_numeric``.
 
     Example usage:
@@ -37,7 +40,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> transformer = ToNumeric(columns=["col1", "col3"])
     >>> transformer
-    ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+    ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
     >>> frame = pd.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
@@ -63,28 +66,47 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
     ```
     """
 
-    def __init__(self, columns: Sequence[str], **kwargs: Any) -> None:
+    def __init__(self, columns: Sequence[str], ignore_missing: bool = False, **kwargs: Any) -> None:
         self._columns = tuple(columns)
+        self._ignore_missing = bool(ignore_missing)
         self._kwargs = kwargs
 
     def __repr__(self) -> str:
         args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
         if args:
             args = ", " + args
-        return f"{self.__class__.__qualname__}(columns={self._columns}{args})"
+        return (
+            f"{self.__class__.__qualname__}(columns={self._columns}, "
+            f"ignore_missing={self._ignore_missing}{args})"
+        )
 
     def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
-        for col in tqdm(self._columns, desc="Converting to numeric"):
-            frame[col] = pd.to_numeric(frame[col], **self._kwargs)
+        for col in tqdm(self._columns, desc="converting to numeric"):
+            if col not in frame:
+                if self._ignore_missing:
+                    logger.warning(
+                        f"skipping transformation for column {col} because the column is missing"
+                    )
+                else:
+                    msg = f"column {col} is not in the DataFrame (columns:{sorted(frame.columns)})"
+                    raise RuntimeError(msg)
+            else:
+                logger.info(f"transforming column `{col}`...")
+                frame[col] = pd.to_numeric(frame[col], **self._kwargs)
         return frame
 
     @classmethod
-    def from_schema(cls, schema: pa.Schema, **kwargs: Any) -> ToNumericDataFrameTransformer:
+    def from_schema(
+        cls, schema: pa.Schema, ignore_missing: bool = False, **kwargs: Any
+    ) -> ToNumericDataFrameTransformer:
         r"""Instantiate a ``ToNumericDataFrameTransformer`` where the
         columns are automatically selected from the schema.
 
         Args:
             schema: The DataFrame schema.
+            ignore_missing: If ``False``, an exception is raised if a
+                column is missing, otherwise just a warning message is
+                shown.
             **kwargs: The keyword arguments for ``pandas.to_numeric``.
 
         Returns:
@@ -129,4 +151,4 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
         dtypes = get_dtypes_from_schema(schema)
         columns = sorted(find_numeric_columns_from_dtypes(dtypes))
         logger.info(f"found {len(columns):,} numeric columns: {columns}")
-        return cls(columns=columns, **kwargs)
+        return cls(columns=columns, ignore_missing=ignore_missing, **kwargs)
