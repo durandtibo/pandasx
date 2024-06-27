@@ -35,9 +35,9 @@ def test_to_numeric_dataframe_transformer_str() -> None:
 
 
 def test_to_numeric_dataframe_transformer_str_kwargs() -> None:
-    assert (
-        str(ToNumeric(columns=["col1", "col3"], errors="ignore"))
-        == "ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False, errors=ignore)"
+    assert str(ToNumeric(columns=["col1", "col3"], errors="ignore")) == (
+        "ToNumericDataFrameTransformer(columns=('col1', 'col3'), "
+        "ignore_missing=False, errors=ignore)"
     )
 
 
