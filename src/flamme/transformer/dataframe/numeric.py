@@ -123,7 +123,7 @@ class ToNumericDataFrameTransformer(BaseDataFrameTransformer):
         ...     pa.schema([("col1", pa.int64()), ("col2", pa.string()), ("col3", pa.int64())])
         ... )
         >>> transformer
-        ToNumericDataFrameTransformer(columns=('col1', 'col3'))
+        ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
         >>> frame = pd.DataFrame(
         ...     {
         ...         "col1": [1, 2, 3, 4, 5],

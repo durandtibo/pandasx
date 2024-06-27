@@ -47,7 +47,7 @@ class SequentialDataFrameTransformer(BaseDataFrameTransformer):
     >>> transformer
     SequentialDataFrameTransformer(
       (0): StripStringDataFrameTransformer(columns=('col1', 'col3'))
-      (1): ToNumericDataFrameTransformer(columns=('col1', 'col2'))
+      (1): ToNumericDataFrameTransformer(columns=('col1', 'col2'), ignore_missing=False)
     )
     >>> frame = pd.DataFrame(
     ...     {
