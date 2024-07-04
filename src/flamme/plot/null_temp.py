@@ -51,7 +51,7 @@ def plot_null_temporal(ax: Axes, nulls: Sequence, totals: Sequence, labels: Sequ
     if len(labels) != len(totals):
         msg = f"nulls ({len(nulls):,}) and labels ({len(labels):,}) have different lengths"
         raise RuntimeError(msg)
-    if len(nulls):
+    if not nulls:
         return
 
     labels = list(map(str, labels))
