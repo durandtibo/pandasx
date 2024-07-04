@@ -62,7 +62,9 @@ class BaseSchemaReader(ABC, metaclass=AbstractFactory):
         >>> from flamme.schema.reader import ParquetSchemaReader
         >>> with tempfile.TemporaryDirectory() as tmpdir:
         ...     path = Path(tmpdir).joinpath("data.parquet")
-        ...     pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"]}).to_parquet(path, index=False)
+        ...     pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"]}).to_parquet(
+        ...         path, index=False
+        ...     )
         ...     reader = ParquetSchemaReader(path)
         ...     schema = reader.read()
         ...     schema
@@ -97,7 +99,10 @@ def is_schema_reader_config(config: dict) -> bool:
 
     >>> from flamme.schema.reader import is_schema_reader_config
     >>> is_schema_reader_config(
-    ...     {"_target_": "flamme.schema.reader.ParquetSchemaReader", "path": "/path/to/data.parquet"}
+    ...     {
+    ...         "_target_": "flamme.schema.reader.ParquetSchemaReader",
+    ...         "path": "/path/to/data.parquet",
+    ...     }
     ... )
     True
 
@@ -126,7 +131,10 @@ def setup_schema_reader(
 
     >>> from flamme.schema.reader import setup_schema_reader
     >>> reader = setup_schema_reader(
-    ...     {"_target_": "flamme.schema.reader.ParquetSchemaReader", "path": "/path/to/data.parquet"}
+    ...     {
+    ...         "_target_": "flamme.schema.reader.ParquetSchemaReader",
+    ...         "path": "/path/to/data.parquet",
+    ...     }
     ... )
     >>> reader
     ParquetSchemaReader(path=.../data.parquet)
