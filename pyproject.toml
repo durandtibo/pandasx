@@ -58,6 +58,14 @@ mike = "^2.1"
 mkdocs-material = "^9.5"
 mkdocstrings = { extras = ["python"], version = "^0.25" }
 
+
+[tool.poetry.group.nb]
+optional = true
+
+[tool.poetry.group.nb.dependencies]
+jupyterlab = "^4.0"
+seaborn = "^0.13"
+
 [tool.poetry.group.plotly]
 optional = true  # Plotly is used only as a comparison with matplotlib
 
