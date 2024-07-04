@@ -98,11 +98,11 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        columns = self._columns
-        if columns is None:
+        columns = sorted(frame.columns) if self._columns is None else self._columns
+        if self._dt_column in columns:
             # Exclude the datetime column because it does not make sense to analyze it because
             # we cannot know the date/time if the value is null.
-            columns = sorted([col for col in frame.columns if col != self._dt_column])
+            columns.remove(self._dt_column)
         return TemporalNullValueSection(
             frame=frame,
             columns=columns,
