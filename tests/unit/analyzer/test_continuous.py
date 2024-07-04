@@ -123,7 +123,7 @@ def test_column_continuous_analyzer_figsize(figsize: tuple[float, float]) -> Non
     assert section.figsize == figsize
 
 
-def test_column_continuous_analyzer_get_statistics() -> None:
+def test_column_continuous_analyzer_analyze() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(
         pd.DataFrame({"col": [np.nan, *list(range(101)), np.nan]})
     )
@@ -160,7 +160,7 @@ def test_column_continuous_analyzer_get_statistics() -> None:
     )
 
 
-def test_column_continuous_analyzer_get_statistics_empty() -> None:
+def test_column_continuous_analyzer_analyze_empty() -> None:
     section = ColumnContinuousAnalyzer(column="col").analyze(pd.DataFrame({"col": []}))
     assert isinstance(section, ColumnContinuousSection)
     assert objects_are_allclose(
@@ -195,7 +195,7 @@ def test_column_continuous_analyzer_get_statistics_empty() -> None:
     )
 
 
-def test_column_continuous_analyzer_get_statistics_missing_column() -> None:
+def test_column_continuous_analyzer_analyze_missing_column() -> None:
     section = ColumnContinuousAnalyzer(column="col2").analyze(pd.DataFrame({"col": []}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -284,7 +284,7 @@ def test_column_temporal_continuous_analyzer_figsize(
     assert section.figsize == figsize
 
 
-def test_column_temporal_continuous_analyzer_get_statistics(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_continuous_analyzer_analyze(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
@@ -292,7 +292,7 @@ def test_column_temporal_continuous_analyzer_get_statistics(dataframe: pd.DataFr
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_continuous_analyzer_get_statistics_empty() -> None:
+def test_column_temporal_continuous_analyzer_analyze_empty() -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"col": [], "int": [], "str": [], "datetime": []}))
@@ -300,7 +300,7 @@ def test_column_temporal_continuous_analyzer_get_statistics_empty() -> None:
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_continuous_analyzer_get_statistics_missing_column() -> None:
+def test_column_temporal_continuous_analyzer_analyze_missing_column() -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"datetime": []}))
@@ -308,9 +308,19 @@ def test_column_temporal_continuous_analyzer_get_statistics_missing_column() -> 
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_continuous_analyzer_get_statistics_missing_dt_column() -> None:
+def test_column_temporal_continuous_analyzer_analyze_missing_dt_column() -> None:
     section = ColumnTemporalContinuousAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"col": []}))
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_column_temporal_continuous_analyzer_analyze_same_column() -> None:
+    section = ColumnTemporalContinuousAnalyzer(column="col", dt_column="col", period="M").analyze(
+        pd.DataFrame(
+            {"col": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"])}
+        )
+    )
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})

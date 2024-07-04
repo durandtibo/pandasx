@@ -68,6 +68,6 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     def analyze(self, frame: pd.DataFrame) -> BaseSection:
-        logger.info(f"Selecting a {len(self._columns):,} columns: {self._columns}")
+        logger.info(f"Selecting {len(self._columns):,} columns: {self._columns}")
         frame = frame[self._columns]
         return self._analyzer.analyze(frame)
