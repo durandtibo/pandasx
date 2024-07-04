@@ -8,11 +8,11 @@ __all__ = ["TemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
+from flamme.plot import plot_null_temporal
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -26,8 +26,8 @@ from flamme.utils.figure import figure2html, readable_xticklabels
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import numpy as np
     import pandas as pd
-    from matplotlib.axes import Axes
 
 
 logger = logging.getLogger(__name__)
@@ -220,12 +220,12 @@ def create_temporal_null_figure(
     if frame.shape[0] == 0:
         return ""
 
-    num_nulls, total, labels = prepare_data(
+    nulls, totals, labels = prepare_data(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
 
     fig, ax = plt.subplots(figsize=figsize)
-    plot_temporal_null_total(ax=ax, labels=labels, num_nulls=num_nulls, total=total)
+    plot_null_temporal(ax=ax, labels=labels, nulls=nulls, totals=totals)
     readable_xticklabels(ax, max_num_xticks=100)
     return figure2html(fig, close_fig=True)
 
@@ -248,12 +248,12 @@ def create_temporal_null_table(
     """
     if frame.shape[0] == 0:
         return ""
-    num_nulls, totals, labels = prepare_data(
+    nulls, totals, labels = prepare_data(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
     rows = []
-    for label, num_null, total in zip(labels, num_nulls, totals):
-        rows.append(create_temporal_null_table_row(label=label, num_nulls=num_null, total=total))
+    for label, null, total in zip(labels, nulls, totals):
+        rows.append(create_temporal_null_table_row(label=label, num_nulls=null, total=total))
     return Template(
         """
 <details>
@@ -316,27 +316,6 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
     )
 
 
-def plot_temporal_null_total(
-    ax: Axes, num_nulls: np.ndarray, total: np.ndarray, labels: list
-) -> None:
-    color = "tab:blue"
-    x = np.arange(len(labels))
-    ax.set_ylabel("number of null/total values", color=color)
-    ax.tick_params(axis="y", labelcolor=color)
-    ax.bar(x=x, height=total, color="tab:cyan", alpha=0.5, label="total")
-    ax.bar(x=x, height=num_nulls, color=color, alpha=0.8, label="null")
-    ax.legend()
-
-    ax2 = ax.twinx()
-    color = "black"
-    ax2.set_ylabel("percentage", color=color)
-    ax2.tick_params(axis="y", labelcolor=color)
-    ax2.plot(x, num_nulls / total, "o-", color=color)
-
-    ax.set_xticks(x, labels=labels)
-    ax.set_xlim(-0.5, len(labels) - 0.5)
-
-
 def prepare_data(
     frame: pd.DataFrame,
     columns: Sequence[str],
@@ -366,7 +345,7 @@ def prepare_data(
     >>> import numpy as np
     >>> import pandas as pd
     >>> from flamme.section.null_temp import prepare_data
-    >>> num_nulls, total, labels = prepare_data(
+    >>> nulls, totals, labels = prepare_data(
     ...     frame=pd.DataFrame(
     ...         {
     ...             "col1": np.array([np.nan, 1, 0, 1]),
@@ -380,9 +359,9 @@ def prepare_data(
     ...     dt_column="datetime",
     ...     period="M",
     ... )
-    >>> num_nulls
+    >>> nulls
     array([2, 0, 0, 1])
-    >>> total
+    >>> totals
     array([2, 2, 2, 2])
     >>> labels
     ['2020-01', '2020-02', '2020-03', '2020-04']
@@ -394,7 +373,7 @@ def prepare_data(
     frame_na = frame[columns].isna().astype(float).copy()
     frame_na[dt_col] = frame[dt_column].dt.to_period(period)
 
-    num_nulls = frame_na.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
-    total = frame_na.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
-    labels = [str(dt) for dt in num_nulls.index]
-    return num_nulls.to_numpy().astype(int), total.to_numpy().astype(int), labels
+    nulls = frame_na.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
+    totals = frame_na.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
+    labels = [str(dt) for dt in nulls.index]
+    return nulls.to_numpy().astype(int), totals.to_numpy().astype(int), labels
