@@ -170,16 +170,17 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             f"Analyzing the temporal continuous distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if self._column not in frame:
-            logger.info(
-                "Skipping temporal continuous distribution analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
-            )
-            return EmptySection()
-        if self._dt_column not in frame:
+        for column in [self._column, self._dt_column]:
+            if column not in frame:
+                logger.info(
+                    "Skipping temporal continuous distribution analysis because the column "
+                    f"({column}) is not in the DataFrame"
+                )
+                return EmptySection()
+        if self._column == self._dt_column:
             logger.info(
                 "Skipping temporal continuous distribution analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
+                f"({self._column}) is the column to analyze"
             )
             return EmptySection()
         return ColumnTemporalContinuousSection(

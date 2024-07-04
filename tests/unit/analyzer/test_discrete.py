@@ -60,7 +60,7 @@ def test_column_discrete_analyzer_yscale(dataframe: pd.DataFrame, yscale: str) -
     assert section.yscale == yscale
 
 
-def test_column_discrete_analyzer_get_statistics() -> None:
+def test_column_discrete_analyzer_analyze() -> None:
     section = ColumnDiscreteAnalyzer(column="int").analyze(
         pd.DataFrame(
             {
@@ -76,7 +76,7 @@ def test_column_discrete_analyzer_get_statistics() -> None:
     assert stats["total"] == 4
 
 
-def test_column_discrete_analyzer_get_statistics_dropna_true() -> None:
+def test_column_discrete_analyzer_analyze_dropna_true() -> None:
     section = ColumnDiscreteAnalyzer(column="int", dropna=True).analyze(
         pd.DataFrame(
             {
@@ -93,7 +93,7 @@ def test_column_discrete_analyzer_get_statistics_dropna_true() -> None:
     )
 
 
-def test_column_discrete_analyzer_get_statistics_empty_no_row() -> None:
+def test_column_discrete_analyzer_analyze_empty_no_row() -> None:
     section = ColumnDiscreteAnalyzer(column="int").analyze(
         pd.DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
     )
@@ -103,7 +103,7 @@ def test_column_discrete_analyzer_get_statistics_empty_no_row() -> None:
     )
 
 
-def test_column_discrete_analyzer_get_statistics_empty_no_column() -> None:
+def test_column_discrete_analyzer_analyze_empty_no_column() -> None:
     section = ColumnDiscreteAnalyzer(column="col").analyze(pd.DataFrame({}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -163,7 +163,7 @@ def test_column_temporal_discrete_analyzer_figsize(
     assert section.figsize == figsize
 
 
-def test_column_temporal_discrete_analyzer_get_statistics(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_discrete_analyzer_analyze(dataframe: pd.DataFrame) -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(dataframe)
@@ -171,7 +171,7 @@ def test_column_temporal_discrete_analyzer_get_statistics(dataframe: pd.DataFram
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_discrete_analyzer_get_statistics_empty() -> None:
+def test_column_temporal_discrete_analyzer_analyze_empty() -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"col": [], "int": [], "str": [], "datetime": []}))
@@ -179,7 +179,7 @@ def test_column_temporal_discrete_analyzer_get_statistics_empty() -> None:
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_discrete_analyzer_get_statistics_missing_column() -> None:
+def test_column_temporal_discrete_analyzer_analyze_missing_column() -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"datetime": []}))
@@ -187,9 +187,19 @@ def test_column_temporal_discrete_analyzer_get_statistics_missing_column() -> No
     assert objects_are_equal(section.get_statistics(), {})
 
 
-def test_column_temporal_discrete_analyzer_get_statistics_missing_dt_column() -> None:
+def test_column_temporal_discrete_analyzer_analyze_missing_dt_column() -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
     ).analyze(pd.DataFrame({"col": []}))
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_column_temporal_discrete_analyzer_analyze_same_column() -> None:
+    section = ColumnTemporalDiscreteAnalyzer(column="col", dt_column="col", period="M").analyze(
+        pd.DataFrame(
+            {"col": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"])}
+        )
+    )
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
