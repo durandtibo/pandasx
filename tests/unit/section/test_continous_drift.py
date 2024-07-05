@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -27,16 +28,16 @@ def dataframe() -> pd.DataFrame:
 def test_create_temporal_drift_figure(dataframe: pd.DataFrame) -> None:
     assert isinstance(
         create_temporal_drift_figure(frame=dataframe, column="col", dt_column="date", period="M"),
-        str,
+        plt.Figure,
     )
 
 
 def test_create_temporal_drift_figure_empty() -> None:
-    assert isinstance(
+    assert (
         create_temporal_drift_figure(
             frame=pd.DataFrame({"col": [], "date": []}), column="col", dt_column="date", period="M"
-        ),
-        str,
+        )
+        is None
     )
 
 
@@ -46,7 +47,7 @@ def test_create_temporal_drift_figure_nbins(dataframe: pd.DataFrame, nbins: int)
         create_temporal_drift_figure(
             frame=dataframe, column="col", dt_column="date", period="M", nbins=nbins
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -56,7 +57,7 @@ def test_create_temporal_drift_figure_yscale(dataframe: pd.DataFrame, yscale: st
         create_temporal_drift_figure(
             frame=dataframe, column="col", dt_column="date", period="M", yscale=yscale
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -68,7 +69,7 @@ def test_create_temporal_drift_figure_xmin(
         create_temporal_drift_figure(
             frame=dataframe, column="col", dt_column="date", period="M", xmin=xmin
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -80,7 +81,7 @@ def test_create_temporal_drift_figure_xmax(
         create_temporal_drift_figure(
             frame=dataframe, column="col", dt_column="date", period="M", xmax=xmax
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -92,14 +93,14 @@ def test_create_temporal_drift_figure_figsize(
         create_temporal_drift_figure(
             frame=dataframe, column="col", dt_column="date", period="M", figsize=figsize
         ),
-        str,
+        plt.Figure,
     )
 
 
 def test_create_temporal_drift_figure_1_group(dataframe: pd.DataFrame) -> None:
     assert isinstance(
         create_temporal_drift_figure(frame=dataframe, column="col", dt_column="date", period="Y"),
-        str,
+        plt.Figure,
     )
 
 
@@ -108,5 +109,5 @@ def test_create_temporal_drift_figure_2_groups(dataframe: pd.DataFrame) -> None:
         create_temporal_drift_figure(
             frame=dataframe.iloc[:50, :], column="col", dt_column="date", period="M"
         ),
-        str,
+        plt.Figure,
     )

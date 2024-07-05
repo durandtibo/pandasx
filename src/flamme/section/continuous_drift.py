@@ -11,7 +11,6 @@ from matplotlib import pyplot as plt
 
 from flamme.plot import hist_continuous2
 from flamme.plot.utils import readable_xticklabels
-from flamme.utils.figure import figure2html
 from flamme.utils.mapping import sort_by_keys
 from flamme.utils.range import find_range
 
@@ -30,8 +29,8 @@ def create_temporal_drift_figure(
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create the HTML code of figures to show the temporal drift.
+) -> plt.Figure | None:
+    r"""Return the figure to analyze the temporal drift.
 
     Args:
         frame: The DataFrame with the data.
@@ -57,11 +56,11 @@ def create_temporal_drift_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML code of the figure.
+        The figure or ``None`` if there is no valid data.
     """
     array = frame[column].dropna().to_numpy()
     if array.size == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return None
 
     frame = frame[[column, dt_column]].copy()
     frame[dt_column] = frame[dt_column].dt.to_period(period)
@@ -97,4 +96,4 @@ def create_temporal_drift_figure(
         )
         ax.set_title(f"{key1} vs {key2}")
         readable_xticklabels(ax, max_num_xticks=100)
-    return figure2html(fig, close_fig=True)
+    return fig
