@@ -13,6 +13,7 @@ from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
+from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
     add_cdf_plot,
@@ -29,7 +30,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html, readable_xticklabels
+from flamme.utils.figure import figure2html
 from flamme.utils.range import find_range
 
 if TYPE_CHECKING:
