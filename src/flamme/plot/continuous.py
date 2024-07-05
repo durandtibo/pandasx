@@ -2,7 +2,7 @@ r"""Contain plotting functions to analyze continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["hist_continuous"]
+__all__ = ["hist_continuous", "hist_continuous2"]
 
 from typing import TYPE_CHECKING
 
@@ -88,3 +88,81 @@ def hist_continuous(
         axvline_quantile(ax, quantile=q05, label="q0.05 ", horizontalalignment="right")
     if xmin < q95 < xmax:
         axvline_quantile(ax, quantile=q95, label=" q0.95", horizontalalignment="left")
+
+
+def hist_continuous2(
+    ax: Axes,
+    array1: np.ndarray,
+    array2: np.ndarray,
+    label1: str = "first",
+    label2: str = "second",
+    nbins: int | None = None,
+    density: bool = False,
+    yscale: str = "linear",
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+) -> None:
+    r"""Plot the histogram of two arrays to compare the distributions.
+
+    Args:
+        ax: The axes of the matplotlib figure to update.
+        array1: The first array with the data.
+        array2: The second array with the data.
+        label1: The label associated to the first array.
+        label2: The label associated to the second array.
+        nbins: The number of bins to use to plot.
+        density: If True, draw and return a probability density:
+            each bin will display the bin's raw count divided by the
+            total number of counts and the bin width, so that the area
+            under the histogram integrates to 1.
+        yscale: The y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
+        xmin: The minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: The maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import numpy as np
+    >>> from matplotlib import pyplot as plt
+    >>> from flamme.plot import hist_continuous2
+    >>> fig, ax = plt.subplots()
+    >>> hist_continuous2(ax, array1=np.arange(101), array2=np.arange(51))
+
+    ```
+    """
+    array1, array2 = array1.ravel(), array2.ravel()
+    array = np.concatenate([array1, array2])
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    ax.hist(
+        array1,
+        bins=nbins,
+        range=(xmin, xmax),
+        color="tab:blue",
+        alpha=0.5,
+        label=label1,
+        density=density,
+    )
+    ax.hist(
+        array2,
+        bins=nbins,
+        range=(xmin, xmax),
+        color="tab:orange",
+        alpha=0.5,
+        label=label2,
+        density=density,
+    )
+    readable_xticklabels(ax, max_num_xticks=100)
+    if xmin < xmax:
+        ax.set_xlim(xmin, xmax)
+    ax.set_ylabel("number of occurrences")
+    if yscale == "auto":
+        yscale = auto_yscale_continuous(array=array, nbins=nbins)
+    ax.set_yscale(yscale)
+    ax.legend()
