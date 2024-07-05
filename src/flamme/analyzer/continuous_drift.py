@@ -55,7 +55,17 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
     ...     column="col", dt_column="date", period="M"
     ... )
     >>> analyzer
-    ColumnContinuousAdvancedAnalyzer(column=float, nbins=None, yscale=auto, figsize=None)
+    ColumnContinuousTemporalDriftAnalyzer(
+      (column): col
+      (dt_column): date
+      (period): M
+      (nbins): None
+      (density): False
+      (yscale): auto
+      (xmin): None
+      (xmax): None
+      (figsize): None
+    )
     >>> rng = np.random.default_rng()
     >>> frame = pd.DataFrame(
     ...     {
