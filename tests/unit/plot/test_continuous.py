@@ -43,3 +43,15 @@ def test_hist_continuous_xmax(xmax: float | str | None) -> None:
 def test_hist_continuous_xmin_xmax() -> None:
     fig, ax = plt.subplots()
     hist_continuous(ax=ax, array=np.arange(101), xmin="q0.1", xmax="q0.9")
+
+
+@pytest.mark.parametrize("cdf", [True, False])
+def test_hist_continuous_cdf(cdf: bool) -> None:
+    fig, ax = plt.subplots()
+    hist_continuous(ax=ax, array=np.arange(101), cdf=cdf)
+
+
+@pytest.mark.parametrize("quantile", [True, False])
+def test_hist_continuous_quantile(quantile: bool) -> None:
+    fig, ax = plt.subplots()
+    hist_continuous(ax=ax, array=np.arange(101), quantile=quantile)
