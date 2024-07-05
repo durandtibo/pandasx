@@ -71,7 +71,15 @@ def hist_continuous(
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
     if cdf:
-        plot_cdf(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
+        plot_cdf(
+            ax=ax.twinx(),
+            array=array,
+            nbins=nbins,
+            xmin=xmin,
+            xmax=xmax,
+            color="tab:red",
+            labelcolor="tab:red",
+        )
 
     if not quantile:
         return
