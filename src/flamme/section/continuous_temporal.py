@@ -13,11 +13,10 @@ from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
-from flamme.plot.utils import readable_xticklabels
+from flamme.plot.utils import auto_yscale_continuous, readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
-    auto_yscale_continuous,
     render_html_toc,
     tags2id,
     tags2title,
