@@ -6,6 +6,7 @@ __all__ = [
     "BaseSection",
     "ColumnContinuousAdvancedSection",
     "ColumnContinuousSection",
+    "ColumnContinuousTemporalDriftSection",
     "ColumnDiscreteSection",
     "ColumnTemporalContinuousSection",
     "ColumnTemporalDiscreteSection",
@@ -28,6 +29,7 @@ from flamme.section.base import BaseSection
 from flamme.section.content import ContentSection
 from flamme.section.continuous import ColumnContinuousSection
 from flamme.section.continuous_advanced import ColumnContinuousAdvancedSection
+from flamme.section.continuous_drift import ColumnContinuousTemporalDriftSection
 from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
 from flamme.section.count_rows import TemporalRowCountSection
 from flamme.section.discrete import ColumnDiscreteSection
