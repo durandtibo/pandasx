@@ -14,7 +14,8 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 
-from flamme.plot.utils import auto_yscale_continuous, readable_xticklabels
+from flamme.plot import hist_continuous
+from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -298,25 +299,9 @@ def create_histogram_figure(
     array = series.to_numpy()
     if array.size == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
-    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     fig, ax = plt.subplots(figsize=figsize)
-    ax.hist(array, bins=nbins, range=[xmin, xmax], color="tab:blue", alpha=0.9)
-    readable_xticklabels(ax, max_num_xticks=100)
-    if xmin < xmax:
-        ax.set_xlim(xmin, xmax)
-    ax.set_title(f"distribution of values for column {column}")
-    ax.set_ylabel("number of occurrences")
-    if yscale == "auto":
-        yscale = auto_yscale_continuous(array=array, nbins=nbins)
-    ax.set_yscale(yscale)
-    if xmin < stats["q05"] < xmax:
-        add_axvline_quantile(ax, x=stats["q05"], label="q0.05 ", horizontalalignment="right")
-        ax.axvline(stats["q05"], color="black", linestyle="dashed")
-    if xmin < stats["q95"] < xmax:
-        add_axvline_quantile(ax, x=stats["q95"], label=" q0.95", horizontalalignment="left")
-    # if xmin < stats["median"] < xmax:
-    #     add_axvline_median(ax, x=stats["median"])
-    add_cdf_plot(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
+    ax.set_title(f"data distribution for column {column}")
+    hist_continuous(ax=ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax, yscale=yscale)
     ax.legend(
         [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
         [
