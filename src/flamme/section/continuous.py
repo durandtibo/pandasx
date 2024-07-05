@@ -8,7 +8,6 @@ __all__ = ["ColumnContinuousSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
@@ -25,7 +24,6 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html
 from flamme.utils.range import find_range
 
@@ -33,7 +31,6 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     import pandas as pd
-    from matplotlib.axes import Axes
 
 
 logger = logging.getLogger(__name__)
@@ -311,86 +308,6 @@ def create_histogram_figure(
         ],
     )
     return figure2html(fig, close_fig=True)
-
-
-def add_axvline_quantile(
-    ax: Axes,
-    x: float,
-    label: str,
-    color: str = "black",
-    linestyle: str = "dashed",
-    horizontalalignment: str = "center",
-) -> None:
-    ax.axvline(x, color=color, linestyle=linestyle)
-    ax.text(
-        x,
-        0.99,
-        label,
-        transform=ax.get_xaxis_transform(),
-        color=color,
-        horizontalalignment=horizontalalignment,
-        verticalalignment="top",
-    )
-
-
-def add_axvline_median(
-    ax: Axes,
-    x: float,
-    label: str = "median",
-    color: str = "black",
-    linestyle: str = "dashed",
-    horizontalalignment: str = "center",
-) -> None:
-    ax.axvline(x, color=color, linestyle=linestyle)
-    ax.text(
-        x,
-        0.99,
-        label,
-        transform=ax.get_xaxis_transform(),
-        color=color,
-        horizontalalignment=horizontalalignment,
-        verticalalignment="top",
-    )
-
-
-def add_cdf_plot(
-    ax: Axes,
-    array: np.ndarray,
-    nbins: int,
-    xmin: float = float("-inf"),
-    xmax: float = float("inf"),
-    color: str = "tab:red",
-) -> None:
-    r"""Add the cumulative distribution function (CDF) plot.
-
-    Args:
-        ax: The axes of the matplotlib figure to update.
-        array: The array with the data.
-        nbins: The number of bins to use to plot the CDF.
-        xmin: The minimum value of the range or its
-            associated quantile. ``q0.1`` means the 10% quantile.
-            ``0`` is the minimum value and ``1`` is the maximum value.
-        xmax: The maximum value of the range or its
-            associated quantile. ``q0.9`` means the 90% quantile.
-            ``0`` is the minimum value and ``1`` is the maximum value.
-        color: The plot color.
-    """
-    nbins = nbins or 1000
-    array = nonnan(array)
-    if array.size == 0:
-        return
-    nleft = array[array < xmin].size
-    nright = array[array > xmax].size
-    counts, edges = np.histogram(array[np.logical_and(array >= xmin, array <= xmax)], bins=nbins)
-    cdf = (np.cumsum(counts) + nleft) / (np.sum(counts) + nleft + nright)
-    x = [(left + right) * 0.5 for left, right in zip(edges[:-1], edges[1:])]
-    ax = ax.twinx()
-    ax.tick_params(axis="y", labelcolor=color)
-    ax.plot(x, cdf, color=color, label="CDF")
-    xmin, xmax = max(0.0, cdf[0]), min(1.0, cdf[-1])
-    if xmin < xmax:
-        ax.set_ylim(xmin, xmax)
-    ax.set_ylabel("cumulative distribution function (CDF)", color=color)
 
 
 def create_stats_table(stats: dict, column: str) -> str:
