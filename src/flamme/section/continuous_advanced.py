@@ -13,10 +13,10 @@ from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
+from flamme.plot import plot_cdf
 from flamme.plot.utils import auto_yscale_continuous, readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.continuous import (
-    add_cdf_plot,
     create_boxplot_figure,
     create_histogram_figure,
     create_stats_table,
@@ -272,5 +272,5 @@ def create_histogram_range_figure(
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array_range, nbins=nbins)
     ax.set_yscale(yscale)
-    add_cdf_plot(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
+    plot_cdf(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
     return figure2html(fig, close_fig=True)

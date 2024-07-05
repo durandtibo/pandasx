@@ -5,14 +5,10 @@ import pandas as pd
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
-from matplotlib import pyplot as plt
 from pandas.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
-    add_axvline_median,
-    add_axvline_quantile,
-    add_cdf_plot,
     create_boxplot_figure,
     create_histogram_figure,
     create_stats_table,
@@ -337,38 +333,3 @@ def test_create_histogram_figure_figsize(
 
 def test_create_stats_table(stats: dict[str, float]) -> None:
     assert isinstance(create_stats_table(stats=stats, column="col"), str)
-
-
-#########################################
-#    Tests for add_axvline_quantile     #
-#########################################
-
-
-def test_add_axvline_quantile() -> None:
-    _fig, ax = plt.subplots()
-    add_axvline_quantile(ax, x=1.0, label="my_label")
-
-
-#######################################
-#    Tests for add_axvline_median     #
-#######################################
-
-
-def test_add_axvline_median() -> None:
-    _fig, ax = plt.subplots()
-    add_axvline_median(ax, x=1.0)
-
-
-#################################
-#    Tests for add_cdf_plot     #
-#################################
-
-
-def test_add_cdf_plot_empty() -> None:
-    _fig, ax = plt.subplots()
-    add_cdf_plot(ax, array=np.asarray([]), nbins=10)
-
-
-def test_add_cdf_plot() -> None:
-    _fig, ax = plt.subplots()
-    add_cdf_plot(ax, array=np.arange(101), nbins=10)
