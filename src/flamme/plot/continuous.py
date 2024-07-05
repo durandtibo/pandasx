@@ -61,6 +61,9 @@ def hist_continuous(
 
     ```
     """
+    array = array.ravel()
+    if array.shape[0] == 0:
+        return
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     ax.hist(array, bins=nbins, range=(xmin, xmax), color="tab:blue", alpha=0.9)
     readable_xticklabels(ax, max_num_xticks=100)
@@ -139,6 +142,8 @@ def hist_continuous2(
     """
     array1, array2 = array1.ravel(), array2.ravel()
     array = np.concatenate([array1, array2])
+    if array.shape[0] == 0:
+        return
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     ax.hist(
         array1,
