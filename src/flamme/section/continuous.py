@@ -14,6 +14,7 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 
+from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -25,7 +26,7 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.array import nonnan
-from flamme.utils.figure import figure2html, readable_xticklabels
+from flamme.utils.figure import figure2html
 from flamme.utils.range import find_range
 
 if TYPE_CHECKING:
@@ -304,8 +305,8 @@ def create_histogram_figure(
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
-    ax.set_title(f"Distribution of values for column {column}")
-    ax.set_ylabel("Number of occurrences")
+    ax.set_title(f"distribution of values for column {column}")
+    ax.set_ylabel("number of occurrences")
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)

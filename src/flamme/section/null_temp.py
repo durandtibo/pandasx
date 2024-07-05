@@ -13,6 +13,7 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 
 from flamme.plot import plot_null_temporal
+from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -21,7 +22,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html, readable_xticklabels
+from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
