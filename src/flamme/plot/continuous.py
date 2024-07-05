@@ -27,6 +27,8 @@ def hist_continuous(
     yscale: str = "linear",
     xmin: float | str | None = None,
     xmax: float | str | None = None,
+    cdf: bool = True,
+    quantile: bool = True,
 ) -> None:
     r"""Plot the histogram of an array containing continuous values.
 
@@ -43,6 +45,9 @@ def hist_continuous(
         xmax: The maximum value of the range or its
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
+        cdf: If ``True``, the CDF is added to the plot.
+        quantile: If ``True``, the 5% and 95% quantiles are added to
+            the plot.
 
     Example usage:
 
@@ -65,9 +70,13 @@ def hist_continuous(
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
+    if cdf:
+        plot_cdf(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
+
+    if not quantile:
+        return
     q05, q95 = np.quantile(array, q=[0.05, 0.95])
     if xmin < q05 < xmax:
         axvline_quantile(ax, quantile=q05, label="q0.05 ", horizontalalignment="right")
     if xmin < q95 < xmax:
         axvline_quantile(ax, quantile=q95, label=" q0.95", horizontalalignment="left")
-    plot_cdf(ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax)
