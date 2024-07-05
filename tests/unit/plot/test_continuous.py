@@ -57,6 +57,16 @@ def test_hist_continuous_quantile(quantile: bool) -> None:
     hist_continuous(ax=ax, array=np.arange(101), quantile=quantile)
 
 
+def test_hist_continuous_empty() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous(ax=ax, array=np.array([]))
+
+
+def test_hist_continuous_nan() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous(ax=ax, array=np.array([1, 2, 3, np.nan, 4, np.nan, np.nan]))
+
+
 #####################################
 #    Tests for hist_continuous2     #
 #####################################
@@ -106,3 +116,27 @@ def test_hist_continuous2_xmax(xmax: float | str | None) -> None:
 def test_hist_continuous2_xmin_xmax() -> None:
     fig, ax = plt.subplots()
     hist_continuous2(ax=ax, array1=np.arange(101), array2=np.arange(51), xmin="q0.1", xmax="q0.9")
+
+
+def test_hist_continuous2_empty() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous2(ax=ax, array1=np.array([]), array2=np.array([]))
+
+
+def test_hist_continuous2_array1_empty() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous2(ax=ax, array1=np.array([]), array2=np.arange(101))
+
+
+def test_hist_continuous2_array2_empty() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous2(ax=ax, array1=np.arange(101), array2=np.array([]))
+
+
+def test_hist_continuous2_nan() -> None:
+    fig, ax = plt.subplots()
+    hist_continuous2(
+        ax=ax,
+        array1=np.array([1, 2, 3, np.nan, 4, np.nan, np.nan]),
+        array2=np.array([5, np.nan, 7, np.nan, np.nan]),
+    )
