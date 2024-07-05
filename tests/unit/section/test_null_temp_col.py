@@ -498,4 +498,4 @@ def test_create_temporal_null_table_empty() -> None:
 
 
 def testcreate_temporal_null_table_row() -> None:
-    assert isinstance(create_temporal_null_table_row(label="meow", num_nulls=5, total=42), str)
+    assert isinstance(create_temporal_null_table_row(label="meow", null=5, total=42), str)
