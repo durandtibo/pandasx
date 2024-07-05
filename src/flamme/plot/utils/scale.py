@@ -25,7 +25,7 @@ def auto_yscale_continuous(array: np.ndarray, nbins: int | None = None) -> str:
     ```pycon
 
     >>> import numpy as np
-    >>> from flamme.section.utils import auto_yscale_continuous
+    >>> from flamme.plot.utils import auto_yscale_continuous
     >>> auto_yscale_continuous(np.arange(100))
     linear
 
