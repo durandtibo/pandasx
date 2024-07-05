@@ -20,7 +20,8 @@ def plot_cdf(
     nbins: int | None = None,
     xmin: float = float("-inf"),
     xmax: float = float("inf"),
-    color: str = "tab:red",
+    color: str = "tab:blue",
+    labelcolor: str = "black",
 ) -> None:
     r"""Plot the cumulative distribution function (CDF).
 
@@ -35,6 +36,7 @@ def plot_cdf(
             associated quantile. ``q0.9`` means the 90% quantile.
             ``0`` is the minimum value and ``1`` is the maximum value.
         color: The plot color.
+        labelcolor: The label color.
 
     Example usage:
 
@@ -57,10 +59,9 @@ def plot_cdf(
     counts, edges = np.histogram(array[np.logical_and(array >= xmin, array <= xmax)], bins=nbins)
     cdf = (np.cumsum(counts) + nleft) / (np.sum(counts) + nleft + nright)
     x = [(left + right) * 0.5 for left, right in zip(edges[:-1], edges[1:])]
-    ax = ax.twinx()
-    ax.tick_params(axis="y", labelcolor=color)
+    ax.tick_params(axis="y", labelcolor=labelcolor)
     ax.plot(x, cdf, color=color, label="CDF")
-    xmin, xmax = max(0.0, cdf[0]), min(1.0, cdf[-1])
-    if xmin < xmax:
-        ax.set_ylim(xmin, xmax)
-    ax.set_ylabel("cumulative distribution function (CDF)", color=color)
+    ymin, ymax = max(0.0, cdf[0]), min(1.0, cdf[-1])
+    if ymin < ymax:
+        ax.set_ylim(ymin, ymax)
+    ax.set_ylabel("cumulative distribution function (CDF)", color=labelcolor)
