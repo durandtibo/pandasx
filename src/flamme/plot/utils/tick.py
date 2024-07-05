@@ -1,4 +1,4 @@
-r"""Contain utility functions for manage figure's ticks."""
+r"""Contain utility functions for figure's ticks."""
 
 from __future__ import annotations
 
