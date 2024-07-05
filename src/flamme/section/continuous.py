@@ -63,7 +63,7 @@ class ColumnContinuousSection(BaseSection):
     >>> import pandas as pd
     >>> from flamme.section import ColumnContinuousSection
     >>> section = ColumnContinuousSection(
-    ...     series=pd.Series([np.nan, *list(range(101)), np.nan]), column="col"
+    ...     series=pd.Series([float("nan"), *list(range(101)), float("nan")]), column="col"
     ... )
     >>> section
     ColumnContinuousSection(
@@ -202,7 +202,7 @@ class ColumnContinuousSection(BaseSection):
 {{go_to_top}}
 
 <p style="margin-top: 1rem;">
-This section analyzes the discrete distribution of values for column <em>{{column}}</em>.
+This section analyzes the distribution of continuous values for column <em>{{column}}</em>.
 
 <ul>
   <li> total values: {{total_values}} </li>
