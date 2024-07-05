@@ -44,6 +44,10 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
         nbins: The number of bins in the histogram.
+        density: If True, draw and return a probability density:
+            each bin will display the bin's raw count divided by the
+            total number of counts and the bin width, so that the area
+            under the histogram integrates to 1.
         yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
