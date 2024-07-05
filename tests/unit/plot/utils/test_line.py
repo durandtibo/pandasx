@@ -4,7 +4,6 @@ from matplotlib import pyplot as plt
 
 from flamme.plot.utils import axvline_median, axvline_quantile
 
-
 #####################################
 #    Tests for axvline_quantile     #
 #####################################
