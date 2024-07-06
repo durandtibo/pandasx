@@ -6,8 +6,8 @@ from __future__ import annotations
 __all__ = ["TransformedIngestor"]
 
 import logging
-from typing import TYPE_CHECKING
 
+import polars as pl
 from coola.utils import str_indent, str_mapping
 
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
@@ -15,9 +15,6 @@ from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +24,7 @@ class TransformedIngestor(BaseIngestor):
 
     Args:
         ingestor: The base ingestor.
-        transformer: Specifies a ``pandas.DataFrame`` transformer or
+        transformer: Specifies a ``polars.DataFrame`` transformer or
             its configuration.
 
     Example usage:
@@ -62,6 +59,6 @@ class TransformedIngestor(BaseIngestor):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def ingest(self) -> pd.DataFrame:
-        frame = self._ingestor.ingest()
-        return self._transformer.transform(frame)
+    def ingest(self) -> pl.DataFrame:
+        frame = self._ingestor.ingest().to_pandas()
+        return pl.from_pandas(self._transformer.transform(frame))
