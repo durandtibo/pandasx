@@ -166,7 +166,7 @@ def hist_continuous2(
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
-    ax.set_ylabel("number of occurrences")
+    ax.set_ylabel("density (number of occurrences/total)" if density else "number of occurrences")
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
