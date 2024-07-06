@@ -4,6 +4,8 @@ from __future__ import annotations
 
 __all__ = [
     "BaseDataFrameTransformer",
+    "Cast",
+    "CastDataFrameTransformer",
     "Column",
     "ColumnDataFrameTransformer",
     "ColumnSelection",
@@ -20,6 +22,8 @@ __all__ = [
     "ToDatetimeDataFrameTransformer",
     "ToNumeric",
     "ToNumericDataFrameTransformer",
+    "ToTime",
+    "ToTimeDataFrameTransformer",
     "is_dataframe_transformer_config",
     "setup_dataframe_transformer",
 ]
@@ -29,6 +33,10 @@ from flamme.transformer.dataframe.base import (
     is_dataframe_transformer_config,
     setup_dataframe_transformer,
 )
+from flamme.transformer.dataframe.casting import CastDataFrameTransformer
+from flamme.transformer.dataframe.casting import CastDataFrameTransformer as Cast
+from flamme.transformer.dataframe.casting import ToTimeDataFrameTransformer
+from flamme.transformer.dataframe.casting import ToTimeDataFrameTransformer as ToTime
 from flamme.transformer.dataframe.column import ColumnDataFrameTransformer
 from flamme.transformer.dataframe.column import ColumnDataFrameTransformer as Column
 from flamme.transformer.dataframe.datetime import ToDatetimeDataFrameTransformer
