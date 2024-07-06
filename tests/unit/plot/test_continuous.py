@@ -22,6 +22,12 @@ def test_hist_continuous_nbins(nbins: int) -> None:
     hist_continuous(ax=ax, array=np.arange(101), nbins=nbins)
 
 
+@pytest.mark.parametrize("density", [True, False])
+def test_hist_continuous_density(density: bool) -> None:
+    fig, ax = plt.subplots()
+    hist_continuous(ax=ax, array=np.arange(101), density=density)
+
+
 @pytest.mark.parametrize("yscale", ["linear", "log", "auto"])
 def test_hist_continuous_yscale(yscale: str) -> None:
     fig, ax = plt.subplots()

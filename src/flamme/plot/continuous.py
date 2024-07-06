@@ -24,6 +24,7 @@ def hist_continuous(
     ax: Axes,
     array: np.ndarray,
     nbins: int | None = None,
+    density: bool = False,
     yscale: str = "linear",
     xmin: float | str | None = None,
     xmax: float | str | None = None,
@@ -36,6 +37,10 @@ def hist_continuous(
         ax: The axes of the matplotlib figure to update.
         array: The array with the data.
         nbins: The number of bins to use to plot.
+        density: If True, draw and return a probability density:
+            each bin will display the bin's raw count divided by the
+            total number of counts and the bin width, so that the area
+            under the histogram integrates to 1.
         yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
@@ -65,11 +70,11 @@ def hist_continuous(
     if array.shape[0] == 0:
         return
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
-    ax.hist(array, bins=nbins, range=(xmin, xmax), color="tab:blue", alpha=0.9)
+    ax.hist(array, bins=nbins, range=(xmin, xmax), color="tab:blue", alpha=0.9, density=density)
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
-    ax.set_ylabel("number of occurrences")
+    ax.set_ylabel("density (number of occurrences/total)" if density else "number of occurrences")
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
@@ -166,7 +171,7 @@ def hist_continuous2(
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
-    ax.set_ylabel("number of occurrences")
+    ax.set_ylabel("density (number of occurrences/total)" if density else "number of occurrences")
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=nbins)
     ax.set_yscale(yscale)
