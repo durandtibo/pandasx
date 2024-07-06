@@ -362,3 +362,12 @@ def test_create_temporal_drift_figure_2_groups(dataframe: pd.DataFrame) -> None:
         ),
         plt.Figure,
     )
+
+
+def test_create_temporal_drift_figure_missing_columns() -> None:
+    assert (
+        create_temporal_drift_figure(
+            frame=pd.DataFrame({}), column="col", dt_column="date", period="Y"
+        )
+        is None
+    )
