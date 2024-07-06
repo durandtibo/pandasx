@@ -1,4 +1,4 @@
-r"""Contain the base class to implement a ``pandas.DataFrame``
+r"""Contain the base class to implement a ``polars.DataFrame``
 transformer."""
 
 from __future__ import annotations
@@ -17,19 +17,19 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
 
 class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
-    r"""Define the base class to transform a ``pandas.DataFrame``.
+    r"""Define the base class to transform a ``polars.DataFrame``.
 
     Example usage:
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pd
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> transformer = ToNumeric(columns=["col1", "col3"])
     >>> transformer
@@ -59,11 +59,11 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
-        r"""Transform the data in the ``pandas.DataFrame``.
+    def transform(self, frame: pl.DataFrame) -> pl.DataFrame:
+        r"""Transform the data in the ``polars.DataFrame``.
 
         Args:
-            frame: The ``pandas.DataFrame`` to transform.
+            frame: The ``polars.DataFrame`` to transform.
 
         Returns:
             The transformed DataFrame.
@@ -72,7 +72,7 @@ class BaseDataFrameTransformer(ABC, metaclass=AbstractFactory):
 
         ```pycon
 
-        >>> import pandas as pd
+        >>> import polars as pd
         >>> from flamme.transformer.dataframe import ToNumeric
         >>> transformer = ToNumeric(columns=["col1", "col3"])
         >>> frame = pd.DataFrame(
@@ -129,13 +129,13 @@ def is_dataframe_transformer_config(config: dict) -> bool:
 def setup_dataframe_transformer(
     transformer: BaseDataFrameTransformer | dict,
 ) -> BaseDataFrameTransformer:
-    r"""Set up a ``pandas.DataFrame`` transformer.
+    r"""Set up a ``polars.DataFrame`` transformer.
 
     The transformer is instantiated from its configuration
     by using the ``BaseDataFrameTransformer`` factory function.
 
     Args:
-        transformer: Specifies a ``pandas.DataFrame`` transformer or
+        transformer: Specifies a ``polars.DataFrame`` transformer or
             its configuration.
 
     Returns:

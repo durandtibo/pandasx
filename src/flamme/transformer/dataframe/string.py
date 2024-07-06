@@ -1,4 +1,4 @@
-r"""Contain ``pandas.DataFrame`` transformers to transform columns with
+r"""Contain ``polars.DataFrame`` transformers to transform columns with
 string values."""
 
 from __future__ import annotations
@@ -7,14 +7,13 @@ __all__ = ["StripStringDataFrameTransformer"]
 
 from typing import TYPE_CHECKING
 
+import polars as pl
 from tqdm import tqdm
 
 from flamme.transformer.dataframe.base import BaseDataFrameTransformer
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    import pandas as pd
 
 
 class StripStringDataFrameTransformer(BaseDataFrameTransformer):
@@ -27,12 +26,12 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.transformer.dataframe import StripString
-    >>> transformer = StripString(columns=["col1", "col3"])
+    >>> transformer = StripString(columns=["col2", "col3"])
     >>> transformer
-    StripStringDataFrameTransformer(columns=('col1', 'col3'))
-    >>> frame = pd.DataFrame(
+    StripStringDataFrameTransformer(columns=('col2', 'col3'))
+    >>> frame = pl.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
@@ -41,20 +40,32 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     ...     }
     ... )
     >>> frame
-       col1 col2   col3   col4
-    0     1    1     a      a
-    1     2    2      b      b
-    2     3    3    c      c
-    3     4    4      d      d
-    4     5    5      e      e
+    shape: (5, 4)
+    ┌──────┬──────┬───────┬───────┐
+    │ col1 ┆ col2 ┆ col3  ┆ col4  │
+    │ ---  ┆ ---  ┆ ---   ┆ ---   │
+    │ i64  ┆ str  ┆ str   ┆ str   │
+    ╞══════╪══════╪═══════╪═══════╡
+    │ 1    ┆ 1    ┆ a     ┆ a     │
+    │ 2    ┆ 2    ┆  b    ┆  b    │
+    │ 3    ┆ 3    ┆   c   ┆   c   │
+    │ 4    ┆ 4    ┆ d     ┆ d     │
+    │ 5    ┆ 5    ┆ e     ┆ e     │
+    └──────┴──────┴───────┴───────┘
     >>> out = transformer.transform(frame)
     >>> out
-       col1 col2 col3   col4
-    0     1    1    a     a
-    1     2    2    b      b
-    2     3    3    c    c
-    3     4    4    d      d
-    4     5    5    e      e
+    shape: (5, 4)
+    ┌──────┬──────┬──────┬───────┐
+    │ col1 ┆ col2 ┆ col3 ┆ col4  │
+    │ ---  ┆ ---  ┆ ---  ┆ ---   │
+    │ i64  ┆ str  ┆ str  ┆ str   │
+    ╞══════╪══════╪══════╪═══════╡
+    │ 1    ┆ 1    ┆ a    ┆ a     │
+    │ 2    ┆ 2    ┆ b    ┆  b    │
+    │ 3    ┆ 3    ┆ c    ┆   c   │
+    │ 4    ┆ 4    ┆ d    ┆ d     │
+    │ 5    ┆ 5    ┆ e    ┆ e     │
+    └──────┴──────┴──────┴───────┘
 
     ```
     """
@@ -65,7 +76,8 @@ class StripStringDataFrameTransformer(BaseDataFrameTransformer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns})"
 
-    def transform(self, frame: pd.DataFrame) -> pd.DataFrame:
-        for col in tqdm(self._columns, desc="Striping strings"):
-            frame[col] = frame[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
+    def transform(self, frame: pl.DataFrame) -> pl.DataFrame:
+        for col in tqdm(self._columns, desc="stripping chars"):
+            if frame.schema[col] == pl.String:
+                frame = frame.with_columns(frame.select(pl.col(col).str.strip_chars()))
         return frame
