@@ -22,6 +22,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.figure import figure2html
 from flamme.utils.mapping import sort_by_keys
 from flamme.utils.range import find_range
 
@@ -195,6 +196,7 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
                 "section": number,
                 "column": self._column,
                 "dt_column": self._dt_column,
+                "temporal_drift_figure": self._create_temporal_drift_figure(),
             }
         )
 
@@ -212,8 +214,26 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
 <p style="margin-top: 1rem;">
 This section analyzes the temporal drift of continuous values for column <em>{{column}}</em>.
 
+{{temporal_drift_figure}}
 <p style="margin-top: 1rem;">
 """
+
+    def _create_temporal_drift_figure(self) -> str:
+        fig = create_temporal_drift_figure(
+            frame=self._frame,
+            column=self._column,
+            dt_column=self._dt_column,
+            period=self._period,
+            nbins=self._nbins,
+            density=self._density,
+            yscale=self._yscale,
+            xmin=self._xmin,
+            xmax=self._xmax,
+            figsize=self._figsize,
+        )
+        if fig is None:
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return figure2html(fig, close_fig=True)
 
 
 def create_temporal_drift_figure(
@@ -256,6 +276,8 @@ def create_temporal_drift_figure(
     Returns:
         The figure or ``None`` if there is no valid data.
     """
+    if column not in frame or dt_column not in frame:
+        return None
     array = frame[column].dropna().to_numpy()
     if array.size == 0:
         return None
