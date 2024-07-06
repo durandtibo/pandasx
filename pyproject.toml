@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "flamme"
 version = "0.0.17a0"
-description = "A library to generate custom reports of pandas DataFrames"
+description = "A library to generate custom reports of polars DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
 homepage = "https://github.com/durandtibo/flamme"
@@ -42,6 +42,7 @@ pyarrow = ">=10.0,<17.0"
 python = ">=3.9,<3.13"
 scipy = ">=1.10,<2.0"
 tqdm = ">=4.65,<5.0"
+polars = ">=1.0,<2.0"
 
 # Optional dependencies
 clickhouse-connect = { version = ">=0.7.0,<1.0", optional = true }
