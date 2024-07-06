@@ -32,6 +32,15 @@ def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
 #########################################
 
 
+def test_transformed_ingestor_repr(frame_path: Path) -> None:
+    assert repr(
+        TransformedIngestor(
+            ingestor=ParquetIngestor(path=frame_path),
+            transformer=ToNumeric(columns=["col1", "col3"]),
+        )
+    ).startswith("TransformedIngestor(")
+
+
 def test_transformed_ingestor_str(frame_path: Path) -> None:
     assert str(
         TransformedIngestor(

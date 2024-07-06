@@ -6,18 +6,15 @@ from __future__ import annotations
 __all__ = ["TransformedIngestor"]
 
 import logging
-from typing import TYPE_CHECKING
 
-from coola.utils import str_indent, str_mapping
+import polars as pl
+from coola.utils import repr_indent, repr_mapping
 
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
 from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +24,7 @@ class TransformedIngestor(BaseIngestor):
 
     Args:
         ingestor: The base ingestor.
-        transformer: Specifies a ``pandas.DataFrame`` transformer or
+        transformer: Specifies a ``polars.DataFrame`` transformer or
             its configuration.
 
     Example usage:
@@ -37,12 +34,12 @@ class TransformedIngestor(BaseIngestor):
     >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> ingestor = TransformedIngestor(
-    ...     ingestor=ParquetIngestor(path="/path/to/frame.csv"),
+    ...     ingestor=ParquetIngestor(path="/path/to/frame.parquet"),
     ...     transformer=ToNumeric(columns=["col1", "col3"]),
     ... )
     >>> ingestor
     TransformedIngestor(
-      (ingestor): ParquetIngestor(path=/path/to/frame.csv)
+      (ingestor): ParquetIngestor(path=/path/to/frame.parquet)
       (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
     )
     >>> frame = ingestor.ingest()  # doctest: +SKIP
@@ -57,11 +54,11 @@ class TransformedIngestor(BaseIngestor):
         self._transformer = setup_dataframe_transformer(transformer)
 
     def __repr__(self) -> str:
-        args = str_indent(
-            str_mapping({"ingestor": self._ingestor, "transformer": self._transformer})
+        args = repr_indent(
+            repr_mapping({"ingestor": self._ingestor, "transformer": self._transformer})
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def ingest(self) -> pd.DataFrame:
-        frame = self._ingestor.ingest()
-        return self._transformer.transform(frame)
+    def ingest(self) -> pl.DataFrame:
+        frame = self._ingestor.ingest().to_pandas()
+        return pl.from_pandas(self._transformer.transform(frame))
