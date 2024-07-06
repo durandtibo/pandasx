@@ -39,10 +39,10 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     frame = pd.DataFrame(
         {
             "bool": rng.integers(low=0, high=2, size=(nrows,), dtype=bool),
-            "float": rng.normal(size=(nrows,)) * 3 + 1,
+            "float": rng.normal(size=(nrows,)) * 3 + 1 + 0.001 * np.arange(nrows),
             "int": rng.integers(low=0, high=10, size=(nrows,)),
             "str": rng.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
-            "cauchy": rng.standard_cauchy(size=(nrows,)),
+            "cauchy": rng.standard_cauchy(size=(nrows,)) + 0.01 * np.arange(nrows),
             "half cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
         }
     )
@@ -169,6 +169,25 @@ def create_continuous_column_analyzer(
                 column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
             ),
             "most frequent": fa.MostFrequentValuesAnalyzer(column=column, top=10),
+            "temporal drift monthly": fa.ColumnContinuousTemporalDriftAnalyzer(
+                column=column,
+                dt_column="datetime",
+                period="M",
+                nbins=201,
+                figsize=FIGSIZE,
+                xmin="q0.01",
+                xmax="q0.99",
+            ),
+            "temporal drift monthly (density)": fa.ColumnContinuousTemporalDriftAnalyzer(
+                column=column,
+                dt_column="datetime",
+                period="M",
+                nbins=201,
+                figsize=FIGSIZE,
+                xmin="q0.01",
+                xmax="q0.99",
+                density=True,
+            ),
         },
         max_toc_depth=1,
     )
