@@ -90,7 +90,7 @@ class Reporter(BaseReporter):
 
     def compute(self) -> None:
         logger.info("Ingesting the DataFrame...")
-        frame = self._ingestor.ingest()
+        frame = self._ingestor.ingest().to_pandas()
         logger.info(f"Transforming the DataFrame {frame.shape}...")
         frame = self._transformer.transform(frame)
         logger.info(f"Analyzing the DataFrame {frame.shape}...")

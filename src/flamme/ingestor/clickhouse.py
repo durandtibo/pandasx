@@ -7,12 +7,12 @@ __all__ = ["ClickHouseIngestor"]
 import logging
 from typing import TYPE_CHECKING
 
+import polars as pl
+
 from flamme.ingestor.base import BaseIngestor
 from flamme.utils import setup_object
 
 if TYPE_CHECKING:
-    import pandas as pd
-
     from flamme.utils.imports import is_clickhouse_connect_available
 
     if is_clickhouse_connect_available():
@@ -51,14 +51,15 @@ class ClickHouseIngestor(BaseIngestor):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def ingest(self) -> pd.DataFrame:
+    def ingest(self) -> pl.DataFrame:
         logger.info(
             f"Ingesting data from clickhouse... \n\n"
             "---------------------------------------------------------------------------------\n"
             f"query:\n{self._query}\n"
             "---------------------------------------------------------------------------------\n\n"
         )
-        frame = self._client.query_df(query=self._query).sort_index(axis=1)
+        frame = pl.from_arrow(self._client.query_arrow(query=self._query))
+        frame = frame.select(sorted(frame.columns))
         logger.info(f"Data ingested. DataFrame shape: {frame.shape}")
         logger.info(f"number of unique column names: {len(set(frame.columns)):,}")
         return frame

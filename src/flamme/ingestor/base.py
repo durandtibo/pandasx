@@ -12,7 +12,7 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class BaseIngestor(ABC, metaclass=AbstractFactory):
     ```
     """
 
-    def ingest(self) -> pd.DataFrame:
+    def ingest(self) -> pl.DataFrame:
         r"""Ingest a DataFrame.
 
         Returns:
