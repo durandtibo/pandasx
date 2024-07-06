@@ -5,7 +5,8 @@ from __future__ import annotations
 
 __all__ = ["CastDataFrameTransformer", "ToTimeDataFrameTransformer"]
 
-from typing import TYPE_CHECKING
+import logging
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -20,6 +21,8 @@ if is_tqdm_available():
 else:  # pragma: no cover
     from flamme.utils.noop import tqdm
 
+logger = logging.getLogger(__name__)
+
 
 class CastDataFrameTransformer(BaseDataFrameTransformer):
     r"""Implement a transformer to convert some columns to a new data
@@ -28,6 +31,10 @@ class CastDataFrameTransformer(BaseDataFrameTransformer):
     Args:
         columns: The columns to convert.
         dtype: The target data type.
+        ignore_missing: If ``False``, an exception is raised if a
+            column is missing, otherwise just a warning message is
+            shown.
+        **kwargs: The keyword arguments for ``cast``.
 
     Example usage:
 
@@ -37,7 +44,7 @@ class CastDataFrameTransformer(BaseDataFrameTransformer):
     >>> from flamme.transformer.dataframe import Cast
     >>> transformer = Cast(columns=["col1", "col3"], dtype=pl.Int32)
     >>> transformer
-    CastDataFrameTransformer(columns=('col1', 'col3'), dtype=Int32)
+    CastDataFrameTransformer(columns=('col1', 'col3'), dtype=Int32, ignore_missing=False)
     >>> frame = pl.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
@@ -77,16 +84,42 @@ class CastDataFrameTransformer(BaseDataFrameTransformer):
     ```
     """
 
-    def __init__(self, columns: Sequence[str], dtype: type[pl.DataType]) -> None:
+    def __init__(
+        self,
+        columns: Sequence[str],
+        dtype: type[pl.DataType],
+        ignore_missing: bool = False,
+        **kwargs: Any,
+    ) -> None:
         self._columns = tuple(columns)
         self._dtype = dtype
+        self._ignore_missing = bool(ignore_missing)
+        self._kwargs = kwargs
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(columns={self._columns}, dtype={self._dtype})"
+        args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
+        if args:
+            args = ", " + args
+        return (
+            f"{self.__class__.__qualname__}(columns={self._columns}, dtype={self._dtype}, "
+            f"ignore_missing={self._ignore_missing}{args})"
+        )
 
     def transform(self, frame: pl.DataFrame) -> pl.DataFrame:
         for col in tqdm(self._columns, desc=f"converting to {self._dtype}"):
-            frame = frame.with_columns(frame.select(pl.col(col).cast(self._dtype)))
+            if col not in frame:
+                if self._ignore_missing:
+                    logger.warning(
+                        f"skipping transformation for column {col} because the column is missing"
+                    )
+                else:
+                    msg = f"column {col} is not in the DataFrame (columns:{sorted(frame.columns)})"
+                    raise RuntimeError(msg)
+            else:
+                logger.info(f"transforming column `{col}`...")
+                frame = frame.with_columns(
+                    frame.select(pl.col(col).cast(self._dtype, **self._kwargs))
+                )
         return frame
 
 
@@ -101,6 +134,10 @@ class ToTimeDataFrameTransformer(BaseDataFrameTransformer):
             for the full specification. Example: ``"%H:%M:%S"``.
             If set to ``None`` (default), the format is inferred from
             the data.
+        ignore_missing: If ``False``, an exception is raised if a
+            column is missing, otherwise just a warning message is
+            shown.
+        **kwargs: The keyword arguments for ``cast``.
 
     Example usage:
 
@@ -110,7 +147,7 @@ class ToTimeDataFrameTransformer(BaseDataFrameTransformer):
     >>> from flamme.transformer.dataframe import ToTime
     >>> transformer = ToTime(columns=["col1"], format="%H:%M:%S")
     >>> transformer
-    ToTimeDataFrameTransformer(columns=('col1',), format=%H:%M:%S)
+    ToTimeDataFrameTransformer(columns=('col1',), format=%H:%M:%S, ignore_missing=False)
     >>> frame = pl.DataFrame(
     ...     {
     ...         "col1": ["01:01:01", "02:02:02", "12:00:01", "18:18:18", "23:59:59"],
@@ -153,14 +190,36 @@ class ToTimeDataFrameTransformer(BaseDataFrameTransformer):
         self,
         columns: Sequence[str],
         format: str | None = None,  # noqa: A002
+        ignore_missing: bool = False,
+        **kwargs: Any,
     ) -> None:
         self._columns = tuple(columns)
         self._format = format
+        self._ignore_missing = bool(ignore_missing)
+        self._kwargs = kwargs
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__qualname__}(columns={self._columns}, format={self._format})"
+        args = ", ".join([f"{key}={value}" for key, value in self._kwargs.items()])
+        if args:
+            args = ", " + args
+        return (
+            f"{self.__class__.__qualname__}(columns={self._columns}, format={self._format}, "
+            f"ignore_missing={self._ignore_missing}{args})"
+        )
 
     def transform(self, frame: pl.DataFrame) -> pl.DataFrame:
         for col in tqdm(self._columns, desc=f"converting to time ({self._format})"):
-            frame = frame.with_columns(frame.select(pl.col(col).str.to_time(self._format)))
+            if col not in frame:
+                if self._ignore_missing:
+                    logger.warning(
+                        f"skipping transformation for column {col} because the column is missing"
+                    )
+                else:
+                    msg = f"column {col} is not in the DataFrame (columns:{sorted(frame.columns)})"
+                    raise RuntimeError(msg)
+            else:
+                logger.info(f"transforming column `{col}`...")
+                frame = frame.with_columns(
+                    frame.select(pl.col(col).str.to_time(self._format, **self._kwargs))
+                )
         return frame
