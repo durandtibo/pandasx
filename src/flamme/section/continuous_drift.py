@@ -276,6 +276,8 @@ def create_temporal_drift_figure(
     Returns:
         The figure or ``None`` if there is no valid data.
     """
+    if column not in frame or dt_column not in frame:
+        return None
     array = frame[column].dropna().to_numpy()
     if array.size == 0:
         return None
