@@ -8,7 +8,7 @@ __all__ = ["TransformedIngestor"]
 import logging
 
 import polars as pl
-from coola.utils import str_indent, str_mapping
+from coola.utils import repr_indent, repr_mapping
 
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
 from flamme.transformer.dataframe.base import (
@@ -34,12 +34,12 @@ class TransformedIngestor(BaseIngestor):
     >>> from flamme.ingestor import TransformedIngestor, ParquetIngestor
     >>> from flamme.transformer.dataframe import ToNumeric
     >>> ingestor = TransformedIngestor(
-    ...     ingestor=ParquetIngestor(path="/path/to/frame.csv"),
+    ...     ingestor=ParquetIngestor(path="/path/to/frame.parquet"),
     ...     transformer=ToNumeric(columns=["col1", "col3"]),
     ... )
     >>> ingestor
     TransformedIngestor(
-      (ingestor): ParquetIngestor(path=/path/to/frame.csv)
+      (ingestor): ParquetIngestor(path=/path/to/frame.parquet)
       (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
     )
     >>> frame = ingestor.ingest()  # doctest: +SKIP
@@ -54,8 +54,8 @@ class TransformedIngestor(BaseIngestor):
         self._transformer = setup_dataframe_transformer(transformer)
 
     def __repr__(self) -> str:
-        args = str_indent(
-            str_mapping({"ingestor": self._ingestor, "transformer": self._transformer})
+        args = repr_indent(
+            repr_mapping({"ingestor": self._ingestor, "transformer": self._transformer})
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 

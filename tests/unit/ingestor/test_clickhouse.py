@@ -32,6 +32,13 @@ def table() -> pa.Table:
 
 
 @clickhouse_connect_available
+def test_clickhouse_ingestor_repr() -> None:
+    assert repr(
+        ClickHouseIngestor(query="select * from source.dataset", client=Mock(spec=Client))
+    ).startswith("ClickHouseIngestor(")
+
+
+@clickhouse_connect_available
 def test_clickhouse_ingestor_str() -> None:
     assert str(
         ClickHouseIngestor(query="select * from source.dataset", client=Mock(spec=Client))

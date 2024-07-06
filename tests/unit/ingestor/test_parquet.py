@@ -31,6 +31,10 @@ def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
 #####################################
 
 
+def test_parquet_ingestor_repr(frame_path: Path) -> None:
+    assert repr(ParquetIngestor(frame_path)).startswith("ParquetIngestor(")
+
+
 def test_parquet_ingestor_str(frame_path: Path) -> None:
     assert str(ParquetIngestor(frame_path)).startswith("ParquetIngestor(")
 

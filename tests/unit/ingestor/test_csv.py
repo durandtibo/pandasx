@@ -31,6 +31,10 @@ def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
 #################################
 
 
+def test_csv_ingestor_repr(frame_path: Path) -> None:
+    assert repr(CsvIngestor(frame_path)).startswith("CsvIngestor(")
+
+
 def test_csv_ingestor_str(frame_path: Path) -> None:
     assert str(CsvIngestor(frame_path)).startswith("CsvIngestor(")
 

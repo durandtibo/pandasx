@@ -11,6 +11,20 @@ from flamme.ingestor import Ingestor
 ##############################
 
 
+def test_ingestor_repr() -> None:
+    assert repr(
+        Ingestor(
+            frame=pd.DataFrame(
+                {
+                    "col1": [1, 2, 3, 4, 5],
+                    "col2": ["a", "b", "c", "d", "e"],
+                    "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
+                }
+            )
+        )
+    ).startswith("Ingestor(")
+
+
 def test_ingestor_str() -> None:
     assert str(
         Ingestor(
