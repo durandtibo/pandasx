@@ -7,6 +7,7 @@ __all__ = [
     "ChoiceAnalyzer",
     "ColumnContinuousAdvancedAnalyzer",
     "ColumnContinuousAnalyzer",
+    "ColumnContinuousTemporalDriftAnalyzer",
     "ColumnDiscreteAnalyzer",
     "ColumnSubsetAnalyzer",
     "ColumnTemporalContinuousAnalyzer",
@@ -37,6 +38,7 @@ from flamme.analyzer.continuous import (
     ColumnTemporalContinuousAnalyzer,
 )
 from flamme.analyzer.continuous_advanced import ColumnContinuousAdvancedAnalyzer
+from flamme.analyzer.continuous_drift import ColumnContinuousTemporalDriftAnalyzer
 from flamme.analyzer.count_rows import TemporalRowCountAnalyzer
 from flamme.analyzer.discrete import (
     ColumnDiscreteAnalyzer,
