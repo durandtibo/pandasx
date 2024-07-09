@@ -8,16 +8,13 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
-from grizz.ingestor.base import BaseIngestor, setup_ingestor
+from grizz.ingestor import BaseIngestor, setup_ingestor
+from grizz.transformer import BaseTransformer, setup_transformer
 from iden.io import save_text
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.reporter.base import BaseReporter
 from flamme.reporter.utils import create_html_report
-from flamme.transformer.dataframe.base import (
-    BaseDataFrameTransformer,
-    setup_dataframe_transformer,
-)
 from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
@@ -44,11 +41,11 @@ class Reporter(BaseReporter):
 
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from grizz.ingestor import ParquetIngestor
-    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
+    >>> from grizz.transformer import SequentialTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(
     ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-    ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...     transformer=SequentialTransformer(transformers=[]),
     ...     analyzer=NullValueAnalyzer(),
     ...     report_path="/path/to/report.html",
     ... )
@@ -60,14 +57,14 @@ class Reporter(BaseReporter):
     def __init__(
         self,
         ingestor: BaseIngestor | dict,
-        transformer: BaseDataFrameTransformer | dict,
+        transformer: BaseTransformer | dict,
         analyzer: BaseAnalyzer | dict,
         report_path: Path | str,
         max_toc_depth: int = 6,
     ) -> None:
         self._ingestor = setup_ingestor(ingestor)
         logger.info(f"ingestor:\n{ingestor}")
-        self._transformer = setup_dataframe_transformer(transformer)
+        self._transformer = setup_transformer(transformer)
         logger.info(f"transformer:\n{transformer}")
         self._analyzer = setup_analyzer(analyzer)
         logger.info(f"analyzer:\n{analyzer}")

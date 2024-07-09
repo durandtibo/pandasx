@@ -9,16 +9,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from grizz.ingestor import Ingestor
-
-from flamme import analyzer as fa
-from flamme.reporter import BaseReporter, Reporter
-from flamme.transformer.dataframe import (
-    BaseDataFrameTransformer,
-    SequentialDataFrameTransformer,
+from grizz.transformer import (
+    BaseTransformer,
+    SequentialTransformer,
     StripString,
     ToDatetime,
     ToNumeric,
 )
+
+from flamme import analyzer as fa
+from flamme.reporter import BaseReporter, Reporter
 from flamme.utils.logging import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -235,13 +235,13 @@ def create_analyzer() -> fa.BaseAnalyzer:
     )
 
 
-def create_transformer() -> BaseDataFrameTransformer:
+def create_transformer() -> BaseTransformer:
     r"""Instantiate a ``pandas.DataFrame`` transformer.
 
     Returns:
         The instantiated transformer.
     """
-    return SequentialDataFrameTransformer(
+    return SequentialTransformer(
         [
             # ColumnSelection(
             #     columns=["str", "float", "int", "cauchy", "datetime", "datetime_str", "missing"],
