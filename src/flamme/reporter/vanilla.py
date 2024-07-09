@@ -99,4 +99,4 @@ class Reporter(BaseReporter):
             body=section.render_html_body(),
         )
         logger.info(f"Saving HTML report at {self._report_path}...")
-        save_text(report, self._report_path)
+        save_text(report, self._report_path, exist_ok=True)

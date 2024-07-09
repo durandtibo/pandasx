@@ -1026,13 +1026,13 @@ colorama = ">=0.4"
 
 [[package]]
 name = "grizz"
-version = "0.0.2"
+version = "0.0.3"
 description = "A light library to preprocess data with polars"
 optional = false
 python-versions = "<3.13,>=3.9"
 files = [
-    {file = "grizz-0.0.2-py3-none-any.whl", hash = "sha256:af81b7b78aa3cc0ccb61889e862bb763f3bc0b2003525913f2ae9e2e2f0c31f2"},
-    {file = "grizz-0.0.2.tar.gz", hash = "sha256:67ad5e081303afb18cb4f998d9789b775872e75e9c6006bbffc830783ef98be6"},
+    {file = "grizz-0.0.3-py3-none-any.whl", hash = "sha256:9202b03d319c5ec5baee65858aa118005ba1c2f5029d4235d7d056bd3e022e01"},
+    {file = "grizz-0.0.3.tar.gz", hash = "sha256:baa3db5bc8b6a096bb18b596ecfbdba806f2a49193c89d03d174bc0881ef57ae"},
 ]
 
 [package.dependencies]
@@ -3529,13 +3529,13 @@ win32 = ["pywin32"]
 
 [[package]]
 name = "setuptools"
-version = "70.2.0"
+version = "70.3.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-70.2.0-py3-none-any.whl", hash = "sha256:b8b8060bb426838fbe942479c90296ce976249451118ef566a5a0b7d8b78fb05"},
-    {file = "setuptools-70.2.0.tar.gz", hash = "sha256:bd63e505105011b25c3c11f753f7e3b8465ea739efddaccef8f0efac2137bac1"},
+    {file = "setuptools-70.3.0-py3-none-any.whl", hash = "sha256:fe384da74336c398e0d956d1cae0669bc02eed936cdb1d49b57de1990dc11ffc"},
+    {file = "setuptools-70.3.0.tar.gz", hash = "sha256:f171bab1dfbc86b132997f26a119f6056a57950d058587841a0082e8830f9dc5"},
 ]
 
 [package.extras]
@@ -4024,4 +4024,4 @@ all = ["clickhouse-connect", "hya"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "2a4007730ef071feae4a3d8c94602368fcd8b933fcb7f95d301072c5e90eecda"
+content-hash = "e596a6fc126f671d679ad4bc9aced5f9f26afc8bce0ea97a7913a92a54c69f40"
