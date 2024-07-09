@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 import pytest
+from grizz.ingestor import ParquetIngestor
 from iden.io import load_text, save_text
 
 from flamme.analyzer import NullValueAnalyzer
-from flamme.ingestor import ParquetIngestor
 from flamme.reporter import NoRepeatReporter, Reporter
 from flamme.transformer.dataframe import Sequential
 
