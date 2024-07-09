@@ -3,18 +3,19 @@ r"""Contain a demo example to generate a report."""
 
 from __future__ import annotations
 
+import datetime
 import logging
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from grizz.ingestor import Ingestor
 from grizz.transformer import (
     BaseTransformer,
+    Cast,
     SequentialTransformer,
-    StripString,
+    StripChars,
     ToDatetime,
-    ToNumeric,
 )
 
 from flamme import analyzer as fa
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 FIGSIZE = (14, 5)
 
 
-def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
+def create_dataframe(nrows: int = 1000) -> pl.DataFrame:
     r"""Create a DataFrame.
 
     Args:
@@ -36,7 +37,7 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
         The generated DayaFrame.
     """
     rng = np.random.default_rng(42)
-    frame = pd.DataFrame(
+    frame = pl.DataFrame(
         {
             "bool": rng.integers(low=0, high=2, size=(nrows,), dtype=bool),
             "float": rng.normal(size=(nrows,)) * 3 + 1 + 0.001 * np.arange(nrows),
@@ -52,11 +53,20 @@ def create_dataframe(nrows: int = 1000) -> pd.DataFrame:
     mask[:, 2] = rng.choice([True, False], size=(mask.shape[0]), p=[0.6, 0.4])
     mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
     mask[mask.all(1), -1] = 0
-    frame = frame.mask(mask)
-    frame["discrete"] = rng.integers(low=0, high=1001, size=(nrows,))
-    frame["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
-    frame["datetime_str"] = pd.date_range("2018-01-01", periods=nrows, freq="H").astype(str)
-    return frame
+
+    # frame = frame.with_columns(pl.when(mask > 0).then(None).otherwise(pl.all()).name.keep())
+    logger.info(frame)
+
+    frame = frame.with_columns(
+        pl.Series(rng.integers(low=0, high=1001, size=(nrows,))).alias("discrete"),
+        pl.datetime_range(
+            start=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc),
+            end=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc)
+            + datetime.timedelta(hours=nrows - 1),
+            interval="1h",
+        ).alias("datetime"),
+    )
+    return frame.with_columns(pl.col("datetime").cast(dtype=pl.String).alias("datetime_str"))
 
 
 def create_null_value_analyzer() -> fa.BaseAnalyzer:
@@ -247,8 +257,9 @@ def create_transformer() -> BaseTransformer:
             #     columns=["str", "float", "int", "cauchy", "datetime", "datetime_str", "missing"],
             #     ignore_missing=True,
             # ),
-            StripString(columns=["str"]),
-            ToNumeric(columns=["float", "int", "cauchy"]),
+            StripChars(columns=["str"]),
+            Cast(columns=["float", "cauchy"], dtype=pl.Float64),
+            Cast(columns=["int"], dtype=pl.Int64),
             ToDatetime(columns=["datetime", "datetime_str"]),
         ]
     )
