@@ -9,10 +9,10 @@ from pathlib import Path
 import numpy as np
 import plotly
 import plotly.express as px
+from iden.io import save_text
 from matplotlib import pyplot as plt
 
 from flamme.utils.figure import figure2html
-from flamme.utils.io import save_text
 
 
 def matplotlib_histogram(data: np.ndarray, bins: int = 100) -> str:

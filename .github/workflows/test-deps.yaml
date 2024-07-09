@@ -86,7 +86,7 @@ jobs:
       - name: Run unit tests
         run: |
           poetry run make unit-test-cov
-          
+
 
   grizz:
     runs-on: ${{ matrix.os }}
@@ -438,7 +438,7 @@ jobs:
       - name: Run unit tests
         run: |
           poetry run make unit-test-cov
-          
+
 
   polars:
     runs-on: ${{ matrix.os }}

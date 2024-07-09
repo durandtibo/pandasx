@@ -8,6 +8,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
+from iden.io import save_text
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.ingestor.base import BaseIngestor, setup_ingestor
@@ -17,7 +18,6 @@ from flamme.transformer.dataframe.base import (
     BaseDataFrameTransformer,
     setup_dataframe_transformer,
 )
-from flamme.utils.io import save_text
 from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:

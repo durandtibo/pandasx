@@ -6,8 +6,8 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 import pytest
+from iden.io import save_text
 
-from flamme.utils.io import save_text
 from flamme.utils.path import (
     find_files,
     find_parquet_files,
