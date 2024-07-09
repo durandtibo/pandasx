@@ -32,17 +32,19 @@ packages = [
 # Core dependencies
 colorlog = ">=6.7,<7.0"  # TODO: make optional
 coola = ">=0.2.0,<1.0"
+grizz = ">=0.0.1,<1.0"
+iden = ">=0.0.4,<1.0"
 jinja2 = ">=3.0,<4.0"
-markdown = ">=3.4,<4.0"
+markdown = ">=3.4,<4.0"  # TODO: make optional (?)
 matplotlib = ">=3.6,<4.0"
 numpy = ">=1.23,<3.0"
 objectory = ">=0.1,<0.2"
 pandas = ">=1.4,<3.0"
+polars = ">=1.0,<2.0"
 pyarrow = ">=10.0,<17.0"
 python = ">=3.9,<3.13"
 scipy = ">=1.10,<2.0"
-tqdm = ">=4.65,<5.0"
-polars = ">=1.0,<2.0"
+tqdm = ">=4.65,<5.0"  # TODO: make optional
 
 # Optional dependencies
 clickhouse-connect = { version = ">=0.7.0,<1.0", optional = true }
