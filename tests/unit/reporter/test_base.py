@@ -5,11 +5,11 @@ from collections import Counter
 from typing import TYPE_CHECKING
 
 from grizz.ingestor import ParquetIngestor
+from grizz.transformer import Sequential
 from objectory import OBJECT_TARGET
 
 from flamme.analyzer import NullValueAnalyzer
 from flamme.reporter import Reporter, is_reporter_config, setup_reporter
-from flamme.transformer.dataframe import Sequential
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -26,10 +26,7 @@ def test_is_reporter_config_true() -> None:
         {
             OBJECT_TARGET: "flamme.reporter.Reporter",
             "ingestor": {OBJECT_TARGET: "grizz.ingestor.CsvIngestor", "path": "/path/to/data.csv"},
-            "transformer": {
-                OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
-                "columns": ["col1", "col3"],
-            },
+            "transformer": {OBJECT_TARGET: "grizz.transformer.DropDuplicate"},
             "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},
             "report_path": "/path/to/report.html",
         }
@@ -64,10 +61,7 @@ def test_setup_reporter_dict() -> None:
                     OBJECT_TARGET: "grizz.ingestor.CsvIngestor",
                     "path": "/path/to/data.csv",
                 },
-                "transformer": {
-                    OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
-                    "columns": ["col1", "col3"],
-                },
+                "transformer": {OBJECT_TARGET: "grizz.transformer.DropDuplicate"},
                 "analyzer": {OBJECT_TARGET: "flamme.analyzer.NullValueAnalyzer"},
                 "report_path": "/path/to/report.html",
             }

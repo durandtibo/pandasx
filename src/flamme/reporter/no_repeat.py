@@ -32,12 +32,12 @@ class NoRepeatReporter(BaseReporter):
 
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from grizz.ingestor import ParquetIngestor
-    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
+    >>> from grizz.transformer import SequentialTransformer
     >>> from flamme.reporter import Reporter, NoRepeatReporter
     >>> reporter = NoRepeatReporter(
     ...     reporter=Reporter(
     ...         ingestor=ParquetIngestor("/path/to/data.parquet"),
-    ...         transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...         transformer=SequentialTransformer(transformers=[]),
     ...         analyzer=NullValueAnalyzer(),
     ...         report_path="/path/to/report.html",
     ...     ),

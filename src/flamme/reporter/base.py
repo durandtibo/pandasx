@@ -22,18 +22,18 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> from grizz.ingestor import ParquetIngestor
-    >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
+    >>> from grizz.transformer import SequentialTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(
     ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-    ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+    ...     transformer=SequentialTransformer(transformers=[]),
     ...     analyzer=NullValueAnalyzer(),
     ...     report_path="/path/to/report.html",
     ... )
     >>> reporter
     Reporter(
       (ingestor): ParquetIngestor(path=/path/to/data.parquet)
-      (transformer): SequentialDataFrameTransformer()
+      (transformer): SequentialTransformer()
       (analyzer): NullValueAnalyzer(figsize=None)
       (report_path): /path/to/report.html
       (max_toc_depth): 6
@@ -52,11 +52,11 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
 
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> from grizz.ingestor import ParquetIngestor
-        >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
+        >>> from grizz.transformer import SequentialTransformer
         >>> from flamme.reporter import Reporter
         >>> reporter = Reporter(
         ...     ingestor=ParquetIngestor("/path/to/data.parquet"),
-        ...     transformer=SequentialDataFrameTransformer(transformers=[]),
+        ...     transformer=SequentialTransformer(transformers=[]),
         ...     analyzer=NullValueAnalyzer(figsize=None),
         ...     report_path="/path/to/report.html",
         ... )
@@ -94,10 +94,7 @@ def is_reporter_config(config: dict) -> bool:
     ...             "_target_": "grizz.ingestor.CsvIngestor",
     ...             "path": "/path/to/data.csv",
     ...         },
-    ...         "transformer": {
-    ...             "_target_": "flamme.transformer.dataframe.ToNumeric",
-    ...             "columns": ["col1", "col3"],
-    ...         },
+    ...         "transformer": {"_target_": "grizz.transformer.DropDuplicate"},
     ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
     ...         "report_path": "/path/to/report.html",
     ...     }
@@ -135,10 +132,7 @@ def setup_reporter(
     ...             "_target_": "grizz.ingestor.CsvIngestor",
     ...             "path": "/path/to/data.csv",
     ...         },
-    ...         "transformer": {
-    ...             "_target_": "flamme.transformer.dataframe.ToNumeric",
-    ...             "columns": ["col1", "col3"],
-    ...         },
+    ...         "transformer": {"_target_": "grizz.transformer.DropDuplicate"},
     ...         "analyzer": {"_target_": "flamme.analyzer.NullValueAnalyzer"},
     ...         "report_path": "/path/to/report.html",
     ...     }
@@ -146,7 +140,7 @@ def setup_reporter(
     >>> reporter
     Reporter(
       (ingestor): CsvIngestor(path=/path/to/data.csv)
-      (transformer): ToNumericDataFrameTransformer(columns=('col1', 'col3'), ignore_missing=False)
+      (transformer): DropDuplicateTransformer(columns=None, ignore_missing=False)
       (analyzer): NullValueAnalyzer(figsize=None)
       (report_path): /path/to/report.html
       (max_toc_depth): 6
