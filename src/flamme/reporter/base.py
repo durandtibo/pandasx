@@ -21,7 +21,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
     ```pycon
 
     >>> from flamme.analyzer import NullValueAnalyzer
-    >>> from flamme.ingestor import ParquetIngestor
+    >>> from grizz.ingestor import ParquetIngestor
     >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(
@@ -51,7 +51,7 @@ class BaseReporter(ABC, metaclass=AbstractFactory):
         ```pycon
 
         >>> from flamme.analyzer import NullValueAnalyzer
-        >>> from flamme.ingestor import ParquetIngestor
+        >>> from grizz.ingestor import ParquetIngestor
         >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
         >>> from flamme.reporter import Reporter
         >>> reporter = Reporter(
@@ -91,7 +91,7 @@ def is_reporter_config(config: dict) -> bool:
     ...     {
     ...         "_target_": "flamme.reporter.Reporter",
     ...         "ingestor": {
-    ...             "_target_": "flamme.ingestor.CsvIngestor",
+    ...             "_target_": "grizz.ingestor.CsvIngestor",
     ...             "path": "/path/to/data.csv",
     ...         },
     ...         "transformer": {
@@ -132,7 +132,7 @@ def setup_reporter(
     ...     {
     ...         "_target_": "flamme.reporter.Reporter",
     ...         "ingestor": {
-    ...             "_target_": "flamme.ingestor.CsvIngestor",
+    ...             "_target_": "grizz.ingestor.CsvIngestor",
     ...             "path": "/path/to/data.csv",
     ...         },
     ...         "transformer": {

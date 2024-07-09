@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 import pytest
+from grizz.ingestor import ParquetIngestor
 
 from flamme.analyzer import NullValueAnalyzer
-from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter
 from flamme.transformer.dataframe import Sequential
 

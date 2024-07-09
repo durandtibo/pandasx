@@ -8,10 +8,10 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
+from grizz.ingestor.base import BaseIngestor, setup_ingestor
 from iden.io import save_text
 
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
-from flamme.ingestor.base import BaseIngestor, setup_ingestor
 from flamme.reporter.base import BaseReporter
 from flamme.reporter.utils import create_html_report
 from flamme.transformer.dataframe.base import (
@@ -43,7 +43,7 @@ class Reporter(BaseReporter):
     ```pycon
 
     >>> from flamme.analyzer import NullValueAnalyzer
-    >>> from flamme.ingestor import ParquetIngestor
+    >>> from grizz.ingestor import ParquetIngestor
     >>> from flamme.transformer.dataframe import SequentialDataFrameTransformer
     >>> from flamme.reporter import Reporter
     >>> reporter = Reporter(

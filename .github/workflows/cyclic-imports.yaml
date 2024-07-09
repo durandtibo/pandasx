@@ -32,9 +32,6 @@ jobs:
       - name: check flamme.analyzer
         run: |
           poetry run python -c "from flamme import analyzer"
-      - name: check flamme.ingestor
-        run: |
-          poetry run python -c "from flamme import ingestor"
       - name: check flamme.plot
         run: |
           poetry run python -c "from flamme import plot"

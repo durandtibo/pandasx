@@ -8,9 +8,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from grizz.ingestor import Ingestor
 
 from flamme import analyzer as fa
-from flamme.ingestor import Ingestor
 from flamme.reporter import BaseReporter, Reporter
 from flamme.transformer.dataframe import (
     BaseDataFrameTransformer,

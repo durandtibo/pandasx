@@ -4,10 +4,10 @@ import logging
 from collections import Counter
 from typing import TYPE_CHECKING
 
+from grizz.ingestor import ParquetIngestor
 from objectory import OBJECT_TARGET
 
 from flamme.analyzer import NullValueAnalyzer
-from flamme.ingestor import ParquetIngestor
 from flamme.reporter import Reporter, is_reporter_config, setup_reporter
 from flamme.transformer.dataframe import Sequential
 
@@ -25,7 +25,7 @@ def test_is_reporter_config_true() -> None:
     assert is_reporter_config(
         {
             OBJECT_TARGET: "flamme.reporter.Reporter",
-            "ingestor": {OBJECT_TARGET: "flamme.ingestor.CsvIngestor", "path": "/path/to/data.csv"},
+            "ingestor": {OBJECT_TARGET: "grizz.ingestor.CsvIngestor", "path": "/path/to/data.csv"},
             "transformer": {
                 OBJECT_TARGET: "flamme.transformer.dataframe.ToNumeric",
                 "columns": ["col1", "col3"],
@@ -61,7 +61,7 @@ def test_setup_reporter_dict() -> None:
             {
                 OBJECT_TARGET: "flamme.reporter.Reporter",
                 "ingestor": {
-                    OBJECT_TARGET: "flamme.ingestor.CsvIngestor",
+                    OBJECT_TARGET: "grizz.ingestor.CsvIngestor",
                     "path": "/path/to/data.csv",
                 },
                 "transformer": {
