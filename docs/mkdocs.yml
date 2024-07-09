@@ -26,12 +26,10 @@ nav:
   - get_started.md
   - Reference:
       - analyzer: refs/analyzer.md
-      - ingestor: refs/ingestor.md
       - plot: refs/plot.md
       - reporter: refs/reporter.md
       - schema: refs/schema.md
       - section: refs/section.md
-      - transformer: refs/transformer.md
       - utils: refs/utils.md
   - GitHub: https://github.com/durandtibo/flamme
 
