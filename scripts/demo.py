@@ -20,6 +20,7 @@ from grizz.transformer import (
 
 from flamme import analyzer as fa
 from flamme.reporter import BaseReporter, Reporter
+from flamme.utils.array import rand_replace
 from flamme.utils.logging import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -39,26 +40,56 @@ def create_dataframe(nrows: int = 1000) -> pl.DataFrame:
     rng = np.random.default_rng(42)
     frame = pl.DataFrame(
         {
-            "bool": rng.integers(low=0, high=2, size=(nrows,), dtype=bool),
-            "float": rng.normal(size=(nrows,)) * 3 + 1 + 0.001 * np.arange(nrows),
-            "int": rng.integers(low=0, high=10, size=(nrows,)),
-            "str": rng.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
-            "cauchy": rng.standard_cauchy(size=(nrows,)) + 0.01 * np.arange(nrows),
-            "half cauchy": np.abs(rng.standard_cauchy(size=(nrows,))),
-        }
+            "bool": rand_replace(
+                rng.integers(low=0, high=2, size=(nrows,), dtype=bool),
+                value=None,
+                prob=0.4,
+                rng=rng,
+            ).tolist(),
+            "float": rand_replace(
+                rng.normal(size=(nrows,)) * 3 + 1 + 0.001 * np.arange(nrows),
+                value=None,
+                prob=0.8,
+                rng=rng,
+            ).tolist(),
+            "int": rand_replace(
+                rng.integers(low=0, high=10, size=(nrows,)),
+                value=None,
+                prob=0.6,
+                rng=rng,
+            ).tolist(),
+            "str": rand_replace(
+                rng.choice(["A", "B", "C"], size=(nrows,), p=[0.6, 0.3, 0.1]),
+                value=None,
+                prob=0.2,
+                rng=rng,
+            ).tolist(),
+            "cauchy": rand_replace(
+                rng.standard_cauchy(size=(nrows,)) + 0.01 * np.arange(nrows),
+                value=None,
+                prob=0.2,
+                rng=rng,
+            ).tolist(),
+            "half cauchy": rand_replace(
+                np.abs(rng.standard_cauchy(size=(nrows,))),
+                value=None,
+                prob=0.2,
+                rng=rng,
+            ).tolist(),
+            "discrete": rng.integers(low=0, high=1001, size=(nrows,)),
+        },
+        schema={
+            "bool": pl.Boolean,
+            "float": pl.Float32,
+            "int": pl.Int64,
+            "str": pl.String,
+            "cauchy": pl.Float64,
+            "half cauchy": pl.Float64,
+            "discrete": pl.Int64,
+        },
     )
-    mask = rng.choice([True, False], size=frame.shape, p=[0.2, 0.8])
-    mask[:, 0] = rng.choice([True, False], size=(mask.shape[0]), p=[0.4, 0.6])
-    mask[:, 1] = rng.choice([True, False], size=(mask.shape[0]), p=[0.8, 0.2])
-    mask[:, 2] = rng.choice([True, False], size=(mask.shape[0]), p=[0.6, 0.4])
-    mask[:, 3] = rng.choice([True, False], size=(mask.shape[0]), p=[0.2, 0.8])
-    mask[mask.all(1), -1] = 0
-
-    # frame = frame.with_columns(pl.when(mask > 0).then(None).otherwise(pl.all()).name.keep())
-    logger.info(frame)
 
     frame = frame.with_columns(
-        pl.Series(rng.integers(low=0, high=1001, size=(nrows,))).alias("discrete"),
         pl.datetime_range(
             start=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc),
             end=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc)
