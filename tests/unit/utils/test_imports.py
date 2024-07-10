@@ -7,10 +7,13 @@ import pytest
 from flamme.utils.imports import (
     check_clickhouse_connect,
     check_colorlog,
+    check_markdown,
     clickhouse_connect_available,
     colorlog_available,
     is_clickhouse_connect_available,
     is_colorlog_available,
+    is_markdown_available,
+    markdown_available,
 )
 
 
@@ -122,6 +125,60 @@ def test_colorlog_available_decorator_without_package() -> None:
     with patch("flamme.utils.imports.is_colorlog_available", lambda: False):
 
         @colorlog_available
+        def fn(n: int = 0) -> int:
+            return 42 + n
+
+        assert fn(2) is None
+
+
+####################
+#     markdown     #
+####################
+
+
+def test_check_markdown_with_package() -> None:
+    with patch("flamme.utils.imports.is_markdown_available", lambda: True):
+        check_markdown()
+
+
+def test_check_markdown_without_package() -> None:
+    with (
+        patch("flamme.utils.imports.is_markdown_available", lambda: False),
+        pytest.raises(RuntimeError, match="`markdown` package is required but not installed."),
+    ):
+        check_markdown()
+
+
+def test_is_markdown_available() -> None:
+    assert isinstance(is_markdown_available(), bool)
+
+
+def test_markdown_available_with_package() -> None:
+    with patch("flamme.utils.imports.is_markdown_available", lambda: True):
+        fn = markdown_available(my_function)
+        assert fn(2) == 44
+
+
+def test_markdown_available_without_package() -> None:
+    with patch("flamme.utils.imports.is_markdown_available", lambda: False):
+        fn = markdown_available(my_function)
+        assert fn(2) is None
+
+
+def test_markdown_available_decorator_with_package() -> None:
+    with patch("flamme.utils.imports.is_markdown_available", lambda: True):
+
+        @markdown_available
+        def fn(n: int = 0) -> int:
+            return 42 + n
+
+        assert fn(2) == 44
+
+
+def test_markdown_available_decorator_without_package() -> None:
+    with patch("flamme.utils.imports.is_markdown_available", lambda: False):
+
+        @markdown_available
         def fn(n: int = 0) -> int:
             return 42 + n
 
