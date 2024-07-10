@@ -12,8 +12,8 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-    import polars as pl
     import pandas as pd
+    import polars as pl
 
     from flamme.section import BaseSection
 

@@ -8,7 +8,7 @@ __all__ = ["NullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import pandas as pd
+import polars as pl
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
@@ -137,6 +137,7 @@ class NullValueSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info("Rendering the null value distribution of all columns...")
+        frame = self._get_dataframe()
         return Template(self._create_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -144,9 +145,9 @@ class NullValueSection(BaseSection):
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "table_alpha": self._create_table(sort_by="column"),
-                "table_sort": self._create_table(sort_by="null"),
-                "bar_figure": self._create_bar_figure(),
+                "table_alpha": self._create_table(frame=frame, sort_by="column"),
+                "table_sort": self._create_table(frame=frame, sort_by="null"),
+                "bar_figure": self._create_bar_figure(frame),
                 "num_columns": f"{len(self._columns):,}",
             }
         )
@@ -199,54 +200,93 @@ In the following histogram, the columns are sorted by ascending order of null va
 <p style="margin-top: 1rem;">
 """
 
-    def _create_bar_figure(self) -> str:
-        dataframe = self._get_dataframe().sort_values(by="null")
-        fig, ax = plt.subplots(figsize=self._figsize)
-        labels = dataframe["column"].tolist()
-        ax.bar(x=labels, height=dataframe["null"].to_numpy(), color="tab:blue")
-        if labels:
-            ax.set_xlim(-0.5, len(labels) - 0.5)
-        readable_xticklabels(ax, max_num_xticks=100)
-        ax.set_xlabel("column")
-        ax.set_ylabel("number of null values")
-        ax.set_title("number of null values per column")
+    def _create_bar_figure(self, frame: pl.DataFrame) -> str:
+        frame = frame.sort(by=["null", "column"])
+        fig = create_bar_figure(
+            columns=frame["column"].to_list(),
+            null_count=frame["null"].to_list(),
+            figsize=self._figsize,
+        )
         return figure2html(fig, close_fig=True)
 
-    def _create_table(self, sort_by: str) -> str:
-        dataframe = self._get_dataframe().sort_values(by=sort_by)
-        rows = "\n".join(
-            [
-                create_table_row(column=column, null_count=null_count, total_count=total_count)
-                for column, null_count, total_count in zip(
-                    dataframe["column"].to_numpy(),
-                    dataframe["null"].to_numpy(),
-                    dataframe["total"].to_numpy(),
-                )
-            ]
+    def _create_table(self, frame: pl.DataFrame, sort_by: str) -> str:
+        return create_table(frame.sort(by=sort_by))
+
+    def _get_dataframe(self) -> pl.DataFrame:
+        return pl.DataFrame(
+            {"column": self._columns, "null": self._null_count, "total": self._total_count},
+            schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
         )
-        return Template(
-            """
+
+
+def create_bar_figure(
+    columns: Sequence[str],
+    null_count: Sequence[int],
+    figsize: tuple[float, float] | None = None,
+) -> plt.Figure:
+    r"""Return a bar figure with the distribution of null values per
+    column.
+
+    Args:
+        columns: The column names.
+        null_count: The number of null values for each column.
+            It must have the same size as ``columns``.
+        figsize: The figure size in inches. The first dimension
+            is the width and the second is the height.
+
+    Returns:
+        The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null import create_bar_figure
+    >>> fig = create_bar_figure(columns=["col1", "col2", "col3"], null_count=[5, 10, 2])
+
+    ```
+    """
+    if len(columns) != len(null_count):
+        msg = f"columns ({len(columns):,}) and null_count ({len(null_count):,}) do not match"
+        raise RuntimeError(msg)
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.bar(x=columns, height=null_count, color="tab:blue")
+    if columns:
+        ax.set_xlim(-0.5, len(columns) - 0.5)
+    readable_xticklabels(ax, max_num_xticks=100)
+    ax.set_xlabel("column")
+    ax.set_ylabel("number of null values")
+    ax.set_title("number of null values per column")
+    return fig
+
+
+def create_table(frame: pl.DataFrame) -> str:
+    rows = [
+        create_table_row(column=column, null_count=null, total_count=total)
+        for column, null, total in zip(
+            frame["column"],
+            frame["null"],
+            frame["total"],
+        )
+    ]
+    return Template(
+        """
 <table class="table table-hover table-responsive w-auto" >
-    <thead class="thead table-group-divider">
-        <tr>
-            <th>column</th>
-            <th>null pct</th>
-            <th>null count</th>
-            <th>total count</th>
-        </tr>
-    </thead>
-    <tbody class="tbody table-group-divider">
-        {{rows}}
-        <tr class="table-group-divider"></tr>
-    </tbody>
+<thead class="thead table-group-divider">
+    <tr>
+        <th>column</th>
+        <th>null pct</th>
+        <th>null count</th>
+        <th>total count</th>
+    </tr>
+</thead>
+<tbody class="tbody table-group-divider">
+    {{rows}}
+    <tr class="table-group-divider"></tr>
+</tbody>
 </table>
 """
-        ).render({"rows": rows})
-
-    def _get_dataframe(self) -> pd.DataFrame:
-        return pd.DataFrame(
-            {"column": self._columns, "null": self._null_count, "total": self._total_count}
-        )
+    ).render({"rows": "\n".join(rows)})
 
 
 def create_table_row(column: str, null_count: int, total_count: int) -> str:
@@ -259,8 +299,18 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null import create_table_row
+    >>> row = create_table_row(column="col", null_count=5, total_count=101)
+
+    ```
     """
-    pct = null_count / total_count
+    pct = null_count / total_count if total_count > 0 else float("nan")
+    pct_color = pct if total_count > 0 else 0
     return Template(
         """<tr>
     <th style="background-color: rgba(0, 191, 255, {{null_pct}})">{{column}}</th>
@@ -270,7 +320,9 @@ def create_table_row(column: str, null_count: int, total_count: int) -> str:
 </tr>"""
     ).render(
         {
-            "num_style": f'style="text-align: right; background-color: rgba(0, 191, 255, {pct})"',
+            "num_style": (
+                f'style="text-align: right; background-color: rgba(0, 191, 255, {pct_color})"'
+            ),
             "column": column,
             "null_count": f"{null_count:,}",
             "null_pct": f"{pct:.4f}",
