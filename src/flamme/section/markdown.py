@@ -8,7 +8,6 @@ __all__ = ["MarkdownSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import markdown
 from jinja2 import Template
 
 from flamme.section.base import BaseSection
@@ -19,9 +18,13 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.imports import check_markdown, is_markdown_available
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+if is_markdown_available():  # pragma: no cover
+    import markdown
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +50,7 @@ class MarkdownSection(BaseSection):
     """
 
     def __init__(self, desc: str) -> None:
+        check_markdown()
         self._desc = str(desc)
 
     def __repr__(self) -> str:
