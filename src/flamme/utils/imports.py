@@ -5,10 +5,13 @@ from __future__ import annotations
 __all__ = [
     "check_clickhouse_connect",
     "check_colorlog",
+    "check_markdown",
     "clickhouse_connect_available",
     "colorlog_available",
     "is_clickhouse_connect_available",
     "is_colorlog_available",
+    "is_markdown_available",
+    "markdown_available",
 ]
 
 from typing import TYPE_CHECKING, Any
@@ -170,3 +173,79 @@ def colorlog_available(fn: Callable[..., Any]) -> Callable[..., Any]:
     ```
     """
     return decorator_package_available(fn, is_colorlog_available)
+
+
+####################
+#     markdown     #
+####################
+
+
+def is_markdown_available() -> bool:
+    r"""Indicate if the ``markdown`` package is installed or not.
+
+    Returns:
+        ``True`` if ``markdown`` is available otherwise
+            ``False``.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.utils.imports import is_markdown_available
+    >>> is_markdown_available()
+
+    ```
+    """
+    return package_available("markdown")
+
+
+def check_markdown() -> None:
+    r"""Check if the ``markdown`` package is installed.
+
+    Raises:
+        RuntimeError: if the ``markdown`` package is not
+            installed.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.utils.imports import check_markdown
+    >>> check_markdown()
+
+    ```
+    """
+    if not is_markdown_available():
+        msg = (
+            "`markdown` package is required but not installed. "
+            "You can install `markdown` package with the command:\n\n"
+            "pip install markdown\n"
+        )
+        raise RuntimeError(msg)
+
+
+def markdown_available(fn: Callable[..., Any]) -> Callable[..., Any]:
+    r"""Implement a decorator to execute a function only if ``markdown``
+    package is installed.
+
+    Args:
+        fn: The function to execute.
+
+    Returns:
+        A wrapper around ``fn`` if ``markdown`` package is
+            installed, otherwise ``None``.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.utils.imports import markdown_available
+    >>> @markdown_available
+    ... def my_function(n: int = 0) -> int:
+    ...     return 42 + n
+    ...
+    >>> my_function()
+
+    ```
+    """
+    return decorator_package_available(fn, is_markdown_available)
