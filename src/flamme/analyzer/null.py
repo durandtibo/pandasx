@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import NullValueSection
@@ -30,20 +31,27 @@ class NullValueAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> analyzer = NullValueAnalyzer()
     >>> analyzer
     NullValueAnalyzer(figsize=None)
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    NullValueSection(
+      (columns): ('float', 'int', 'str')
+      (null_count): array([1, 1, 2])
+      (total_count): array([4, 4, 4])
+      (figsize): None
+    )
 
     ```
     """
@@ -54,8 +62,10 @@ class NullValueAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(figsize={self._figsize})"
 
-    def analyze(self, frame: pd.DataFrame) -> NullValueSection:
+    def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> NullValueSection:
         logger.info("Analyzing the null value distribution of all columns...")
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
+            frame = frame.to_pandas()
         return NullValueSection(
             columns=list(frame.columns),
             null_count=frame.isna().sum().to_frame("count")["count"].to_numpy(),

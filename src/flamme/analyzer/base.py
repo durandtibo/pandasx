@@ -12,7 +12,7 @@ from objectory import AbstractFactory
 from objectory.utils import is_object_config
 
 if TYPE_CHECKING:
-
+    import polars as pl
     import pandas as pd
 
     from flamme.section import BaseSection
@@ -27,25 +27,32 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import NullValueAnalyzer
     >>> analyzer = NullValueAnalyzer()
     >>> analyzer
     NullValueAnalyzer(figsize=None)
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
-    >>> analyzer.analyze(frame)
+    >>> section = analyzer.analyze(frame)
+    >>> section
+    NullValueSection(
+      (columns): ('float', 'int', 'str')
+      (null_count): array([1, 1, 2])
+      (total_count): array([4, 4, 4])
+      (figsize): None
+    )
 
     ```
     """
 
-    def analyze(self, frame: pd.DataFrame) -> BaseSection:
+    def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> BaseSection:
         r"""Analyze the data in a DataFrame.
 
         Args:
@@ -58,18 +65,25 @@ class BaseAnalyzer(ABC, metaclass=AbstractFactory):
 
         ```pycon
 
-        >>> import numpy as np
-        >>> import pandas as pd
+        >>> import polars as pl
         >>> from flamme.analyzer import NullValueAnalyzer
         >>> analyzer = NullValueAnalyzer()
-        >>> frame = pd.DataFrame(
+        >>> frame = pl.DataFrame(
         ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
+        ...         "float": [1.2, 4.2, None, 2.2],
+        ...         "int": [None, 1, 0, 1],
+        ...         "str": ["A", "B", None, None],
+        ...     },
+        ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
         ... )
-        >>> analyzer.analyze(frame)
+        >>> section = analyzer.analyze(frame)
+        >>> section
+        NullValueSection(
+          (columns): ('float', 'int', 'str')
+          (null_count): array([1, 1, 2])
+          (total_count): array([4, 4, 4])
+          (figsize): None
+        )
 
         ```
         """
