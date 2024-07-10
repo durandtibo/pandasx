@@ -283,7 +283,9 @@ def create_temporal_drift_figure(
         return None
 
     frame = frame[[column, dt_column]].copy()
-    frame[dt_column] = frame[dt_column].dt.to_period(period)
+    frame[dt_column] = (
+        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    )
     groups = sort_by_keys(frame.groupby(dt_column).groups)
     groups = {key: frame.loc[index, column].to_numpy() for key, index in groups.items()}
 

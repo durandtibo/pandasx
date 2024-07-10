@@ -206,7 +206,9 @@ def create_temporal_figure(
         return "<span>&#9888;</span> No figure is generated because the column is empty"
     frame = frame[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
-    frame[col_dt] = frame[dt_column].dt.to_period(period).astype(str)
+    frame[col_dt] = (
+        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    )
     frame = frame[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
     frame = pd.DataFrame({col_count: frame}).reset_index().sort_values(by=[col_dt, column])
     frame = frame.pivot_table(
