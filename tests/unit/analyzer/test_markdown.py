@@ -5,16 +5,19 @@ import pandas as pd
 
 from flamme.analyzer import MarkdownAnalyzer
 from flamme.section import MarkdownSection
+from flamme.testing import markdown_available
 
 ######################################
 #     Tests for MarkdownAnalyzer     #
 ######################################
 
 
+@markdown_available
 def test_markdown_analyzer_str() -> None:
     assert str(MarkdownAnalyzer(desc="hello cats!")).startswith("MarkdownAnalyzer(")
 
 
+@markdown_available
 def test_markdown_analyzer_get_statistics() -> None:
     section = MarkdownAnalyzer(desc="hello cats!").analyze(
         pd.DataFrame(
@@ -29,6 +32,7 @@ def test_markdown_analyzer_get_statistics() -> None:
     assert section.get_statistics() == {}
 
 
+@markdown_available
 def test_markdown_analyzer_get_statistics_empty() -> None:
     section = MarkdownAnalyzer(desc="hello cats!").analyze(pd.DataFrame({}))
     assert isinstance(section, MarkdownSection)
