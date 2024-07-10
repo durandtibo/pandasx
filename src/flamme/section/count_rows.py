@@ -291,7 +291,9 @@ def prepare_data(
     frame = frame[[dt_column]].copy()
     columns = frame.columns.tolist()
     dt_col = "__datetime__"
-    frame[dt_col] = frame[dt_column].dt.to_period(period)
+    frame[dt_col] = (
+        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    )
 
     frame_count = frame.groupby(dt_col)[columns].size()
     count = frame_count.to_numpy().astype(int).tolist()

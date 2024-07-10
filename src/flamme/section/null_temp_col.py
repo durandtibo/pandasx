@@ -384,7 +384,12 @@ def prepare_data(
     """
     dataframe = frame[[column, dt_column]].copy()
     dt_col = "__datetime__"
-    dataframe[dt_col] = dataframe[dt_column].dt.to_period(period)
+    dataframe[dt_col] = (
+        dataframe[dt_column]
+        .apply(lambda x: x.replace(tzinfo=None))
+        .dt.to_period(period)
+        .astype(str)
+    )
 
     null_col = f"__{column}_isna__"
     dataframe.loc[:, null_col] = dataframe.loc[:, column].isna()

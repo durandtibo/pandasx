@@ -224,7 +224,9 @@ def create_temporal_figure(
         return "<span>&#9888;</span> No figure is generated because the column is empty"
     array = frame[column].to_numpy(dtype=float)
     frame = frame[[column, dt_column]].copy()
-    frame[dt_column] = frame[dt_column].dt.to_period(period).astype(str)
+    frame[dt_column] = (
+        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    )
     frame_group = (
         frame.groupby(dt_column)[column]
         .apply(list)
@@ -272,7 +274,7 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
         return "<span>&#9888;</span> No table is generated because the column is empty"
     frame = frame[[column, dt_column]].copy()
     dt_col = "__datetime__"
-    frame[dt_col] = frame[dt_column].dt.to_period(period)
+    frame[dt_col] = frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period)
     frame_stats = (
         frame.groupby(dt_col)[column]
         .agg(

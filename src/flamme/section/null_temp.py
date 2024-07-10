@@ -372,7 +372,9 @@ def prepare_data(
     columns = list(columns)
     dt_col = "__datetime__"
     frame_na = frame[columns].isna().astype(float).copy()
-    frame_na[dt_col] = frame[dt_column].dt.to_period(period)
+    frame_na[dt_col] = (
+        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    )
 
     nulls = frame_na.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
     totals = frame_na.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
