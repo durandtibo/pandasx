@@ -210,7 +210,7 @@ In the following histogram, the columns are sorted by ascending order of null va
         return figure2html(fig, close_fig=True)
 
     def _create_table(self, frame: pl.DataFrame, sort_by: str) -> str:
-        frame = frame.sort(by=sort_by)
+        return create_table(frame.sort(by=sort_by))
 
     def _get_dataframe(self) -> pl.DataFrame:
         return pl.DataFrame(
