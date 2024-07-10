@@ -52,7 +52,7 @@ tqdm = { version = ">=4.65,<5.0", optional = true }
 
 
 [tool.poetry.extras]
-all = ["clickhouse-connect", "hya", "tqdm"]
+all = ["clickhouse-connect", "colorlog", "hya", "tqdm"]
 
 [tool.poetry.group.docs]
 optional = true

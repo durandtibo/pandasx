@@ -4030,9 +4030,9 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 cffi = ["cffi (>=1.11)"]
 
 [extras]
-all = ["clickhouse-connect", "hya", "tqdm"]
+all = ["clickhouse-connect", "colorlog", "hya", "tqdm"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "ca29c0537d378366d2a7b4175a0d2545f831ec8e039a7900cf70d90d8469915c"
+content-hash = "41b546656916f33958ae19229eee71d64db785c9b6661ee95d71eab0738b5117"
