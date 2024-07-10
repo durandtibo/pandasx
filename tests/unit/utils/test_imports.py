@@ -6,11 +6,8 @@ import pytest
 
 from flamme.utils.imports import (
     check_clickhouse_connect,
-    check_tqdm,
     clickhouse_connect_available,
     is_clickhouse_connect_available,
-    is_tqdm_available,
-    tqdm_available,
 )
 
 
@@ -68,60 +65,6 @@ def test_clickhouse_connect_available_decorator_without_package() -> None:
     with patch("flamme.utils.imports.is_clickhouse_connect_available", lambda: False):
 
         @clickhouse_connect_available
-        def fn(n: int = 0) -> int:
-            return 42 + n
-
-        assert fn(2) is None
-
-
-################
-#     tqdm     #
-################
-
-
-def test_check_tqdm_with_package() -> None:
-    with patch("flamme.utils.imports.is_tqdm_available", lambda: True):
-        check_tqdm()
-
-
-def test_check_tqdm_without_package() -> None:
-    with (
-        patch("flamme.utils.imports.is_tqdm_available", lambda: False),
-        pytest.raises(RuntimeError, match="`tqdm` package is required but not installed."),
-    ):
-        check_tqdm()
-
-
-def test_is_tqdm_available() -> None:
-    assert isinstance(is_tqdm_available(), bool)
-
-
-def test_tqdm_available_with_package() -> None:
-    with patch("flamme.utils.imports.is_tqdm_available", lambda: True):
-        fn = tqdm_available(my_function)
-        assert fn(2) == 44
-
-
-def test_tqdm_available_without_package() -> None:
-    with patch("flamme.utils.imports.is_tqdm_available", lambda: False):
-        fn = tqdm_available(my_function)
-        assert fn(2) is None
-
-
-def test_tqdm_available_decorator_with_package() -> None:
-    with patch("flamme.utils.imports.is_tqdm_available", lambda: True):
-
-        @tqdm_available
-        def fn(n: int = 0) -> int:
-            return 42 + n
-
-        assert fn(2) == 44
-
-
-def test_tqdm_available_decorator_without_package() -> None:
-    with patch("flamme.utils.imports.is_tqdm_available", lambda: False):
-
-        @tqdm_available
         def fn(n: int = 0) -> int:
             return 42 + n
 
