@@ -8,6 +8,7 @@ __all__ = ["TemporalNullValueAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+import polars as pl
 from coola.utils import repr_indent, repr_mapping
 
 from flamme.analyzer.base import BaseAnalyzer
@@ -38,8 +39,8 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.analyzer import TemporalNullValueAnalyzer
     >>> analyzer = TemporalNullValueAnalyzer(dt_column="datetime", period="M")
     >>> analyzer
@@ -49,13 +50,17 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
       (period): M
       (figsize): None
     )
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "col": np.array([np.nan, 1, 0, 1]),
-    ...         "datetime": pd.to_datetime(
-    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...         ),
-    ...     }
+    ...         "col": [None, 1, 0, 1],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -87,11 +92,15 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: pd.DataFrame) -> TemporalNullValueSection | EmptySection:
+    def analyze(
+        self, frame: pd.DataFrame | pl.DataFrame
+    ) -> TemporalNullValueSection | EmptySection:
         logger.info(
             f"Analyzing the temporal null value distribution | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
+            frame = frame.to_pandas()
         if self._dt_column not in frame:
             logger.info(
                 "Skipping temporal null value analysis because the datetime column "

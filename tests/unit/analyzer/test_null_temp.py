@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+from datetime import datetime, timezone
+
+import polars as pl
 import pytest
 from coola import objects_are_equal
 from pandas.testing import assert_frame_equal
@@ -11,13 +12,23 @@ from flamme.section import EmptySection, TemporalNullValueSection
 
 
 @pytest.fixture()
-def dataframe() -> pd.DataFrame:
-    return pd.DataFrame(
+def dataframe() -> pl.DataFrame:
+    return pl.DataFrame(
         {
-            "col1": np.array([1.2, 4.2, np.nan, 2.2]),
-            "col2": np.array([np.nan, 1, np.nan, 1]),
-            "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
-        }
+            "float": [1.2, 4.2, None, 2.2],
+            "int": [None, 1, None, 1],
+            "datetime": [
+                datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+            ],
+        },
+        schema={
+            "float": pl.Float64,
+            "int": pl.Int64,
+            "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+        },
     )
 
 
@@ -32,39 +43,39 @@ def test_temporal_null_value_analyzer_str() -> None:
     )
 
 
-def test_temporal_null_value_analyzer_frame(dataframe: pd.DataFrame) -> None:
+def test_temporal_null_value_analyzer_frame(dataframe: pl.DataFrame) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert_frame_equal(section.frame, dataframe)
+    assert_frame_equal(section.frame, dataframe.to_pandas())
 
 
-def test_temporal_null_value_analyzer_columns(dataframe: pd.DataFrame) -> None:
+def test_temporal_null_value_analyzer_columns(dataframe: pl.DataFrame) -> None:
     section = TemporalNullValueAnalyzer(
-        dt_column="datetime", period="M", columns=("col1",)
+        dt_column="datetime", period="M", columns=("float",)
     ).analyze(dataframe)
-    assert section.columns == ("col1",)
+    assert section.columns == ("float",)
 
 
-def test_temporal_null_value_analyzer_columns_none(dataframe: pd.DataFrame) -> None:
+def test_temporal_null_value_analyzer_columns_none(dataframe: pl.DataFrame) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert section.columns == ("col1", "col2")
+    assert section.columns == ("float", "int")
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "date"])
-def test_temporal_null_value_analyzer_dt_column(dataframe: pd.DataFrame, dt_column: str) -> None:
-    dataframe["date"] = pd.to_datetime(["2021-01-03", "2021-02-03", "2021-03-03", "2021-04-03"])
+def test_temporal_null_value_analyzer_dt_column(dataframe: pl.DataFrame, dt_column: str) -> None:
+    dataframe = dataframe.with_columns(pl.col("datetime").alias("date"))
     section = TemporalNullValueAnalyzer(dt_column=dt_column, period="M").analyze(dataframe)
     assert section.dt_column == dt_column
 
 
 @pytest.mark.parametrize("period", ["M", "D"])
-def test_temporal_null_value_analyzer_period(dataframe: pd.DataFrame, period: str) -> None:
+def test_temporal_null_value_analyzer_period(dataframe: pl.DataFrame, period: str) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period=period).analyze(dataframe)
     assert section.period == period
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_temporal_null_value_analyzer_figsize(
-    dataframe: pd.DataFrame, figsize: tuple[int, int]
+    dataframe: pl.DataFrame, figsize: tuple[int, int]
 ) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M", figsize=figsize).analyze(
         dataframe
@@ -72,12 +83,12 @@ def test_temporal_null_value_analyzer_figsize(
     assert section.figsize == figsize
 
 
-def test_temporal_null_value_analyzer_figsize_default(dataframe: pd.DataFrame) -> None:
+def test_temporal_null_value_analyzer_figsize_default(dataframe: pl.DataFrame) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
     assert section.figsize is None
 
 
-def test_temporal_null_value_analyzer_get_statistics(dataframe: pd.DataFrame) -> None:
+def test_temporal_null_value_analyzer_get_statistics(dataframe: pl.DataFrame) -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
     assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -85,7 +96,13 @@ def test_temporal_null_value_analyzer_get_statistics(dataframe: pd.DataFrame) ->
 
 def test_temporal_null_value_analyzer_get_statistics_empty_rows() -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
-        pd.DataFrame({"col": [], "datetime": []})
+        pl.DataFrame(
+            {"col": [], "datetime": []},
+            schema={
+                "col": pl.Float64,
+                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+            },
+        )
     )
     assert isinstance(section, TemporalNullValueSection)
     assert objects_are_equal(section.get_statistics(), {})
@@ -93,7 +110,7 @@ def test_temporal_null_value_analyzer_get_statistics_empty_rows() -> None:
 
 def test_temporal_null_value_analyzer_get_statistics_missing_dt_column() -> None:
     section = TemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
-        pd.DataFrame({"col": []})
+        pl.DataFrame({"col": []})
     )
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
