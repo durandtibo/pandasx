@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import MarkdownSection
+from flamme.utils.imports import check_markdown
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -36,6 +37,7 @@ class MarkdownAnalyzer(BaseAnalyzer):
     """
 
     def __init__(self, desc: str) -> None:
+        check_markdown()
         self._desc = str(desc)
 
     def __repr__(self) -> str:
