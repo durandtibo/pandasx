@@ -3694,7 +3694,7 @@ files = [
 name = "tqdm"
 version = "4.66.4"
 description = "Fast, Extensible Progress Meter"
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "tqdm-4.66.4-py3-none-any.whl", hash = "sha256:b75ca56b413b030bc3f00af51fd2c1a1a5eac6a0c1cca83cbb37a5c52abce644"},
@@ -4030,9 +4030,9 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 cffi = ["cffi (>=1.11)"]
 
 [extras]
-all = ["clickhouse-connect", "hya"]
+all = ["clickhouse-connect", "hya", "tqdm"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "507ad29bf7077248b453d23dd3c166ef6ee228fa0bc55d83a5a99f58ec8594d1"
+content-hash = "ffbb4f5301e218ef32b9d930cd8e442d9bce72275a9426ddbbc3477b324be94c"
