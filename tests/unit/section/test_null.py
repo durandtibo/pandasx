@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import numpy as np
+import polars as pl
 import pytest
 from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
+from matplotlib import pyplot as plt
 
 from flamme.section import NullValueSection
+from flamme.section.null import create_bar_figure, create_table, create_table_row
 
 ######################################
 #     Tests for NullValueSection     #
@@ -181,3 +184,65 @@ def test_null_value_section_render_html_toc_args() -> None:
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+#######################################
+#     Tests for create_bar_figure     #
+#######################################
+
+
+def test_create_bar_figure() -> None:
+    assert isinstance(
+        create_bar_figure(columns=["col1", "col2", "col3"], null_count=[5, 10, 2]), plt.Figure
+    )
+
+
+def test_create_bar_figure_empty() -> None:
+    assert isinstance(create_bar_figure(columns=[], null_count=[]), plt.Figure)
+
+
+def test_create_bar_figure_incorrect_lengths() -> None:
+    with pytest.raises(RuntimeError, match="columns .* and null_count .* do not match"):
+        create_bar_figure(columns=["col1", "col2", "col3"], null_count=[5, 10, 2, 5])
+
+
+##################################
+#     Tests for create_table     #
+##################################
+
+
+def test_create_table() -> None:
+    assert isinstance(
+        create_table(
+            pl.DataFrame(
+                {"column": ["col1", "col2", "col3"], "null": [0, 1, 2], "total": [5, 5, 5]},
+                schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
+            )
+        ),
+        str,
+    )
+
+
+def test_create_table_empty() -> None:
+    assert isinstance(
+        create_table(
+            pl.DataFrame(
+                {"column": [], "null": [], "total": []},
+                schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
+            )
+        ),
+        str,
+    )
+
+
+######################################
+#     Tests for create_table_row     #
+######################################
+
+
+def test_create_table_row() -> None:
+    assert isinstance(create_table_row(column="col", null_count=5, total_count=101), str)
+
+
+def test_create_table_row_zero() -> None:
+    assert isinstance(create_table_row(column="col", null_count=0, total_count=0), str)
