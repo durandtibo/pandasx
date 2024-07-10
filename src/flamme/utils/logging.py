@@ -7,7 +7,10 @@ __all__ = ["configure_logging"]
 
 import logging
 
-import colorlog
+from flamme.utils.imports import is_colorlog_available
+
+if is_colorlog_available():  # pragma: no cover
+    import colorlog
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +21,10 @@ def configure_logging(level: int = logging.INFO) -> None:
     Args:
         level: The lower level.
     """
+    if not is_colorlog_available():
+        logging.basicConfig(level=level)
+        return
+
     handler = colorlog.StreamHandler()
     formatter = colorlog.ColoredFormatter(
         fmt=(

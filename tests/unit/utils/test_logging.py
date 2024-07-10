@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
+from flamme.testing import colorlog_available
 from flamme.utils.logging import configure_logging
 
 
@@ -18,8 +19,14 @@ def _reset_logging() -> None:
 #######################################
 
 
+@colorlog_available
 def test_configure_logging() -> None:
     configure_logging()
+
+
+def test_configure_logging_without_colorlog() -> None:
+    with patch("flamme.utils.logging.is_colorlog_available", lambda: False):
+        configure_logging()
 
 
 @pytest.mark.parametrize("level", [logging.INFO, logging.WARNING, logging.ERROR])

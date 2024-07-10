@@ -30,7 +30,6 @@ packages = [
 
 [tool.poetry.dependencies]
 # Core dependencies
-colorlog = ">=6.7,<7.0"  # TODO: make optional
 coola = ">=0.7,<1.0"
 grizz = ">=0.0.3,<1.0"
 iden = ">=0.0.4,<1.0"
@@ -39,7 +38,7 @@ markdown = ">=3.4,<4.0"  # TODO: make optional (?)
 matplotlib = ">=3.6,<4.0"
 numpy = ">=1.23,<3.0"
 objectory = ">=0.1,<0.2"
-pandas = ">=1.4,<3.0"
+pandas = ">=1.4,<3.0"  # TODO: remove after transition
 polars = ">=1.0,<2.0"
 pyarrow = ">=10.0,<17.0"
 python = ">=3.9,<3.13"
@@ -47,12 +46,13 @@ scipy = ">=1.10,<2.0"
 
 # Optional dependencies
 clickhouse-connect = { version = ">=0.7.0,<1.0", optional = true }
+colorlog = { version = ">=6.7,<7.0", optional = true }
 hya = { version = ">=0.2,<1.0", optional = true }
 tqdm = { version = ">=4.65,<5.0", optional = true }
 
 
 [tool.poetry.extras]
-all = ["clickhouse-connect", "hya", "tqdm"]
+all = ["clickhouse-connect", "colorlog", "hya", "tqdm"]
 
 [tool.poetry.group.docs]
 optional = true

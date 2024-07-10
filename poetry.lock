@@ -573,7 +573,7 @@ files = [
 name = "colorlog"
 version = "6.8.2"
 description = "Add colours to the output of Python's logging module."
-optional = false
+optional = true
 python-versions = ">=3.6"
 files = [
     {file = "colorlog-6.8.2-py3-none-any.whl", hash = "sha256:4dcbb62368e2800cb3c5abd348da7e53f6c362dda502ec27c560b2e58a66bd33"},
@@ -4030,9 +4030,9 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 cffi = ["cffi (>=1.11)"]
 
 [extras]
-all = ["clickhouse-connect", "hya", "tqdm"]
+all = ["clickhouse-connect", "colorlog", "hya", "tqdm"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "ffbb4f5301e218ef32b9d930cd8e442d9bce72275a9426ddbbc3477b324be94c"
+content-hash = "41b546656916f33958ae19229eee71d64db785c9b6661ee95d71eab0738b5117"
