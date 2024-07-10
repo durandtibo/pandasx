@@ -9,9 +9,9 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import repr_indent, repr_mapping, str_indent
+from grizz.utils.imports import is_tqdm_available
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from tqdm import tqdm
 
 from flamme.plot import plot_null_temporal
 from flamme.plot.utils import readable_xticklabels
@@ -30,6 +30,11 @@ if TYPE_CHECKING:
 
     import numpy as np
     import pandas as pd
+
+if is_tqdm_available():
+    from tqdm import tqdm
+else:  # pragma: no cover
+    from grizz.utils.noop import tqdm
 
 logger = logging.getLogger(__name__)
 
