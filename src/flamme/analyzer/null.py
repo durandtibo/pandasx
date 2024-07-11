@@ -13,6 +13,7 @@ import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import NullValueSection
+from flamme.utils.null import compute_null_count
 
 logger = logging.getLogger(__name__)
 
@@ -66,11 +67,7 @@ class NullValueAnalyzer(BaseAnalyzer):
         nrows, ncols = frame.shape
         return NullValueSection(
             columns=list(frame.columns),
-            null_count=(
-                frame.null_count().to_numpy().astype(int)
-                if ncols > 0
-                else np.zeros(ncols, dtype=int)
-            ),
+            null_count=compute_null_count(frame),
             total_count=np.full((ncols,), nrows),
             figsize=self._figsize,
         )
