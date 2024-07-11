@@ -19,8 +19,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.dtype import series_column_types
 from flamme.utils.null import compute_null_count
+from flamme.utils.dtype2 import compact_type_name
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -236,7 +236,7 @@ def create_table_row(
         The HTML code of a row.
     """
     total = max(total, 1)
-    types = ", ".join(sorted([prepare_type_name(t) for t in types]))
+    types = ", ".join(sorted([compact_type_name(t) for t in types]))
     null = f"{null:,} ({100 * null / total:.2f}%)"
     nunique = f"{nunique:,} ({100 * nunique / total:.2f}%)"
     most_frequent_values = ", ".join(
@@ -260,24 +260,3 @@ def create_table_row(
             "most_frequent_values": most_frequent_values,
         }
     )
-
-
-TYPE_NAMES = {
-    "polars._libs.tslibs.timestamps.Timestamp": "polars.Timestamp",
-    "polars._libs.tslibs.nattype.NaTType": "polars.NaTType",
-    "polars._libs.missing.NAType": "polars.NAType",
-}
-
-
-def prepare_type_name(typ: type) -> str:
-    r"""Return a compact type name when possible.
-
-    Args:
-        typ: The input type.
-
-    Returns:
-        The compact type name.
-    """
-    name = str(typ).split("'", maxsplit=2)[1].rsplit("'", maxsplit=2)[0]
-    # Reduce the name if possible
-    return TYPE_NAMES.get(name, name)

@@ -24,7 +24,7 @@ from flamme.section.utils import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from numpy.typing import DTypeLike
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -43,20 +43,20 @@ class DataTypeSection(BaseSection):
 
     ```pycon
 
-    >>> import numpy as np
+    >>> import polars as pl
     >>> from flamme.section import DataTypeSection
     >>> section = DataTypeSection(
     ...     dtypes={
-    ...         "float": np.dtype("float64"),
-    ...         "int": np.dtype("float64"),
-    ...         "str": np.dtype("O"),
+    ...         "float": pl.Float64(),
+    ...         "int": pl.Int64(),
+    ...         "str": pl.String(),
     ...     },
     ...     types={"float": {float}, "int": {int}, "str": {str, type(None)}},
     ... )
     >>> section
     DataTypeSection(
-      (dtypes): {'float': dtype('float64'), 'int': dtype('float64'), 'str': dtype('O')}
-      (types): {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+      (dtypes): {'float': Float64, 'int': Int64, 'str': String}
+      (types): {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {...}}
     )
     >>> section.get_statistics()
     {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
@@ -64,7 +64,7 @@ class DataTypeSection(BaseSection):
     ```
     """
 
-    def __init__(self, dtypes: dict[str, DTypeLike], types: dict[str, set]) -> None:
+    def __init__(self, dtypes: dict[str, pl.DataType], types: dict[str, set]) -> None:
         self._dtypes = dtypes
         self._types = types
 
@@ -147,7 +147,7 @@ This section analyzes the values types for each column.
         ).render({"rows": rows})
 
 
-def create_table_row(column: str, dtype: DTypeLike, types: set) -> str:
+def create_table_row(column: str, dtype: pl.DataType, types: set[type]) -> str:
     r"""Create the HTML code of a new table row.
 
     Args:

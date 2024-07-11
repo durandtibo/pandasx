@@ -7,8 +7,6 @@ from coola import objects_are_equal
 from flamme.analyzer import DataFrameSummaryAnalyzer
 from flamme.section import DataFrameSummarySection
 
-NoneType = type(None)
-
 
 @pytest.fixture()
 def dataframe() -> pl.DataFrame:
@@ -40,7 +38,7 @@ def test_column_type_analyzer_get_statistics(dataframe: pl.DataFrame) -> None:
             "columns": ("col1", "col2", "col3"),
             "null_count": (1, 0, 2),
             "nunique": (5, 2, 5),
-            "column_types": ({float}, {int}, {float, str, NoneType}),
+            "column_types": ({float}, {int}, {float, str, type(None)}),
         },
     )
 
@@ -103,6 +101,6 @@ def test_column_type_analyzer_sort() -> None:
             "columns": ("col1", "col2", "col3"),
             "null_count": (1, 0, 2),
             "nunique": (5, 2, 5),
-            "column_types": ({float}, {int}, {float, str, NoneType}),
+            "column_types": ({float}, {int}, {float, str, type(None)}),
         },
     )
