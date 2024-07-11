@@ -11,8 +11,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ContentSection
 
 if TYPE_CHECKING:
-
-    import pandas as pd
+    import polars as pl
 
     from flamme.section import BaseSection
 
@@ -29,18 +28,18 @@ class ContentAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ContentAnalyzer
     >>> analyzer = ContentAnalyzer(content="meow")
     >>> analyzer
     ContentAnalyzer()
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -53,6 +52,6 @@ class ContentAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: pd.DataFrame) -> BaseSection:  # noqa: ARG002
+    def analyze(self, frame: pl.DataFrame) -> BaseSection:  # noqa: ARG002
         logger.info("Generating the given custom content...")
         return ContentSection(content=self._content)

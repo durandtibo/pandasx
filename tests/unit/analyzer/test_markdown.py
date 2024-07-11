@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+import polars as pl
 
 from flamme.analyzer import MarkdownAnalyzer
 from flamme.section import MarkdownSection
@@ -20,12 +19,25 @@ def test_markdown_analyzer_str() -> None:
 @markdown_available
 def test_markdown_analyzer_get_statistics() -> None:
     section = MarkdownAnalyzer(desc="hello cats!").analyze(
-        pd.DataFrame(
+        pl.DataFrame(
             {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-            }
+                "col1": [1.2, 4.2, 4.2, 2.2],
+                "col2": [1, 1, 1, 1],
+                "col3": [1, 2, 2, 2],
+            },
+            schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
+        )
+    )
+    assert isinstance(section, MarkdownSection)
+    assert section.get_statistics() == {}
+
+
+@markdown_available
+def test_markdown_analyzer_get_statistics_empty_rows() -> None:
+    section = MarkdownAnalyzer(desc="hello cats!").analyze(
+        pl.DataFrame(
+            {"col1": [], "col2": [], "col3": []},
+            schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
         )
     )
     assert isinstance(section, MarkdownSection)
@@ -34,6 +46,6 @@ def test_markdown_analyzer_get_statistics() -> None:
 
 @markdown_available
 def test_markdown_analyzer_get_statistics_empty() -> None:
-    section = MarkdownAnalyzer(desc="hello cats!").analyze(pd.DataFrame({}))
+    section = MarkdownAnalyzer(desc="hello cats!").analyze(pl.DataFrame({}))
     assert isinstance(section, MarkdownSection)
     assert section.get_statistics() == {}
