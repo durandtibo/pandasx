@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from types import NoneType
+
+import numpy as np
+import pandas as pd
 import polars as pl
 import pyarrow as pa
 import pytest
 
-from flamme.utils.dtype2 import frame_types, series_types
+from flamme.utils.dtype2 import compact_type_name, frame_types, series_types
 
 
 @pytest.fixture()
@@ -84,3 +88,23 @@ def test_series_types_string() -> None:
 
 def test_series_types_empty() -> None:
     assert series_types(pl.Series([], dtype=pl.Object)) == set()
+
+
+#######################################
+#     Tests for compact_type_name     #
+#######################################
+
+
+@pytest.mark.parametrize(
+    ("typ", "name"),
+    [
+        (float, "float"),
+        (int, "int"),
+        (str, "str"),
+        (NoneType, "NoneType"),
+        (pd.Timestamp, "pandas.Timestamp"),
+        (np.ndarray, "numpy.ndarray"),
+    ],
+)
+def test_compact_type_name(typ: type, name: str) -> None:
+    assert compact_type_name(typ) == name

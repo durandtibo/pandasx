@@ -70,3 +70,32 @@ def series_types(series: pl.Series) -> set[type]:
     ```
     """
     return {type(x) for x in series.to_list()}
+
+
+TYPE_NAMES = {
+    "pandas._libs.tslibs.timestamps.Timestamp": "pandas.Timestamp",
+    "pandas._libs.tslibs.nattype.NaTType": "pandas.NaTType",
+    "pandas._libs.missing.NAType": "pandas.NAType",
+}
+
+
+def compact_type_name(typ: type) -> str:
+    r"""Return a compact type name when possible.
+
+    Args:
+        typ: The input type.
+
+    Returns:
+        The compact type name.
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.utils.dtype2 import compact_type_name
+    >>> compact_type_name(int)
+    int
+
+    ```
+    """
+    name = str(typ).split("'", maxsplit=2)[1].rsplit("'", maxsplit=2)[0]
+    return TYPE_NAMES.get(name, name)

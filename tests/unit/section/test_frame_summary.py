@@ -7,7 +7,6 @@ from coola import objects_are_allclose
 from jinja2 import Template
 
 from flamme.section import DataFrameSummarySection
-from flamme.section.frame_summary import prepare_type_name
 
 NoneType = type(None)
 
@@ -148,23 +147,3 @@ def test_column_temporal_null_value_section_render_html_toc_args(dataframe: pd.D
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
-
-
-#######################################
-#     Tests for prepare_type_name     #
-#######################################
-
-
-@pytest.mark.parametrize(
-    ("typ", "name"),
-    [
-        (float, "float"),
-        (int, "int"),
-        (str, "str"),
-        (NoneType, "NoneType"),
-        (pd.Timestamp, "pandas.Timestamp"),
-        (np.ndarray, "numpy.ndarray"),
-    ],
-)
-def test_prepare_type_name(typ: type, name: str) -> None:
-    assert prepare_type_name(typ) == name
