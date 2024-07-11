@@ -110,7 +110,7 @@ def create_null_value_analyzer() -> fa.BaseAnalyzer:
         {
             "overall": fa.NullValueAnalyzer(figsize=FIGSIZE),
             "temporal": fa.TemporalNullValueAnalyzer(
-                dt_column="datetime", period="M", figsize=FIGSIZE
+                dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             "monthly": fa.ColumnTemporalNullValueAnalyzer(
                 dt_column="datetime", period="M", figsize=(7, 4)

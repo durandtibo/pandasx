@@ -8,9 +8,11 @@ __all__ = ["TemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
+import numpy as np
 import polars as pl
 import polars.selectors as cs
 from coola.utils import repr_indent, repr_mapping
+from grizz.utils.period import period_to_strftime_format
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -29,7 +31,6 @@ from flamme.utils.figure import figure2html
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -50,28 +51,36 @@ class TemporalNullValueSection(BaseSection):
 
     ```pycon
 
+    >>> from datetime import datetime, timezone
     >>> import polars as pl
-    >>> import numpy as np
     >>> from flamme.section import TemporalNullValueSection
     >>> section = TemporalNullValueSection(
     ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": np.array([1.2, 4.2, None, 2.2]),
-    ...             "col2": np.array([None, 1, None, 1]),
-    ...             "datetime": pl.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
+    ...             "col1": [None, 1.0, 0.0, 1.0],
+    ...             "col2": [None, 1, 0, None],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col1": pl.Float64,
+    ...             "col2": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
     ...     ),
     ...     columns=["col1", "col2"],
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
     TemporalNullValueSection(
       (columns): ('col1', 'col2')
       (dt_column): datetime
-      (period): M
+      (period): 1mo
       (figsize): None
     )
     >>> section.get_statistics()
@@ -349,7 +358,7 @@ def prepare_data(
     >>> nulls, totals, labels = prepare_data(
     ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": [None, 1.0, 0.0, 1.0],
+    ...             "col1": [None, float("nan"), 0.0, 1.0],
     ...             "col2": [None, 1, 0, None],
     ...             "datetime": [
     ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
@@ -378,14 +387,20 @@ def prepare_data(
     ```
     """
     columns = list(columns)
-    frame_na = frame.select([*columns, dt_column]).with_columns(cs.by_name(columns).is_null())
+    frame_na = frame.select([*columns, dt_column]).with_columns(
+        cs.by_name(columns).is_null().cast(pl.Int64)
+    )
     frame_group = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
-    # frame_na[dt_col] = (
-    #     frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
-    # )
+    format_dt = period_to_strftime_format(period)
+    labels = [name[0].strftime(format_dt) for name, _ in frame_group]
 
-    nulls = frame_group.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal()
-    totals = frame_group.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal()
-    template = period_to_strftime_format(period)
-    labels = [name[0].strftime(template) for name, _ in frame_group]
-    return nulls.to_numpy().astype(int), totals.to_numpy().astype(int), labels
+    nulls = np.zeros(len(labels), dtype=np.int64)
+    totals = np.zeros(len(labels), dtype=np.int64)
+    if columns:
+        nulls += (
+            frame_group.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal().to_numpy()
+        )
+        totals += (
+            frame_group.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal().to_numpy()
+        )
+    return nulls, totals, labels
