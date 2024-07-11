@@ -9,7 +9,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from jinja2 import Template
-from polars import DataType
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -19,10 +18,11 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.null import compute_null_count
 from flamme.utils.dtype2 import compact_type_name
+from flamme.utils.null import compute_null_count
 
 if TYPE_CHECKING:
+    from polars import DataType
     from collections.abc import Sequence
 
     import polars as pl
