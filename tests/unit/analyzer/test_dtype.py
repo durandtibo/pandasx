@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+import polars as pl
 from coola import objects_are_equal
 
 from flamme.analyzer import DataTypeAnalyzer
@@ -18,30 +17,34 @@ def test_column_type_analyzer_str() -> None:
 
 def test_column_type_analyzer_get_statistics() -> None:
     section = DataTypeAnalyzer().analyze(
-        pd.DataFrame(
+        pl.DataFrame(
             {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-            }
+                "int": [None, 1, 0, 1],
+                "float": [1.2, 4.2, float("nan"), 2.2],
+                "str": ["A", "B", None, None],
+            },
+            schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
         )
     )
     assert isinstance(section, DataTypeSection)
     assert objects_are_equal(
         section.get_statistics(),
-        {"float": {float}, "int": {float}, "str": {str, type(None), float}},
+        {"float": {float}, "int": {int, type(None)}, "str": {str, type(None)}},
     )
 
 
 def test_column_type_analyzer_get_statistics_empty() -> None:
     section = DataTypeAnalyzer().analyze(
-        pd.DataFrame({"float": np.array([]), "int": np.array([]), "str": np.array([])})
+        pl.DataFrame(
+            {"int": [], "float": [], "str": []},
+            schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
+        )
     )
     assert isinstance(section, DataTypeSection)
     assert objects_are_equal(section.get_statistics(), {"float": set(), "int": set(), "str": set()})
 
 
 def test_column_type_analyzer_get_statistics_empty_no_column() -> None:
-    section = DataTypeAnalyzer().analyze(pd.DataFrame({}))
+    section = DataTypeAnalyzer().analyze(pl.DataFrame({}))
     assert isinstance(section, DataTypeSection)
     assert objects_are_equal(section.get_statistics(), {})
