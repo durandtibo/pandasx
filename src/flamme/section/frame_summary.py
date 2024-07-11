@@ -9,6 +9,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from jinja2 import Template
+from polars import DataType
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -19,11 +20,12 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.dtype import series_column_types
+from flamme.utils.null import compute_null_count
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -40,16 +42,16 @@ class DataFrameSummarySection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> import numpy as np
     >>> from flamme.section import DataFrameSummarySection
     >>> section = DataFrameSummarySection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": np.array([1.2, 4.2, 4.2, 2.2]),
-    ...             "col2": np.array([1, 1, 1, 1]),
-    ...             "col3": np.array([1, 2, 2, 2]),
-    ...         }
+    ...             "col1": [1.2, 4.2, 4.2, 2.2],
+    ...             "col2": [1, 1, 1, 1],
+    ...             "col3": [1, 2, 2, 2],
+    ...         },schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ...     )
     ... )
     >>> section
@@ -58,7 +60,7 @@ class DataFrameSummarySection(BaseSection):
     {'columns': ('col1', 'col2', 'col3'), 'null_count': (0, 0, 0), 'nunique': (3, 1, 2), 'column_types': ({<class 'float'>}, {<class 'int'>}, {<class 'int'>})}
     """
 
-    def __init__(self, frame: pd.DataFrame, top: int = 5) -> None:
+    def __init__(self, frame: pl.DataFrame, top: int = 5) -> None:
         self._frame = frame
         if top < 0:
             msg = f"Incorrect top value ({top}). top must be positive"
@@ -69,7 +71,7 @@ class DataFrameSummarySection(BaseSection):
         return f"{self.__class__.__qualname__}(top={self._top})"
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -81,15 +83,13 @@ class DataFrameSummarySection(BaseSection):
         return tuple(self._frame.columns)
 
     def get_null_count(self) -> tuple[int, ...]:
-        return tuple(
-            self._frame.isna().sum().to_frame("__count__")["__count__"].astype(int).tolist()
-        )
+        return tuple(compute_null_count(self._frame))
 
     def get_nunique(self) -> tuple[int, ...]:
-        return tuple(self._frame.nunique(dropna=False).astype(int).tolist())
+        return tuple(self._frame.n_unique().astype(int).tolist())
 
-    def get_column_types(self) -> tuple[set[type], ...]:
-        return tuple(series_column_types(self._frame[col]) for col in self.frame)
+    def get_column_types(self) -> tuple[DataType, ...]:
+        return tuple(self._frame.schema.dtypes())
 
     def get_most_frequent_values(self, top: int = 5) -> tuple[tuple[tuple[Any, int], ...], ...]:
         value_counts = []
@@ -263,9 +263,9 @@ def create_table_row(
 
 
 TYPE_NAMES = {
-    "pandas._libs.tslibs.timestamps.Timestamp": "pandas.Timestamp",
-    "pandas._libs.tslibs.nattype.NaTType": "pandas.NaTType",
-    "pandas._libs.missing.NAType": "pandas.NAType",
+    "polars._libs.tslibs.timestamps.Timestamp": "polars.Timestamp",
+    "polars._libs.tslibs.nattype.NaTType": "polars.NaTType",
+    "polars._libs.missing.NAType": "polars.NAType",
 }
 
 
