@@ -113,11 +113,11 @@ def create_null_value_analyzer() -> fa.BaseAnalyzer:
                 dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             "monthly": fa.ColumnTemporalNullValueAnalyzer(
-                dt_column="datetime", period="M", figsize=(7, 4)
+                dt_column="datetime", period="1mo", figsize=(7, 4)
             ),
-            "weekly": fa.ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="W"),
+            "weekly": fa.ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="1w"),
             "daily": fa.ColumnTemporalNullValueAnalyzer(
-                dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
+                dt_column="datetime", period="1d", ncols=1, figsize=FIGSIZE
             ),
         }
     )
@@ -145,7 +145,7 @@ def create_discrete_column_analyzer(column: str) -> fa.BaseAnalyzer:
             #     column=column, dt_column="datetime", period="D", figsize=FIGSIZE
             # ),
             "null monthly": fa.ColumnTemporalNullValueAnalyzer(
-                columns=[column], dt_column="datetime", period="M", figsize=FIGSIZE
+                columns=[column], dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             "most frequent": fa.MostFrequentValuesAnalyzer(column=column, top=10),
         }
@@ -183,7 +183,7 @@ def create_continuous_column_analyzer(
                 xmax=xmax,
             ),
             "null monthly": fa.ColumnTemporalNullValueAnalyzer(
-                columns=[column], dt_column="datetime", period="M", figsize=FIGSIZE
+                columns=[column], dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             "monthly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
