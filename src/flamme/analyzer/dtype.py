@@ -6,14 +6,13 @@ from __future__ import annotations
 __all__ = ["DataTypeAnalyzer"]
 
 import logging
-from typing import TYPE_CHECKING
+
+import pandas as pd
+import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
-from flamme.utils.dtype import frame_column_types
-
-if TYPE_CHECKING:
-    import pandas as pd
+from flamme.utils.dtype2 import frame_types
 
 logger = logging.getLogger(__name__)
 
@@ -25,20 +24,25 @@ class DataTypeAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import DataTypeAnalyzer
     >>> analyzer = DataTypeAnalyzer()
     >>> analyzer
     DataTypeAnalyzer()
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, float("nan"), 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    DataTypeSection(
+      (dtypes): {'int': Int64, 'float': Float64, 'str': String}
+      (types): {'int': {<class 'int'>, <class 'NoneType'>}, 'float': {<class 'float'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+    )
 
     ```
     """
@@ -46,6 +50,8 @@ class DataTypeAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: pd.DataFrame) -> DataTypeSection:
+    def analyze(self, frame: pl.DataFrame | pd.DataFrame) -> DataTypeSection:
         logger.info("Analyzing the data types...")
-        return DataTypeSection(dtypes=frame.dtypes.to_dict(), types=frame_column_types(frame))
+        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
+            frame = pl.from_pandas(frame)
+        return DataTypeSection(dtypes=dict(frame.schema), types=frame_types(frame))
