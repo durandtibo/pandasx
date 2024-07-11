@@ -8,6 +8,7 @@ __all__ = ["ColumnTemporalNullValueAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import polars as pl
 from coola.utils import repr_indent, repr_mapping
 
@@ -17,7 +18,6 @@ from flamme.section import ColumnTemporalNullValueSection, EmptySection
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -113,8 +113,8 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
-            frame = frame.to_pandas()
+        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
+            frame = pl.from_pandas(frame)
         if self._dt_column not in frame:
             logger.info(
                 "Skipping monthly null value analysis because the datetime column "

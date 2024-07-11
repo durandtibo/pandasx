@@ -250,8 +250,8 @@ def test_prepare_data(dataframe: pl.DataFrame) -> None:
     assert objects_are_equal(
         prepare_data(frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="1mo"),
         (
-            np.array([2, 0, 0, 1]),
-            np.array([2, 2, 2, 2]),
+            np.array([2, 0, 0, 1], dtype=np.int64),
+            np.array([2, 2, 2, 2], dtype=np.int64),
             ["2020-01", "2020-02", "2020-03", "2020-04"],
         ),
     )
@@ -261,8 +261,8 @@ def test_prepare_data_subset(dataframe: pl.DataFrame) -> None:
     assert objects_are_equal(
         prepare_data(frame=dataframe, columns=["col1"], dt_column="datetime", period="1mo"),
         (
-            np.array([1, 0, 0, 0]),
-            np.array([1, 1, 1, 1]),
+            np.array([1, 0, 0, 0], dtype=np.int64),
+            np.array([1, 1, 1, 1], dtype=np.int64),
             ["2020-01", "2020-02", "2020-03", "2020-04"],
         ),
     )
@@ -272,8 +272,8 @@ def test_prepare_data_empty_columns(dataframe: pl.DataFrame) -> None:
     assert objects_are_equal(
         prepare_data(frame=dataframe, columns=[], dt_column="datetime", period="1mo"),
         (
-            np.array([0, 0, 0, 0]),
-            np.array([0, 0, 0, 0]),
+            np.array([0, 0, 0, 0], dtype=np.int64),
+            np.array([0, 0, 0, 0], dtype=np.int64),
             ["2020-01", "2020-02", "2020-03", "2020-04"],
         ),
     )
@@ -287,5 +287,5 @@ def test_prepare_data_empty(dataframe_empty: pl.DataFrame) -> None:
             dt_column="datetime",
             period="1mo",
         ),
-        (np.array([], dtype=int), np.array([], dtype=int), []),
+        (np.array([], dtype=np.int64), np.array([], dtype=np.int64), []),
     )
