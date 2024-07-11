@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 from coola import objects_are_allclose, objects_are_equal
 
@@ -10,8 +9,10 @@ from flamme.section import EmptySection, MostFrequentValuesSection
 
 
 @pytest.fixture()
-def dataframe() -> pd.DataFrame:
-    return pd.DataFrame({"col": np.array([1, 42, np.nan, 22, 1, 2, 1, np.nan])})
+def dataframe() -> pl.DataFrame:
+    return pl.DataFrame(
+        {"col": [1.0, 42.0, None, 22.0, 1.0, 2.0, 1.0, None]}, schema={"col": pl.Float64}
+    )
 
 
 ################################################
@@ -23,18 +24,19 @@ def test_most_frequent_values_analyzer_str() -> None:
     assert str(MostFrequentValuesAnalyzer(column="col")).startswith("MostFrequentValuesAnalyzer(")
 
 
-def test_most_frequent_values_analyzer_get_statistics(dataframe: pd.DataFrame) -> None:
+def test_most_frequent_values_analyzer_get_statistics(dataframe: pl.DataFrame) -> None:
     section = MostFrequentValuesAnalyzer(column="col").analyze(dataframe)
     assert isinstance(section, MostFrequentValuesSection)
     assert objects_are_allclose(
         section.get_statistics(),
-        {"most_common": [(1.0, 3), (float("nan"), 2), (42.0, 1), (22.0, 1), (2.0, 1)]},
-        equal_nan=True,
+        {"most_common": [(1.0, 3), (None, 2), (42.0, 1), (22.0, 1), (2.0, 1)]},
     )
 
 
-def test_most_frequent_values_analyzer_get_statistics_dropna_true(dataframe: pd.DataFrame) -> None:
-    section = MostFrequentValuesAnalyzer(column="col", dropna=True).analyze(dataframe)
+def test_most_frequent_values_analyzer_get_statistics_drop_nulls_true(
+    dataframe: pl.DataFrame,
+) -> None:
+    section = MostFrequentValuesAnalyzer(column="col", drop_nulls=True).analyze(dataframe)
     assert isinstance(section, MostFrequentValuesSection)
     assert objects_are_equal(
         section.get_statistics(), {"most_common": [(1.0, 3), (42.0, 1), (22.0, 1), (2.0, 1)]}
@@ -42,12 +44,14 @@ def test_most_frequent_values_analyzer_get_statistics_dropna_true(dataframe: pd.
 
 
 def test_most_frequent_values_analyzer_get_statistics_empty_no_row() -> None:
-    section = MostFrequentValuesAnalyzer(column="col").analyze(pd.DataFrame({"col": np.array([])}))
+    section = MostFrequentValuesAnalyzer(column="col").analyze(
+        pl.DataFrame({"col": []}, schema={"col": pl.Int64})
+    )
     assert isinstance(section, MostFrequentValuesSection)
     assert objects_are_equal(section.get_statistics(), {"most_common": []})
 
 
 def test_most_frequent_values_analyzer_get_statistics_empty_no_column() -> None:
-    section = MostFrequentValuesAnalyzer(column="col").analyze(pd.DataFrame({}))
+    section = MostFrequentValuesAnalyzer(column="col").analyze(pl.DataFrame({}))
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
