@@ -8,7 +8,11 @@ __all__ = ["TemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
+import numpy as np
+import polars as pl
+import polars.selectors as cs
 from coola.utils import repr_indent, repr_mapping
+from grizz.utils.period import period_to_strftime_format
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -26,9 +30,6 @@ from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    import numpy as np
-    import pandas as pd
 
 
 logger = logging.getLogger(__name__)
@@ -50,28 +51,36 @@ class TemporalNullValueSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
-    >>> import numpy as np
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import TemporalNullValueSection
     >>> section = TemporalNullValueSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...             "col2": np.array([np.nan, 1, np.nan, 1]),
-    ...             "datetime": pd.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
+    ...             "col1": [None, 1.0, 0.0, 1.0],
+    ...             "col2": [None, 1, 0, None],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col1": pl.Float64,
+    ...             "col2": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
     ...     ),
     ...     columns=["col1", "col2"],
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
     TemporalNullValueSection(
       (columns): ('col1', 'col2')
       (dt_column): datetime
-      (period): M
+      (period): 1mo
       (figsize): None
     )
     >>> section.get_statistics()
@@ -82,7 +91,7 @@ class TemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         columns: Sequence[str],
         dt_column: str,
         period: str,
@@ -115,7 +124,7 @@ class TemporalNullValueSection(BaseSection):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -197,7 +206,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -232,7 +241,7 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_table(
-    frame: pd.DataFrame, columns: Sequence[str], dt_column: str, period: str
+    frame: pl.DataFrame, columns: Sequence[str], dt_column: str, period: str
 ) -> str:
     r"""Create a HTML representation of a table with the temporal
     distribution of null values.
@@ -318,7 +327,7 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
 
 
 def prepare_data(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -343,22 +352,30 @@ def prepare_data(
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section.null_temp import prepare_data
     >>> nulls, totals, labels = prepare_data(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": np.array([np.nan, 1, 0, 1]),
-    ...             "col2": np.array([np.nan, 1, 0, np.nan]),
-    ...             "datetime": pd.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
+    ...             "col1": [None, float("nan"), 0.0, 1.0],
+    ...             "col2": [None, 1, 0, None],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col1": pl.Float64,
+    ...             "col2": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
     ...     ),
     ...     columns=["col1", "col2"],
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> nulls
     array([2, 0, 0, 1])
@@ -370,13 +387,20 @@ def prepare_data(
     ```
     """
     columns = list(columns)
-    dt_col = "__datetime__"
-    frame_na = frame[columns].isna().astype(float).copy()
-    frame_na[dt_col] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    frame_na = frame.select([*columns, dt_column]).with_columns(
+        cs.by_name(columns).is_null().cast(pl.Int64)
     )
+    frame_group = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
+    format_dt = period_to_strftime_format(period)
+    labels = [name[0].strftime(format_dt) for name, _ in frame_group]
 
-    nulls = frame_na.groupby(dt_col)[columns].sum().sum(axis=1).sort_index()
-    totals = frame_na.groupby(dt_col)[columns].count().sum(axis=1).sort_index()
-    labels = [str(dt) for dt in nulls.index]
-    return nulls.to_numpy().astype(int), totals.to_numpy().astype(int), labels
+    nulls = np.zeros(len(labels), dtype=np.int64)
+    totals = np.zeros(len(labels), dtype=np.int64)
+    if columns:
+        nulls += (
+            frame_group.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal().to_numpy()
+        )
+        totals += (
+            frame_group.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal().to_numpy()
+        )
+    return nulls, totals, labels
