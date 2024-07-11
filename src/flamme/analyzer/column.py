@@ -15,7 +15,7 @@ from flamme.utils import setup_object
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
     from flamme.section import BaseSection
 
@@ -35,20 +35,21 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
     ```pycon
 
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnSubsetAnalyzer, NullValueAnalyzer
-    >>> analyzer = ColumnSubsetAnalyzer(columns=["int", "float"], analyzer=NullValueAnalyzer())
+    >>> analyzer = ColumnSubsetAnalyzer(columns=["float", "str"], analyzer=NullValueAnalyzer())
     >>> analyzer
     ColumnSubsetAnalyzer(
-      (columns): 2 ['int', 'float']
+      (columns): 2 ['float', 'str']
       (analyzer): NullValueAnalyzer(figsize=None)
     )
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -67,7 +68,6 @@ class ColumnSubsetAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: pd.DataFrame) -> BaseSection:
+    def analyze(self, frame: pl.DataFrame) -> BaseSection:
         logger.info(f"Selecting {len(self._columns):,} columns: {self._columns}")
-        frame = frame[self._columns]
-        return self._analyzer.analyze(frame)
+        return self._analyzer.analyze(frame.select(self._columns))
