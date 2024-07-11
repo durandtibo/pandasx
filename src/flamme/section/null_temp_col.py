@@ -16,7 +16,6 @@ from matplotlib import pyplot as plt
 from flamme.plot import plot_null_temporal
 from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
-from flamme.section.null_temp import prepare_data
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -25,6 +24,7 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
+from flamme.utils.null import compute_temporal_null
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -291,7 +291,7 @@ def create_temporal_null_figures(
         fig, ax = plt.subplots(figsize=figsize)
         ax.set_title(f"column: {column}")
 
-        nulls, totals, labels = prepare_data(
+        nulls, totals, labels = compute_temporal_null(
             frame=frame, columns=[column], dt_column=dt_column, period=period
         )
         plot_null_temporal(ax=ax, labels=labels, nulls=nulls, totals=totals)
@@ -402,7 +402,7 @@ def create_temporal_null_table(
     """
     if frame.shape[0] == 0:
         return ""
-    nulls, totals, labels = prepare_data(
+    nulls, totals, labels = compute_temporal_null(
         frame=frame, columns=[column], dt_column=dt_column, period=period
     )
     rows = []
