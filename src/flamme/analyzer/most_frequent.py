@@ -66,7 +66,7 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
         if self._column not in frame:
             logger.info(
                 f"Skipping most frequent values analysis of column {self._column} "
-                f"because it is not in the DataFrame: {sorted(frame.columns)}"
+                f"because the column is missing"
             )
             return EmptySection()
         series = frame[self._column]
