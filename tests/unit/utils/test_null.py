@@ -8,7 +8,48 @@ import pytest
 from coola import objects_are_equal
 from polars.testing import assert_frame_equal
 
-from flamme.utils.null import compute_col_null, compute_temporal_null
+from flamme.utils.null import (
+    compute_col_null,
+    compute_null_count,
+    compute_temporal_null,
+)
+
+########################################
+#     Tests for compute_null_count     #
+########################################
+
+
+def test_compute_null_count() -> None:
+    assert objects_are_equal(
+        compute_null_count(
+            pl.DataFrame(
+                {
+                    "int": [None, 1, 0, 1],
+                    "float": [1.2, 4.2, None, 2.2],
+                    "str": ["A", "B", None, None],
+                },
+                schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
+            )
+        ),
+        np.array([1, 1, 2], dtype=np.int64),
+    )
+
+
+def test_compute_null_count_empty_rows() -> None:
+    assert objects_are_equal(
+        compute_null_count(
+            pl.DataFrame(
+                {"int": [], "float": [], "str": []},
+                schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
+            )
+        ),
+        np.array([0, 0, 0], dtype=np.int64),
+    )
+
+
+def test_compute_null_count_empty() -> None:
+    assert objects_are_equal(compute_null_count(pl.DataFrame({})), np.array([], dtype=np.int64))
+
 
 ######################################
 #     Tests for compute_col_null     #
