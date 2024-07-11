@@ -22,8 +22,9 @@ from flamme.section.utils import (
 )
 
 if TYPE_CHECKING:
-    import polars as pl
     from collections.abc import Sequence
+
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
