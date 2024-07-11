@@ -13,7 +13,7 @@ from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.section.toc import TableOfContentSection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class TableOfContentAnalyzer(BaseAnalyzer):
     ```pycon
 
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import TableOfContentAnalyzer, DuplicatedRowAnalyzer
     >>> analyzer = TableOfContentAnalyzer(DuplicatedRowAnalyzer())
     >>> analyzer
@@ -40,12 +40,13 @@ class TableOfContentAnalyzer(BaseAnalyzer):
       (analyzer): DuplicatedRowAnalyzer(columns=None, figsize=None)
       (max_toc_depth): 1
     )
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "col1": np.array([0, 1, 0, 1]),
-    ...         "col2": np.array([1, 0, 1, 0]),
-    ...         "col3": np.array([1, 1, 1, 1]),
-    ...     }
+    ...         "col1": [1.2, 4.2, 4.2, 2.2],
+    ...         "col2": [1, 1, 1, 1],
+    ...         "col3": [1, 2, 2, 2],
+    ...     },
+    ...     schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -66,7 +67,7 @@ class TableOfContentAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: pd.DataFrame) -> TableOfContentSection:
+    def analyze(self, frame: pl.DataFrame) -> TableOfContentSection:
         return TableOfContentSection(
             section=self._analyzer.analyze(frame), max_toc_depth=self._max_toc_depth
         )
