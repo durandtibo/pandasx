@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 from coola import objects_are_allclose
 
@@ -42,12 +41,13 @@ def test_mapping_analyzer_get_statistics() -> None:
             "section2": NullValueAnalyzer(),
         }
     ).analyze(
-        pd.DataFrame(
+        pl.DataFrame(
             {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-            }
+                "float": [1.2, 4.2, None, 2.2],
+                "int": [None, 1, 0, 1],
+                "str": ["A", "B", None, None],
+            },
+            schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
         )
     )
     assert isinstance(section, SectionDict)
@@ -75,12 +75,13 @@ def test_mapping_analyzer_get_statistics_empty() -> None:
             "section2": NullValueAnalyzer(),
         }
     ).analyze(
-        pd.DataFrame(
+        pl.DataFrame(
             {
-                "float": np.array([]),
-                "int": np.array([]),
-                "str": np.array([]),
-            }
+                "float": [],
+                "int": [],
+                "str": [],
+            },
+            schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
         )
     )
     assert isinstance(section, SectionDict)
@@ -110,12 +111,13 @@ def test_mapping_analyzer_max_toc_depth(max_toc_depth: int) -> None:
         },
         max_toc_depth=max_toc_depth,
     ).analyze(
-        pd.DataFrame(
+        pl.DataFrame(
             {
-                "float": np.array([1.2, 4.2, np.nan, 2.2]),
-                "int": np.array([np.nan, 1, 0, 1]),
-                "str": np.array(["A", "B", None, np.nan]),
-            }
+                "float": [1.2, 4.2, None, 2.2],
+                "int": [None, 1, 0, 1],
+                "str": ["A", "B", None, None],
+            },
+            schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
         )
     )
     assert isinstance(section, SectionDict)
