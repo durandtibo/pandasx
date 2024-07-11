@@ -25,7 +25,7 @@ from flamme.utils.figure import figure2html
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -47,28 +47,28 @@ class TemporalRowCountSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import TemporalRowCountSection
     >>> section = TemporalRowCountSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "datetime": pd.to_datetime(
-    ...                 [
-    ...                     "2020-01-03",
-    ...                     "2020-01-04",
-    ...                     "2020-01-05",
-    ...                     "2020-02-03",
-    ...                     "2020-03-03",
-    ...                     "2020-04-03",
-    ...                 ]
-    ...             )
-    ...         }
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ]
+    ...         },
+    ...         schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ...     ),
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
-    TemporalRowCountSection(dt_column=datetime, period=M, figsize=None)
+    TemporalRowCountSection(dt_column=datetime, period=1mo, figsize=None)
     >>> section.get_statistics()
     {}
 
@@ -77,7 +77,7 @@ class TemporalRowCountSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
@@ -100,7 +100,7 @@ class TemporalRowCountSection(BaseSection):
         )
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -158,8 +158,7 @@ class TemporalRowCountSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -175,7 +174,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_count_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -206,7 +205,7 @@ def create_temporal_count_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_count_table(frame: pd.DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str) -> str:
     r"""Return a HTML representation of a figure with number of rows per
     temporal windows.
 
@@ -226,8 +225,7 @@ def create_temporal_count_table(frame: pd.DataFrame, dt_column: str, period: str
     for label, num_rows in zip(labels, counts):
         rows.append(create_temporal_count_table_row(label=label, num_rows=num_rows))
     return Template(
-        """
-<details>
+        """<details>
     <summary>[show statistics per temporal period]</summary>
 
     <p>The following table shows some statistics for each period.
@@ -270,7 +268,7 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
 
 
 def prepare_data(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     dt_column: str,
     period: str,
 ) -> tuple[list[int], list[str]]:
