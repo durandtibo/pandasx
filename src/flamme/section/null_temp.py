@@ -8,11 +8,7 @@ __all__ = ["TemporalNullValueSection"]
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
-import polars as pl
-import polars.selectors as cs
 from coola.utils import repr_indent, repr_mapping
-from grizz.utils.period import period_to_strftime_format
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
@@ -27,9 +23,12 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
+from flamme.utils.null import compute_temporal_null
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -230,7 +229,7 @@ def create_temporal_null_figure(
     if frame.shape[0] == 0:
         return ""
 
-    nulls, totals, labels = prepare_data(
+    nulls, totals, labels = compute_temporal_null(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
 
@@ -258,7 +257,7 @@ def create_temporal_null_table(
     """
     if frame.shape[0] == 0:
         return ""
-    nulls, totals, labels = prepare_data(
+    nulls, totals, labels = compute_temporal_null(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
     rows = []
@@ -324,83 +323,3 @@ def create_temporal_null_table_row(label: str, num_nulls: int, total: int) -> st
             "num_non_nulls_pct": f"{100 * num_non_nulls / total:.2f}%",
         }
     )
-
-
-def prepare_data(
-    frame: pl.DataFrame,
-    columns: Sequence[str],
-    dt_column: str,
-    period: str,
-) -> tuple[np.ndarray, np.ndarray, list]:
-    r"""Prepare the data to create the figure and table.
-
-    Args:
-        frame: The DataFrame to analyze.
-        columns: The list of columns to analyze.
-        dt_column: The datetime column used to analyze
-            the temporal distribution.
-        period: The temporal period e.g. monthly or daily.
-
-    Returns:
-        A tuple with 3 values. The first value is a numpy NDArray
-            that contains the number of null values per period. The
-            second value is a numpy NDArray that contains the total
-            number of values. The third value is a list that contains
-            the label of each period.
-
-    Example usage:
-
-    ```pycon
-
-    >>> from datetime import datetime, timezone
-    >>> import polars as pl
-    >>> from flamme.section.null_temp import prepare_data
-    >>> nulls, totals, labels = prepare_data(
-    ...     frame=pl.DataFrame(
-    ...         {
-    ...             "col1": [None, float("nan"), 0.0, 1.0],
-    ...             "col2": [None, 1, 0, None],
-    ...             "datetime": [
-    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
-    ...             ],
-    ...         },
-    ...         schema={
-    ...             "col1": pl.Float64,
-    ...             "col2": pl.Int64,
-    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
-    ...         },
-    ...     ),
-    ...     columns=["col1", "col2"],
-    ...     dt_column="datetime",
-    ...     period="1mo",
-    ... )
-    >>> nulls
-    array([2, 0, 0, 1])
-    >>> totals
-    array([2, 2, 2, 2])
-    >>> labels
-    ['2020-01', '2020-02', '2020-03', '2020-04']
-
-    ```
-    """
-    columns = list(columns)
-    frame_na = frame.select([*columns, dt_column]).with_columns(
-        cs.by_name(columns).is_null().cast(pl.Int64)
-    )
-    frame_group = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
-    format_dt = period_to_strftime_format(period)
-    labels = [name[0].strftime(format_dt) for name, _ in frame_group]
-
-    nulls = np.zeros(len(labels), dtype=np.int64)
-    totals = np.zeros(len(labels), dtype=np.int64)
-    if columns:
-        nulls += (
-            frame_group.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal().to_numpy()
-        )
-        totals += (
-            frame_group.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal().to_numpy()
-        )
-    return nulls, totals, labels
