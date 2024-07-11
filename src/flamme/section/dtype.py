@@ -3,7 +3,7 @@ each column."""
 
 from __future__ import annotations
 
-__all__ = ["DataTypeSection"]
+__all__ = ["DataTypeSection", "create_section_template", "create_table", "create_table_row"]
 
 import copy
 import logging
@@ -86,14 +86,14 @@ class DataTypeSection(BaseSection):
         return copy.deepcopy(self._types)
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "table": self._create_table(),
+                "table": create_table(dtypes=self._dtypes, types=self._types),
             }
         )
 
@@ -103,9 +103,23 @@ class DataTypeSection(BaseSection):
         logger.info("Rendering the data types report...")
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.dtype import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -113,24 +127,50 @@ class DataTypeSection(BaseSection):
 This section analyzes the values types for each column.
 
 <ul>
-  <li> <b>data type</b>: is the pandas data type used to represent the column </li>
-  <li> <b>types</b>: are the real object types for the objects in the column </li>
+  <li> <b>data type</b>: is the column data type </li>
+  <li> <b>types</b>: are the real object types for the objects in the column.
+  A column can contain multiple types. </li>
 </ul>
 
 {{table}}
 """
 
-    def _create_table(self) -> str:
-        columns = sorted(self._types.keys())
-        rows = "\n".join(
-            [
-                create_table_row(column=col, types=self._types[col], dtype=self._dtypes[col])
-                for col in columns
-            ]
-        )
-        return Template(
-            """
-<table class="table table-hover table-responsive w-auto" >
+
+def create_table(dtypes: dict[str, pl.DataType], types: dict[str, set]) -> str:
+    r"""Return a HTML table with the data types information.
+
+    Args:
+        dtypes: The data type for each column.
+        types: The types of the values in each
+            column. A column can contain multiple types. The keys are
+            the column names.
+
+    Returns:
+        The generated HTML table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.dtype import create_table_row
+    >>> table = create_table(
+    ...     dtypes={
+    ...         "float": pl.Float64(),
+    ...         "int": pl.Int64(),
+    ...         "str": pl.String(),
+    ...     },
+    ...     types={"float": {float}, "int": {int}, "str": {str, type(None)}},
+    ... )
+
+    ```
+    """
+    columns = sorted(types.keys())
+    rows = "\n".join(
+        [create_table_row(column=col, types=types[col], dtype=dtypes[col]) for col in columns]
+    )
+    return Template(
+        """<table class="table table-hover table-responsive w-auto" >
     <thead class="thead table-group-divider">
         <tr>
             <th>column</th>
@@ -144,7 +184,7 @@ This section analyzes the values types for each column.
     </tbody>
 </table>
 """
-        ).render({"rows": rows})
+    ).render({"rows": rows})
 
 
 def create_table_row(column: str, dtype: pl.DataType, types: set[type]) -> str:
@@ -157,6 +197,16 @@ def create_table_row(column: str, dtype: pl.DataType, types: set[type]) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.dtype import create_table_row
+    >>> row = create_table_row(column="col", dtype=pl.Int64(), types={int})
+
+    ```
     """
     types = sorted([str(t).replace("<", "&lt;").replace(">", "&gt;") for t in types])
     return Template(

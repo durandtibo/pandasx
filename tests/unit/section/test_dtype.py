@@ -6,10 +6,20 @@ from coola import objects_are_allclose
 from jinja2 import Template
 
 from flamme.section import DataTypeSection
+from flamme.section.dtype import create_section_template, create_table, create_table_row
 
 #####################################
 #     Tests for DataTypeSection     #
 #####################################
+
+
+def test_data_type_section_repr() -> None:
+    assert str(
+        DataTypeSection(
+            dtypes={"float": pl.Float64(), "int": pl.Int64(), "str": pl.String()},
+            types={"float": {float}, "int": {int}, "str": {str, type(None)}},
+        )
+    ).startswith("DataTypeSection(")
 
 
 def test_data_type_section_str() -> None:
@@ -91,4 +101,47 @@ def test_data_type_section_render_html_toc_args() -> None:
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
+    )
+
+
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
+##################################
+#     Tests for create_table     #
+##################################
+
+
+def test_create_table() -> None:
+    assert isinstance(
+        create_table(
+            dtypes={"float": pl.Float64(), "int": pl.Int64(), "str": pl.String()},
+            types={"float": {float}, "int": {int}, "str": {str, type(None)}},
+        ),
+        str,
+    )
+
+
+def test_create_table_empty() -> None:
+    assert isinstance(create_table(dtypes={}, types={}), str)
+
+
+######################################
+#     Tests for create_table_row     #
+######################################
+
+
+def test_create_table_row() -> None:
+    assert isinstance(create_table_row(column="col", dtype=pl.Int64(), types={int}), str)
+
+
+def test_create_table_row_empty() -> None:
+    assert isinstance(
+        create_table_row(column="col", dtype=pl.Int64(), types={int, type(None)}), str
     )
