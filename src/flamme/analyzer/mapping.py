@@ -14,7 +14,7 @@ from flamme.section import SectionDict
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    import pandas as pd
+    import polars as pl
 
 
 class MappingAnalyzer(BaseAnalyzer):
@@ -32,8 +32,7 @@ class MappingAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import (
     ...     FilteredAnalyzer,
     ...     NullValueAnalyzer,
@@ -48,14 +47,29 @@ class MappingAnalyzer(BaseAnalyzer):
       (null): NullValueAnalyzer(figsize=None)
       (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
     )
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    SectionDict(
+      (null): NullValueSection(
+          (columns): ('float', 'int', 'str')
+          (null_count): array([1, 1, 2])
+          (total_count): array([4, 4, 4])
+          (figsize): None
+        )
+      (duplicate): DuplicatedRowSection(
+          (frame): (4, 3)
+          (columns): None
+          (figsize): None
+        )
+    )
 
     ```
     """
@@ -73,7 +87,7 @@ class MappingAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, frame: pd.DataFrame) -> SectionDict:
+    def analyze(self, frame: pl.DataFrame) -> SectionDict:
         return SectionDict(
             sections={name: analyzer.analyze(frame) for name, analyzer in self._analyzers.items()},
             max_toc_depth=self._max_toc_depth,
@@ -97,7 +111,7 @@ class MappingAnalyzer(BaseAnalyzer):
         ```pycon
 
         >>> import numpy as np
-        >>> import pandas as pd
+        >>> import polars as pl
         >>> from flamme.analyzer import MappingAnalyzer, NullValueAnalyzer, DuplicatedRowAnalyzer
         >>> analyzer = MappingAnalyzer({"null": NullValueAnalyzer()})
         >>> analyzer.add_analyzer("duplicate", DuplicatedRowAnalyzer())
@@ -106,14 +120,29 @@ class MappingAnalyzer(BaseAnalyzer):
           (null): NullValueAnalyzer(figsize=None)
           (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
         )
-        >>> frame = pd.DataFrame(
+        >>> frame = pl.DataFrame(
         ...     {
-        ...         "int": np.array([np.nan, 1, 0, 1]),
-        ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-        ...         "str": np.array(["A", "B", None, np.nan]),
-        ...     }
+        ...         "float": [1.2, 4.2, None, 2.2],
+        ...         "int": [None, 1, 0, 1],
+        ...         "str": ["A", "B", None, None],
+        ...     },
+        ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
         ... )
         >>> section = analyzer.analyze(frame)
+        >>> section
+        SectionDict(
+          (null): NullValueSection(
+              (columns): ('float', 'int', 'str')
+              (null_count): array([1, 1, 2])
+              (total_count): array([4, 4, 4])
+              (figsize): None
+            )
+          (duplicate): DuplicatedRowSection(
+              (frame): (4, 3)
+              (columns): None
+              (figsize): None
+            )
+        )
 
         ```
         """
