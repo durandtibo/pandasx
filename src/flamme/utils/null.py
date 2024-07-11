@@ -2,13 +2,13 @@ r"""Contain utility functions to analyze data with null values."""
 
 from __future__ import annotations
 
-__all__ = ["compute_null_per_col"]
+__all__ = ["compute_col_null"]
 
 import numpy as np
-import pandas as pd
+import polars as pl
 
 
-def compute_null_per_col(frame: pd.DataFrame) -> pd.DataFrame:
+def compute_col_null(frame: pl.DataFrame) -> pl.DataFrame:
     r"""Return the number and percentage of null values per column.
 
     Args:
@@ -22,34 +22,45 @@ def compute_null_per_col(frame: pd.DataFrame) -> pd.DataFrame:
 
     ```pycon
 
-    >>> import pandas as pd
-    >>> from flamme.utils.null import compute_null_per_col
-    >>> frame = compute_null_per_col(
-    ...     pd.DataFrame(
+    >>> import polars as pl
+    >>> from flamme.utils.null import compute_col_null
+    >>> frame = compute_col_null(
+    ...     pl.DataFrame(
     ...         {
-    ...             "int": np.array([np.nan, 1, 0, 1]),
-    ...             "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...             "str": np.array(["A", "B", None, np.nan]),
-    ...         }
+    ...             "int": [None, 1, 0, 1],
+    ...             "float": [1.2, 4.2, None, 2.2],
+    ...             "str": ["A", "B", None, None],
+    ...         },
+    ...         schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
     ...     )
     ... )
     >>> frame
-      column  null  total  null_pct
-    0    int     1      4      0.25
-    1  float     1      4      0.25
-    2    str     2      4      0.50
+    shape: (3, 4)
+    ┌────────┬──────┬───────┬──────────┐
+    │ column ┆ null ┆ total ┆ null_pct │
+    │ ---    ┆ ---  ┆ ---   ┆ ---      │
+    │ str    ┆ i64  ┆ i64   ┆ f64      │
+    ╞════════╪══════╪═══════╪══════════╡
+    │ int    ┆ 1    ┆ 4     ┆ 0.25     │
+    │ float  ┆ 1    ┆ 4     ┆ 0.25     │
+    │ str    ┆ 2    ┆ 4     ┆ 0.5      │
+    └────────┴──────┴───────┴──────────┘
 
     ```
     """
-    null_count = frame.isna().sum().to_frame("count")["count"].to_numpy().astype(int)
-    total_count = np.full((frame.shape[1],), frame.shape[0]).astype(int)
+    if frame.shape[0] > 0:
+        null_count = frame.null_count().to_numpy()[0].astype(np.int64)
+    else:
+        null_count = np.zeros((frame.shape[1],), dtype=np.int64)
+    total_count = np.full((frame.shape[1],), frame.shape[0], dtype=np.int64)
     with np.errstate(invalid="ignore"):
-        null_pct = null_count.astype(float) / total_count.astype(float)
-    return pd.DataFrame(
+        null_pct = null_count.astype(np.float64) / total_count.astype(np.float64)
+    return pl.DataFrame(
         {
             "column": list(frame.columns),
             "null": null_count,
             "total": total_count,
             "null_pct": null_pct,
-        }
+        },
+        schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64, "null_pct": pl.Float64},
     )
