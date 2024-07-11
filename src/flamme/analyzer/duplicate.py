@@ -8,13 +8,14 @@ __all__ = ["DuplicatedRowAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+import pandas as pd
+import polars as pl
+
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DuplicatedRowSection
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    import pandas as pd
 
 
 logger = logging.getLogger(__name__)
@@ -34,19 +35,26 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     ```pycon
 
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import DuplicatedRowAnalyzer
     >>> analyzer = DuplicatedRowAnalyzer()
     >>> analyzer
     DuplicatedRowAnalyzer(columns=None, figsize=None)
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "col1": np.array([0, 1, 0, 1]),
-    ...         "col2": np.array([1, 0, 1, 0]),
-    ...         "col3": np.array([1, 1, 1, 1]),
-    ...     }
+    ...         "col1": [1.2, 4.2, 4.2, 2.2],
+    ...         "col2": [1, 1, 1, 1],
+    ...         "col3": [1, 2, 2, 2],
+    ...     },
+    ...     schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    DuplicatedRowSection(
+      (frame): (4, 3)
+      (columns): None
+      (figsize): None
+    )
 
     ```
     """
@@ -62,6 +70,8 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(columns={self._columns}, figsize={self._figsize})"
 
-    def analyze(self, frame: pd.DataFrame) -> DuplicatedRowSection:
+    def analyze(self, frame: pl.DataFrame | pd.DataFrame) -> DuplicatedRowSection:
         logger.info(f"Analyzing the duplicated rows section using the columns: {self._columns}")
+        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
+            frame = pl.from_pandas(frame)
         return DuplicatedRowSection(frame=frame, columns=self._columns, figsize=self._figsize)

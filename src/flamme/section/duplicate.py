@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
-from matplotlib import pyplot as plt
 
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
@@ -20,12 +19,11 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -46,20 +44,22 @@ class DuplicatedRowSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> import numpy as np
     >>> from flamme.section import DuplicatedRowSection
     >>> section = DuplicatedRowSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": np.array([1.2, 4.2, 4.2, 2.2]),
-    ...             "col2": np.array([1, 1, 1, 1]),
-    ...             "col3": np.array([1, 2, 2, 2]),
-    ...         }
+    ...             "col1": [1.2, 4.2, 4.2, 2.2],
+    ...             "col2": [1, 1, 1, 1],
+    ...             "col3": [1, 2, 2, 2],
+    ...         },
+    ...         schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ...     )
     ... )
     >>> section
     DuplicatedRowSection(
+      (frame): (4, 3)
       (columns): None
       (figsize): None
     )
@@ -71,7 +71,7 @@ class DuplicatedRowSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         columns: Sequence[str] | None = None,
         figsize: tuple[float, float] | None = None,
     ) -> None:
@@ -80,11 +80,15 @@ class DuplicatedRowSection(BaseSection):
         self._figsize = figsize
 
     def __repr__(self) -> str:
-        args = repr_indent(repr_mapping({"columns": self._columns, "figsize": self._figsize}))
+        args = repr_indent(
+            repr_mapping(
+                {"frame": self._frame.shape, "columns": self._columns, "figsize": self._figsize}
+            )
+        )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -103,7 +107,7 @@ class DuplicatedRowSection(BaseSection):
         return self._figsize
 
     def get_statistics(self) -> dict:
-        frame_no_duplicate = self._frame.drop_duplicates(subset=self._columns)
+        frame_no_duplicate = self._frame.unique(subset=self._columns)
         return {"num_rows": self._frame.shape[0], "num_unique_rows": frame_no_duplicate.shape[0]}
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
@@ -146,28 +150,26 @@ This section shows the number of unique and duplicated rows when considering the
 """
 
 
-def create_duplicate_histogram(
-    num_rows: int, num_unique_rows: int, figsize: tuple[float, float] | None = None
-) -> str:
-    fig, ax = plt.subplots(figsize=figsize)
-    x = list(range(3))
-    ax.bar(x, [num_rows, num_unique_rows, num_rows - num_unique_rows], color="tab:blue")
-    ax.set_xticks(x, labels=["total", "unique", "duplicate"])
-    ax.set_xlim(-0.5, 2.5)
-    ax.set_ylabel("Number of occurrences")
-    ax.set_title("Analysis of the number of duplicate rows")
-    return figure2html(fig, close_fig=True)
-
-
 def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:
-    r"""Create a table with information about duplicated rows.
+    r"""Return a HTML table with information about duplicated rows.
 
     Args:
-        num_rows (int): The number of rows.
-        num_unique_rows (int): The number of unique rows.
+        num_rows: The number of rows.
+        num_unique_rows: The number of unique rows.
 
     Returns:
-        The HTML representation of the table.
+        The HTML table with information about duplicated rows.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> import numpy as np
+    >>> from flamme.section.duplicate import create_duplicate_table
+    >>> table = create_duplicate_table(num_rows=10, num_unique_rows=5)
+
+    ```
     """
     num_duplicated_rows = num_rows - num_unique_rows
     pct_unique_rows = num_unique_rows / num_rows if num_rows else float("nan")
