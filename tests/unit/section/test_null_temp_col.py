@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+from datetime import datetime, timezone
+
+import polars as pl
 import pytest
 from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
-from pandas.testing import assert_frame_equal
+from polars.testing import assert_frame_equal
 
 from flamme.section import ColumnTemporalNullValueSection
 from flamme.section.null_temp_col import (
@@ -15,20 +16,48 @@ from flamme.section.null_temp_col import (
     create_temporal_null_figures,
     create_temporal_null_table,
     create_temporal_null_table_row,
-    prepare_data,
     split_figures_by_column,
 )
 
 
 @pytest.fixture()
-def dataframe() -> pd.DataFrame:
-    return pd.DataFrame(
+def dataframe() -> pl.DataFrame:
+    return pl.DataFrame(
         {
-            "float": np.array([1.2, 4.2, np.nan, 2.2]),
-            "int": np.array([np.nan, 1, 0, 1]),
-            "str": np.array(["A", "B", None, np.nan]),
-            "datetime": pd.to_datetime(["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]),
-        }
+            "float": [1.2, 4.2, None, 2.2],
+            "int": [None, 1, 0, 1],
+            "str": ["A", "B", None, None],
+            "datetime": [
+                datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+            ],
+        },
+        schema={
+            "float": pl.Float64,
+            "int": pl.Int64,
+            "str": pl.String,
+            "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+        },
+    )
+
+
+@pytest.fixture()
+def dataframe_empty() -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "float": [],
+            "int": [],
+            "str": [],
+            "datetime": [],
+        },
+        schema={
+            "float": pl.Float64,
+            "int": pl.Int64,
+            "str": pl.String,
+            "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+        },
     )
 
 
@@ -37,52 +66,52 @@ def dataframe() -> pd.DataFrame:
 ####################################################
 
 
-def test_column_temporal_null_value_section_str(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_str(dataframe: pl.DataFrame) -> None:
     assert str(
         ColumnTemporalNullValueSection(
             frame=dataframe,
             columns=["float", "int", "str"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         )
     ).startswith("ColumnTemporalNullValueSection(")
 
 
-def test_column_temporal_null_value_section_frame(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_frame(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert_frame_equal(section.frame, dataframe)
 
 
-def test_column_temporal_null_value_section_columns(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_columns(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert section.columns == ("float", "int", "str")
 
 
 @pytest.mark.parametrize("dt_column", ["datetime", "str"])
 def test_column_temporal_null_value_section_dt_column(
-    dataframe: pd.DataFrame, dt_column: str
+    dataframe: pl.DataFrame, dt_column: str
 ) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column=dt_column,
-        period="M",
+        period="1mo",
     )
     assert section.dt_column == dt_column
 
 
-@pytest.mark.parametrize("period", ["M", "D"])
-def test_column_temporal_null_value_section_period(dataframe: pd.DataFrame, period: str) -> None:
+@pytest.mark.parametrize("period", ["1mo", "D"])
+def test_column_temporal_null_value_section_period(dataframe: pl.DataFrame, period: str) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
@@ -93,12 +122,12 @@ def test_column_temporal_null_value_section_period(dataframe: pd.DataFrame, peri
 
 
 @pytest.mark.parametrize("ncols", [1, 2])
-def test_column_temporal_null_value_section_ncols(dataframe: pd.DataFrame, ncols: int) -> None:
+def test_column_temporal_null_value_section_ncols(dataframe: pl.DataFrame, ncols: int) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
         ncols=ncols,
     )
     assert section.ncols == ncols
@@ -106,116 +135,124 @@ def test_column_temporal_null_value_section_ncols(dataframe: pd.DataFrame, ncols
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_temporal_null_value_section_figsize(
-    dataframe: pd.DataFrame, figsize: tuple[float, float]
+    dataframe: pl.DataFrame, figsize: tuple[float, float]
 ) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
         figsize=figsize,
     )
     assert section.figsize == figsize
 
 
-def test_column_temporal_null_value_section_figsize_default(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_figsize_default(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert section.figsize == (7, 5)
 
 
-def test_column_temporal_null_value_section_get_statistics(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_get_statistics(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_temporal_null_value_section_get_statistics_empty_row() -> None:
+def test_column_temporal_null_value_section_get_statistics_empty_row(
+    dataframe_empty: pl.DataFrame,
+) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=dataframe_empty,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert objects_are_allclose(section.get_statistics(), {})
 
 
 def test_column_temporal_null_value_section_get_statistics_only_datetime_column() -> None:
     section = ColumnTemporalNullValueSection(
-        frame=pd.DataFrame(
+        frame=pl.DataFrame(
             {
-                "datetime": pd.to_datetime(
-                    ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                ),
-            }
+                "datetime": [
+                    datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+                ],
+            },
+            schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
         ),
         columns=[],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert objects_are_allclose(section.get_statistics(), {})
 
 
-def test_column_temporal_null_value_section_render_html_body(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_render_html_body(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
 def test_column_temporal_null_value_section_render_html_body_args(
-    dataframe: pd.DataFrame,
+    dataframe: pl.DataFrame,
 ) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
     )
 
 
-def test_column_temporal_null_value_section_render_html_body_empty() -> None:
+def test_column_temporal_null_value_section_render_html_body_empty(
+    dataframe_empty: pl.DataFrame,
+) -> None:
     section = ColumnTemporalNullValueSection(
-        frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+        frame=dataframe_empty,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_temporal_null_value_section_render_html_toc(dataframe: pd.DataFrame) -> None:
+def test_column_temporal_null_value_section_render_html_toc(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
 def test_column_temporal_null_value_section_render_html_toc_args(
-    dataframe: pd.DataFrame,
+    dataframe: pl.DataFrame,
 ) -> None:
     section = ColumnTemporalNullValueSection(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
@@ -227,26 +264,26 @@ def test_column_temporal_null_value_section_render_html_toc_args(
 #################################################
 
 
-def test_create_temporal_null_figure(dataframe: pd.DataFrame) -> None:
+def test_create_temporal_null_figure(dataframe: pl.DataFrame) -> None:
     assert isinstance(
         create_temporal_null_figure(
             frame=dataframe,
             columns=["float", "int", "str"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         ),
         str,
     )
 
 
 @pytest.mark.parametrize("ncols", [1, 2])
-def test_create_temporal_null_figure_ncols(dataframe: pd.DataFrame, ncols: int) -> None:
+def test_create_temporal_null_figure_ncols(dataframe: pl.DataFrame, ncols: int) -> None:
     assert isinstance(
         create_temporal_null_figure(
             frame=dataframe,
             columns=["float", "int", "str"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
             ncols=ncols,
         ),
         str,
@@ -258,23 +295,23 @@ def test_create_temporal_null_figure_ncols(dataframe: pd.DataFrame, ncols: int) 
 ##################################################
 
 
-def test_create_temporal_null_figures(dataframe: pd.DataFrame) -> None:
+def test_create_temporal_null_figures(dataframe: pl.DataFrame) -> None:
     figures = create_temporal_null_figures(
         frame=dataframe,
         columns=["float", "int", "str"],
         dt_column="datetime",
-        period="M",
+        period="1mo",
     )
     assert isinstance(figures, list)
     assert len(figures) == 3
 
 
-def test_create_temporal_null_figures_subset(dataframe: pd.DataFrame) -> None:
+def test_create_temporal_null_figures_subset(dataframe: pl.DataFrame) -> None:
     figures = create_temporal_null_figures(
         frame=dataframe,
         columns=["float", "int"],
         dt_column="datetime",
-        period="W",
+        period="1w",
     )
     assert isinstance(figures, list)
     assert len(figures) == 2
@@ -283,22 +320,22 @@ def test_create_temporal_null_figures_subset(dataframe: pd.DataFrame) -> None:
 def test_create_temporal_null_figures_empty() -> None:
     assert (
         create_temporal_null_figures(
-            frame=pd.DataFrame({}),
+            frame=pl.DataFrame({}),
             columns=[],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         )
         == []
     )
 
 
-def test_create_temporal_null_figures_empty_rows() -> None:
+def test_create_temporal_null_figures_empty_rows(dataframe_empty: pl.DataFrame) -> None:
     assert (
         create_temporal_null_figures(
-            frame=pd.DataFrame({"float": [], "int": [], "str": [], "datetime": []}),
+            frame=dataframe_empty,
             columns=["float", "int", "str"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         )
         == []
     )
@@ -376,81 +413,30 @@ def test_split_figures_by_column_empty_ncols_2() -> None:
     )
 
 
-#################################
-#    Tests for prepare_data     #
-#################################
-
-
-def test_prepare_data() -> None:
-    assert objects_are_equal(
-        prepare_data(
-            frame=pd.DataFrame(
-                {
-                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
-                    "datetime": pd.to_datetime(
-                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                    ),
-                }
-            ),
-            column="col",
-            dt_column="datetime",
-            period="M",
-        ),
-        (
-            np.array([0, 0, 1, 0]),
-            np.array([1, 1, 1, 1]),
-            ["2020-01", "2020-02", "2020-03", "2020-04"],
-        ),
-    )
-
-
-def test_prepare_data_empty() -> None:
-    assert objects_are_equal(
-        prepare_data(
-            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
-            column="col",
-            dt_column="datetime",
-            period="M",
-        ),
-        (
-            np.array([], dtype=int),
-            np.array([], dtype=int),
-            [],
-        ),
-    )
-
-
 #########################################
 #    Tests for create_table_section     #
 #########################################
 
 
-def test_create_table_section() -> None:
+def test_create_table_section(dataframe: pl.DataFrame) -> None:
     assert isinstance(
         create_table_section(
-            frame=pd.DataFrame(
-                {
-                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
-                    "datetime": pd.to_datetime(
-                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                    ),
-                }
-            ),
-            columns=["col"],
+            frame=dataframe,
+            columns=["float"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         ),
         str,
     )
 
 
-def test_create_table_section_empty() -> None:
+def test_create_table_section_empty(dataframe_empty: pl.DataFrame) -> None:
     assert (
         create_table_section(
-            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
-            columns=["col"],
+            frame=dataframe_empty,
+            columns=["float"],
             dt_column="datetime",
-            period="M",
+            period="1mo",
         )
         == ""
     )
@@ -461,32 +447,25 @@ def test_create_table_section_empty() -> None:
 ###############################################
 
 
-def test_create_temporal_null_table() -> None:
+def test_create_temporal_null_table(dataframe: pl.DataFrame) -> None:
     assert isinstance(
         create_temporal_null_table(
-            frame=pd.DataFrame(
-                {
-                    "col": np.array([1.2, 4.2, np.nan, 2.2]),
-                    "datetime": pd.to_datetime(
-                        ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-                    ),
-                }
-            ),
-            column="col",
+            frame=dataframe,
+            column="float",
             dt_column="datetime",
-            period="M",
+            period="1mo",
         ),
         str,
     )
 
 
-def test_create_temporal_null_table_empty() -> None:
+def test_create_temporal_null_table_empty(dataframe_empty: pl.DataFrame) -> None:
     assert (
         create_temporal_null_table(
-            frame=pd.DataFrame({"col": [], "datetime": pd.to_datetime([])}),
-            column="col",
+            frame=dataframe_empty,
+            column="float",
             dt_column="datetime",
-            period="M",
+            period="1mo",
         )
         == ""
     )

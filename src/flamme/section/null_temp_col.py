@@ -16,6 +16,7 @@ from matplotlib import pyplot as plt
 from flamme.plot import plot_null_temporal
 from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
+from flamme.section.null_temp import prepare_data
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -28,8 +29,7 @@ from flamme.utils.figure import figure2html
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import numpy as np
-    import pandas as pd
+    import polars as pl
 
 if is_tqdm_available():
     from tqdm import tqdm
@@ -58,18 +58,27 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
-    >>> import numpy as np
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import ColumnTemporalNullValueSection
-    >>> dataframe = pd.DataFrame(
+    >>> dataframe = pl.DataFrame(
     ...     {
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...         "datetime": pd.to_datetime(
-    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...         ),
-    ...     }
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "int": pl.Int64,
+    ...         "float": pl.Float64,
+    ...         "str": pl.String,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
     ... )
     >>> section = ColumnTemporalNullValueSection(
     ...     frame=dataframe, columns=["float", "int", "str"], dt_column="datetime", period="M"
@@ -90,7 +99,7 @@ class ColumnTemporalNullValueSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         columns: Sequence[str],
         dt_column: str,
         period: str,
@@ -119,7 +128,7 @@ class ColumnTemporalNullValueSection(BaseSection):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -210,7 +219,7 @@ The column <em>{{column}}</em> is used as the temporal column.
 
 
 def create_temporal_null_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -252,7 +261,7 @@ def create_temporal_null_figure(
 
 
 def create_temporal_null_figures(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     columns: Sequence[str],
     dt_column: str,
     period: str,
@@ -283,7 +292,7 @@ def create_temporal_null_figures(
         ax.set_title(f"column: {column}")
 
         nulls, totals, labels = prepare_data(
-            frame=frame, column=column, dt_column=dt_column, period=period
+            frame=frame, columns=[column], dt_column=dt_column, period=period
         )
         plot_null_temporal(ax=ax, labels=labels, nulls=nulls, totals=totals)
         readable_xticklabels(ax, max_num_xticks=50)
@@ -300,7 +309,7 @@ def add_column_to_figure(columns: Sequence[str], figures: Sequence[str]) -> list
         figures: The HTML representations of each figure.
 
     Returns:
-        The updated HTML representations of each figure.
+        The uplated HTML representations of each figure.
 
     Raises:
         RuntimeError: if the number of column names is different from
@@ -335,80 +344,10 @@ def split_figures_by_column(figures: Sequence[str], ncols: int) -> list[str]:
     return cols
 
 
-def prepare_data(
-    frame: pd.DataFrame,
-    column: str,
-    dt_column: str,
-    period: str,
-) -> tuple[np.ndarray, np.ndarray, list]:
-    r"""Prepare the data to create the figure and table.
-
-    Args:
-        frame: The DataFrame to analyze.
-        column: The column to analyze.
-        dt_column: The datetime column used to analyze
-            the temporal distribution.
-        period: The temporal period e.g. monthly or
-            daily.
-
-    Returns:
-        A tuple with 3 values. The first value is a numpy NDArray
-            that contains the number of null values per period. The
-            second value is a numpy NDArray that contains the total
-            number of values. The third value is a list that contains
-            the label of each period.
-
-    Example usage:
-
-    ```pycon
-
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> from flamme.section.null_temp_col import prepare_data
-    >>> nulls, totals, labels = prepare_data(
-    ...     frame=pd.DataFrame(
-    ...         {
-    ...             "col": np.array([np.nan, 1, 0, 1]),
-    ...             "datetime": pd.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
-    ...     ),
-    ...     column="col",
-    ...     dt_column="datetime",
-    ...     period="M",
-    ... )
-    >>> nulls
-    array([1, 0, 0, 0])
-    >>> totals
-    array([1, 1, 1, 1])
-    >>> labels
-    ['2020-01', '2020-02', '2020-03', '2020-04']
-
-    ```
-    """
-    dataframe = frame[[column, dt_column]].copy()
-    dt_col = "__datetime__"
-    dataframe[dt_col] = (
-        dataframe[dt_column]
-        .apply(lambda x: x.replace(tzinfo=None))
-        .dt.to_period(period)
-        .astype(str)
-    )
-
-    null_col = f"__{column}_isna__"
-    dataframe.loc[:, null_col] = dataframe.loc[:, column].isna()
-
-    nulls = dataframe.groupby(dt_col)[null_col].sum().sort_index()
-    totals = dataframe.groupby(dt_col)[null_col].count().sort_index()
-    labels = [str(dt) for dt in nulls.index]
-    return nulls.to_numpy().astype(int), totals.to_numpy().astype(int), labels
-
-
 def create_table_section(
-    frame: pd.DataFrame, columns: Sequence[str], dt_column: str, period: str
+    frame: pl.DataFrame, columns: Sequence[str], dt_column: str, period: str
 ) -> str:
-    r"""Create a HTML representation of a table with the temporal
+    r"""Return a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
@@ -445,9 +384,9 @@ def create_table_section(
 
 
 def create_temporal_null_table(
-    frame: pd.DataFrame, column: str, dt_column: str, period: str
+    frame: pl.DataFrame, column: str, dt_column: str, period: str
 ) -> str:
-    r"""Create a HTML representation of a table with the temporal
+    r"""Return a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:
@@ -464,7 +403,7 @@ def create_temporal_null_table(
     if frame.shape[0] == 0:
         return ""
     nulls, totals, labels = prepare_data(
-        frame=frame, column=column, dt_column=dt_column, period=period
+        frame=frame, columns=[column], dt_column=dt_column, period=period
     )
     rows = []
     for label, null, total in zip(labels, nulls, totals):
@@ -495,7 +434,7 @@ def create_temporal_null_table(
 
 
 def create_temporal_null_table_row(label: str, null: int, total: int) -> str:
-    r"""Create the HTML code of a new table row.
+    r"""Return the HTML code of a new table row.
 
     Args:
         label: The label of the row.

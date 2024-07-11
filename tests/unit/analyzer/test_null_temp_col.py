@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import polars as pl
 import pytest
 from coola import objects_are_equal
-from pandas.testing import assert_frame_equal
+from polars.testing import assert_frame_equal
 
 from flamme.analyzer import ColumnTemporalNullValueAnalyzer
 from flamme.section import ColumnTemporalNullValueSection, EmptySection
@@ -47,7 +47,7 @@ def test_column_temporal_null_value_analyzer_str() -> None:
 
 def test_column_temporal_null_value_analyzer_frame(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(dataframe)
-    assert_frame_equal(section.frame, dataframe.to_pandas())
+    assert_frame_equal(section.frame, dataframe)
 
 
 def test_column_temporal_null_value_analyzer_columns_none(dataframe: pl.DataFrame) -> None:
