@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from types import NoneType
-
 import numpy as np
 import pandas as pd
 import polars as pl
@@ -101,7 +99,7 @@ def test_series_types_empty() -> None:
         (float, "float"),
         (int, "int"),
         (str, "str"),
-        (NoneType, "NoneType"),
+        (type(None), "NoneType"),
         (pd.Timestamp, "pandas.Timestamp"),
         (np.ndarray, "numpy.ndarray"),
     ],
