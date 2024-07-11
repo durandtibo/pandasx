@@ -28,22 +28,25 @@ class TableOfContentSection(BaseSection):
     ```pycon
 
     >>> import pandas as pd
+    >>> import polars as pl
     >>> import numpy as np
     >>> from flamme.section import TableOfContentSection, DuplicatedRowSection
     >>> section = TableOfContentSection(
     ...     DuplicatedRowSection(
-    ...         frame=pd.DataFrame(
+    ...         frame=pl.DataFrame(
     ...             {
-    ...                 "col1": np.array([1.2, 4.2, 4.2, 2.2]),
-    ...                 "col2": np.array([1, 1, 1, 1]),
-    ...                 "col3": np.array([1, 2, 2, 2]),
-    ...             }
+    ...                 "col1": [1.2, 4.2, 4.2, 2.2],
+    ...                 "col2": [1, 1, 1, 1],
+    ...                 "col3": [1, 2, 2, 2],
+    ...             },
+    ...             schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ...         )
     ...     )
     ... )
     >>> section
     TableOfContentSection(
       (section): DuplicatedRowSection(
+          (frame): (4, 3)
           (columns): None
           (figsize): None
         )
