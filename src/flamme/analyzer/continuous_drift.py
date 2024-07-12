@@ -7,6 +7,7 @@ __all__ = ["ColumnContinuousTemporalDriftAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+import polars as pl
 from coola.utils import repr_indent, repr_mapping
 
 from flamme.analyzer.base import BaseAnalyzer
@@ -118,7 +119,9 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(self, frame: pd.DataFrame) -> ColumnContinuousTemporalDriftSection | EmptySection:
+    def analyze(
+        self, frame: pd.DataFrame | pl.DataFrame
+    ) -> ColumnContinuousTemporalDriftSection | EmptySection:
         logger.info(f"Analyzing the temporal drift of {self._column}")
         for column in [self._column, self._dt_column]:
             if column not in frame:
@@ -133,6 +136,8 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
                 f"({self._column}) is the column to analyze"
             )
             return EmptySection()
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
+            frame = frame.to_pandas()
         return ColumnContinuousTemporalDriftSection(
             frame=frame,
             column=self._column,

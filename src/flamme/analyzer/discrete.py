@@ -8,6 +8,8 @@ import logging
 from collections import Counter
 from typing import TYPE_CHECKING
 
+import polars as pl
+
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import (
     ColumnDiscreteSection,
@@ -79,7 +81,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             f"figsize={self._figsize})"
         )
 
-    def analyze(self, frame: pd.DataFrame) -> ColumnDiscreteSection | EmptySection:
+    def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> ColumnDiscreteSection | EmptySection:
         logger.info(f"Analyzing the discrete distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -87,6 +89,8 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
                 f"because it is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
+            frame = frame.to_pandas()
         return ColumnDiscreteSection(
             counter=Counter(frame[self._column].value_counts(dropna=self._dropna).to_dict()),
             null_values=frame[self._column].isna().sum(),
@@ -155,7 +159,9 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: pd.DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
+    def analyze(
+        self, frame: pd.DataFrame | pl.DataFrame
+    ) -> ColumnTemporalDiscreteSection | EmptySection:
         logger.info(
             f"Analyzing the temporal discrete distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
@@ -173,6 +179,8 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
                 f"({self._column}) is the column to analyze"
             )
             return EmptySection()
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
+            frame = frame.to_pandas()
         return ColumnTemporalDiscreteSection(
             column=self._column,
             frame=frame,

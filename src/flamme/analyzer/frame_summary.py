@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataFrameSummarySection
+import polars as pl
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -55,8 +56,10 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(top={self._top:,}, sort={self._sort})"
 
-    def analyze(self, frame: pd.DataFrame) -> DataFrameSummarySection:
+    def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> DataFrameSummarySection:
         logger.info("Analyzing the DataFrame...")
+        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
+            frame = frame.to_pandas()
         if self._sort:
             frame = frame.reindex(sorted(frame.columns), axis=1)
         return DataFrameSummarySection(frame=frame, top=self._top)
