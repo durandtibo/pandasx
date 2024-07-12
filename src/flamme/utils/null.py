@@ -2,7 +2,7 @@ r"""Contain utility functions to analyze data with null values."""
 
 from __future__ import annotations
 
-__all__ = ["compute_null_count", "compute_col_null", "compute_temporal_null"]
+__all__ = ["compute_null_count", "compute_null", "compute_temporal_null_count"]
 
 from typing import TYPE_CHECKING
 
@@ -15,42 +15,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
 
-def compute_null_count(frame: pl.DataFrame) -> np.ndarray:
-    r"""Return the number of null values in each column.
-
-    Args:
-        frame: The DataFrame to analyze.
-
-    Returns:
-        An array with the number of null values in each column.
-            The shape of the array is the number of columns.
-
-    Example usage:
-
-    ```pycon
-
-    >>> import polars as pl
-    >>> from flamme.utils.null import compute_null_count
-    >>> frame = pl.DataFrame(
-    ...     {
-    ...         "int": [None, 1, 0, 1],
-    ...         "float": [1.2, 4.2, None, 2.2],
-    ...         "str": ["A", "B", None, None],
-    ...     },
-    ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
-    ... )
-    >>> count = compute_null_count(frame)
-    >>> count
-    array([1, 1, 2])
-
-    ```
-    """
-    if (ncols := frame.shape[1]) == 0:
-        return np.zeros(ncols, dtype=np.int64)
-    return frame.null_count().to_numpy()[0].astype(int)
-
-
-def compute_col_null(frame: pl.DataFrame) -> pl.DataFrame:
+def compute_null(frame: pl.DataFrame) -> pl.DataFrame:
     r"""Return the number and percentage of null values per column.
 
     Args:
@@ -65,8 +30,8 @@ def compute_col_null(frame: pl.DataFrame) -> pl.DataFrame:
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.utils.null import compute_col_null
-    >>> frame = compute_col_null(
+    >>> from flamme.utils.null import compute_null
+    >>> frame = compute_null(
     ...     pl.DataFrame(
     ...         {
     ...             "int": [None, 1, 0, 1],
@@ -105,7 +70,42 @@ def compute_col_null(frame: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def compute_temporal_null(
+def compute_null_count(frame: pl.DataFrame) -> np.ndarray:
+    r"""Return the number of null values in each column.
+
+    Args:
+        frame: The DataFrame to analyze.
+
+    Returns:
+        An array with the number of null values in each column.
+            The shape of the array is the number of columns.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.utils.null import compute_null_count
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
+    ... )
+    >>> count = compute_null_count(frame)
+    >>> count
+    array([1, 1, 2])
+
+    ```
+    """
+    if (ncols := frame.shape[1]) == 0:
+        return np.zeros(ncols, dtype=np.int64)
+    return frame.null_count().to_numpy()[0].astype(int)
+
+
+def compute_temporal_null_count(
     frame: pl.DataFrame,
     columns: Sequence[str],
     dt_column: str,
@@ -133,8 +133,8 @@ def compute_temporal_null(
 
     >>> from datetime import datetime, timezone
     >>> import polars as pl
-    >>> from flamme.utils.null import compute_temporal_null
-    >>> nulls, totals, labels = compute_temporal_null(
+    >>> from flamme.utils.null import compute_temporal_null_count
+    >>> nulls, totals, labels = compute_temporal_null_count(
     ...     frame=pl.DataFrame(
     ...         {
     ...             "col1": [None, float("nan"), 0.0, 1.0],
