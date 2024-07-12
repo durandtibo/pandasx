@@ -57,14 +57,6 @@ class ChoiceAnalyzer(BaseAnalyzer):
     ...     },
     ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
-    >>> section = analyzer.analyze(frame)
-    >>> section
-    NullValueSection(
-      (columns): ('float', 'int', 'str')
-      (null_count): array([1, 1, 2])
-      (total_count): array([4, 4, 4])
-      (figsize): None
-    )
 
     ```
     """

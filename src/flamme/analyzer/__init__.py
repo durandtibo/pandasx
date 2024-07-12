@@ -25,6 +25,7 @@ __all__ = [
     "TableOfContentAnalyzer",
     "TemporalNullValueAnalyzer",
     "TemporalRowCountAnalyzer",
+    "TransformAnalyzer",
     "is_analyzer_config",
     "setup_analyzer",
 ]
@@ -55,3 +56,4 @@ from flamme.analyzer.null import NullValueAnalyzer
 from flamme.analyzer.null_temp import TemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.toc import TableOfContentAnalyzer
+from flamme.analyzer.transform import TransformAnalyzer
