@@ -6,16 +6,15 @@ from __future__ import annotations
 __all__ = ["DataTypeAnalyzer"]
 
 import logging
-
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
 from flamme.utils.dtype2 import frame_types
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import polars as pl
     import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 

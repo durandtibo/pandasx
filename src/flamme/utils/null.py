@@ -46,7 +46,7 @@ def compute_null_count(frame: pl.DataFrame) -> np.ndarray:
     ```
     """
     if (ncols := frame.shape[1]) == 0:
-        return np.zeros(ncols, dtype=int)
+        return np.zeros(ncols, dtype=np.int64)
     return frame.null_count().to_numpy()[0].astype(int)
 
 
