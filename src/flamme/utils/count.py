@@ -2,14 +2,14 @@ r"""Contain utility functions for counting."""
 
 from __future__ import annotations
 
-__all__ = ["compute_unique_count", "row_temporal_count"]
+__all__ = ["compute_nunique", "compute_temporal_count"]
 
 import numpy as np
 import polars as pl
 from grizz.utils.period import period_to_strftime_format
 
 
-def compute_unique_count(frame: pl.DataFrame) -> np.ndarray:
+def compute_nunique(frame: pl.DataFrame) -> np.ndarray:
     r"""Return the number of unique values in each column.
 
     Args:
@@ -24,7 +24,7 @@ def compute_unique_count(frame: pl.DataFrame) -> np.ndarray:
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.utils.count import compute_unique_count
+    >>> from flamme.utils.count import compute_nunique
     >>> frame = pl.DataFrame(
     ...     {
     ...         "int": [None, 1, 0, 1],
@@ -33,7 +33,7 @@ def compute_unique_count(frame: pl.DataFrame) -> np.ndarray:
     ...     },
     ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
     ... )
-    >>> count = compute_unique_count(frame)
+    >>> count = compute_nunique(frame)
     >>> count
     array([3, 4, 3])
 
@@ -44,7 +44,7 @@ def compute_unique_count(frame: pl.DataFrame) -> np.ndarray:
     return frame.select(pl.all().n_unique()).to_numpy()[0].astype(np.int64)
 
 
-def row_temporal_count(
+def compute_temporal_count(
     frame: pl.DataFrame,
     dt_column: str,
     period: str,
@@ -66,8 +66,8 @@ def row_temporal_count(
 
     >>> from datetime import datetime, timezone
     >>> import polars as pl
-    >>> from flamme.utils.count import row_temporal_count
-    >>> counts, labels = row_temporal_count(
+    >>> from flamme.utils.count import compute_temporal_count
+    >>> counts, labels = compute_temporal_count(
     ...     frame=pl.DataFrame(
     ...         {
     ...             "col1": [None, float("nan"), 0.0, 1.0, 4.2, 42.0],

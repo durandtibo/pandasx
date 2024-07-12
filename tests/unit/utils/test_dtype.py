@@ -26,7 +26,7 @@ def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     frame = pd.DataFrame(
         {
             "col_float": np.arange(nrows, dtype=float) + 0.5,
-            "col_int": np.arange(nrows, dtype=int),
+            "col_int": np.arange(nrows, dtype=np.int64),
             "col_str": [f"a{i}" for i in range(nrows)],
         }
     )

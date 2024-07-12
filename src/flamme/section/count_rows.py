@@ -20,7 +20,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.count import row_temporal_count
+from flamme.utils.count import compute_temporal_count
 from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
@@ -197,7 +197,7 @@ def create_temporal_count_figure(
     if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because there is no data"
 
-    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
+    counts, labels = compute_temporal_count(frame=frame, dt_column=dt_column, period=period)
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=labels, height=counts, color="tab:blue")
     ax.set_ylabel("number of rows")
@@ -221,7 +221,7 @@ def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str
     """
     if frame.shape[0] == 0:
         return ""
-    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
+    counts, labels = compute_temporal_count(frame=frame, dt_column=dt_column, period=period)
     rows = [
         create_temporal_count_table_row(label=label, num_rows=num_rows)
         for label, num_rows in zip(labels, counts)

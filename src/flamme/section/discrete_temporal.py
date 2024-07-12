@@ -218,7 +218,7 @@ def create_temporal_figure(
     labels = mixed_typed_sort(frame.columns.tolist())
     num_labels = len(labels)
     steps = frame.index.tolist()
-    x = np.arange(len(steps), dtype=int)
+    x = np.arange(len(steps), dtype=np.int64)
     bottom = np.zeros_like(x)
     width = 0.9 if len(steps) < 50 else 1
     fig, ax = plt.subplots(figsize=figsize)
