@@ -36,7 +36,6 @@ class ChoiceAnalyzer(BaseAnalyzer):
     >>> import polars as pl
     >>> from flamme.analyzer import (
     ...     ChoiceAnalyzer,
-    ...     FilteredAnalyzer,
     ...     NullValueAnalyzer,
     ...     DuplicatedRowAnalyzer,
     ... )
