@@ -34,7 +34,6 @@ class MappingAnalyzer(BaseAnalyzer):
 
     >>> import polars as pl
     >>> from flamme.analyzer import (
-    ...     FilteredAnalyzer,
     ...     NullValueAnalyzer,
     ...     DuplicatedRowAnalyzer,
     ...     MappingAnalyzer,
