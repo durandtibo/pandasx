@@ -2,11 +2,46 @@ r"""Contain utility functions for counting."""
 
 from __future__ import annotations
 
-__all__ = ["row_temporal_count"]
+__all__ = ["compute_unique_count", "row_temporal_count"]
 
 import numpy as np
 import polars as pl
 from grizz.utils.period import period_to_strftime_format
+
+
+def compute_unique_count(frame: pl.DataFrame) -> np.ndarray:
+    r"""Return the number of unique values in each column.
+
+    Args:
+        frame: The DataFrame to analyze.
+
+    Returns:
+        An array with the number of unique values in each column.
+            The shape of the array is the number of columns.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.utils.count import compute_unique_count
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
+    ... )
+    >>> count = compute_unique_count(frame)
+    >>> count
+    array([3, 4, 3])
+
+    ```
+    """
+    if (ncols := frame.shape[1]) == 0:
+        return np.zeros(ncols, dtype=np.int64)
+    return frame.select(pl.all().n_unique()).to_numpy()[0].astype(np.int64)
 
 
 def row_temporal_count(
