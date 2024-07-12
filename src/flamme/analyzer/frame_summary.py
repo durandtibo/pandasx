@@ -7,9 +7,10 @@ __all__ = ["DataFrameSummaryAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
+import polars as pl
+
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataFrameSummarySection
-import polars as pl
 
 if TYPE_CHECKING:
     import pandas as pd
