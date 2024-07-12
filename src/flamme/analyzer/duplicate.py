@@ -8,13 +8,13 @@ __all__ = ["DuplicatedRowAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
-import pandas as pd
-import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DuplicatedRowSection
 
 if TYPE_CHECKING:
+    import polars as pl
+    import pandas as pd
     from collections.abc import Sequence
 
 
@@ -72,6 +72,4 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
 
     def analyze(self, frame: pl.DataFrame | pd.DataFrame) -> DuplicatedRowSection:
         logger.info(f"Analyzing the duplicated rows section using the columns: {self._columns}")
-        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
-            frame = pl.from_pandas(frame)
         return DuplicatedRowSection(frame=frame, columns=self._columns, figsize=self._figsize)
