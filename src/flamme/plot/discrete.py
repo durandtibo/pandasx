@@ -27,7 +27,7 @@ def bar_discrete(
     Args:
         ax: The axes of the matplotlib figure to update.
         names: The name of the values to plot.
-        counts: The number of value occurences.
+        counts: The number of value occurrences.
         yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
             on the distribution.
