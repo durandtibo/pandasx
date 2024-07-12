@@ -23,7 +23,7 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
-from flamme.utils.null import compute_temporal_null
+from flamme.utils.null import compute_temporal_null_count
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -229,7 +229,7 @@ def create_temporal_null_figure(
     if frame.shape[0] == 0:
         return ""
 
-    nulls, totals, labels = compute_temporal_null(
+    nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
 
@@ -257,7 +257,7 @@ def create_temporal_null_table(
     """
     if frame.shape[0] == 0:
         return ""
-    nulls, totals, labels = compute_temporal_null(
+    nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
     rows = []
