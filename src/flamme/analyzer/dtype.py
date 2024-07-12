@@ -7,12 +7,15 @@ __all__ = ["DataTypeAnalyzer"]
 
 import logging
 
-import pandas as pd
-import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
 from flamme.utils.dtype2 import frame_types
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import polars as pl
+    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +55,4 @@ class DataTypeAnalyzer(BaseAnalyzer):
 
     def analyze(self, frame: pl.DataFrame | pd.DataFrame) -> DataTypeSection:
         logger.info("Analyzing the data types...")
-        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
-            frame = pl.from_pandas(frame)
         return DataTypeSection(dtypes=dict(frame.schema), types=frame_types(frame))

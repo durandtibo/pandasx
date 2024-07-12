@@ -11,7 +11,7 @@ from flamme.section import MarkdownSection
 from flamme.utils.imports import check_markdown
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 
 class MarkdownAnalyzer(BaseAnalyzer):
@@ -24,13 +24,19 @@ class MarkdownAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import MarkdownAnalyzer
     >>> analyzer = MarkdownAnalyzer(desc="hello cats!")
     >>> analyzer
     MarkdownAnalyzer()
-    >>> frame = pd.DataFrame({})
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
+    ... )
     >>> section = analyzer.analyze(frame)
 
     ```
@@ -43,5 +49,5 @@ class MarkdownAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: pd.DataFrame) -> MarkdownSection:  # noqa: ARG002
+    def analyze(self, frame: pl.DataFrame) -> MarkdownSection:  # noqa: ARG002
         return MarkdownSection(desc=self._desc)

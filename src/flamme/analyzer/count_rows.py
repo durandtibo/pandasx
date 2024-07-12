@@ -12,7 +12,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import EmptySection, TemporalRowCountSection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -32,20 +32,26 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.analyzer import TemporalRowCountAnalyzer
-    >>> analyzer = TemporalRowCountAnalyzer(dt_column="datetime", period="M")
+    >>> analyzer = TemporalRowCountAnalyzer(dt_column="datetime", period="1mo")
     >>> analyzer
-    TemporalRowCountAnalyzer(dt_column=datetime, period=M, figsize=None)
-    >>> frame = pd.DataFrame(
+    TemporalRowCountAnalyzer(dt_column=datetime, period=1mo, figsize=None)
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "datetime": pd.to_datetime(
-    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...         ),
-    ...     }
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    TemporalRowCountSection(dt_column=datetime, period=1mo, figsize=None)
 
     ```
     """
@@ -66,7 +72,7 @@ class TemporalRowCountAnalyzer(BaseAnalyzer):
             f"period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(self, frame: pd.DataFrame) -> TemporalRowCountSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> TemporalRowCountSection | EmptySection:
         logger.info(
             f"Analyzing the number of rows | "
             f"datetime column: {self._dt_column} | period: {self._period}"

@@ -89,8 +89,7 @@ class Reporter(BaseReporter):
         logger.info("Ingesting the DataFrame...")
         frame = self._ingestor.ingest()
         logger.info(f"Transforming the DataFrame {frame.shape}...")
-        # TODO (tibo): remove after transition to polars  # noqa: TD003
-        frame = self._transformer.transform(frame).to_pandas()
+        frame = self._transformer.transform(frame)
         logger.info(f"Analyzing the DataFrame {frame.shape}...")
         section = self._analyzer.analyze(frame)
         logger.info("Creating the HTML report...")

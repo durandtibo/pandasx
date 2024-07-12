@@ -17,7 +17,6 @@ __all__ = [
     "DataFrameSummaryAnalyzer",
     "DataTypeAnalyzer",
     "DuplicatedRowAnalyzer",
-    "FilteredAnalyzer",
     "MappingAnalyzer",
     "MarkdownAnalyzer",
     "MostFrequentValuesAnalyzer",
@@ -25,6 +24,7 @@ __all__ = [
     "TableOfContentAnalyzer",
     "TemporalNullValueAnalyzer",
     "TemporalRowCountAnalyzer",
+    "TransformAnalyzer",
     "is_analyzer_config",
     "setup_analyzer",
 ]
@@ -46,7 +46,6 @@ from flamme.analyzer.discrete import (
 )
 from flamme.analyzer.dtype import DataTypeAnalyzer
 from flamme.analyzer.duplicate import DuplicatedRowAnalyzer
-from flamme.analyzer.filter import FilteredAnalyzer
 from flamme.analyzer.frame_summary import DataFrameSummaryAnalyzer
 from flamme.analyzer.mapping import MappingAnalyzer
 from flamme.analyzer.markdown import MarkdownAnalyzer
@@ -55,3 +54,4 @@ from flamme.analyzer.null import NullValueAnalyzer
 from flamme.analyzer.null_temp import TemporalNullValueAnalyzer
 from flamme.analyzer.null_temp_col import ColumnTemporalNullValueAnalyzer
 from flamme.analyzer.toc import TableOfContentAnalyzer
+from flamme.analyzer.transform import TransformAnalyzer

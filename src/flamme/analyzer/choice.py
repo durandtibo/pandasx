@@ -14,7 +14,7 @@ from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 
 if TYPE_CHECKING:
 
-    import pandas as pd
+    import polars as pl
 
     from flamme.section import BaseSection
 
@@ -33,11 +33,9 @@ class ChoiceAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import (
     ...     ChoiceAnalyzer,
-    ...     FilteredAnalyzer,
     ...     NullValueAnalyzer,
     ...     DuplicatedRowAnalyzer,
     ... )
@@ -50,20 +48,14 @@ class ChoiceAnalyzer(BaseAnalyzer):
       (null): NullValueAnalyzer(figsize=None)
       (duplicate): DuplicatedRowAnalyzer(columns=None, figsize=None)
     )
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
-    >>> section = analyzer.analyze(frame)
-    >>> section.__class__.__qualname__
-    NullValueSection
-    >>> frame = pd.DataFrame({"col": np.arange(10)})
-    >>> section = analyzer.analyze(frame)
-    >>> section.__class__.__qualname__
-    DuplicatedRowSection
 
     ```
     """
@@ -71,7 +63,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
     def __init__(
         self,
         analyzers: Mapping[str, BaseAnalyzer | dict],
-        selection_fn: Callable[[pd.DataFrame], str],
+        selection_fn: Callable[[pl.DataFrame], str],
     ) -> None:
         self._analyzers = {name: setup_analyzer(analyzer) for name, analyzer in analyzers.items()}
         self._selection_fn = selection_fn
@@ -83,7 +75,7 @@ class ChoiceAnalyzer(BaseAnalyzer):
     def analyzers(self) -> dict[str, BaseAnalyzer]:
         return self._analyzers
 
-    def analyze(self, frame: pd.DataFrame) -> BaseSection:
+    def analyze(self, frame: pl.DataFrame) -> BaseSection:
         analyzer = self._analyzers[self._selection_fn(frame)]
         return analyzer.analyze(frame)
 
@@ -105,15 +97,17 @@ class NumUniqueSelection(Callable):
     ```pycon
 
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer.choice import NumUniqueSelection
-    >>> selection = NumUniqueSelection(column='col')
+    >>> selection = NumUniqueSelection(column="col")
     >>> selection
     NumUniqueSelection(column=col, threshold=100, small=small, large=large)
-    >>> selection(pd.DataFrame({'col': np.arange(10)}))
+    >>> selection(pl.DataFrame({"col": np.arange(10)}))
     small
-    >>> selection(pd.DataFrame({'col': np.arange(1000)}))
+    >>> selection(pl.DataFrame({"col": np.arange(1000)}))
     large
+
+    ```
     """
 
     def __init__(
@@ -130,6 +124,6 @@ class NumUniqueSelection(Callable):
             f"small={self._small}, large={self._large})"
         )
 
-    def __call__(self, frame: pd.DataFrame) -> str:
-        nunique = frame[self._column].nunique()
+    def __call__(self, frame: pl.DataFrame) -> str:
+        nunique = frame[self._column].n_unique()
         return self._small if nunique <= self._threshold else self._large

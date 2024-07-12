@@ -6,14 +6,17 @@ from __future__ import annotations
 __all__ = ["NullValueAnalyzer"]
 
 import logging
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
-import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import NullValueSection
 from flamme.utils.null import compute_null_count
+
+if TYPE_CHECKING:
+    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -62,8 +65,6 @@ class NullValueAnalyzer(BaseAnalyzer):
 
     def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> NullValueSection:
         logger.info("Analyzing the null value distribution of all columns...")
-        if isinstance(frame, pd.DataFrame):  # TODO (tibo): remove later  # noqa: TD003
-            frame = pl.from_pandas(frame)
         nrows, ncols = frame.shape
         return NullValueSection(
             columns=list(frame.columns),

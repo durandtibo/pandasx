@@ -20,12 +20,13 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.count import row_temporal_count
 from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -47,28 +48,28 @@ class TemporalRowCountSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import TemporalRowCountSection
     >>> section = TemporalRowCountSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "datetime": pd.to_datetime(
-    ...                 [
-    ...                     "2020-01-03",
-    ...                     "2020-01-04",
-    ...                     "2020-01-05",
-    ...                     "2020-02-03",
-    ...                     "2020-03-03",
-    ...                     "2020-04-03",
-    ...                 ]
-    ...             )
-    ...         }
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ]
+    ...         },
+    ...         schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ...     ),
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
-    TemporalRowCountSection(dt_column=datetime, period=M, figsize=None)
+    TemporalRowCountSection(dt_column=datetime, period=1mo, figsize=None)
     >>> section.get_statistics()
     {}
 
@@ -77,7 +78,7 @@ class TemporalRowCountSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         dt_column: str,
         period: str,
         figsize: tuple[float, float] | None = None,
@@ -100,7 +101,7 @@ class TemporalRowCountSection(BaseSection):
         )
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         r"""The DataFrame to analyze."""
         return self._frame
 
@@ -158,8 +159,7 @@ class TemporalRowCountSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -175,7 +175,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 
 
 def create_temporal_count_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
@@ -197,7 +197,7 @@ def create_temporal_count_figure(
     if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because there is no data"
 
-    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
+    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=labels, height=counts, color="tab:blue")
     ax.set_ylabel("number of rows")
@@ -206,7 +206,7 @@ def create_temporal_count_figure(
     return figure2html(fig, close_fig=True)
 
 
-def create_temporal_count_table(frame: pd.DataFrame, dt_column: str, period: str) -> str:
+def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str) -> str:
     r"""Return a HTML representation of a figure with number of rows per
     temporal windows.
 
@@ -221,13 +221,13 @@ def create_temporal_count_table(frame: pd.DataFrame, dt_column: str, period: str
     """
     if frame.shape[0] == 0:
         return ""
-    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
-    rows = []
-    for label, num_rows in zip(labels, counts):
-        rows.append(create_temporal_count_table_row(label=label, num_rows=num_rows))
+    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
+    rows = [
+        create_temporal_count_table_row(label=label, num_rows=num_rows)
+        for label, num_rows in zip(labels, counts)
+    ]
     return Template(
-        """
-<details>
+        """<details>
     <summary>[show statistics per temporal period]</summary>
 
     <p>The following table shows some statistics for each period.
@@ -267,35 +267,3 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
             "num_rows": f"{num_rows:,}",
         }
     )
-
-
-def prepare_data(
-    frame: pd.DataFrame,
-    dt_column: str,
-    period: str,
-) -> tuple[list[int], list[str]]:
-    r"""Prepare the data to create the figure and table.
-
-    Args:
-        frame: The DataFrame to analyze.
-        dt_column: The datetime column used to analyze
-            the temporal distribution.
-        period: The temporal period e.g. monthly or daily.
-
-    Returns:
-        A tuple with the counts and the temporal window labels.
-    """
-    if frame.shape[0] == 0:
-        return [], []
-
-    frame = frame[[dt_column]].copy()
-    columns = frame.columns.tolist()
-    dt_col = "__datetime__"
-    frame[dt_col] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
-    )
-
-    frame_count = frame.groupby(dt_col)[columns].size()
-    count = frame_count.to_numpy().astype(int).tolist()
-    labels = [str(dt) for dt in frame_count.index]
-    return count, labels
