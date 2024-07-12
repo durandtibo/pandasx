@@ -22,7 +22,6 @@ from flamme.utils.dtype2 import compact_type_name
 from flamme.utils.null import compute_null_count
 
 if TYPE_CHECKING:
-    from polars import DataType
     from collections.abc import Sequence
 
     import polars as pl
@@ -88,7 +87,7 @@ class DataFrameSummarySection(BaseSection):
     def get_nunique(self) -> tuple[int, ...]:
         return tuple(self._frame.n_unique().astype(int).tolist())
 
-    def get_column_types(self) -> tuple[DataType, ...]:
+    def get_column_types(self) -> tuple[pl.DataType, ...]:
         return tuple(self._frame.schema.dtypes())
 
     def get_most_frequent_values(self, top: int = 5) -> tuple[tuple[tuple[Any, int], ...], ...]:

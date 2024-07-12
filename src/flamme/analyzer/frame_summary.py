@@ -27,7 +27,6 @@ class DataFrameSummaryAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
     >>> import polars as pl
     >>> from flamme.analyzer import DataFrameSummaryAnalyzer
     >>> analyzer = DataFrameSummaryAnalyzer()

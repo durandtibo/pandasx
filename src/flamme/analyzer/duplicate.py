@@ -8,14 +8,14 @@ __all__ = ["DuplicatedRowAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
-
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DuplicatedRowSection
 
 if TYPE_CHECKING:
-    import polars as pl
-    import pandas as pd
     from collections.abc import Sequence
+
+    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,6 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
     >>> import polars as pl
     >>> from flamme.analyzer import DuplicatedRowAnalyzer
     >>> analyzer = DuplicatedRowAnalyzer()
