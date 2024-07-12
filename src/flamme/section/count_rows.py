@@ -20,6 +20,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.count import row_temporal_count
 from flamme.utils.figure import figure2html
 
 if TYPE_CHECKING:
@@ -196,7 +197,7 @@ def create_temporal_count_figure(
     if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because there is no data"
 
-    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
+    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=labels, height=counts, color="tab:blue")
     ax.set_ylabel("number of rows")
@@ -220,10 +221,11 @@ def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str
     """
     if frame.shape[0] == 0:
         return ""
-    counts, labels = prepare_data(frame=frame, dt_column=dt_column, period=period)
-    rows = []
-    for label, num_rows in zip(labels, counts):
-        rows.append(create_temporal_count_table_row(label=label, num_rows=num_rows))
+    counts, labels = row_temporal_count(frame=frame, dt_column=dt_column, period=period)
+    rows = [
+        create_temporal_count_table_row(label=label, num_rows=num_rows)
+        for label, num_rows in zip(labels, counts)
+    ]
     return Template(
         """<details>
     <summary>[show statistics per temporal period]</summary>
@@ -265,35 +267,3 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
             "num_rows": f"{num_rows:,}",
         }
     )
-
-
-def prepare_data(
-    frame: pl.DataFrame,
-    dt_column: str,
-    period: str,
-) -> tuple[list[int], list[str]]:
-    r"""Prepare the data to create the figure and table.
-
-    Args:
-        frame: The DataFrame to analyze.
-        dt_column: The datetime column used to analyze
-            the temporal distribution.
-        period: The temporal period e.g. monthly or daily.
-
-    Returns:
-        A tuple with the counts and the temporal window labels.
-    """
-    if frame.shape[0] == 0:
-        return [], []
-
-    frame = frame[[dt_column]].copy()
-    columns = frame.columns.tolist()
-    dt_col = "__datetime__"
-    frame[dt_col] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
-    )
-
-    frame_count = frame.groupby(dt_col)[columns].size()
-    count = frame_count.to_numpy().astype(int).tolist()
-    labels = [str(dt) for dt in frame_count.index]
-    return count, labels

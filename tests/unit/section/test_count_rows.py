@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 import polars as pl
 import pytest
-from coola import objects_are_allclose, objects_are_equal
+from coola import objects_are_allclose
 from jinja2 import Template
 from polars.testing import assert_frame_equal
 
@@ -12,7 +12,6 @@ from flamme.section import TemporalRowCountSection
 from flamme.section.count_rows import (
     create_temporal_count_figure,
     create_temporal_count_table,
-    prepare_data,
 )
 
 
@@ -115,7 +114,10 @@ def test_column_temporal_row_count_section_get_statistics(dataframe: pl.DataFram
 
 def test_column_temporal_row_count_section_get_statistics_empty_row() -> None:
     section = TemporalRowCountSection(
-        frame=pl.DataFrame({"col1": [], "col2": [], "datetime": []}),
+        frame=pl.DataFrame(
+            {"datetime": []},
+            schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+        ),
         dt_column="datetime",
         period="1mo",
     )
@@ -144,7 +146,10 @@ def test_column_temporal_row_count_section_render_html_body_args(dataframe: pl.D
 
 def test_column_temporal_row_count_section_render_html_body_empty_rows() -> None:
     section = TemporalRowCountSection(
-        frame=pl.DataFrame({"col1": [], "col2": [], "datetime": []}),
+        frame=pl.DataFrame(
+            {"datetime": []},
+            schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+        ),
         dt_column="datetime",
         period="1mo",
     )
@@ -182,7 +187,10 @@ def test_create_temporal_count_table(dataframe: pl.DataFrame) -> None:
 def test_create_temporal_count_table_empty() -> None:
     assert isinstance(
         create_temporal_count_table(
-            frame=pl.DataFrame({"col1": [], "col2": [], "datetime": pl.to_datetime([])}),
+            frame=pl.DataFrame(
+                {"datetime": []},
+                schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+            ),
             dt_column="datetime",
             period="1mo",
         ),
@@ -212,30 +220,4 @@ def test_create_temporal_count_figure_empty() -> None:
             frame=pl.DataFrame({"datetime": []}), dt_column="datetime", period="1mo"
         ),
         str,
-    )
-
-
-#################################
-#    Tests for prepare_data     #
-#################################
-
-
-def test_prepare_data(dataframe: pl.DataFrame) -> None:
-    assert objects_are_equal(
-        prepare_data(
-            frame=dataframe,
-            dt_column="datetime",
-            period="1mo",
-        ),
-        (
-            [3, 1, 1, 1],
-            ["2020-01", "2020-02", "2020-03", "2020-04"],
-        ),
-    )
-
-
-def test_prepare_data_empty() -> None:
-    assert objects_are_equal(
-        prepare_data(frame=pl.DataFrame({"datetime": []}), dt_column="datetime", period="1mo"),
-        ([], []),
     )
