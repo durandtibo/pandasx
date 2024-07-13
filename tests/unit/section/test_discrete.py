@@ -67,6 +67,7 @@ def test_column_discrete_section_get_statistics() -> None:
         section.get_statistics(),
         {
             "most_common": [("c", 6), ("a", 4), ("b", 2)],
+            "null_values": 0,
             "nunique": 3,
             "total": 12,
         },
@@ -77,7 +78,7 @@ def test_column_discrete_section_get_statistics_empty_row() -> None:
     section = ColumnDiscreteSection(counter=Counter({"a": 0, "b": 0, "c": 0}), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
-        {"most_common": [], "nunique": 0, "total": 0},
+        {"most_common": [], "null_values": 0, "nunique": 0, "total": 0},
     )
 
 
@@ -85,7 +86,7 @@ def test_column_discrete_section_get_statistics_empty_column() -> None:
     section = ColumnDiscreteSection(counter=Counter({}), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
-        {"most_common": [], "nunique": 0, "total": 0},
+        {"most_common": [], "null_values": 0, "nunique": 0, "total": 0},
     )
 
 

@@ -62,9 +62,10 @@ def test_column_discrete_analyzer_analyze() -> None:
         )
     )
     assert isinstance(section, ColumnDiscreteSection)
-    stats = section.get_statistics()
-    assert stats["nunique"] == 3
-    assert stats["total"] == 4
+    assert objects_are_equal(
+        section.get_statistics(),
+        {"most_common": [(1, 2), (None, 1), (0, 1)], "null_values": 1, "nunique": 3, "total": 4},
+    )
 
 
 def test_column_discrete_analyzer_analyze_drop_nulls_true() -> None:
@@ -80,7 +81,7 @@ def test_column_discrete_analyzer_analyze_drop_nulls_true() -> None:
     assert isinstance(section, ColumnDiscreteSection)
     assert objects_are_equal(
         section.get_statistics(),
-        {"most_common": [(1, 2), (0, 1)], "nunique": 2, "total": 3},
+        {"most_common": [(1, 2), (0, 1)], "null_values": 0, "nunique": 2, "total": 3},
     )
 
 
@@ -90,7 +91,7 @@ def test_column_discrete_analyzer_analyze_empty_no_row() -> None:
     )
     assert isinstance(section, ColumnDiscreteSection)
     assert objects_are_equal(
-        section.get_statistics(), {"most_common": [], "nunique": 0, "total": 0}
+        section.get_statistics(), {"most_common": [], "null_values": 0, "nunique": 0, "total": 0}
     )
 
 

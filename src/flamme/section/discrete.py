@@ -6,6 +6,7 @@ from __future__ import annotations
 __all__ = [
     "ColumnDiscreteSection",
     "create_histogram",
+    "create_histogram_section",
     "create_section_template",
     "create_table",
     "create_table_row",
@@ -122,6 +123,7 @@ class ColumnDiscreteSection(BaseSection):
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
         return {
             "most_common": most_common,
+            "null_values": self._null_values,
             "nunique": len(most_common),
             "total": self._total,
         }
