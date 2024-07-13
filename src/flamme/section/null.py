@@ -3,7 +3,13 @@ values."""
 
 from __future__ import annotations
 
-__all__ = ["NullValueSection"]
+__all__ = [
+    "NullValueSection",
+    "create_section_template",
+    "create_table",
+    "create_table_row",
+    "create_bar_figure",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -138,7 +144,7 @@ class NullValueSection(BaseSection):
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info("Rendering the null value distribution of all columns...")
         frame = self._get_dataframe()
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -157,9 +163,41 @@ class NullValueSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_bar_figure(self, frame: pl.DataFrame) -> str:
+        frame = frame.sort(by=["null", "column"])
+        fig = create_bar_figure(
+            columns=frame["column"].to_list(),
+            null_count=frame["null"].to_list(),
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+    def _create_table(self, frame: pl.DataFrame, sort_by: str) -> str:
+        return create_table(frame.sort(by=sort_by))
+
+    def _get_dataframe(self) -> pl.DataFrame:
+        return pl.DataFrame(
+            {"column": self._columns, "null": self._null_count, "total": self._total_count},
+            schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
+        )
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -199,24 +237,6 @@ In the following histogram, the columns are sorted by ascending order of null va
 
 <p style="margin-top: 1rem;">
 """
-
-    def _create_bar_figure(self, frame: pl.DataFrame) -> str:
-        frame = frame.sort(by=["null", "column"])
-        fig = create_bar_figure(
-            columns=frame["column"].to_list(),
-            null_count=frame["null"].to_list(),
-            figsize=self._figsize,
-        )
-        return figure2html(fig, close_fig=True)
-
-    def _create_table(self, frame: pl.DataFrame, sort_by: str) -> str:
-        return create_table(frame.sort(by=sort_by))
-
-    def _get_dataframe(self) -> pl.DataFrame:
-        return pl.DataFrame(
-            {"column": self._columns, "null": self._null_count, "total": self._total_count},
-            schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
-        )
 
 
 def create_bar_figure(
@@ -261,6 +281,30 @@ def create_bar_figure(
 
 
 def create_table(frame: pl.DataFrame) -> str:
+    r"""Create a HTML representation of a table with the temporal
+    distribution of null values.
+
+    Args:
+        frame: The DataFrame to analyze.
+
+    Returns:
+        The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.null import create_table
+    >>> frame = pl.DataFrame(
+    ...     {"column": ["A", "B", "C"], "null": [0, 1, 2], "total": [4, 4, 4]},
+    ...     schema={"column": pl.String, "null": pl.Int64, "total": pl.Int64},
+    ... )
+    >>> table = create_table(frame=frame)
+
+    ```
+    """
     rows = [
         create_table_row(column=column, null_count=null, total_count=total)
         for column, null, total in zip(
@@ -270,20 +314,19 @@ def create_table(frame: pl.DataFrame) -> str:
         )
     ]
     return Template(
-        """
-<table class="table table-hover table-responsive w-auto" >
-<thead class="thead table-group-divider">
-    <tr>
-        <th>column</th>
-        <th>null pct</th>
-        <th>null count</th>
-        <th>total count</th>
-    </tr>
-</thead>
-<tbody class="tbody table-group-divider">
-    {{rows}}
-    <tr class="table-group-divider"></tr>
-</tbody>
+        """<table class="table table-hover table-responsive w-auto" >
+    <thead class="thead table-group-divider">
+        <tr>
+            <th>column</th>
+            <th>null pct</th>
+            <th>null count</th>
+            <th>total count</th>
+        </tr>
+    </thead>
+    <tbody class="tbody table-group-divider">
+        {{rows}}
+        <tr class="table-group-divider"></tr>
+    </tbody>
 </table>
 """
     ).render({"rows": "\n".join(rows)})
