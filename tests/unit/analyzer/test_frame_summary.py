@@ -36,23 +36,28 @@ def test_column_type_analyzer_get_statistics(dataframe: pl.DataFrame) -> None:
         section.get_statistics(),
         {
             "columns": ("col1", "col2", "col3"),
+            "dtypes": (pl.Float64(), pl.Int64(), pl.String()),
             "null_count": (1, 0, 2),
-            "nunique": (5, 2, 5),
-            "column_types": ({float}, {int}, {float, str, type(None)}),
+            "nunique": (5, 2, 4),
         },
     )
 
 
 def test_column_type_analyzer_get_statistics_empty_rows() -> None:
-    section = DataFrameSummaryAnalyzer().analyze(pl.DataFrame({"col1": [], "col2": [], "col3": []}))
+    section = DataFrameSummaryAnalyzer().analyze(
+        pl.DataFrame(
+            {"col1": [], "col2": [], "col3": []},
+            schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.String},
+        )
+    )
     assert isinstance(section, DataFrameSummarySection)
     assert objects_are_equal(
         section.get_statistics(),
         {
             "columns": ("col1", "col2", "col3"),
+            "dtypes": (pl.Float64(), pl.Int64(), pl.String()),
             "null_count": (0, 0, 0),
             "nunique": (0, 0, 0),
-            "column_types": (set(), set(), set()),
         },
     )
 
@@ -62,12 +67,7 @@ def test_column_type_analyzer_get_statistics_empty_no_column() -> None:
     assert isinstance(section, DataFrameSummarySection)
     assert objects_are_equal(
         section.get_statistics(),
-        {
-            "columns": (),
-            "null_count": (),
-            "nunique": (),
-            "column_types": (),
-        },
+        {"columns": (), "dtypes": (), "null_count": (), "nunique": ()},
     )
 
 
@@ -99,8 +99,8 @@ def test_column_type_analyzer_sort() -> None:
         section.get_statistics(),
         {
             "columns": ("col1", "col2", "col3"),
+            "dtypes": (pl.Float64(), pl.Int64(), pl.String()),
             "null_count": (1, 0, 2),
-            "nunique": (5, 2, 5),
-            "column_types": ({float}, {int}, {float, str, type(None)}),
+            "nunique": (5, 2, 4),
         },
     )

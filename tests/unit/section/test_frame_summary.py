@@ -98,18 +98,32 @@ def test_dataframe_summary_section_get_most_frequent_values_empty() -> None:
 def test_dataframe_summary_section_get_statistics(dataframe: pl.DataFrame) -> None:
     assert DataFrameSummarySection(dataframe).get_statistics() == {
         "columns": ("float", "int", "str"),
+        "dtypes": (pl.Float64(), pl.Int64(), pl.String()),
         "null_count": (1, 0, 2),
         "nunique": (5, 2, 4),
+    }
+
+
+def test_dataframe_summary_section_get_statistics_empty_rows() -> None:
+    assert DataFrameSummarySection(
+        pl.DataFrame(
+            {"float": [], "int": [], "str": []},
+            schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
+        )
+    ).get_statistics() == {
+        "columns": ("float", "int", "str"),
         "dtypes": (pl.Float64(), pl.Int64(), pl.String()),
+        "null_count": (0, 0, 0),
+        "nunique": (0, 0, 0),
     }
 
 
 def test_dataframe_summary_section_get_statistics_empty() -> None:
     assert DataFrameSummarySection(pl.DataFrame({})).get_statistics() == {
         "columns": (),
+        "dtypes": (),
         "null_count": (),
         "nunique": (),
-        "dtypes": (),
     }
 
 
