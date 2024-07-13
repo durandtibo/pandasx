@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+import matplotlib.pyplot as plt
 import polars as pl
 import pytest
 from coola import objects_are_allclose
@@ -10,8 +11,10 @@ from polars.testing import assert_frame_equal
 
 from flamme.section import TemporalNullValueSection
 from flamme.section.null_temp import (
+    create_section_template,
     create_temporal_null_figure,
     create_temporal_null_table,
+    create_temporal_null_table_row,
 )
 
 
@@ -187,6 +190,15 @@ def test_temporal_null_value_section_render_html_toc_args(dataframe: pl.DataFram
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 ################################################
 #    Tests for create_temporal_null_figure     #
 ################################################
@@ -197,7 +209,7 @@ def test_create_temporal_null_figure(dataframe: pl.DataFrame) -> None:
         create_temporal_null_figure(
             frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="1mo"
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -209,7 +221,7 @@ def test_create_temporal_null_figure_empty(dataframe_empty: pl.DataFrame) -> Non
             dt_column="datetime",
             period="1mo",
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -237,3 +249,12 @@ def test_create_temporal_null_table_empty(dataframe_empty: pl.DataFrame) -> None
         ),
         str,
     )
+
+
+###################################################
+#    Tests for create_temporal_null_table_row     #
+###################################################
+
+
+def test_create_temporal_null_table_row() -> None:
+    assert isinstance(create_temporal_null_table_row(label="meow", num_nulls=5, total=42), str)

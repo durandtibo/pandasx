@@ -505,8 +505,7 @@ def create_table_section(
         )
         tables.append(f'<p style="margin-top: 1rem;">\n\n{table}\n')
     return Template(
-        """
-<details>
+        """<details>
     <summary>[show statistics per temporal period]</summary>
 
     <p style="margin-top: 1rem;">
