@@ -51,7 +51,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     >>> section = analyzer.analyze(frame)
     >>> section
     ColumnDiscreteSection(
-      (null_values): 4
+      (null_values): 2
       (column): str
       (yscale): auto
       (max_rows): 20
@@ -95,7 +95,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             series = series.drop_nulls()
         return ColumnDiscreteSection(
             counter=Counter(series.to_list()),
-            null_values=frame.null_count().sum_horizontal().item(),
+            null_values=series.null_count(),
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
