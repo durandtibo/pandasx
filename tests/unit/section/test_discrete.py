@@ -5,9 +5,16 @@ from collections import Counter
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
+from matplotlib import pyplot as plt
 
 from flamme.section import ColumnDiscreteSection
-from flamme.section.discrete import create_histogram
+from flamme.section.discrete import (
+    create_histogram,
+    create_histogram_section,
+    create_section_template,
+    create_table,
+    create_table_row,
+)
 
 ###########################################
 #     Tests for ColumnDiscreteSection     #
@@ -111,6 +118,40 @@ def test_column_discrete_section_render_html_toc_args() -> None:
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
+##############################################
+#     Tests for create_histogram_section     #
+##############################################
+
+
+def test_create_histogram_section() -> None:
+    assert isinstance(
+        create_histogram_section(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col"), str
+    )
+
+
+def test_create_histogram_section_empty() -> None:
+    assert isinstance(create_histogram_section(counter=Counter({}), column="col"), str)
+
+
+@pytest.mark.parametrize("yscale", ["auto", "linear", "log"])
+def test_create_histogram_section_yscale(yscale: str) -> None:
+    assert isinstance(
+        create_histogram_section(
+            counter=Counter({"a": 4, "b": 2, "c": 6}), column="col", yscale=yscale
+        ),
+        str,
+    )
+
+
 ######################################
 #     Tests for create_histogram     #
 ######################################
@@ -118,21 +159,46 @@ def test_column_discrete_section_render_html_toc_args() -> None:
 
 def test_create_histogram() -> None:
     assert isinstance(
-        create_histogram(column="col", labels=["a", "b", "c"], counts=[5, 2, 100]), str
+        create_histogram(column="col", names=["a", "b", "c"], counts=[5, 2, 100]), plt.Figure
     )
 
 
-@pytest.mark.parametrize("yscale", ["linear", "log"])
+@pytest.mark.parametrize("yscale", ["auto", "linear", "log"])
 def test_create_histogram_yscale(yscale: str) -> None:
     assert isinstance(
-        create_histogram(column="col", labels=["a", "b", "c"], counts=[5, 2, 100], yscale=yscale),
-        str,
+        create_histogram(column="col", names=["a", "b", "c"], counts=[5, 2, 100], yscale=yscale),
+        plt.Figure,
     )
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_figsize(figsize: tuple[float, float]) -> None:
     assert isinstance(
-        create_histogram(column="col", labels=["a", "b", "c"], counts=[5, 2, 100], figsize=figsize),
-        str,
+        create_histogram(column="col", names=["a", "b", "c"], counts=[5, 2, 100], figsize=figsize),
+        plt.Figure,
+    )
+
+
+##################################
+#     Tests for create_table     #
+##################################
+
+
+def test_create_table() -> None:
+    assert isinstance(create_table(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col"), str)
+
+
+def test_create_table_empty() -> None:
+    assert isinstance(create_table(counter=Counter({}), column="col"), str)
+
+
+######################################
+#     Tests for create_table_row     #
+######################################
+
+
+def test_create_table_row() -> None:
+    assert (
+        create_table_row(column="col", count=5)
+        == '<tr><th>col</th><td style="text-align: right;">5</td></tr>'
     )
