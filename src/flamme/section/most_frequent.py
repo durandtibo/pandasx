@@ -210,6 +210,8 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
 
     ```
     """
+    pct = 100 * count / total if total > 0 else float("nan")
+    cum_percentage = 100 * cumcount / total if total > 0 else float("nan")
     return Template(
         """<tr>
     <th>{{value}}</th>
@@ -222,7 +224,7 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
             "num_style": 'style="text-align: right;"',
             "value": value,
             "count": f"{count:,}",
-            "percentage": f"{100 * count / total:.2f}",
-            "cum_percentage": f"{100 * cumcount / total:.2f}",
+            "percentage": f"{pct:.2f}",
+            "cum_percentage": f"{cum_percentage:.2f}",
         }
     )

@@ -100,8 +100,8 @@ def test_create_table_empty() -> None:
 
 
 def test_create_table_row() -> None:
-    assert isinstance(create_table_row(Counter({"a": 4, "b": 2, "c": 6})), str)
+    assert isinstance(create_table_row(value="A", count=5, total=101, cumcount=42), str)
 
 
 def test_create_table_row_empty() -> None:
-    assert isinstance(create_table_row(Counter({})), str)
+    assert isinstance(create_table_row(value="A", count=0, total=0, cumcount=0), str)
