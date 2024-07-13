@@ -8,13 +8,11 @@ import logging
 from collections import Counter
 from typing import TYPE_CHECKING
 
-import polars as pl
-
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnDiscreteSection, EmptySection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +22,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
 
     Args:
         column: The column to analyze.
-        dropna: If ``True``, the NaN values are not included in the
+        drop_nulls: If ``True``, the NaN values are not included in the
             analysis.
         max_rows: The maximum number of rows to show in the
             table.
@@ -38,23 +36,22 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnDiscreteAnalyzer
     >>> analyzer = ColumnDiscreteAnalyzer(column="str")
     >>> analyzer
-    ColumnDiscreteAnalyzer(column=str, dropna=False, max_rows=20, yscale=auto, figsize=None)
-    >>> frame = pd.DataFrame(
+    ColumnDiscreteAnalyzer(column=str, drop_nulls=False, max_rows=20, yscale=auto, figsize=None)
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
     ...     }
     ... )
     >>> section = analyzer.analyze(frame)
     >>> section
     ColumnDiscreteSection(
-      (null_values): 2
+      (null_values): 4
       (column): str
       (yscale): auto
       (max_rows): 20
@@ -67,13 +64,13 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     def __init__(
         self,
         column: str,
-        dropna: bool = False,
+        drop_nulls: bool = False,
         max_rows: int = 20,
         yscale: str = "auto",
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
-        self._dropna = bool(dropna)
+        self._drop_nulls = bool(drop_nulls)
         self._max_rows = max_rows
         self._yscale = yscale
         self._figsize = figsize
@@ -81,11 +78,11 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
-            f"dropna={self._dropna}, max_rows={self._max_rows}, yscale={self._yscale}, "
+            f"drop_nulls={self._drop_nulls}, max_rows={self._max_rows}, yscale={self._yscale}, "
             f"figsize={self._figsize})"
         )
 
-    def analyze(self, frame: pd.DataFrame | pl.DataFrame) -> ColumnDiscreteSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnDiscreteSection | EmptySection:
         logger.info(f"Analyzing the discrete distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -93,11 +90,12 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
                 f"because it is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
+        series = frame[self._column]
+        if self._drop_nulls:
+            series = series.drop_nulls()
         return ColumnDiscreteSection(
-            counter=Counter(frame[self._column].value_counts(dropna=self._dropna).to_dict()),
-            null_values=frame[self._column].isna().sum().item(),
+            counter=Counter(series.to_list()),
+            null_values=frame.null_count().sum_horizontal().item(),
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
