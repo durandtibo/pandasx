@@ -8,12 +8,7 @@ import pandas as pd
 import pytest
 from iden.io import save_text
 
-from flamme.utils.path import (
-    find_files,
-    find_parquet_files,
-    human_file_size,
-    sanitize_path,
-)
+from flamme.utils.path import find_files, find_parquet_files, human_file_size
 
 #####################################
 #     Tests for human_file_size     #
@@ -30,31 +25,6 @@ def test_human_file_size_2kb() -> None:
     with patch("flamme.utils.path.sanitize_path", sanitize_mock):
         assert human_file_size(path) == "2.00 KB"
         sanitize_mock.assert_called_once_with(path)
-
-
-###################################
-#     Tests for sanitize_path     #
-###################################
-
-
-def test_sanitize_path_empty_str() -> None:
-    assert sanitize_path("") == Path.cwd()
-
-
-def test_sanitize_path_str() -> None:
-    assert sanitize_path("something") == Path.cwd().joinpath("something")
-
-
-def test_sanitize_path_path(tmp_path: Path) -> None:
-    assert sanitize_path(tmp_path) == tmp_path
-
-
-def test_sanitize_path_resolve() -> None:
-    assert sanitize_path(Path("something/./../")) == Path.cwd()
-
-
-def test_sanitize_path_uri() -> None:
-    assert sanitize_path("file:///my/path/something/./../") == Path("/my/path")
 
 
 ################################

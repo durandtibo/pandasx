@@ -9,9 +9,9 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
+from coola.utils.path import sanitize_path
 
 from flamme.reporter.base import BaseReporter, setup_reporter
-from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
     from pathlib import Path

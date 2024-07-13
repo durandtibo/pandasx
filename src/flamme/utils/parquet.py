@@ -8,9 +8,9 @@ __all__ = ["get_dtypes", "get_table_schema"]
 from typing import TYPE_CHECKING
 
 import pyarrow as pa
+from coola.utils.path import sanitize_path
 
 from flamme.utils.dtype import get_dtypes_from_schema
-from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
     from pathlib import Path

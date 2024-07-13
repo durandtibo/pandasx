@@ -30,7 +30,7 @@ def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
     >>> import numpy as np
     >>> from flamme.utils.stats import compute_statistics_continuous
     >>> compute_statistics_continuous(np.arange(101))
-    {'mean': 50.0, 'std': 29.30...,
+    {'mean': 50.0, 'std': 29.15...,
      'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
      'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
      'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1}
