@@ -3,7 +3,7 @@ values."""
 
 from __future__ import annotations
 
-__all__ = ["DuplicatedRowSection"]
+__all__ = ["DuplicatedRowSection", "create_section_template", "create_duplicate_table"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -114,7 +114,7 @@ class DuplicatedRowSection(BaseSection):
         logger.info(f"Rendering the duplicated rows section using the columns: {self._columns}")
         stats = self.get_statistics()
         columns = self._frame.columns if self._columns is None else self._columns
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -134,8 +134,23 @@ class DuplicatedRowSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.duplicate import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """
 <h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
@@ -164,8 +179,6 @@ def create_duplicate_table(num_rows: int, num_unique_rows: int) -> str:
 
     ```pycon
 
-    >>> import polars as pl
-    >>> import numpy as np
     >>> from flamme.section.duplicate import create_duplicate_table
     >>> table = create_duplicate_table(num_rows=10, num_unique_rows=5)
 
