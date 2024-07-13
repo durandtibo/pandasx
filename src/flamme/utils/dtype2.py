@@ -92,7 +92,8 @@ def compact_type_name(typ: type) -> str:
 
     >>> import polars as pl
     >>> from flamme.utils.dtype2 import compact_type_name
-    >>> compact_type_name(int)
+    >>> name = compact_type_name(int)
+    >>> name
     int
 
     ```

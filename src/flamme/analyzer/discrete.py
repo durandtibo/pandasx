@@ -56,6 +56,14 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     ...     }
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    ColumnDiscreteSection(
+      (null_values): 2
+      (column): str
+      (yscale): auto
+      (max_rows): 20
+      (figsize): None
+    )
 
     ```
     """
@@ -93,7 +101,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
             frame = frame.to_pandas()
         return ColumnDiscreteSection(
             counter=Counter(frame[self._column].value_counts(dropna=self._dropna).to_dict()),
-            null_values=frame[self._column].isna().sum(),
+            null_values=frame[self._column].isna().sum().item(),
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
@@ -137,6 +145,13 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     ...     }
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    ColumnTemporalDiscreteSection(
+      (column): str
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
 
     ```
     """

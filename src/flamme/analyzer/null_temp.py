@@ -63,6 +63,13 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
     ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    TemporalNullValueSection(
+      (columns): ('col',)
+      (dt_column): datetime
+      (period): M
+      (figsize): None
+    )
 
     ```
     """

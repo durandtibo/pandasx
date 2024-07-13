@@ -38,6 +38,8 @@ class MarkdownAnalyzer(BaseAnalyzer):
     ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    MarkdownSection()
 
     ```
     """
