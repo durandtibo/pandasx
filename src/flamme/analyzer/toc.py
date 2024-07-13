@@ -49,6 +49,15 @@ class TableOfContentAnalyzer(BaseAnalyzer):
     ...     schema={"col1": pl.Float64, "col2": pl.Int64, "col3": pl.Int64},
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    TableOfContentSection(
+      (section): DuplicatedRowSection(
+          (frame): (4, 3)
+          (columns): None
+          (figsize): None
+        )
+      (max_toc_depth): 1
+    )
 
     ```
     """

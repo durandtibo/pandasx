@@ -40,10 +40,8 @@ from flamme.analyzer.continuous import (
 from flamme.analyzer.continuous_advanced import ColumnContinuousAdvancedAnalyzer
 from flamme.analyzer.continuous_drift import ColumnContinuousTemporalDriftAnalyzer
 from flamme.analyzer.count_rows import TemporalRowCountAnalyzer
-from flamme.analyzer.discrete import (
-    ColumnDiscreteAnalyzer,
-    ColumnTemporalDiscreteAnalyzer,
-)
+from flamme.analyzer.discrete import ColumnDiscreteAnalyzer
+from flamme.analyzer.discrete_temp import ColumnTemporalDiscreteAnalyzer
 from flamme.analyzer.dtype import DataTypeAnalyzer
 from flamme.analyzer.duplicate import DuplicatedRowAnalyzer
 from flamme.analyzer.frame_summary import DataFrameSummaryAnalyzer

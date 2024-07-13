@@ -7,10 +7,10 @@ __all__ = ["ParquetSchemaReader"]
 import logging
 from typing import TYPE_CHECKING
 
+from coola.utils.path import sanitize_path
 from pyarrow.parquet import read_schema
 
 from flamme.schema.reader.base import BaseSchemaReader
-from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
     from pathlib import Path

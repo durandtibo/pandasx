@@ -2,16 +2,17 @@ r"""Contain utility functions to manage paths."""
 
 from __future__ import annotations
 
-__all__ = ["find_files", "find_parquet_files", "human_file_size", "sanitize_path"]
+__all__ = ["find_files", "find_parquet_files", "human_file_size"]
 
-from pathlib import Path
 from typing import TYPE_CHECKING
-from urllib.parse import unquote, urlparse
+
+from coola.utils.path import sanitize_path
 
 from flamme.utils.format import human_byte
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from pathlib import Path
 
 
 def human_file_size(path: Path | str, decimal: int = 2) -> str:
@@ -35,38 +36,6 @@ def human_file_size(path: Path | str, decimal: int = 2) -> str:
     ```
     """
     return human_byte(size=sanitize_path(path).stat().st_size, decimal=decimal)
-
-
-def sanitize_path(path: Path | str) -> Path:
-    r"""Sanitize a given path.
-
-    Args:
-        path: The path to sanitize.
-
-    Returns:
-        The sanitized path.
-
-    Example usage:
-
-    ```pycon
-
-    >>> from pathlib import Path
-    >>> from flamme.utils.path import sanitize_path
-    >>> sanitize_path("something")
-    PosixPath('.../something')
-    >>> sanitize_path("")
-    PosixPath('...')
-    >>> sanitize_path(Path("something"))
-    PosixPath('.../something')
-    >>> sanitize_path(Path("something/./../"))
-    PosixPath('...')
-
-    ```
-    """
-    if isinstance(path, str):
-        # Use urlparse to parse file URI: https://stackoverflow.com/a/15048213
-        path = Path(unquote(urlparse(path).path))
-    return path.expanduser().resolve()
 
 
 def find_files(

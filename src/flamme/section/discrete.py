@@ -3,17 +3,23 @@ discrete values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnDiscreteSection"]
+__all__ = [
+    "ColumnDiscreteSection",
+    "create_histogram",
+    "create_histogram_section",
+    "create_section_template",
+    "create_table",
+    "create_table_row",
+]
 
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
-from flamme.plot.utils import readable_xticklabels
+from flamme.plot import bar_discrete
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -64,7 +70,7 @@ class ColumnDiscreteSection(BaseSection):
       (figsize): None
     )
     >>> section.get_statistics()
-    {'most_common': [('c', 6), ('a', 4), ('b', 2)], 'nunique': 3, 'total': 12}
+    {'most_common': [('c', 6), ('a', 4), ('b', 2)], 'null_values': 0, 'nunique': 3, 'total': 12}
 
     ```
     """
@@ -117,6 +123,7 @@ class ColumnDiscreteSection(BaseSection):
         most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
         return {
             "most_common": most_common,
+            "null_values": self._null_values,
             "nunique": len(most_common),
             "total": self._total,
         }
@@ -127,7 +134,7 @@ class ColumnDiscreteSection(BaseSection):
         null_values_pct = (
             f"{100 * self._null_values / stats['total']:.2f}" if stats["total"] > 0 else "N/A"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -139,8 +146,17 @@ class ColumnDiscreteSection(BaseSection):
                 "unique_values": f"{stats['nunique']:,}",
                 "null_values": f"{self._null_values:,}",
                 "null_values_pct": null_values_pct,
-                "figure": self._create_figure(),
-                "table": self._create_table(),
+                "figure": create_histogram_section(
+                    counter=self._counter,
+                    column=self._column,
+                    yscale=self._yscale,
+                    figsize=self._figsize,
+                ),
+                "table": create_table(
+                    column=self._column,
+                    counter=self._counter,
+                    max_rows=self._max_rows,
+                ),
             }
         )
 
@@ -149,9 +165,23 @@ class ColumnDiscreteSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.discrete import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -159,9 +189,9 @@ class ColumnDiscreteSection(BaseSection):
 This section analyzes the discrete distribution of values for column <em>{{column}}</em>.
 
 <ul>
-  <li> total values: {{total_values}} </li>
-  <li> number of unique values: {{unique_values}} </li>
-  <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
+<li> total values: {{total_values}} </li>
+<li> number of unique values: {{unique_values}} </li>
+<li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
 </ul>
 
 {{figure}}
@@ -169,43 +199,136 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 <p style="margin-top: 1rem;">
 """
 
-    def _create_figure(self) -> str:
-        if self._total == 0:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
-        most_common = [(value, count) for value, count in self._counter.most_common() if count > 0]
-        fig = create_histogram(
-            column=self._column,
-            labels=[str(value) for value, _ in most_common],
-            counts=[count for _, count in most_common],
-            yscale=self._yscale,
-            figsize=self._figsize,
-        )
-        return Template(
-            r"""
-<p style="margin-top: 1rem;">
+
+def create_histogram_section(
+    counter: Counter,
+    column: str = "N/A",
+    yscale: str = "auto",
+    figsize: tuple[float, float] | None = None,
+) -> str:
+    r"""Return the histogram section.
+
+    Args:
+        counter: The counter that represents the discrete
+            distribution.
+        column: The column name.
+        yscale: The y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'`` scale is chosen based on the
+            distribution.
+        figsize: The figure size in inches. The first
+            dimension is the width and the second is the height.
+
+    Returns:
+        The histogram section.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from collections import Counter
+    >>> from flamme.section.discrete import create_histogram_section
+    >>> section = create_histogram_section(
+    ...     counter=Counter({"a": 4, "b": 2, "c": 6}), column="col"
+    ... )
+
+    ```
+    """
+    if sum(counter.values()) == 0:
+        return "<span>&#9888;</span> No figure is generated because the column is empty"
+    most_common = [(value, count) for value, count in counter.most_common() if count > 0]
+    fig = create_histogram(
+        column=column,
+        names=[str(value) for value, _ in most_common],
+        counts=[count for _, count in most_common],
+        yscale=yscale,
+        figsize=figsize,
+    )
+    return Template(
+        r"""<p style="margin-top: 1rem;">
 <b>Distribution of values in column {{column}}</b>
 
 <p>The values in the figure below are sorted by decreasing order of number of occurrences.
 
 {{figure}}
 """
-        ).render({"figure": fig, "column": self._column})
+    ).render({"figure": figure2html(fig, close_fig=True), "column": column})
 
-    def _create_table(self) -> str:
-        if self._total == 0:
-            return "<span>&#9888;</span> No table is generated because the column is empty"
 
-        most_common = self._counter.most_common(self._max_rows)
-        rows_head = "\n".join(
-            [create_table_row(column=col, count=count) for col, count in most_common]
-        )
-        lest_common = self._counter.most_common()[-self._max_rows :][::-1]
-        rows_tail = "\n".join(
-            [create_table_row(column=col, count=count) for col, count in lest_common]
-        )
-        return Template(
-            """
-<details>
+def create_histogram(
+    column: str,
+    names: Sequence,
+    counts: Sequence[int],
+    yscale: str = "auto",
+    figsize: tuple[float, float] | None = None,
+) -> plt.Figure:
+    r"""Return a figure with the histogram of discrete values.
+
+    Args:
+        column: The column name.
+        names: The name of the values to plot.
+        counts: The number of value occurrences.
+        yscale: The y-axis scale. If ``'auto'``, the
+            ``'linear'`` or ``'log'/'symlog'`` scale is chosen based
+            on the distribution.
+        figsize: The figure size in inches. The first
+            dimension is the width and the second is the height.
+
+    Returns:
+        The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.discrete import create_histogram
+    >>> fig = create_histogram(
+    ...     column="col", names=["a", "b", "c", "d"], counts=[5, 100, 42, 27]
+    ... )
+
+    ```
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    bar_discrete(ax=ax, names=names, counts=counts, yscale=yscale)
+    ax.set_title(f"number of occurrences for each value of {column}")
+    return fig
+
+
+def create_table(
+    counter: Counter,
+    column: str = "N/A",
+    max_rows: int = 20,
+) -> str:
+    r"""Return a HTML table with the discrete distribution.
+
+    Args:
+        counter: The counter that represents the discrete
+            distribution.
+        column: The column name.
+        max_rows: The maximum number of rows to show in the
+            table.
+
+    Returns:
+        The generated table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from collections import Counter
+    >>> from flamme.section.discrete import create_table_row
+    >>> table = create_table(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
+
+    ```
+    """
+    if sum(counter.values()) == 0:
+        return "<span>&#9888;</span> No table is generated because the column is empty"
+
+    most_common = counter.most_common(max_rows)
+    rows_head = "\n".join([create_table_row(column=col, count=count) for col, count in most_common])
+    lest_common = counter.most_common()[-max_rows:][::-1]
+    rows_tail = "\n".join([create_table_row(column=col, count=count) for col, count in lest_common])
+    return Template(
+        """<details>
     <summary>[show head and tail values]</summary>
 
     <div class="row">
@@ -244,35 +367,14 @@ This section analyzes the discrete distribution of values for column <em>{{colum
     </div>
 </details>
 """
-        ).render(
-            {
-                "max_values": len(most_common),
-                "rows_head": rows_head,
-                "rows_tail": rows_tail,
-                "column": self._column,
-            }
-        )
-
-
-def create_histogram(
-    column: str,
-    labels: list[str],
-    counts: list[int],
-    yscale: str = "auto",
-    figsize: tuple[float, float] | None = None,
-) -> str:
-    fig, ax = plt.subplots(figsize=figsize)
-    x = np.arange(len(labels))
-    ax.bar(x, counts, width=0.9 if len(labels) < 50 else 1, color="tab:blue")
-    if yscale == "auto":
-        yscale = "log" if (max(counts) / min(counts)) >= 50 else "linear"
-    ax.set_yscale(yscale)
-    ax.set_xticks(x, labels=labels)
-    readable_xticklabels(ax, max_num_xticks=100)
-    ax.set_xlim(-0.5, len(labels) - 0.5)
-    ax.set_ylabel("Number of occurrences")
-    ax.set_title(f"Number of occurrences for each value of {column}")
-    return figure2html(fig, close_fig=True)
+    ).render(
+        {
+            "max_values": len(most_common),
+            "rows_head": rows_head,
+            "rows_tail": rows_tail,
+            "column": column,
+        }
+    )
 
 
 def create_table_row(column: str, count: int) -> str:
@@ -284,7 +386,14 @@ def create_table_row(column: str, count: int) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.discrete import create_table_row
+    >>> row = create_table_row(column="col", count=5)
+
+    ```
     """
-    return Template("""<tr><th>{{column}}</th><td {{num_style}}>{{count}}</td></tr>""").render(
-        {"num_style": 'style="text-align: right;"', "column": column, "count": f"{count:,}"}
-    )
+    return f'<tr><th>{column}</th><td style="text-align: right;">{count:,}</td></tr>'

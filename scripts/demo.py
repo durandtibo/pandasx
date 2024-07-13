@@ -262,7 +262,7 @@ def create_analyzer() -> fa.BaseAnalyzer:
             "summary": fa.DataFrameSummaryAnalyzer(),
             "monthly count": fa.TemporalRowCountAnalyzer(
                 dt_column="datetime",
-                period="M",
+                period="1mo",
                 figsize=FIGSIZE,
             ),
             "duplicate": fa.DuplicatedRowAnalyzer(),

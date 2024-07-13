@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from flamme.plot.utils import auto_yscale_continuous
+from flamme.plot.utils import auto_yscale_continuous, auto_yscale_discrete
 
 ############################################
 #     Tests for auto_yscale_continuous     #
@@ -51,3 +51,32 @@ def test_auto_yscale_continuous_log(array: np.ndarray) -> None:
 )
 def test_auto_yscale_continuous_symlog(array: np.ndarray) -> None:
     assert auto_yscale_continuous(array, nbins=10) == "symlog"
+
+
+##########################################
+#     Tests for auto_yscale_discrete     #
+##########################################
+
+
+@pytest.mark.parametrize("max_count", [1, 5, 10])
+def test_auto_yscale_discrete_linear(max_count: int) -> None:
+    assert auto_yscale_discrete(min_count=1, max_count=max_count) == "linear"
+
+
+@pytest.mark.parametrize("max_count", [50, 100, 1000])
+def test_auto_yscale_discrete_log(max_count: int) -> None:
+    assert auto_yscale_discrete(min_count=1, max_count=max_count) == "log"
+
+
+def test_auto_yscale_discrete_threshold_50() -> None:
+    assert auto_yscale_discrete(min_count=1, max_count=49) == "linear"
+    assert auto_yscale_discrete(min_count=1, max_count=50) == "log"
+
+
+def test_auto_yscale_discrete_threshold_100() -> None:
+    assert auto_yscale_discrete(min_count=1, max_count=99, threshold=100) == "linear"
+    assert auto_yscale_discrete(min_count=1, max_count=100, threshold=100) == "log"
+
+
+def test_auto_yscale_discrete_min_count_0() -> None:
+    assert auto_yscale_discrete(min_count=0, max_count=5) == "linear"

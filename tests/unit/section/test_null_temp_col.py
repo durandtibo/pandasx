@@ -11,6 +11,7 @@ from polars.testing import assert_frame_equal
 from flamme.section import ColumnTemporalNullValueSection
 from flamme.section.null_temp_col import (
     add_column_to_figure,
+    create_section_template,
     create_table_section,
     create_temporal_null_figure,
     create_temporal_null_figures,
@@ -259,6 +260,15 @@ def test_column_temporal_null_value_section_render_html_toc_args(
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 #################################################
 #     Tests for create_temporal_null_figure     #
 #################################################
@@ -476,5 +486,5 @@ def test_create_temporal_null_table_empty(dataframe_empty: pl.DataFrame) -> None
 ###################################################
 
 
-def testcreate_temporal_null_table_row() -> None:
+def test_create_temporal_null_table_row() -> None:
     assert isinstance(create_temporal_null_table_row(label="meow", null=5, total=42), str)

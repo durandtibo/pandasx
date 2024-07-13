@@ -75,6 +75,14 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     ...     },
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    ColumnTemporalNullValueSection(
+      (columns): ('float', 'int', 'str')
+      (dt_column): datetime
+      (period): M
+      (ncols): 2
+      (figsize): (7, 5)
+    )
 
     ```
     """
