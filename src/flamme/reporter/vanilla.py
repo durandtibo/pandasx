@@ -8,6 +8,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from coola.utils import str_indent, str_mapping
+from coola.utils.path import sanitize_path
 from grizz.ingestor import BaseIngestor, setup_ingestor
 from grizz.transformer import BaseTransformer, setup_transformer
 from iden.io import save_text
@@ -15,7 +16,6 @@ from iden.io import save_text
 from flamme.analyzer.base import BaseAnalyzer, setup_analyzer
 from flamme.reporter.base import BaseReporter
 from flamme.reporter.utils import create_html_report
-from flamme.utils.path import sanitize_path
 
 if TYPE_CHECKING:
     from pathlib import Path
