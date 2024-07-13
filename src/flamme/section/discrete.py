@@ -70,7 +70,7 @@ class ColumnDiscreteSection(BaseSection):
       (figsize): None
     )
     >>> section.get_statistics()
-    {'most_common': [('c', 6), ('a', 4), ('b', 2)], 'nunique': 3, 'total': 12}
+    {'most_common': [('c', 6), ('a', 4), ('b', 2)], 'null_values': 0, 'nunique': 3, 'total': 12}
 
     ```
     """

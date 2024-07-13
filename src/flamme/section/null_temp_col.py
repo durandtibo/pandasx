@@ -3,7 +3,15 @@ values for each column."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnTemporalNullValueSection"]
+__all__ = [
+    "ColumnTemporalNullValueSection",
+    "create_section_template",
+    "create_table_section",
+    "create_temporal_null_figure",
+    "create_temporal_null_figures",
+    "create_temporal_null_table",
+    "create_temporal_null_table_row",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -61,7 +69,7 @@ class ColumnTemporalNullValueSection(BaseSection):
     >>> from datetime import datetime, timezone
     >>> import polars as pl
     >>> from flamme.section import ColumnTemporalNullValueSection
-    >>> dataframe = pl.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
     ...         "int": [None, 1, 0, 1],
     ...         "float": [1.2, 4.2, None, 2.2],
@@ -81,7 +89,7 @@ class ColumnTemporalNullValueSection(BaseSection):
     ...     },
     ... )
     >>> section = ColumnTemporalNullValueSection(
-    ...     frame=dataframe, columns=["float", "int", "str"], dt_column="datetime", period="M"
+    ...     frame=frame, columns=["float", "int", "str"], dt_column="datetime", period="M"
     ... )
     >>> section
     ColumnTemporalNullValueSection(
@@ -168,7 +176,7 @@ class ColumnTemporalNullValueSection(BaseSection):
             f"Rendering the temporal null value distribution of the following columns: "
             f"{self._columns}\ndatetime column: {self._dt_column} | period: {self._period}"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -198,9 +206,23 @@ class ColumnTemporalNullValueSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null_temp_col import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -242,6 +264,38 @@ def create_temporal_null_figure(
 
     Returns:
         The HTML representation of the figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.null_temp_col import create_temporal_null_figure
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "int": pl.Int64,
+    ...         "float": pl.Float64,
+    ...         "str": pl.String,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
+    ... )
+    >>> figures = create_temporal_null_figure(
+    ...     frame=frame, columns=["float", "int", "str"], dt_column="datetime", period="1mo"
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return ""
@@ -250,13 +304,12 @@ def create_temporal_null_figure(
     )
     figures = add_column_to_figure(columns=columns, figures=figures)
     return Template(
-        """
-    <div class="container-fluid text-center">
-      <div class="row align-items-start">
-        {{columns}}
-      </div>
-    </div>
-    """
+        """<div class="container-fluid text-center">
+  <div class="row align-items-start">
+    {{columns}}
+  </div>
+</div>
+"""
     ).render({"columns": "\n".join(split_figures_by_column(figures=figures, ncols=ncols))})
 
 
@@ -282,6 +335,38 @@ def create_temporal_null_figures(
 
     Returns:
         The HTML representations of the figures.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.null_temp_col import create_temporal_null_figures
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "int": pl.Int64,
+    ...         "float": pl.Float64,
+    ...         "str": pl.String,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
+    ... )
+    >>> figures = create_temporal_null_figures(
+    ...     frame=frame, columns=["float", "int", "str"], dt_column="datetime", period="1mo"
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return []
@@ -314,6 +399,15 @@ def add_column_to_figure(columns: Sequence[str], figures: Sequence[str]) -> list
     Raises:
         RuntimeError: if the number of column names is different from
             the number of figures.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null_temp_col import add_column_to_figure
+    >>> figures = add_column_to_figure(columns=["col1", "col2"], figures=["fig1", "fig2"])
+
+    ```
     """
     if len(columns) != len(figures):
         msg = (
@@ -336,6 +430,15 @@ def split_figures_by_column(figures: Sequence[str], ncols: int) -> list[str]:
 
     Returns:
         The columns.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null_temp_col import split_figures_by_column
+    >>> cols = split_figures_by_column(figures=["fig1", "fig2", "fig3"], ncols=2)
+
+    ```
     """
     cols = []
     for i in range(ncols):
@@ -360,6 +463,38 @@ def create_table_section(
 
     Returns:
         The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.null_temp_col import create_table_section
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "int": pl.Int64,
+    ...         "float": pl.Float64,
+    ...         "str": pl.String,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
+    ... )
+    >>> table = create_table_section(
+    ...     frame=frame, columns=["float", "int", "str"], dt_column="datetime", period="1mo"
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return ""
@@ -399,18 +534,50 @@ def create_temporal_null_table(
 
     Returns:
         The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.null_temp_col import create_temporal_null_table
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "int": [None, 1, 0, 1],
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "str": ["A", "B", None, None],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "int": pl.Int64,
+    ...         "float": pl.Float64,
+    ...         "str": pl.String,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
+    ... )
+    >>> table = create_temporal_null_table(
+    ...     frame=frame, column="int", dt_column="datetime", period="1mo"
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return ""
     nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=[column], dt_column=dt_column, period=period
     )
-    rows = []
-    for label, null, total in zip(labels, nulls, totals):
-        rows.append(create_temporal_null_table_row(label=label, null=null, total=total))
+    rows = [
+        create_temporal_null_table_row(label=label, null=null, total=total)
+        for label, null, total in zip(labels, nulls, totals)
+    ]
     return Template(
-        """
-<table class="table table-hover table-responsive w-auto" >
+        """<table class="table table-hover table-responsive w-auto" >
     <thead class="thead table-group-divider">
         <tr>
             <th colspan="6" style="text-align: center">column: {{column}}</th>
@@ -443,6 +610,15 @@ def create_temporal_null_table_row(label: str, null: int, total: int) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.null_temp_col import create_temporal_null_table_row
+    >>> row = create_temporal_null_table_row(label="col", null=5, total=42)
+
+    ```
     """
     non_null = total - null
     return Template(
