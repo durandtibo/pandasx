@@ -3,6 +3,7 @@ from __future__ import annotations
 from jinja2 import Template
 
 from flamme.section import MarkdownSection
+from flamme.section.markdown import create_section_template
 from flamme.testing import markdown_available
 
 #####################################
@@ -59,3 +60,12 @@ def test_markdown_section_render_html_toc_args() -> None:
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
