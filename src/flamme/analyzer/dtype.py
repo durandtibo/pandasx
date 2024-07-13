@@ -33,9 +33,9 @@ class DataTypeAnalyzer(BaseAnalyzer):
     DataTypeAnalyzer()
     >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": [None, 1, 0, 1],
+    ...         "int": [42, 1, 0, 1],
     ...         "float": [1.2, 4.2, float("nan"), 2.2],
-    ...         "str": ["A", "B", None, None],
+    ...         "str": ["A", "B", "C", "D"],
     ...     },
     ...     schema={"int": pl.Int64, "float": pl.Float64, "str": pl.String},
     ... )
@@ -43,7 +43,7 @@ class DataTypeAnalyzer(BaseAnalyzer):
     >>> section
     DataTypeSection(
       (dtypes): {'int': Int64, 'float': Float64, 'str': String}
-      (types): {'int': {<class 'int'>, <class 'NoneType'>}, 'float': {<class 'float'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+      (types): {'int': {<class 'int'>}, 'float': {<class 'float'>}, 'str': {<class 'str'>}}
     )
 
     ```

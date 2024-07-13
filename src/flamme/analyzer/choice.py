@@ -41,7 +41,9 @@ class ChoiceAnalyzer(BaseAnalyzer):
     ... )
     >>> analyzer = ChoiceAnalyzer(
     ...     {"null": NullValueAnalyzer(), "duplicate": DuplicatedRowAnalyzer()},
-    ...     selection_fn=lambda frame: "null" if frame.isna().values.any() else "duplicate",
+    ...     selection_fn=lambda frame: (
+    ...         "null" if frame.null_count().pipe(sum).item() > 0 else "duplicate"
+    ...     ),
     ... )
     >>> analyzer
     ChoiceAnalyzer(
@@ -50,12 +52,19 @@ class ChoiceAnalyzer(BaseAnalyzer):
     )
     >>> frame = pl.DataFrame(
     ...     {
-    ...         "float": [1.2, 4.2, None, 2.2],
-    ...         "int": [None, 1, 0, 1],
-    ...         "str": ["A", "B", None, None],
+    ...         "float": [1.2, 4.2, 1.2, 2.2],
+    ...         "int": [42, 1, 0, 1],
+    ...         "str": ["A", "B", "C", "D"],
     ...     },
     ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
+    >>> section = analyzer.analyze(frame)
+    >>> section
+    DuplicatedRowSection(
+      (frame): (4, 3)
+      (columns): None
+      (figsize): None
+    )
 
     ```
     """
