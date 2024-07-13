@@ -38,26 +38,48 @@ def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
     ```
     """
     array = data.ravel().astype(np.float64)
-    n = array.shape[0]
+    if array.size == 0:
+        return {
+            "mean": float("nan"),
+            "std": float("nan"),
+            "skewness": float("nan"),
+            "kurtosis": float("nan"),
+            "min": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "median": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+            "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
+        }
     quantiles = quantile(array, q=[0.001, 0.01, 0.05, 0.1, 0.25, 0.75, 0.9, 0.95, 0.99, 0.999])
     return {
         "mean": np.mean(array).item(),
         "std": np.std(array).item(),
         "skewness": skew(array).item(),
         "kurtosis": kurtosis(array).item(),
-        "min": np.min(array).item() if n else float("nan"),
+        "min": np.min(array).item(),
         "q001": quantiles[0.001],
         "q01": quantiles[0.01],
         "q05": quantiles[0.05],
         "q10": quantiles[0.1],
         "q25": quantiles[0.25],
-        "median": np.median(array).item() if n else float("nan"),
+        "median": np.median(array).item(),
         "q75": quantiles[0.75],
         "q90": quantiles[0.9],
         "q95": quantiles[0.95],
         "q99": quantiles[0.99],
         "q999": quantiles[0.999],
-        "max": np.max(array).item() if n else float("nan"),
+        "max": np.max(array).item(),
         ">0": (array > 0).sum().item(),
         "<0": (array < 0).sum().item(),
         "=0": (array == 0).sum().item(),
