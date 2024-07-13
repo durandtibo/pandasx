@@ -3,7 +3,7 @@ custom content."""
 
 from __future__ import annotations
 
-__all__ = ["ContentSection"]
+__all__ = ["ContentSection", "create_section_template"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -57,7 +57,7 @@ class ContentSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info("Rendering the section with the custom content...")
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -73,9 +73,23 @@ class ContentSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.content import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 

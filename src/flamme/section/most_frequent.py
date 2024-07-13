@@ -3,7 +3,12 @@ values for a given columns."""
 
 from __future__ import annotations
 
-__all__ = ["MostFrequentValuesSection"]
+__all__ = [
+    "MostFrequentValuesSection",
+    "create_section_template",
+    "create_table",
+    "create_table_row",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -84,14 +89,14 @@ class MostFrequentValuesSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info("Rendering the most frequent values section...")
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "table": self._create_table(),
+                "table": create_table(counter=self._counter, top=self._top),
                 "column": self._column,
                 "top": f"{self._top:,}",
             }
@@ -102,9 +107,23 @@ class MostFrequentValuesSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.most_frequent import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -121,18 +140,38 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 <p style="margin-top: 1rem;">
 """
 
-    def _create_table(self) -> str:
-        most_common = list(self._counter.most_common(self._top))
-        rows = []
-        cumcount = 0
-        for value, count in most_common:
-            cumcount += count
-            rows.append(
-                create_table_row(value=value, count=count, total=self._total, cumcount=cumcount)
-            )
-        return Template(
-            """
-<table class="table table-hover table-responsive w-auto" >
+
+def create_table(counter: Counter, top: int = 100) -> str:
+    r"""Create a HTML representation of a table with the temporal
+    distribution of null values.
+
+    Args:
+        counter: The counter with the number of occurrences
+            for all values.
+        top: The maximum number of values to show.
+
+    Returns:
+        The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from collections import Counter
+    >>> from flamme.section.most_frequent import create_table
+    >>> table = create_table(Counter({"a": 4, "b": 2, "c": 6}))
+
+    ```
+    """
+    total = sum(counter.values())
+    most_common = list(counter.most_common(top))
+    rows = []
+    cumcount = 0
+    for value, count in most_common:
+        cumcount += count
+        rows.append(create_table_row(value=value, count=count, total=total, cumcount=cumcount))
+    return Template(
+        """<table class="table table-hover table-responsive w-auto" >
     <thead class="thead table-group-divider">
         <tr>
             <th>value</th>
@@ -147,7 +186,7 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
     </tbody>
 </table>
 """
-        ).render({"rows": "\n".join(rows)})
+    ).render({"rows": "\n".join(rows)})
 
 
 def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
@@ -161,7 +200,18 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.most_frequent import create_table_row
+    >>> row = create_table_row(value="A", count=5, total=101, cumcount=42)
+
+    ```
     """
+    pct = 100 * count / total if total > 0 else float("nan")
+    cum_percentage = 100 * cumcount / total if total > 0 else float("nan")
     return Template(
         """<tr>
     <th>{{value}}</th>
@@ -174,7 +224,7 @@ def create_table_row(value: str, count: int, total: int, cumcount: int) -> str:
             "num_style": 'style="text-align: right;"',
             "value": value,
             "count": f"{count:,}",
-            "percentage": f"{100 * count / total:.2f}",
-            "cum_percentage": f"{100 * cumcount / total:.2f}",
+            "percentage": f"{pct:.2f}",
+            "cum_percentage": f"{cum_percentage:.2f}",
         }
     )

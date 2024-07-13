@@ -8,7 +8,12 @@ from jinja2 import Template
 from matplotlib import pyplot as plt
 
 from flamme.section import NullValueSection
-from flamme.section.null import create_bar_figure, create_table, create_table_row
+from flamme.section.null import (
+    create_bar_figure,
+    create_section_template,
+    create_table,
+    create_table_row,
+)
 
 ######################################
 #     Tests for NullValueSection     #
@@ -184,6 +189,15 @@ def test_null_value_section_render_html_toc_args() -> None:
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
 
 
 #######################################

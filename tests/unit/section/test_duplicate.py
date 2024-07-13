@@ -7,7 +7,7 @@ from jinja2 import Template
 from polars.testing import assert_frame_equal
 
 from flamme.section import DuplicatedRowSection
-from flamme.section.duplicate import create_duplicate_table
+from flamme.section.duplicate import create_duplicate_table, create_section_template
 
 
 @pytest.fixture()
@@ -126,6 +126,15 @@ def test_duplicated_rows_section_render_html_toc_args(
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
     )
+
+
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
 
 
 ############################################
