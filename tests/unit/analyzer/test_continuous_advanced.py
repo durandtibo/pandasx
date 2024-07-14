@@ -92,7 +92,7 @@ def test_column_continuous_analyzer_get_statistics(dataframe: pl.DataFrame) -> N
             "num_non_nulls": 101,
             "nunique": 102,
             "mean": 50.0,
-            "std": 29.300170647967224,
+            "std": 29.154759474226502,
             "skewness": 0.0,
             "kurtosis": -1.2,
             "min": 0.0,

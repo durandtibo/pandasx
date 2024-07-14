@@ -18,7 +18,6 @@ from flamme.plot.utils import readable_xticklabels
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
-    compute_statistics,
     render_html_toc,
     tags2id,
     tags2title,
@@ -26,6 +25,7 @@ from flamme.section.utils import (
 )
 from flamme.utils.figure import figure2html
 from flamme.utils.range import find_range
+from flamme.utils.stats import compute_statistics_continuous
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -150,7 +150,7 @@ class ColumnContinuousSection(BaseSection):
         return self._figsize
 
     def get_statistics(self) -> dict[str, float]:
-        return compute_statistics(self._series.to_pandas())
+        return compute_statistics_continuous(self._series)
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the continuous distribution of {self._column}")
