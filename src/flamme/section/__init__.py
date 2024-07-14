@@ -30,10 +30,10 @@ from flamme.section.content import ContentSection
 from flamme.section.continuous import ColumnContinuousSection
 from flamme.section.continuous_advanced import ColumnContinuousAdvancedSection
 from flamme.section.continuous_drift import ColumnContinuousTemporalDriftSection
-from flamme.section.continuous_temporal import ColumnTemporalContinuousSection
+from flamme.section.continuous_temp import ColumnTemporalContinuousSection
 from flamme.section.count_rows import TemporalRowCountSection
 from flamme.section.discrete import ColumnDiscreteSection
-from flamme.section.discrete_temporal import ColumnTemporalDiscreteSection
+from flamme.section.discrete_temp import ColumnTemporalDiscreteSection
 from flamme.section.dtype import DataTypeSection
 from flamme.section.duplicate import DuplicatedRowSection
 from flamme.section.empty import EmptySection
