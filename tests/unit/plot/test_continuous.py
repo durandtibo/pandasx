@@ -4,7 +4,39 @@ import numpy as np
 import pytest
 from matplotlib import pyplot as plt
 
-from flamme.plot import hist_continuous, hist_continuous2
+from flamme.plot import boxplot_continuous, hist_continuous, hist_continuous2
+
+#######################################
+#    Tests for boxplot_continuous     #
+#######################################
+
+
+def test_boxplot_continuous() -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous(ax=ax, array=np.arange(101))
+
+
+@pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
+def test_boxplot_continuous_xmin(xmin: float | str | None) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous(ax=ax, array=np.arange(101), xmin=xmin)
+
+
+@pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
+def test_boxplot_continuous_xmax(xmax: float | str | None) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous(ax=ax, array=np.arange(101), xmax=xmax)
+
+
+def test_boxplot_continuous_xmin_xmax() -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous(ax=ax, array=np.arange(101), xmin="q0.1", xmax="q0.9")
+
+
+def test_boxplot_continuous_empty() -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous(ax=ax, array=np.array([]))
+
 
 ####################################
 #    Tests for hist_continuous     #
