@@ -65,19 +65,27 @@ def test_bar_discrete_temporal_with_values_and_steps() -> None:
     bar_discrete_temporal(ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20)))
 
 
-@pytest.mark.parametrize("density", [True, False])
-def test_bar_discrete_temporal_density_ones(density: bool) -> None:
+@pytest.mark.parametrize("proportion", [True, False])
+def test_bar_discrete_temporal_proportion_ones(proportion: bool) -> None:
     fig, ax = plt.subplots()
     bar_discrete_temporal(
-        ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20)), density=density
+        ax,
+        counts=np.ones((5, 20)),
+        values=list(range(5)),
+        steps=list(range(20)),
+        proportion=proportion,
     )
 
 
-@pytest.mark.parametrize("density", [True, False])
-def test_bar_discrete_temporal_density_zeros(density: bool) -> None:
+@pytest.mark.parametrize("proportion", [True, False])
+def test_bar_discrete_temporal_proportion_zeros(proportion: bool) -> None:
     fig, ax = plt.subplots()
     bar_discrete_temporal(
-        ax, counts=np.zeros((5, 20)), values=list(range(5)), steps=list(range(20)), density=density
+        ax,
+        counts=np.zeros((5, 20)),
+        values=list(range(5)),
+        steps=list(range(20)),
+        proportion=proportion,
     )
 
 
@@ -132,19 +140,19 @@ def test_prepare_steps_bar_discrete_temporal_steps_incorrect() -> None:
         _prepare_steps_bar_discrete_temporal(steps=[1, 2, 3], num_steps=5)
 
 
-def test_prepare_counts_bar_discrete_temporal_density_false() -> None:
+def test_prepare_counts_bar_discrete_temporal_proportion_false() -> None:
     assert objects_are_equal(
         _prepare_counts_bar_discrete_temporal(
-            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), density=False
+            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), proportion=False
         ),
         np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]),
     )
 
 
-def test_prepare_counts_bar_discrete_temporal_density_true() -> None:
+def test_prepare_counts_bar_discrete_temporal_proportion_true() -> None:
     assert objects_are_equal(
         _prepare_counts_bar_discrete_temporal(
-            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), density=True
+            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), proportion=True
         ),
         np.array([[1.0, 0.5, 0.75, 0.0, 0.25], [0.0, 0.5, 0.25, 0.0, 0.75]]),
     )
