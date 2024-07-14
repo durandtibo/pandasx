@@ -4,10 +4,14 @@ import polars as pl
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
+from matplotlib import pyplot as plt
 from polars.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousAdvancedSection
-from flamme.section.continuous_advanced import create_histogram_range_figure
+from flamme.section.continuous_advanced import (
+    create_histogram_range_figure,
+    create_section_template,
+)
 
 
 @pytest.fixture()
@@ -240,35 +244,50 @@ def test_column_continuous_advanced_section_render_html_toc_args(series: pl.Seri
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 ##################################################
 #    Tests for create_histogram_range_figure     #
 ##################################################
 
 
 def test_create_histogram_range_figure(series: pl.Series) -> None:
-    assert isinstance(create_histogram_range_figure(series=series, column="col"), str)
+    assert isinstance(create_histogram_range_figure(series=series, column="col"), plt.Figure)
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_create_histogram_range_figure_nbins(series: pl.Series, nbins: int) -> None:
-    assert isinstance(create_histogram_range_figure(series=series, column="col", nbins=nbins), str)
+    assert isinstance(
+        create_histogram_range_figure(series=series, column="col", nbins=nbins), plt.Figure
+    )
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_create_histogram_range_figure_yscale(series: pl.Series, yscale: str) -> None:
     assert isinstance(
-        create_histogram_range_figure(series=series, column="col", yscale=yscale), str
+        create_histogram_range_figure(series=series, column="col", yscale=yscale), plt.Figure
     )
 
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_histogram_range_figure_xmin(series: pl.Series, xmin: float | str | None) -> None:
-    assert isinstance(create_histogram_range_figure(series=series, column="col", xmin=xmin), str)
+    assert isinstance(
+        create_histogram_range_figure(series=series, column="col", xmin=xmin), plt.Figure
+    )
 
 
 @pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
 def test_create_histogram_range_figure_xmax(series: pl.Series, xmax: float | str | None) -> None:
-    assert isinstance(create_histogram_range_figure(series=series, column="col", xmax=xmax), str)
+    assert isinstance(
+        create_histogram_range_figure(series=series, column="col", xmax=xmax), plt.Figure
+    )
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
@@ -276,5 +295,12 @@ def test_create_histogram_range_figure_figsize(
     series: pl.Series, figsize: tuple[float, float]
 ) -> None:
     assert isinstance(
-        create_histogram_range_figure(series=series, column="col", figsize=figsize), str
+        create_histogram_range_figure(series=series, column="col", figsize=figsize), plt.Figure
+    )
+
+
+def test_create_histogram_range_figure_empty() -> None:
+    assert (
+        create_histogram_range_figure(series=pl.Series([None, None], dtype=pl.Int64), column="col")
+        is None
     )

@@ -3,7 +3,11 @@ continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnContinuousAdvancedSection"]
+__all__ = [
+    "ColumnContinuousAdvancedSection",
+    "create_section_template",
+    "create_histogram_range_figure",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -59,7 +63,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.section import ColumnContinuousSection
+    >>> from flamme.section import ColumnContinuousAdvancedSection
     >>> section = ColumnContinuousAdvancedSection(
     ...     series=pl.Series([None, *list(range(101)), None]), column="col"
     ... )
@@ -140,7 +144,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
         null_values_pct = (
             f"{100 * stats['num_nulls'] / stats['count']:.2f}" if stats["count"] > 0 else "N/A"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -164,8 +168,56 @@ class ColumnContinuousAdvancedSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_full_boxplot(self) -> str:
+        fig = create_boxplot_figure(
+            series=self._series,
+            xmin="q0",
+            xmax="q1",
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+    def _create_full_histogram(self) -> str:
+        fig = create_histogram_figure(
+            series=self._series,
+            column=self._column,
+            nbins=self._nbins,
+            xmin="q0",
+            xmax="q1",
+            yscale=self._yscale,
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+    def _create_iqr_histogram(self) -> str:
+        fig = create_histogram_range_figure(
+            series=self._series,
+            column=self._column,
+            nbins=self._nbins,
+            xmin="q0.25",
+            xmax="q0.75",
+            yscale=self._yscale,
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.continuous_advanced import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -190,40 +242,8 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 <b> Analysis of distribution in the inter-quartile range (IQR) </b>
 
 {{iqr_histogram}}
-
+<p style="margin-top: 1rem;">
 """
-
-    def _create_full_boxplot(self) -> str:
-        fig = create_boxplot_figure(
-            series=self._series,
-            xmin="q0",
-            xmax="q1",
-            figsize=self._figsize,
-        )
-        return figure2html(fig, close_fig=True)
-
-    def _create_full_histogram(self) -> str:
-        fig = create_histogram_figure(
-            series=self._series,
-            column=self._column,
-            nbins=self._nbins,
-            xmin="q0",
-            xmax="q1",
-            yscale=self._yscale,
-            figsize=self._figsize,
-        )
-        return figure2html(fig, close_fig=True)
-
-    def _create_iqr_histogram(self) -> str:
-        return create_histogram_range_figure(
-            series=self._series,
-            column=self._column,
-            nbins=self._nbins,
-            xmin="q0.25",
-            xmax="q0.75",
-            yscale=self._yscale,
-            figsize=self._figsize,
-        )
 
 
 def create_histogram_range_figure(
@@ -234,8 +254,8 @@ def create_histogram_range_figure(
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create the HTML code of a histogram figure.
+) -> plt.Figure | None:
+    r"""Create a histogram figure.
 
     Args:
         series: The series/column to analyze.
@@ -254,14 +274,26 @@ def create_histogram_range_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML code of the figure.
+        The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.continuous_advanced import create_histogram_range_figure
+    >>> fig = create_histogram_range_figure(
+    ...     series=pl.Series([None, *list(range(101)), None]), column="col"
+    ... )
+
+    ```
     """
     array = series.drop_nulls().to_numpy()
     if array.size == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return None
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     array = array[np.logical_and(array >= xmin, array <= xmax)]
     fig, ax = plt.subplots(figsize=figsize)
     ax.set_title(f"data distribution for column {column}")
     hist_continuous(ax=ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax, yscale=yscale)
-    return figure2html(fig, close_fig=True)
+    return fig
