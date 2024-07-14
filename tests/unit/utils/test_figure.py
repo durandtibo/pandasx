@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from matplotlib import pyplot as plt
 
-from flamme.utils.figure import figure2html
+from flamme.utils.figure import MISSING_FIGURE_MESSAGE, figure2html
 
 #################################
 #     Tests for figure2html     #
@@ -28,7 +28,4 @@ def test_figure2html_reactive(reactive: bool) -> None:
 
 
 def test_figure2html_none() -> None:
-    assert (
-        figure2html(None)
-        == "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
-    )
+    assert figure2html(None) == MISSING_FIGURE_MESSAGE
