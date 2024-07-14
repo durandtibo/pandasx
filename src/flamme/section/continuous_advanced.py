@@ -153,7 +153,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
                 "unique_values": f"{stats['nunique']:,}",
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
-                "full_histogram": self._create_full_histogram(stats),
+                "full_histogram": self._create_full_histogram(),
                 "iqr_histogram": self._create_iqr_histogram(),
                 "full_boxplot": self._create_full_boxplot(),
             }
@@ -194,24 +194,25 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 """
 
     def _create_full_boxplot(self) -> str:
-        return create_boxplot_figure(
+        fig = create_boxplot_figure(
             series=self._series,
             xmin="q0",
             xmax="q1",
             figsize=self._figsize,
         )
+        return figure2html(fig, close_fig=True)
 
-    def _create_full_histogram(self, stats: dict) -> str:
-        return create_histogram_figure(
+    def _create_full_histogram(self) -> str:
+        fig = create_histogram_figure(
             series=self._series,
             column=self._column,
-            stats=stats,
             nbins=self._nbins,
             xmin="q0",
             xmax="q1",
             yscale=self._yscale,
             figsize=self._figsize,
         )
+        return figure2html(fig, close_fig=True)
 
     def _create_iqr_histogram(self) -> str:
         return create_histogram_range_figure(
