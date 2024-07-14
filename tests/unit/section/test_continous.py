@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
 import pytest
@@ -11,6 +12,7 @@ from flamme.section import ColumnContinuousSection
 from flamme.section.continuous import (
     create_boxplot_figure,
     create_histogram_figure,
+    create_section_template,
     create_stats_table,
 )
 
@@ -252,28 +254,41 @@ def test_column_continuous_section_render_html_toc_args(series: pl.Series) -> No
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 ##########################################
 #    Tests for create_boxplot_figure     #
 ##########################################
 
 
 def test_create_boxplot_figure(series: pl.Series) -> None:
-    assert isinstance(create_boxplot_figure(series=series), str)
+    assert isinstance(create_boxplot_figure(series=series), plt.Figure)
 
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
 def test_create_boxplot_figure_xmin(series: pl.Series, xmin: float | str | None) -> None:
-    assert isinstance(create_boxplot_figure(series=series, xmin=xmin), str)
+    assert isinstance(create_boxplot_figure(series=series, xmin=xmin), plt.Figure)
 
 
 @pytest.mark.parametrize("xmax", [1.0, "q0.9", None, "q0"])
 def test_create_boxplot_figure_xmax(series: pl.Series, xmax: float | str | None) -> None:
-    assert isinstance(create_boxplot_figure(series=series, xmax=xmax), str)
+    assert isinstance(create_boxplot_figure(series=series, xmax=xmax), plt.Figure)
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (7.5, 3.5)])
 def test_create_boxplot_figure_figsize(series: pl.Series, figsize: tuple[float, float]) -> None:
-    assert isinstance(create_boxplot_figure(series=series, figsize=figsize), str)
+    assert isinstance(create_boxplot_figure(series=series, figsize=figsize), plt.Figure)
+
+
+def test_create_boxplot_figure_empty() -> None:
+    assert create_boxplot_figure(series=pl.Series([None, None], dtype=pl.Int64)) is None
 
 
 ############################################
@@ -282,20 +297,20 @@ def test_create_boxplot_figure_figsize(series: pl.Series, figsize: tuple[float, 
 
 
 def test_create_histogram_figure(series: pl.Series, stats: dict) -> None:
-    assert isinstance(create_histogram_figure(series=series, column="col", stats=stats), str)
+    assert isinstance(create_histogram_figure(series=series, column="col", stats=stats), plt.Figure)
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
 def test_create_histogram_figure_nbins(series: pl.Series, stats: dict, nbins: int) -> None:
     assert isinstance(
-        create_histogram_figure(series=series, column="col", stats=stats, nbins=nbins), str
+        create_histogram_figure(series=series, column="col", stats=stats, nbins=nbins), plt.Figure
     )
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
 def test_create_histogram_figure_yscale(series: pl.Series, stats: dict, yscale: str) -> None:
     assert isinstance(
-        create_histogram_figure(series=series, column="col", stats=stats, yscale=yscale), str
+        create_histogram_figure(series=series, column="col", stats=stats, yscale=yscale), plt.Figure
     )
 
 
@@ -304,7 +319,7 @@ def test_create_histogram_figure_xmin(
     series: pl.Series, stats: dict, xmin: float | str | None
 ) -> None:
     assert isinstance(
-        create_histogram_figure(series=series, column="col", stats=stats, xmin=xmin), str
+        create_histogram_figure(series=series, column="col", stats=stats, xmin=xmin), plt.Figure
     )
 
 
@@ -313,7 +328,7 @@ def test_create_histogram_figure_xmax(
     series: pl.Series, stats: dict, xmax: float | str | None
 ) -> None:
     assert isinstance(
-        create_histogram_figure(series=series, column="col", stats=stats, xmax=xmax), str
+        create_histogram_figure(series=series, column="col", stats=stats, xmax=xmax), plt.Figure
     )
 
 
@@ -322,7 +337,17 @@ def test_create_histogram_figure_figsize(
     series: pl.Series, stats: dict, figsize: tuple[float, float]
 ) -> None:
     assert isinstance(
-        create_histogram_figure(series=series, column="col", stats=stats, figsize=figsize), str
+        create_histogram_figure(series=series, column="col", stats=stats, figsize=figsize),
+        plt.Figure,
+    )
+
+
+def test_create_histogram_figure_empty(stats: dict) -> None:
+    assert (
+        create_histogram_figure(
+            series=pl.Series([None, None], dtype=pl.Int64), column="col", stats=stats
+        )
+        is None
     )
 
 

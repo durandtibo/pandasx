@@ -75,11 +75,11 @@ class ColumnContinuousSection(BaseSection):
       (figsize): None
     )
     >>> section.get_statistics()
-    {'count': 103, 'num_nulls': 2, 'nunique': 102, 'mean': 50.0, 'std': 29.30...,
-     'skewness': 0.0, 'kurtosis': -1.200235294117647, 'min': 0.0,
+    {'count': 103, 'nunique': 102, 'num_non_nulls': 101, 'num_nulls': 2,
+     'mean': 50.0, 'std': 29.15..., 'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0,
      'q001': 0.1, 'q01': 1.0, 'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0,
      'q75': 75.0, 'q90': 90.0, 'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0,
-     '>0': 100, '<0': 0, '=0': 1, 'num_non_nulls': 101}
+     '>0': 100, '<0': 0, '=0': 1}
 
     ```
     """
@@ -158,7 +158,7 @@ class ColumnContinuousSection(BaseSection):
         null_values_pct = (
             f"{100 * stats['num_nulls'] / stats['count']:.2f}" if stats["count"] > 0 else "N/A"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -171,22 +171,8 @@ class ColumnContinuousSection(BaseSection):
                 "unique_values": f"{stats['nunique']:,}",
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
-                "histogram_figure": create_histogram_figure(
-                    series=self._series,
-                    column=self._column,
-                    stats=stats,
-                    nbins=self._nbins,
-                    yscale=self._yscale,
-                    xmin=self._xmin,
-                    xmax=self._xmax,
-                    figsize=self._figsize,
-                ),
-                "boxplot_figure": create_boxplot_figure(
-                    series=self._series,
-                    xmin=self._xmin,
-                    xmax=self._xmax,
-                    figsize=self._figsize,
-                ),
+                "histogram_figure": self._create_histogram_figure(stats),
+                "boxplot_figure": self._create_boxplot_figure(),
             }
         )
 
@@ -195,8 +181,49 @@ class ColumnContinuousSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_boxplot_figure(self) -> str:
+        fig = create_boxplot_figure(
+            series=self._series,
+            xmin=self._xmin,
+            xmax=self._xmax,
+            figsize=self._figsize,
+        )
+        if fig is None:
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return figure2html(fig, close_fig=True)
+
+    def _create_histogram_figure(self, stats: dict[str, float]) -> str:
+        fig = create_histogram_figure(
+            series=self._series,
+            column=self._column,
+            stats=stats,
+            nbins=self._nbins,
+            yscale=self._yscale,
+            xmin=self._xmin,
+            xmax=self._xmax,
+            figsize=self._figsize,
+        )
+        if fig is None:
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.continuous import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -221,8 +248,8 @@ def create_boxplot_figure(
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create the HTML code of a boxplot figure.
+) -> plt.Figure | None:
+    r"""Return a boxplot figure.
 
     Args:
         series: The series/column to analyze.
@@ -236,11 +263,11 @@ def create_boxplot_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML code of the figure.
+        The generated figure.
     """
     array = series.drop_nulls().to_numpy()
     if array.size == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return None
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     if figsize is not None:
         figsize = (figsize[0], figsize[0] / 10)
@@ -257,7 +284,7 @@ def create_boxplot_figure(
     if xmin < xmax:
         ax.set_xlim(xmin, xmax)
     ax.set_ylabel(" ")
-    return figure2html(fig, close_fig=True)
+    return fig
 
 
 def create_histogram_figure(
@@ -269,8 +296,8 @@ def create_histogram_figure(
     xmin: float | str | None = None,
     xmax: float | str | None = None,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create the HTML code of a histogram figure.
+) -> plt.Figure | None:
+    r"""Return a histogram figure.
 
     Args:
         series: The series/column to analyze.
@@ -290,11 +317,11 @@ def create_histogram_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML code of the figure.
+        The generated figure.
     """
-    array = series.to_numpy()
+    array = series.drop_nulls().to_numpy()
     if array.size == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return None
     fig, ax = plt.subplots(figsize=figsize)
     ax.set_title(f"data distribution for column {column}")
     hist_continuous(ax=ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax, yscale=yscale)
@@ -306,7 +333,7 @@ def create_histogram_figure(
             f'kurtosis={stats["kurtosis"]:.2f}',
         ],
     )
-    return figure2html(fig, close_fig=True)
+    return fig
 
 
 def create_stats_table(stats: dict, column: str) -> str:
@@ -318,10 +345,46 @@ def create_stats_table(stats: dict, column: str) -> str:
 
     Returns:
         The HTML code of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.continuous import create_stats_table
+    >>> table = create_stats_table(
+    ...     column="col",
+    ...     stats={
+    ...         "count": 101,
+    ...         "nunique": 101,
+    ...         "num_non_nulls": 101,
+    ...         "num_nulls": 0,
+    ...         "mean": 50.0,
+    ...         "std": 29.15,
+    ...         "skewness": 0.0,
+    ...         "kurtosis": -1.20,
+    ...         "min": 0.0,
+    ...         "q001": 0.1,
+    ...         "q01": 1.0,
+    ...         "q05": 5.0,
+    ...         "q10": 10.0,
+    ...         "q25": 25.0,
+    ...         "median": 50.0,
+    ...         "q75": 75.0,
+    ...         "q90": 90.0,
+    ...         "q95": 95.0,
+    ...         "q99": 99.0,
+    ...         "q999": 99.9,
+    ...         "max": 100.0,
+    ...         ">0": 100,
+    ...         "<0": 0,
+    ...         "=0": 1,
+    ...     },
+    ... )
+
+    ```
     """
     return Template(
-        """
-<details>
+        """<details>
     <summary>[show statistics]</summary>
 
     <p>The following table shows some statistics about the distribution for column {{column}}.
