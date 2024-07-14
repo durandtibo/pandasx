@@ -4,10 +4,12 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
+from coola import objects_are_equal
 from matplotlib import pyplot as plt
 
 from flamme.plot import bar_discrete
 from flamme.plot.discrete import (
+    _prepare_counts_bar_discrete_temporal,
     _prepare_labels_bar_discrete_temporal,
     _prepare_steps_bar_discrete_temporal,
     bar_discrete_temporal,
@@ -128,3 +130,21 @@ def test_prepare_steps_bar_discrete_temporal_steps_none() -> None:
 def test_prepare_steps_bar_discrete_temporal_steps_incorrect() -> None:
     with pytest.raises(RuntimeError, match="steps length .* do not match with the count matrix"):
         _prepare_steps_bar_discrete_temporal(steps=[1, 2, 3], num_steps=5)
+
+
+def test_prepare_counts_bar_discrete_temporal_density_false() -> None:
+    assert objects_are_equal(
+        _prepare_counts_bar_discrete_temporal(
+            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), density=False
+        ),
+        np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]),
+    )
+
+
+def test_prepare_counts_bar_discrete_temporal_density_true() -> None:
+    assert objects_are_equal(
+        _prepare_counts_bar_discrete_temporal(
+            counts=np.array([[1, 2, 3, 0, 1], [0, 2, 1, 0, 3]]), density=True
+        ),
+        np.array([[1.0, 0.5, 0.75, 0.0, 0.25], [0.0, 0.5, 0.25, 0.0, 0.75]]),
+    )

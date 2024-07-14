@@ -97,6 +97,7 @@ def bar_discrete_temporal(
     num_labels, num_steps = counts.shape
     labels = _prepare_labels_bar_discrete_temporal(labels=labels, num_labels=num_labels)
     steps = _prepare_steps_bar_discrete_temporal(steps=steps, num_steps=num_steps)
+    counts = _prepare_counts_bar_discrete_temporal(counts=counts, density=density)
 
     x = np.arange(num_steps, dtype=np.int64)
     bottom = np.zeros(num_steps, dtype=counts.dtype)
@@ -171,3 +172,24 @@ def _prepare_steps_bar_discrete_temporal(steps: Sequence | None, num_steps: int)
         )
         raise RuntimeError(msg)
     return list(steps)
+
+
+def _prepare_counts_bar_discrete_temporal(counts: np.ndarray, density: bool) -> np.ndarray:
+    r"""Prepare the count matrix.
+
+    This function was designed to be used in ``bar_discrete_temporal``.
+
+    Args:
+        counts: A 2-d array that indicates the number of occurrences
+            for each value and time step. The first dimension
+            represents the value and the second dimension
+            represents the steps.
+        density: If ``True``, the count matrix is normalized number of
+            occurrences for each step.
+
+    Returns:
+        The count matrix.
+    """
+    if not density:
+        return counts
+    return counts / np.clip(counts.sum(axis=0), a_min=1, a_max=None)
