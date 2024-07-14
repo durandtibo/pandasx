@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 import numpy as np
 import polars as pl
@@ -13,6 +14,9 @@ from flamme.utils.null import (
     compute_null_count,
     compute_temporal_null_count,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 ##################################
 #     Tests for compute_null     #
@@ -168,10 +172,11 @@ def dataframe_empty() -> pl.DataFrame:
     )
 
 
-def test_compute_temporal_null_count(dataframe: pl.DataFrame) -> None:
+@pytest.mark.parametrize("columns", [["col1", "col2"], ("col1", "col2")])
+def test_compute_temporal_null_count(dataframe: pl.DataFrame, columns: Sequence[str]) -> None:
     assert objects_are_equal(
         compute_temporal_null_count(
-            frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="1mo"
+            frame=dataframe, columns=columns, dt_column="datetime", period="1mo"
         ),
         (
             np.array([2, 0, 0, 1], dtype=np.int64),
