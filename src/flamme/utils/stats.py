@@ -2,7 +2,11 @@ r"""Contain statistics utility functions."""
 
 from __future__ import annotations
 
-__all__ = ["compute_statistics_continuous", "compute_statistics_continuous_series", "quantile"]
+__all__ = [
+    "compute_statistics_continuous_array",
+    "compute_statistics_continuous_series",
+    "quantile",
+]
 
 from typing import TYPE_CHECKING
 
@@ -15,12 +19,12 @@ if TYPE_CHECKING:
     import polars as pl
 
 
-def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
+def compute_statistics_continuous_array(array: np.ndarray) -> dict[str, float]:
     r"""Return several descriptive statistics for the data with
     continuous values.
 
     Args:
-        data: The data to analyze.
+        array: The data to analyze.
 
     Returns:
         The descriptive statistics for the input data.
@@ -30,18 +34,26 @@ def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
     ```pycon
 
     >>> import numpy as np
-    >>> from flamme.utils.stats import compute_statistics_continuous
-    >>> compute_statistics_continuous(np.arange(101))
-    {'mean': 50.0, 'std': 29.15...,
+    >>> from flamme.utils.stats import compute_statistics_continuous_array
+    >>> compute_statistics_continuous_array(np.arange(101))
+    {'count': 101, 'nunique': 101, 'num_non_nulls': 101, 'num_nulls': 0,
+     'mean': 50.0, 'std': 29.15...,
      'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
      'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
      'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1}
 
     ```
     """
-    array = data.ravel().astype(np.float64)
-    if array.size == 0:
-        return {
+    array = array.ravel().astype(np.float64)
+    array_non_nan = array[~np.isnan(array)]
+    stats = {
+        "count": int(array.size),
+        "nunique": int(np.unique(array).size),
+        "num_non_nulls": int(array_non_nan.size),
+    }
+    stats["num_nulls"] = stats["count"] - stats["num_non_nulls"]
+    if array_non_nan.size == 0:
+        return stats | {
             "mean": float("nan"),
             "std": float("nan"),
             "skewness": float("nan"),
@@ -63,25 +75,27 @@ def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
             "<0": 0,
             "=0": 0,
         }
-    quantiles = quantile(array, q=[0.001, 0.01, 0.05, 0.1, 0.25, 0.75, 0.9, 0.95, 0.99, 0.999])
-    return {
-        "mean": np.mean(array).item(),
-        "std": np.std(array).item(),
-        "skewness": skew(array).item(),
-        "kurtosis": kurtosis(array).item(),
-        "min": np.min(array).item(),
+    quantiles = quantile(
+        array_non_nan, q=[0.001, 0.01, 0.05, 0.1, 0.25, 0.75, 0.9, 0.95, 0.99, 0.999]
+    )
+    return stats | {
+        "mean": np.mean(array_non_nan).item(),
+        "std": np.std(array_non_nan).item(),
+        "skewness": skew(array_non_nan).item(),
+        "kurtosis": kurtosis(array_non_nan).item(),
+        "min": np.min(array_non_nan).item(),
         "q001": quantiles[0.001],
         "q01": quantiles[0.01],
         "q05": quantiles[0.05],
         "q10": quantiles[0.1],
         "q25": quantiles[0.25],
-        "median": np.median(array).item(),
+        "median": np.median(array_non_nan).item(),
         "q75": quantiles[0.75],
         "q90": quantiles[0.9],
         "q95": quantiles[0.95],
         "q99": quantiles[0.99],
         "q999": quantiles[0.999],
-        "max": np.max(array).item(),
+        "max": np.max(array_non_nan).item(),
         ">0": (array > 0).sum().item(),
         "<0": (array < 0).sum().item(),
         "=0": (array == 0).sum().item(),
@@ -105,21 +119,21 @@ def compute_statistics_continuous_series(series: pl.Series) -> dict[str, float]:
     >>> import polars as pl
     >>> from flamme.utils.stats import compute_statistics_continuous_series
     >>> compute_statistics_continuous_series(pl.Series(list(range(101))))
-    {'mean': 50.0, 'std': 29.15...,
+    {'count': 101, 'nunique': 101, 'num_non_nulls': 101, 'num_nulls': 0,
+     'mean': 50.0, 'std': 29.15...,
      'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
      'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
-     'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1,
-     'count': 101, 'num_nulls': 0, 'nunique': 101, 'num_non_nulls': 101}
+     'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1}
 
     ```
     """
     stats = {
         "count": int(series.shape[0]),
-        "num_nulls": int(series.null_count()),
         "nunique": series.n_unique(),
+        "num_nulls": int(series.null_count()),
     }
     stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
-    return compute_statistics_continuous(series.drop_nulls().to_numpy()) | stats
+    return compute_statistics_continuous_array(series.drop_nulls().to_numpy()) | stats
 
 
 def quantile(array: np.ndarray, q: Sequence[float]) -> dict[float, float]:
