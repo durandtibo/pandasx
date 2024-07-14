@@ -64,7 +64,7 @@ def bar_discrete_temporal(
     counts: np.ndarray,
     steps: Sequence | None = None,
     values: Sequence | None = None,
-    density: bool = False,
+    proportion: bool = False,
 ) -> None:
     r"""Plot the temporal distribution of discrete values.
 
@@ -76,7 +76,7 @@ def bar_discrete_temporal(
             represents the steps.
         steps: The name associated to each step.
         values: The name associated to each value.
-        density: If ``True``, it plots the normalized number of
+        proportion: If ``True``, it plots the normalized number of
             occurrences for each step.
 
     Example usage:
@@ -97,7 +97,7 @@ def bar_discrete_temporal(
     num_values, num_steps = counts.shape
     values = _prepare_values_bar_discrete_temporal(values=values, num_values=num_values)
     steps = _prepare_steps_bar_discrete_temporal(steps=steps, num_steps=num_steps)
-    counts = _prepare_counts_bar_discrete_temporal(counts=counts, density=density)
+    counts = _prepare_counts_bar_discrete_temporal(counts=counts, proportion=proportion)
 
     x = np.arange(num_steps, dtype=np.int64)
     bottom = np.zeros(num_steps, dtype=counts.dtype)
@@ -115,7 +115,7 @@ def bar_discrete_temporal(
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(-0.5, num_steps - 0.5)
     ax.set_ylabel("steps")
-    ax.set_ylabel("density" if density else "number of occurrences")
+    ax.set_ylabel("proportion" if proportion else "number of occurrences")
 
 
 def _prepare_values_bar_discrete_temporal(values: Sequence | None, num_values: int) -> list:
@@ -174,7 +174,7 @@ def _prepare_steps_bar_discrete_temporal(steps: Sequence | None, num_steps: int)
     return list(steps)
 
 
-def _prepare_counts_bar_discrete_temporal(counts: np.ndarray, density: bool) -> np.ndarray:
+def _prepare_counts_bar_discrete_temporal(counts: np.ndarray, proportion: bool) -> np.ndarray:
     r"""Prepare the count matrix.
 
     This function was designed to be used in ``bar_discrete_temporal``.
@@ -184,12 +184,12 @@ def _prepare_counts_bar_discrete_temporal(counts: np.ndarray, density: bool) -> 
             for each value and time step. The first dimension
             represents the value and the second dimension
             represents the steps.
-        density: If ``True``, the count matrix is normalized number of
-            occurrences for each step.
+        proportion: If ``True``, the count matrix is normalized number
+            of occurrences for each step.
 
     Returns:
         The count matrix.
     """
-    if not density:
+    if not proportion:
         return counts
     return counts / np.clip(counts.sum(axis=0), a_min=1, a_max=None)
