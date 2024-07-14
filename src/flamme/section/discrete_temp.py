@@ -43,6 +43,8 @@ class ColumnTemporalDiscreteSection(BaseSection):
             the temporal distribution.
         period: The temporal period e.g. monthly or
             daily.
+        proportion: If ``True``, it plots the normalized number of
+            occurrences for each step.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
@@ -78,6 +80,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
       (column): col
       (dt_column): datetime
       (period): 1mo
+      (proportion): False
       (figsize): None
     )
     >>> section.get_statistics()
@@ -92,12 +95,14 @@ class ColumnTemporalDiscreteSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
+        proportion: bool = False,
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._frame = frame
         self._column = column
         self._dt_column = dt_column
         self._period = period
+        self._proportion = proportion
         self._figsize = figsize
 
     def __repr__(self) -> str:
@@ -107,6 +112,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
                     "column": self._column,
                     "dt_column": self._dt_column,
                     "period": self._period,
+                    "proportion": self._proportion,
                     "figsize": self._figsize,
                 }
             )
@@ -124,6 +130,10 @@ class ColumnTemporalDiscreteSection(BaseSection):
     @property
     def period(self) -> str:
         return self._period
+
+    @property
+    def proportion(self) -> bool:
+        return self._proportion
 
     @property
     def figsize(self) -> tuple[float, float] | None:
@@ -166,6 +176,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
             column=self._column,
             dt_column=self._dt_column,
             period=self._period,
+            proportion=self._proportion,
             figsize=self._figsize,
         )
         if fig is None:
@@ -208,6 +219,7 @@ def create_temporal_figure(
     column: str,
     dt_column: str,
     period: str,
+    proportion: bool = False,
     figsize: tuple[float, float] | None = None,
 ) -> plt.Figure | None:
     r"""Create a figure with the temporal value distribution.
@@ -219,6 +231,8 @@ def create_temporal_figure(
             the temporal distribution.
         period: The temporal period e.g. monthly or
             daily.
+        proportion: If ``True``, it plots the normalized number of
+            occurrences for each step.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
@@ -266,6 +280,6 @@ def create_temporal_figure(
     )
 
     fig, ax = plt.subplots(figsize=figsize)
-    bar_discrete_temporal(ax=ax, counts=counts, steps=steps, values=values)
+    bar_discrete_temporal(ax=ax, counts=counts, steps=steps, values=values, proportion=proportion)
     ax.set_title(f"Temporal distribution for column {column}")
     return fig

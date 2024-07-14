@@ -61,6 +61,25 @@ def test_column_temporal_discrete_analyzer_period(dataframe: pl.DataFrame) -> No
     assert section.period == "M"
 
 
+def test_column_temporal_discrete_analyzer_proportion_default(dataframe: pl.DataFrame) -> None:
+    section = ColumnTemporalDiscreteAnalyzer(
+        column="col", dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
+    assert not section.proportion
+
+
+@pytest.mark.parametrize("proportion", [True, False])
+def test_column_temporal_discrete_analyzer_proportion(
+    dataframe: pl.DataFrame, proportion: bool
+) -> None:
+    section = ColumnTemporalDiscreteAnalyzer(
+        column="col", dt_column="datetime", period="M", proportion=proportion
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalDiscreteSection)
+    assert section.proportion == proportion
+
+
 def test_column_temporal_discrete_analyzer_figsize_default(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalDiscreteAnalyzer(
         column="col", dt_column="datetime", period="M"
