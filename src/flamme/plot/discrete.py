@@ -2,11 +2,12 @@ r"""Contain plotting functions to analyze discrete values."""
 
 from __future__ import annotations
 
-__all__ = ["bar_discrete"]
+__all__ = ["bar_discrete", "bar_discrete_temporal"]
 
 from typing import TYPE_CHECKING
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 from flamme.plot.utils import auto_yscale_discrete, readable_xticklabels
 
@@ -56,3 +57,117 @@ def bar_discrete(
     ax.set_xlim(-0.5, len(names) - 0.5)
     ax.set_xlabel("values")
     ax.set_ylabel("number of occurrences")
+
+
+def bar_discrete_temporal(
+    ax: Axes,
+    counts: np.ndarray,
+    labels: Sequence | None = None,
+    steps: Sequence | None = None,
+    density: bool = False,
+) -> None:
+    r"""Plot the temporal distribution of discrete values.
+
+    Args:
+        ax: The axes of the matplotlib figure to update.
+        counts: A 2-d array that indicates the number of occurrences
+            for each value and time step. The first dimension
+            represents the value and the second dimension
+            represents the steps.
+        labels: The name associated to each value.
+        steps: The name associated to each step.
+        density: If ``True``, it plots the normalized number of
+            occurrences for each step.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from matplotlib import pyplot as plt
+    >>> from flamme.plot import bar_discrete_temporal
+    >>> fig, ax = plt.subplots()
+    >>> bar_discrete_temporal(
+    ...     ax, counts=np.ones((5, 20)), labels=list(range(5)), steps=list(range(20))
+    ... )
+
+    ```
+    """
+    if counts.size == 0:
+        return
+    num_labels, num_steps = counts.shape
+    labels = _prepare_labels_bar_discrete_temporal(labels=labels, num_labels=num_labels)
+    steps = _prepare_steps_bar_discrete_temporal(steps=steps, num_steps=num_steps)
+
+    x = np.arange(num_steps, dtype=np.int64)
+    bottom = np.zeros(num_steps, dtype=counts.dtype)
+    width = 0.9 if num_steps < 50 else 1
+    my_cmap = plt.get_cmap("viridis")
+    for i in range(num_labels):
+        count = counts[i]
+        ax.bar(x, count, label=labels[i], bottom=bottom, width=width, color=my_cmap(i / num_labels))
+        bottom += count
+
+    num_valid_labels = len(list(filter(lambda x: x is not None, labels)))
+    if num_valid_labels <= 10 and num_valid_labels > 0:
+        ax.legend()
+    ax.set_xticks(x, labels=steps)
+    readable_xticklabels(ax, max_num_xticks=100)
+    ax.set_xlim(-0.5, num_steps - 0.5)
+    ax.set_ylabel("steps")
+    ax.set_ylabel("density" if density else "number of occurrences")
+
+
+def _prepare_labels_bar_discrete_temporal(labels: Sequence | None, num_labels: int) -> list:
+    r"""Return the list of labels.
+
+    This function was designed to be used in ``bar_discrete_temporal``.
+
+    Args:
+        labels: The sequence of labels.
+        num_labels: The expected number of labels.
+
+    Returns:
+        The labels. If ``labels`` is ``None``, a list filled with
+            ``None`` is returned.
+
+    Raises:
+        RuntimeError: if the length of ``labels`` does not match with
+            ``num_labels``.
+    """
+    if labels is None:
+        return [None] * num_labels
+    if len(labels) != num_labels:
+        msg = (
+            f"labels length ({len(labels):,}) do not match with the count matrix "
+            f"first dimension ({num_labels:,})"
+        )
+        raise RuntimeError(msg)
+    return list(labels)
+
+
+def _prepare_steps_bar_discrete_temporal(steps: Sequence | None, num_steps: int) -> list:
+    r"""Return the list of steps.
+
+    This function was designed to be used in ``bar_discrete_temporal``.
+
+    Args:
+        steps: The sequence of steps.
+        num_steps: The expected number of steps.
+
+    Returns:
+        The steps. If ``steps`` is ``None``, a list filled with
+            ``None`` is returned.
+
+    Raises:
+        RuntimeError: if the length of ``steps`` does not match with
+            ``num_steps``.
+    """
+    if steps is None:
+        return list(range(num_steps))
+    if len(steps) != num_steps:
+        msg = (
+            f"steps length ({len(steps):,}) do not match with the count matrix "
+            f"second dimension ({num_steps:,})"
+        )
+        raise RuntimeError(msg)
+    return list(steps)
