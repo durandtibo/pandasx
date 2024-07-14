@@ -3,7 +3,13 @@ for a given temporal window."""
 
 from __future__ import annotations
 
-__all__ = ["TemporalRowCountSection"]
+__all__ = [
+    "TemporalRowCountSection",
+    "create_section_template",
+    "create_temporal_count_figure",
+    "create_temporal_count_table",
+    "create_temporal_count_table_row",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -131,7 +137,7 @@ class TemporalRowCountSection(BaseSection):
             "Rendering the number of rows per temporal window "
             f"| datetime column: {self._dt_column} | period: {self._period}"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -139,12 +145,7 @@ class TemporalRowCountSection(BaseSection):
                 "title": tags2title(tags),
                 "section": number,
                 "dt_column": self._dt_column,
-                "figure": create_temporal_count_figure(
-                    frame=self._frame,
-                    dt_column=self._dt_column,
-                    period=self._period,
-                    figsize=self._figsize,
-                ),
+                "figure": self._create_temporal_count_figure(),
                 "table": create_temporal_count_table(
                     frame=self._frame,
                     dt_column=self._dt_column,
@@ -158,8 +159,31 @@ class TemporalRowCountSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_temporal_count_figure(self) -> str:
+        fig = create_temporal_count_figure(
+            frame=self._frame, dt_column=self._dt_column, period=self._period, figsize=self._figsize
+        )
+        if fig is None:
+            return "<span>&#9888;</span> No figure is generated because there is no data"
+        return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.count_rows import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -179,9 +203,8 @@ def create_temporal_count_figure(
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Return a HTML representation of a figure with number of rows per
-    temporal windows.
+) -> plt.Figure | None:
+    r"""Return a figure with number of rows per temporal windows.
 
     Args:
         frame: The DataFrame to analyze.
@@ -192,10 +215,37 @@ def create_temporal_count_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML representation of the figure.
+        The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.count_rows import create_temporal_count_figure
+    >>> fig = create_temporal_count_figure(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ]
+    ...         },
+    ...         schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+    ...     ),
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+
+    ```
     """
-    if frame.shape[0] == 0:
-        return "<span>&#9888;</span> No figure is generated because there is no data"
+    if frame.shape[0] == 0 or dt_column not in frame:
+        return None
 
     counts, labels = compute_temporal_count(frame=frame, dt_column=dt_column, period=period)
     fig, ax = plt.subplots(figsize=figsize)
@@ -203,7 +253,7 @@ def create_temporal_count_figure(
     ax.set_ylabel("number of rows")
     ax.set_xlim(-0.5, len(labels) - 0.5)
     readable_xticklabels(ax, max_num_xticks=100)
-    return figure2html(fig, close_fig=True)
+    return fig
 
 
 def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str) -> str:
@@ -218,6 +268,33 @@ def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str
 
     Returns:
         The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.count_rows import create_temporal_count_table
+    >>> table = create_temporal_count_table(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ]
+    ...         },
+    ...         schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+    ...     ),
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return ""
@@ -259,6 +336,17 @@ def create_temporal_count_table_row(label: str, num_rows: int) -> str:
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.count_rows import create_temporal_count_table_row
+    >>> row = create_temporal_count_table_row(label="meow", num_rows=42)
+
+    ```
     """
     return Template("<tr><th>{{label}}</th><td {{num_style}}>{{num_rows}}</td></tr>").render(
         {
