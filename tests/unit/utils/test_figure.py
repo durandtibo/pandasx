@@ -25,3 +25,10 @@ def test_figure2html_close_fig(close_fig: bool) -> None:
 def test_figure2html_reactive(reactive: bool) -> None:
     fig, _ = plt.subplots()
     assert isinstance(figure2html(fig, reactive=reactive), str)
+
+
+def test_figure2html_none() -> None:
+    assert (
+        figure2html(None)
+        == "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
+    )
