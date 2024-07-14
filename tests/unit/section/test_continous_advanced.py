@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 from coola import objects_are_allclose
 from jinja2 import Template
-from pandas.testing import assert_series_equal
+from polars.testing import assert_series_equal
 
 from flamme.section import ColumnContinuousAdvancedSection
 from flamme.section.continuous_advanced import create_histogram_range_figure
 
 
 @pytest.fixture()
-def series() -> pd.Series:
-    return pd.Series([np.nan, *list(range(101)), np.nan])
+def series() -> pl.Series:
+    return pl.Series([None, *list(range(101)), None], dtype=pl.Int64)
 
 
 @pytest.fixture()
@@ -51,47 +50,47 @@ def stats() -> dict:
 #####################################################
 
 
-def test_column_continuous_advanced_section_str(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_str(series: pl.Series) -> None:
     assert str(ColumnContinuousAdvancedSection(series=series, column="col")).startswith(
         "ColumnContinuousAdvancedSection("
     )
 
 
-def test_column_continuous_advanced_section_series(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_series(series: pl.Series) -> None:
     assert_series_equal(ColumnContinuousAdvancedSection(series=series, column="col").series, series)
 
 
-def test_column_continuous_advanced_section_column(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_column(series: pl.Series) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col").column == "col"
 
 
-def test_column_continuous_advanced_section_yscale_default(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_yscale_default(series: pl.Series) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col").yscale == "auto"
 
 
 @pytest.mark.parametrize("yscale", ["log", "linear"])
-def test_column_continuous_advanced_section_yscale(series: pd.Series, yscale: str) -> None:
+def test_column_continuous_advanced_section_yscale(series: pl.Series, yscale: str) -> None:
     assert (
         ColumnContinuousAdvancedSection(series=series, column="col", yscale=yscale).yscale == yscale
     )
 
 
-def test_column_continuous_advanced_section_nbins_default(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_nbins_default(series: pl.Series) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col").nbins is None
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
-def test_column_continuous_advanced_section_nbins(series: pd.Series, nbins: int) -> None:
+def test_column_continuous_advanced_section_nbins(series: pl.Series, nbins: int) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col", nbins=nbins).nbins == nbins
 
 
-def test_column_continuous_advanced_section_figsize_default(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_figsize_default(series: pl.Series) -> None:
     assert ColumnContinuousAdvancedSection(series=series, column="col").figsize is None
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_column_continuous_advanced_section_figsize(
-    series: pd.Series, figsize: tuple[float, float]
+    series: pl.Series, figsize: tuple[float, float]
 ) -> None:
     assert (
         ColumnContinuousAdvancedSection(series=series, column="col", figsize=figsize).figsize
@@ -99,13 +98,13 @@ def test_column_continuous_advanced_section_figsize(
     )
 
 
-def test_column_continuous_advanced_section_get_statistics(series: pd.Series, stats: dict) -> None:
+def test_column_continuous_advanced_section_get_statistics(series: pl.Series, stats: dict) -> None:
     section = ColumnContinuousAdvancedSection(series=series, column="col")
     assert objects_are_allclose(section.get_statistics(), stats, atol=1e-2)
 
 
 def test_column_continuous_advanced_section_get_statistics_empty_row() -> None:
-    section = ColumnContinuousAdvancedSection(series=pd.Series([], dtype=object), column="col")
+    section = ColumnContinuousAdvancedSection(series=pl.Series([], dtype=pl.Int64), column="col")
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -139,7 +138,9 @@ def test_column_continuous_advanced_section_get_statistics_empty_row() -> None:
 
 
 def test_column_continuous_advanced_section_get_statistics_single_value() -> None:
-    section = ColumnContinuousAdvancedSection(series=pd.Series([1, 1, 1, 1, 1]), column="col")
+    section = ColumnContinuousAdvancedSection(
+        series=pl.Series(values=[1, 1, 1, 1, 1]), column="col"
+    )
     assert objects_are_allclose(
         section.get_statistics(),
         {
@@ -174,7 +175,7 @@ def test_column_continuous_advanced_section_get_statistics_single_value() -> Non
 
 def test_column_continuous_advanced_section_get_statistics_only_nans() -> None:
     section = ColumnContinuousAdvancedSection(
-        series=pd.Series([np.nan, np.nan, np.nan, np.nan]), column="col"
+        series=pl.Series([None, None, None, None]), column="col"
     )
     assert objects_are_allclose(
         section.get_statistics(),
@@ -208,12 +209,12 @@ def test_column_continuous_advanced_section_get_statistics_only_nans() -> None:
     )
 
 
-def test_column_continuous_advanced_section_render_html_body(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_render_html_body(series: pl.Series) -> None:
     section = ColumnContinuousAdvancedSection(series=series, column="col")
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_continuous_advanced_section_render_html_body_args(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_render_html_body_args(series: pl.Series) -> None:
     section = ColumnContinuousAdvancedSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_body(number="1.", tags=["meow"], depth=1)).render(), str
@@ -221,16 +222,18 @@ def test_column_continuous_advanced_section_render_html_body_args(series: pd.Ser
 
 
 def test_column_continuous_advanced_section_render_html_body_empty() -> None:
-    section = ColumnContinuousAdvancedSection(series=pd.Series([], dtype=object), column="col")
+    section = ColumnContinuousAdvancedSection(
+        series=pl.Series(values=[], dtype=pl.Int64), column="col"
+    )
     assert isinstance(Template(section.render_html_body()).render(), str)
 
 
-def test_column_continuous_advanced_section_render_html_toc(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_render_html_toc(series: pl.Series) -> None:
     section = ColumnContinuousAdvancedSection(series=series, column="col")
     assert isinstance(Template(section.render_html_toc()).render(), str)
 
 
-def test_column_continuous_advanced_section_render_html_toc_args(series: pd.Series) -> None:
+def test_column_continuous_advanced_section_render_html_toc_args(series: pl.Series) -> None:
     section = ColumnContinuousAdvancedSection(series=series, column="col")
     assert isinstance(
         Template(section.render_html_toc(number="1.", tags=["meow"], depth=1)).render(), str
@@ -242,35 +245,35 @@ def test_column_continuous_advanced_section_render_html_toc_args(series: pd.Seri
 ##################################################
 
 
-def test_create_histogram_range_figure(series: pd.Series) -> None:
+def test_create_histogram_range_figure(series: pl.Series) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col"), str)
 
 
 @pytest.mark.parametrize("nbins", [1, 2, 4])
-def test_create_histogram_range_figure_nbins(series: pd.Series, nbins: int) -> None:
+def test_create_histogram_range_figure_nbins(series: pl.Series, nbins: int) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", nbins=nbins), str)
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log"])
-def test_create_histogram_range_figure_yscale(series: pd.Series, yscale: str) -> None:
+def test_create_histogram_range_figure_yscale(series: pl.Series, yscale: str) -> None:
     assert isinstance(
         create_histogram_range_figure(series=series, column="col", yscale=yscale), str
     )
 
 
 @pytest.mark.parametrize("xmin", [1.0, "q0.1", None, "q1"])
-def test_create_histogram_range_figure_xmin(series: pd.Series, xmin: float | str | None) -> None:
+def test_create_histogram_range_figure_xmin(series: pl.Series, xmin: float | str | None) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", xmin=xmin), str)
 
 
 @pytest.mark.parametrize("xmax", [100.0, "q0.9", None, "q0"])
-def test_create_histogram_range_figure_xmax(series: pd.Series, xmax: float | str | None) -> None:
+def test_create_histogram_range_figure_xmax(series: pl.Series, xmax: float | str | None) -> None:
     assert isinstance(create_histogram_range_figure(series=series, column="col", xmax=xmax), str)
 
 
 @pytest.mark.parametrize("figsize", [(7, 3), (1.5, 1.5)])
 def test_create_histogram_range_figure_figsize(
-    series: pd.Series, figsize: tuple[float, float]
+    series: pl.Series, figsize: tuple[float, float]
 ) -> None:
     assert isinstance(
         create_histogram_range_figure(series=series, column="col", figsize=figsize), str

@@ -34,7 +34,7 @@ from flamme.utils.range import find_range
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -58,10 +58,10 @@ class ColumnContinuousAdvancedSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.section import ColumnContinuousSection
     >>> section = ColumnContinuousAdvancedSection(
-    ...     series=pd.Series([np.nan, *list(range(101)), np.nan]), column="col"
+    ...     series=pl.Series([np.nan, *list(range(101)), np.nan]), column="col"
     ... )
     >>> section
     ColumnContinuousAdvancedSection(
@@ -82,7 +82,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
 
     def __init__(
         self,
-        series: pd.Series,
+        series: pl.Series,
         column: str,
         nbins: int | None = None,
         yscale: str = "auto",
@@ -120,7 +120,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
         return self._nbins
 
     @property
-    def series(self) -> pd.Series:
+    def series(self) -> pl.Series:
         return self._series
 
     @property
@@ -132,7 +132,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
         return self._figsize
 
     def get_statistics(self) -> dict[str, float]:
-        return compute_statistics(self._series)
+        return compute_statistics(self._series.to_pandas())
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the continuous distribution of {self._column}")
@@ -165,8 +165,7 @@ class ColumnContinuousAdvancedSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -227,7 +226,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 
 def create_histogram_range_figure(
-    series: pd.Series,
+    series: pl.Series,
     column: str,
     nbins: int | None = None,
     yscale: str = "auto",
@@ -256,7 +255,7 @@ def create_histogram_range_figure(
     Returns:
         The HTML code of the figure.
     """
-    array = series.to_numpy()
+    array = series.drop_nulls().to_numpy()
     if array.size == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
