@@ -5,7 +5,11 @@ import polars as pl
 import pytest
 from coola import objects_are_equal
 
-from flamme.utils.count import compute_nunique, compute_temporal_count
+from flamme.utils.count import (
+    compute_nunique,
+    compute_temporal_count,
+    compute_temporal_value_counts,
+)
 
 ####################################
 #    Tests for compute_nunique     #
@@ -103,3 +107,57 @@ def test_compute_temporal_count_empty() -> None:
         ),
         (np.array([], dtype=np.int64), []),
     )
+
+
+##################################################
+#    Tests for compute_temporal_value_counts     #
+##################################################
+
+
+def test_compute_temporal_value_counts() -> None:
+    counts, steps, values = compute_temporal_value_counts(
+        pl.DataFrame(
+            {
+                "col": [None, 1.0, 0.0, 1.0, 1.0, 4.2, 42.0],
+                "datetime": [
+                    datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=6, tzinfo=timezone.utc),
+                    datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+                ],
+            },
+            schema={
+                "col": pl.Float64,
+                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+            },
+        ),
+        column="col",
+        dt_column="datetime",
+        period="1mo",
+    )
+    assert objects_are_equal(
+        counts, np.array([[1, 2, 0, 0, 1], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0]])
+    )
+    assert objects_are_equal(steps, ["2020-01", "2020-02", "2020-03", "2020-04"])
+    assert objects_are_equal(values, ["0.0", "1.0", "4.2", "42.0", "null"])
+
+
+def test_compute_temporal_value_counts_empty() -> None:
+    counts, steps, values = compute_temporal_value_counts(
+        pl.DataFrame(
+            {"col": [], "datetime": []},
+            schema={
+                "col": pl.Float64,
+                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+            },
+        ),
+        column="col",
+        dt_column="datetime",
+        period="1mo",
+    )
+    assert objects_are_equal(counts, np.zeros((0, 0), dtype=np.int64))
+    assert objects_are_equal(steps, [])
+    assert objects_are_equal(values, [])
