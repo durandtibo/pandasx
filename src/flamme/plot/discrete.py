@@ -62,8 +62,8 @@ def bar_discrete(
 def bar_discrete_temporal(
     ax: Axes,
     counts: np.ndarray,
-    values: Sequence | None = None,
     steps: Sequence | None = None,
+    values: Sequence | None = None,
     density: bool = False,
 ) -> None:
     r"""Plot the temporal distribution of discrete values.
@@ -74,8 +74,8 @@ def bar_discrete_temporal(
             for each value and time step. The first dimension
             represents the value and the second dimension
             represents the steps.
-        values: The name associated to each value.
         steps: The name associated to each step.
+        values: The name associated to each value.
         density: If ``True``, it plots the normalized number of
             occurrences for each step.
 

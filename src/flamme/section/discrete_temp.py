@@ -56,7 +56,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
     >>> section = ColumnTemporalDiscreteSection(
     ...     frame=pl.DataFrame(
     ...         {
-    ...             "col": [1, 42, None, 22],
+    ...             "col": [1, 42, None, 42],
     ...             "datetime": [
     ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
     ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
@@ -235,7 +235,7 @@ def create_temporal_figure(
     >>> fig = create_temporal_figure(
     ...     frame=pl.DataFrame(
     ...         {
-    ...             "col": [1, 42, None, 22],
+    ...             "col": [1, 42, None, 42],
     ...             "datetime": [
     ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
     ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
@@ -266,6 +266,6 @@ def create_temporal_figure(
     )
 
     fig, ax = plt.subplots(figsize=figsize)
-    bar_discrete_temporal(ax=ax, counts=counts, values=values, steps=steps)
+    bar_discrete_temporal(ax=ax, counts=counts, steps=steps, values=values)
     ax.set_title(f"Temporal distribution for column {column}")
     return fig
