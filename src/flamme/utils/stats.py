@@ -2,7 +2,7 @@ r"""Contain statistics utility functions."""
 
 from __future__ import annotations
 
-__all__ = ["compute_statistics_continuous"]
+__all__ = ["compute_statistics_continuous", "compute_statistics_continuous_series", "quantile"]
 
 from typing import TYPE_CHECKING
 
@@ -11,6 +11,8 @@ from scipy.stats import kurtosis, skew
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    import polars as pl
 
 
 def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
@@ -84,6 +86,40 @@ def compute_statistics_continuous(data: np.ndarray) -> dict[str, float]:
         "<0": (array < 0).sum().item(),
         "=0": (array == 0).sum().item(),
     }
+
+
+def compute_statistics_continuous_series(series: pl.Series) -> dict[str, float]:
+    r"""Return several descriptive statistics for the data with
+    continuous values.
+
+    Args:
+        series: The series to analyze.
+
+    Returns:
+        The descriptive statistics for the input data.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.utils.stats import compute_statistics_continuous_series
+    >>> compute_statistics_continuous_series(pl.Series(list(range(101))))
+    {'mean': 50.0, 'std': 29.15...,
+     'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
+     'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
+     'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1,
+     'count': 101, 'num_nulls': 0, 'nunique': 101, 'num_non_nulls': 101}
+
+    ```
+    """
+    stats = {
+        "count": int(series.shape[0]),
+        "num_nulls": int(series.null_count()),
+        "nunique": series.n_unique(),
+    }
+    stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
+    return compute_statistics_continuous(series.drop_nulls().to_numpy()) | stats
 
 
 def quantile(array: np.ndarray, q: Sequence[float]) -> dict[float, float]:
