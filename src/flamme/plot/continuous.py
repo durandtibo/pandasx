@@ -2,7 +2,7 @@ r"""Contain plotting functions to analyze continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["hist_continuous", "hist_continuous2"]
+__all__ = ["boxplot_continuous", "hist_continuous", "hist_continuous2"]
 
 from typing import TYPE_CHECKING
 
@@ -18,6 +18,54 @@ from flamme.utils.range import find_range
 
 if TYPE_CHECKING:
     from matplotlib.axes import Axes
+
+
+def boxplot_continuous(
+    ax: Axes,
+    array: np.ndarray,
+    xmin: float | str | None = None,
+    xmax: float | str | None = None,
+) -> None:
+    r"""Plot the histogram of an array containing continuous values.
+
+    Args:
+        ax: The axes of the matplotlib figure to update.
+        array: The array with the data.
+        xmin: The minimum value of the range or its
+            associated quantile. ``q0.1`` means the 10% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+        xmax: The maximum value of the range or its
+            associated quantile. ``q0.9`` means the 90% quantile.
+            ``0`` is the minimum value and ``1`` is the maximum value.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import numpy as np
+    >>> from matplotlib import pyplot as plt
+    >>> from flamme.plot import boxplot_continuous
+    >>> fig, ax = plt.subplots()
+    >>> boxplot_continuous(ax, array=np.arange(101))
+
+    ```
+    """
+    array = array.ravel()
+    if array.size == 0:
+        return
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    ax.boxplot(
+        array,
+        notch=True,
+        vert=False,
+        widths=0.7,
+        patch_artist=True,
+        boxprops={"facecolor": "lightblue"},
+    )
+    readable_xticklabels(ax, max_num_xticks=100)
+    if xmin < xmax:
+        ax.set_xlim(xmin, xmax)
+    ax.set_ylabel(" ")
 
 
 def hist_continuous(
