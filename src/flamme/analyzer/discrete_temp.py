@@ -5,15 +5,11 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalDiscreteAnalyzer"]
 
 import logging
-from typing import TYPE_CHECKING
 
 import polars as pl
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnTemporalDiscreteSection, EmptySection
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -35,28 +31,30 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
     >>> analyzer = ColumnTemporalDiscreteAnalyzer(
-    ...     column="str", dt_column="datetime", period="M"
+    ...     column="col", dt_column="datetime", period="M"
     ... )
     >>> analyzer
-    ColumnTemporalDiscreteAnalyzer(column=str, dt_column=datetime, period=M, figsize=None)
-    >>> frame = pd.DataFrame(
+    ColumnTemporalDiscreteAnalyzer(column=col, dt_column=datetime, period=M, figsize=None)
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...         "datetime": pd.to_datetime(
-    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...         ),
-    ...     }
+    ...         "col": [1, 42, None, 22],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = analyzer.analyze(frame)
     >>> section
     ColumnTemporalDiscreteSection(
-      (column): str
+      (column): col
       (dt_column): datetime
       (period): M
       (figsize): None
@@ -83,9 +81,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             f"dt_column={self._dt_column}, period={self._period}, figsize={self._figsize})"
         )
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnTemporalDiscreteSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
         logger.info(
             f"Analyzing the temporal discrete distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
