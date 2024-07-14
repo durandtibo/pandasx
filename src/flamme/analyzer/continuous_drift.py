@@ -7,14 +7,13 @@ __all__ = ["ColumnContinuousTemporalDriftAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
-import polars as pl
 from coola.utils import repr_indent, repr_mapping
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnContinuousTemporalDriftSection, EmptySection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -49,17 +48,18 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
 
     ```pycon
 
+    >>> from datetime import datetime, timezone
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnContinuousTemporalDriftAnalyzer
     >>> analyzer = ColumnContinuousTemporalDriftAnalyzer(
-    ...     column="col", dt_column="date", period="M"
+    ...     column="col", dt_column="date", period="1mo"
     ... )
     >>> analyzer
     ColumnContinuousTemporalDriftAnalyzer(
       (column): col
       (dt_column): date
-      (period): M
+      (period): 1mo
       (nbins): None
       (density): False
       (yscale): auto
@@ -68,11 +68,18 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
       (figsize): None
     )
     >>> rng = np.random.default_rng()
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "col": rng.standard_normal(10),
-    ...         "date": pd.date_range(start="2017-01-01", periods=10, freq="1D"),
-    ...     }
+    ...         "col": rng.standard_normal(59),
+    ...         "datetime": pl.datetime_range(
+    ...             start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+    ...             end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+    ...             interval="1d",
+    ...             closed="left",
+    ...             eager=True,
+    ...         ),
+    ...     },
+    ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -119,9 +126,7 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnContinuousTemporalDriftSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnContinuousTemporalDriftSection | EmptySection:
         logger.info(f"Analyzing the temporal drift of {self._column}")
         for column in [self._column, self._dt_column]:
             if column not in frame:
@@ -136,8 +141,6 @@ class ColumnContinuousTemporalDriftAnalyzer(BaseAnalyzer):
                 f"({self._column}) is the column to analyze"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
         return ColumnContinuousTemporalDriftSection(
             frame=frame,
             column=self._column,
