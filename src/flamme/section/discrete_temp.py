@@ -8,13 +8,11 @@ __all__ = ["ColumnTemporalDiscreteSection", "create_section_template", "create_t
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
-import pandas as pd
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
-from flamme.plot.utils import readable_xticklabels
+from flamme.plot import bar_discrete_temporal
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -23,11 +21,13 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.count import compute_temporal_value_counts
 from flamme.utils.figure import figure2html
-from flamme.utils.sorting import mixed_typed_sort
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -50,28 +50,34 @@ class ColumnTemporalDiscreteSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
-    >>> import numpy as np
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import ColumnTemporalDiscreteSection
     >>> section = ColumnTemporalDiscreteSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col": np.array([1, 42, np.nan, 22]),
-    ...             "col2": ["a", "b", 1, "a"],
-    ...             "datetime": pd.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
+    ...             "col": [1, 42, None, 22],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
     ...     ),
     ...     column="col",
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
     ColumnTemporalDiscreteSection(
       (column): col
       (dt_column): datetime
-      (period): M
+      (period): 1mo
       (figsize): None
     )
     >>> section.get_statistics()
@@ -82,7 +88,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         column: str,
         dt_column: str,
         period: str,
@@ -155,8 +161,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_temporal_figure(self) -> str:
-        if self._frame.shape[0] == 0:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
         fig = create_temporal_figure(
             frame=self._frame,
             column=self._column,
@@ -164,6 +168,8 @@ class ColumnTemporalDiscreteSection(BaseSection):
             period=self._period,
             figsize=self._figsize,
         )
+        if fig is None:
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
         return figure2html(fig, close_fig=True)
 
 
@@ -198,7 +204,7 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -213,45 +219,53 @@ def create_temporal_figure(
             the temporal distribution.
         period: The temporal period e.g. monthly or
             daily.
-        log_y (bool, optional): If ``True``, it represents the bars
-            with a log scale. Default: ``False``
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
     Returns:
         The generated figure or None if the data is empty.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.discrete_temp import create_temporal_figure
+    >>> fig = create_temporal_figure(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "col": [1, 42, None, 22],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     ),
+    ...     column="col",
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0 or column not in frame or dt_column not in frame:
         return None
-    frame = frame[[column, dt_column]].copy()
-    col_dt, col_count = "__datetime__", "__count__"
-    frame[col_dt] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
-    )
-    frame = frame[[column, col_dt]].groupby(by=[col_dt, column], dropna=False)[column].size()
-    frame = pd.DataFrame({col_count: frame}).reset_index().sort_values(by=[col_dt, column])
-    frame = frame.pivot_table(
-        index=col_dt, columns=column, values=col_count, fill_value=0, dropna=False
+
+    counts, steps, values = compute_temporal_value_counts(
+        frame=frame,
+        column=column,
+        dt_column=dt_column,
+        period=period,
     )
 
-    labels = mixed_typed_sort(frame.columns.tolist())
-    num_labels = len(labels)
-    steps = frame.index.tolist()
-    x = np.arange(len(steps), dtype=np.int64)
-    bottom = np.zeros_like(x)
-    width = 0.9 if len(steps) < 50 else 1
     fig, ax = plt.subplots(figsize=figsize)
-    my_cmap = plt.get_cmap("viridis")
-    for i, label in enumerate(labels):
-        count = frame[label].to_numpy().astype(int)
-        ax.bar(x, count, label=label, bottom=bottom, width=width, color=my_cmap(i / num_labels))
-        bottom += count
-
-    if len(labels) <= 10:
-        ax.legend()
-    ax.set_xticks(x, labels=steps)
-    readable_xticklabels(ax, max_num_xticks=100)
-    ax.set_xlim(-0.5, len(steps) - 0.5)
-    ax.set_ylabel("number of occurrences")
+    bar_discrete_temporal(ax=ax, counts=counts, labels=values, steps=steps)
     ax.set_title(f"Temporal distribution for column {column}")
     return fig
