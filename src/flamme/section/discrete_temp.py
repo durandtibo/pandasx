@@ -179,8 +179,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
             proportion=self._proportion,
             figsize=self._figsize,
         )
-        if fig is None:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
         return figure2html(fig, close_fig=True)
 
 

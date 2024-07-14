@@ -180,6 +180,10 @@ def test_create_histogram_figsize(figsize: tuple[float, float]) -> None:
     )
 
 
+def test_create_histogram_empty() -> None:
+    assert create_histogram(column="col", names=[], counts=[]) is None
+
+
 ##################################
 #     Tests for create_table     #
 ##################################

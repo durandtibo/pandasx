@@ -188,8 +188,6 @@ class TemporalNullValueSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_temporal_null_figure(self) -> str:
-        if self._frame.shape[0] == 0:
-            return ""
         fig = create_temporal_null_figure(
             frame=self._frame,
             columns=self._columns,
@@ -236,7 +234,7 @@ def create_temporal_null_figure(
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
-) -> plt.Figure:
+) -> plt.Figure | None:
     r"""Create a figure with the temporal null value distribution.
 
     Args:
@@ -281,12 +279,12 @@ def create_temporal_null_figure(
 
     ```
     """
-    fig, ax = plt.subplots(figsize=figsize)
     if frame.shape[0] == 0:
-        return fig
+        return None
     nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=columns, dt_column=dt_column, period=period
     )
+    fig, ax = plt.subplots(figsize=figsize)
     plot_null_temporal(ax=ax, labels=labels, nulls=nulls, totals=totals)
     readable_xticklabels(ax, max_num_xticks=100)
     return fig

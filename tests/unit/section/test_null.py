@@ -212,7 +212,7 @@ def test_create_bar_figure() -> None:
 
 
 def test_create_bar_figure_empty() -> None:
-    assert isinstance(create_bar_figure(columns=[], null_count=[]), plt.Figure)
+    assert create_bar_figure(columns=[], null_count=[]) is None
 
 
 def test_create_bar_figure_incorrect_lengths() -> None:

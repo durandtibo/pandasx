@@ -188,8 +188,6 @@ class ColumnContinuousSection(BaseSection):
             xmax=self._xmax,
             figsize=self._figsize,
         )
-        if fig is None:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
         return figure2html(fig, close_fig=True)
 
     def _create_histogram_figure(self, stats: dict[str, float]) -> str:
@@ -203,8 +201,6 @@ class ColumnContinuousSection(BaseSection):
             xmax=self._xmax,
             figsize=self._figsize,
         )
-        if fig is None:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
         return figure2html(fig, close_fig=True)
 
 

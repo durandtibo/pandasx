@@ -28,7 +28,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html
+from flamme.utils.figure import MISSING_FIGURE_MESSAGE, figure2html
 
 if TYPE_CHECKING:
     from collections import Counter
@@ -234,7 +234,7 @@ def create_histogram_section(
     ```
     """
     if sum(counter.values()) == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return MISSING_FIGURE_MESSAGE
     most_common = [(value, count) for value, count in counter.most_common() if count > 0]
     fig = create_histogram(
         column=column,
@@ -260,7 +260,7 @@ def create_histogram(
     counts: Sequence[int],
     yscale: str = "auto",
     figsize: tuple[float, float] | None = None,
-) -> plt.Figure:
+) -> plt.Figure | None:
     r"""Return a figure with the histogram of discrete values.
 
     Args:
@@ -287,6 +287,8 @@ def create_histogram(
 
     ```
     """
+    if sum(counts) == 0:
+        return None
     fig, ax = plt.subplots(figsize=figsize)
     bar_discrete(ax=ax, names=names, counts=counts, yscale=yscale)
     ax.set_title(f"number of occurrences for each value of {column}")
