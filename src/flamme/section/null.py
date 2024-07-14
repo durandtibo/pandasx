@@ -281,7 +281,7 @@ def create_bar_figure(
 
 
 def create_table(frame: pl.DataFrame) -> str:
-    r"""Create a HTML representation of a table with the temporal
+    r"""Return a HTML representation of a table with the temporal
     distribution of null values.
 
     Args:

@@ -34,7 +34,6 @@ class DuplicatedRowAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
     >>> import polars as pl
     >>> from flamme.analyzer import DuplicatedRowAnalyzer
     >>> analyzer = DuplicatedRowAnalyzer()
