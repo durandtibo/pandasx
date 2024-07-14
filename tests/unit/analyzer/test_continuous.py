@@ -28,7 +28,7 @@ def test_column_continuous_analyzer_series(dataframe: pl.DataFrame) -> None:
     assert isinstance(section, ColumnContinuousSection)
     assert_series_equal(
         section.series,
-        pl.Series(values=[None, *list(range(101)), None], name="col", dtype=pl.Int64()),
+        pl.Series(values=[None, *list(range(101)), None], name="col", dtype=pl.Int64),
     )
 
 
