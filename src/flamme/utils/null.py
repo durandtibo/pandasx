@@ -165,10 +165,7 @@ def compute_temporal_null_count(
 
     ```
     """
-    columns = list(columns)
-    frame_na = frame.select([*columns, dt_column]).with_columns(
-        cs.by_name(columns).is_null().cast(pl.Int64)
-    )
+    frame_na = frame.select(cs.by_name(columns).is_null().cast(pl.Int64), pl.col(dt_column))
     frame_group = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
     format_dt = period_to_strftime_format(period)
     labels = [name[0].strftime(format_dt) for name, _ in frame_group]
