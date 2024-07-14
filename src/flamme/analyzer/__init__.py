@@ -33,12 +33,10 @@ from flamme.analyzer.base import BaseAnalyzer, is_analyzer_config, setup_analyze
 from flamme.analyzer.choice import ChoiceAnalyzer
 from flamme.analyzer.column import ColumnSubsetAnalyzer
 from flamme.analyzer.content import ContentAnalyzer
-from flamme.analyzer.continuous import (
-    ColumnContinuousAnalyzer,
-    ColumnTemporalContinuousAnalyzer,
-)
+from flamme.analyzer.continuous import ColumnContinuousAnalyzer
 from flamme.analyzer.continuous_advanced import ColumnContinuousAdvancedAnalyzer
 from flamme.analyzer.continuous_drift import ColumnContinuousTemporalDriftAnalyzer
+from flamme.analyzer.continuous_temp import ColumnTemporalContinuousAnalyzer
 from flamme.analyzer.count_rows import TemporalRowCountAnalyzer
 from flamme.analyzer.discrete import ColumnDiscreteAnalyzer
 from flamme.analyzer.discrete_temp import ColumnTemporalDiscreteAnalyzer
