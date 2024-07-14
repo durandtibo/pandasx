@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,7 +8,7 @@ from coola import objects_are_equal
 from jinja2 import Template
 
 from flamme.section import ColumnTemporalDiscreteSection
-from flamme.section.discrete_temp import create_temporal_figure
+from flamme.section.discrete_temp import create_section_template, create_temporal_figure
 
 
 @pytest.fixture()
@@ -189,6 +190,15 @@ def test_column_temporal_discrete_section_render_html_toc_args(
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 ###########################################
 #    Tests for create_temporal_figure     #
 ###########################################
@@ -203,7 +213,7 @@ def test_create_temporal_figure(dataframe: pd.DataFrame, column: str) -> None:
             dt_column="datetime",
             period="M",
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -220,7 +230,7 @@ def test_create_temporal_figure_20_values() -> None:
             dt_column="datetime",
             period="M",
         ),
-        str,
+        plt.Figure,
     )
 
 
@@ -236,5 +246,41 @@ def test_create_temporal_figure_figsize(
             period="M",
             figsize=figsize,
         ),
-        str,
+        plt.Figure,
+    )
+
+
+def test_create_temporal_figure_empty() -> None:
+    assert (
+        create_temporal_figure(
+            frame=pd.DataFrame({}),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+        is None
+    )
+
+
+def test_create_temporal_figure_missing_column() -> None:
+    assert (
+        create_temporal_figure(
+            frame=pd.DataFrame({"datetime": [1, 2, 3, 4, 5]}),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+        is None
+    )
+
+
+def test_create_temporal_figure_missing_dt_column() -> None:
+    assert (
+        create_temporal_figure(
+            frame=pd.DataFrame({"col": [1, 2, 3, 4, 5]}),
+            column="col",
+            dt_column="datetime",
+            period="M",
+        )
+        is None
     )

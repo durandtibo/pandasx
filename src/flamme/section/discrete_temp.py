@@ -3,7 +3,7 @@ distribution of a column with discrete values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnTemporalDiscreteSection"]
+__all__ = ["ColumnTemporalDiscreteSection", "create_section_template", "create_temporal_figure"]
 
 import logging
 from typing import TYPE_CHECKING
@@ -135,7 +135,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
             f"Analyzing the temporal discrete distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -145,13 +145,7 @@ class ColumnTemporalDiscreteSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "period": self._period,
-                "figure": create_temporal_figure(
-                    frame=self._frame,
-                    column=self._column,
-                    dt_column=self._dt_column,
-                    period=self._period,
-                    figsize=self._figsize,
-                ),
+                "figure": self._create_temporal_figure(),
             }
         )
 
@@ -160,9 +154,35 @@ class ColumnTemporalDiscreteSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_temporal_figure(self) -> str:
+        if self._frame.shape[0] == 0:
+            return "<span>&#9888;</span> No figure is generated because the column is empty"
+        fig = create_temporal_figure(
+            frame=self._frame,
+            column=self._column,
+            dt_column=self._dt_column,
+            period=self._period,
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.discrete_temp import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -183,9 +203,8 @@ def create_temporal_figure(
     dt_column: str,
     period: str,
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create a HTML representation of a figure with the temporal value
-    distribution.
+) -> plt.Figure | None:
+    r"""Create a figure with the temporal value distribution.
 
     Args:
         frame: The DataFrame to analyze.
@@ -200,10 +219,10 @@ def create_temporal_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML representation of the figure.
+        The generated figure or None if the data is empty.
     """
-    if frame.shape[0] == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+    if frame.shape[0] == 0 or column not in frame or dt_column not in frame:
+        return None
     frame = frame[[column, dt_column]].copy()
     col_dt, col_count = "__datetime__", "__count__"
     frame[col_dt] = (
@@ -233,6 +252,6 @@ def create_temporal_figure(
     ax.set_xticks(x, labels=steps)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlim(-0.5, len(steps) - 0.5)
-    ax.set_ylabel("Number of occurrences")
+    ax.set_ylabel("number of occurrences")
     ax.set_title(f"Temporal distribution for column {column}")
-    return figure2html(fig, close_fig=True)
+    return fig
