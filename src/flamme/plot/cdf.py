@@ -53,7 +53,7 @@ def plot_cdf(
     array = nonnan(array.ravel())
     if array.size == 0:
         return
-    nbins = nbins or min(1000, array.shape[0])
+    nbins = nbins or min(1000, array.size)
     nleft = array[array < xmin].size
     nright = array[array > xmax].size
     counts, edges = np.histogram(array[np.logical_and(array >= xmin, array <= xmax)], bins=nbins)
