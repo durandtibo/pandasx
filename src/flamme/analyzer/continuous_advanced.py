@@ -7,13 +7,11 @@ __all__ = ["ColumnContinuousAdvancedAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
-import polars as pl
-
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
     ```pycon
 
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pd
     >>> from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
     >>> analyzer = ColumnContinuousAdvancedAnalyzer(column="float")
     >>> analyzer
@@ -71,9 +69,7 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnContinuousAdvancedSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnContinuousAdvancedSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -81,8 +77,6 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
                 f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
         return ColumnContinuousAdvancedSection(
             column=self._column,
             series=frame[self._column],
