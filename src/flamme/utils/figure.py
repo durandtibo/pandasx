@@ -2,12 +2,16 @@ r"""Contain utility functions to manage matplotlib figures."""
 
 from __future__ import annotations
 
-__all__ = ["figure2html"]
+__all__ = ["MISSING_FIGURE_MESSAGE", "figure2html"]
 
 import base64
 import io
 
 from matplotlib import pyplot as plt
+
+MISSING_FIGURE_MESSAGE = (
+    "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
+)
 
 
 def figure2html(fig: plt.Figure | None, reactive: bool = True, close_fig: bool = False) -> str:
@@ -36,7 +40,7 @@ def figure2html(fig: plt.Figure | None, reactive: bool = True, close_fig: bool =
     ```
     """
     if fig is None:
-        return "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
+        return MISSING_FIGURE_MESSAGE
     fig.tight_layout()
     img = io.BytesIO()
     fig.savefig(img, format="png", bbox_inches="tight")
