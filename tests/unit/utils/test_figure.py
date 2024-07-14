@@ -28,8 +28,7 @@ def test_figure2html_reactive(reactive: bool) -> None:
 
 
 def test_figure2html_none() -> None:
-    fig, _ = plt.subplots()
     assert (
-        figure2html(fig)
+        figure2html(None)
         == "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
     )
