@@ -6,10 +6,121 @@ import pytest
 from coola import objects_are_allclose
 
 from flamme.utils.stats import (
+    compute_statistics_continuous,
     compute_statistics_continuous_array,
     compute_statistics_continuous_series,
     quantile,
 )
+
+###################################################
+#     Tests for compute_statistics_continuous     #
+###################################################
+
+
+@pytest.mark.parametrize("data", [np.arange(101), pl.Series(list(range(101)))])
+def test_compute_statistics_continuous(data: np.ndarray | pl.Series) -> None:
+    assert objects_are_allclose(
+        compute_statistics_continuous(data),
+        {
+            "count": 101,
+            "num_nulls": 0,
+            "num_non_nulls": 101,
+            "nunique": 101,
+            "mean": 50.0,
+            "std": 29.154759474226502,
+            "skewness": 0.0,
+            "kurtosis": -1.2,
+            "min": 0.0,
+            "q001": 0.1,
+            "q01": 1.0,
+            "q05": 5.0,
+            "q10": 10.0,
+            "q25": 25.0,
+            "median": 50.0,
+            "q75": 75.0,
+            "q90": 90.0,
+            "q95": 95.0,
+            "q99": 99.0,
+            "q999": 99.9,
+            "max": 100.0,
+            ">0": 100,
+            "<0": 0,
+            "=0": 1,
+        },
+        atol=1e-2,
+    )
+
+
+@pytest.mark.parametrize("data", [np.array([]), pl.Series([])])
+def test_compute_statistics_continuous_empty(data: np.ndarray | pl.Series) -> None:
+    assert objects_are_allclose(
+        compute_statistics_continuous(data),
+        {
+            "count": 0,
+            "num_nulls": 0,
+            "num_non_nulls": 0,
+            "nunique": 0,
+            "mean": float("nan"),
+            "std": float("nan"),
+            "skewness": float("nan"),
+            "kurtosis": float("nan"),
+            "min": float("nan"),
+            "q001": float("nan"),
+            "q01": float("nan"),
+            "q05": float("nan"),
+            "q10": float("nan"),
+            "q25": float("nan"),
+            "median": float("nan"),
+            "q75": float("nan"),
+            "q90": float("nan"),
+            "q95": float("nan"),
+            "q99": float("nan"),
+            "q999": float("nan"),
+            "max": float("nan"),
+            ">0": 0,
+            "<0": 0,
+            "=0": 0,
+        },
+        equal_nan=True,
+    )
+
+
+@pytest.mark.parametrize(
+    "data",
+    [np.array([np.nan, *list(range(101)), np.nan]), pl.Series([None, *list(range(101)), None])],
+)
+def test_compute_statistics_continuous_with_null(data: np.ndarray | pl.Series) -> None:
+    assert objects_are_allclose(
+        compute_statistics_continuous(data),
+        {
+            "count": 103,
+            "num_nulls": 2,
+            "num_non_nulls": 101,
+            "nunique": 102,
+            "mean": 50.0,
+            "std": 29.154759474226502,
+            "skewness": 0.0,
+            "kurtosis": -1.2,
+            "min": 0.0,
+            "q001": 0.1,
+            "q01": 1.0,
+            "q05": 5.0,
+            "q10": 10.0,
+            "q25": 25.0,
+            "median": 50.0,
+            "q75": 75.0,
+            "q90": 90.0,
+            "q95": 95.0,
+            "q99": 99.0,
+            "q999": 99.9,
+            "max": 100.0,
+            ">0": 100,
+            "<0": 0,
+            "=0": 1,
+        },
+        atol=1e-2,
+    )
+
 
 #########################################################
 #     Tests for compute_statistics_continuous_array     #
@@ -83,7 +194,7 @@ def test_compute_statistics_continuous_array_empty() -> None:
     )
 
 
-def test_compute_statistics_continuous_array_with_nan() -> None:
+def test_compute_statistics_continuous_array_with_null() -> None:
     assert objects_are_allclose(
         compute_statistics_continuous_array(np.array([np.nan, *list(range(101)), np.nan])),
         {
@@ -113,7 +224,6 @@ def test_compute_statistics_continuous_array_with_nan() -> None:
             "=0": 1,
         },
         atol=1e-2,
-        equal_nan=True,
     )
 
 
@@ -255,7 +365,7 @@ def test_compute_statistics_continuous_series_empty() -> None:
     )
 
 
-def test_compute_statistics_continuous_series_with_none() -> None:
+def test_compute_statistics_continuous_series_with_null() -> None:
     assert objects_are_allclose(
         compute_statistics_continuous_series(pl.Series([None, *list(range(101)), None])),
         {
