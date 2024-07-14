@@ -298,7 +298,7 @@ def create_temporal_null_figure(
     ```
     """
     if frame.shape[0] == 0:
-        return ""
+        return "<span>&#9888;</span> No figure is generated because the DataFrame is empty"
     figures = create_temporal_null_figures(
         frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
     )
