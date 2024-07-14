@@ -5,11 +5,13 @@ from __future__ import annotations
 __all__ = ["ColumnTemporalDiscreteAnalyzer"]
 
 import logging
-
-import polars as pl
+from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnTemporalDiscreteSection, EmptySection
+
+if TYPE_CHECKING:
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +37,10 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     >>> import polars as pl
     >>> from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
     >>> analyzer = ColumnTemporalDiscreteAnalyzer(
-    ...     column="col", dt_column="datetime", period="M"
+    ...     column="col", dt_column="datetime", period="1mo"
     ... )
     >>> analyzer
-    ColumnTemporalDiscreteAnalyzer(column=col, dt_column=datetime, period=M, figsize=None)
+    ColumnTemporalDiscreteAnalyzer(column=col, dt_column=datetime, period=1mo, figsize=None)
     >>> frame = pl.DataFrame(
     ...     {
     ...         "col": [1, 42, None, 22],
@@ -56,7 +58,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     ColumnTemporalDiscreteSection(
       (column): col
       (dt_column): datetime
-      (period): M
+      (period): 1mo
       (figsize): None
     )
 
@@ -99,8 +101,6 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
                 f"({self._column}) is the column to analyze"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
         return ColumnTemporalDiscreteSection(
             column=self._column,
             frame=frame,
