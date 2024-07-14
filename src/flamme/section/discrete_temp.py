@@ -266,6 +266,6 @@ def create_temporal_figure(
     )
 
     fig, ax = plt.subplots(figsize=figsize)
-    bar_discrete_temporal(ax=ax, counts=counts, labels=values, steps=steps)
+    bar_discrete_temporal(ax=ax, counts=counts, values=values, steps=steps)
     ax.set_title(f"Temporal distribution for column {column}")
     return fig

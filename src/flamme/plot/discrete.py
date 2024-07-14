@@ -62,7 +62,7 @@ def bar_discrete(
 def bar_discrete_temporal(
     ax: Axes,
     counts: np.ndarray,
-    labels: Sequence | None = None,
+    values: Sequence | None = None,
     steps: Sequence | None = None,
     density: bool = False,
 ) -> None:
@@ -74,7 +74,7 @@ def bar_discrete_temporal(
             for each value and time step. The first dimension
             represents the value and the second dimension
             represents the steps.
-        labels: The name associated to each value.
+        values: The name associated to each value.
         steps: The name associated to each step.
         density: If ``True``, it plots the normalized number of
             occurrences for each step.
@@ -87,15 +87,15 @@ def bar_discrete_temporal(
     >>> from flamme.plot import bar_discrete_temporal
     >>> fig, ax = plt.subplots()
     >>> bar_discrete_temporal(
-    ...     ax, counts=np.ones((5, 20)), labels=list(range(5)), steps=list(range(20))
+    ...     ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20))
     ... )
 
     ```
     """
     if counts.size == 0:
         return
-    num_labels, num_steps = counts.shape
-    labels = _prepare_labels_bar_discrete_temporal(labels=labels, num_labels=num_labels)
+    num_values, num_steps = counts.shape
+    values = _prepare_values_bar_discrete_temporal(values=values, num_values=num_values)
     steps = _prepare_steps_bar_discrete_temporal(steps=steps, num_steps=num_steps)
     counts = _prepare_counts_bar_discrete_temporal(counts=counts, density=density)
 
@@ -103,13 +103,13 @@ def bar_discrete_temporal(
     bottom = np.zeros(num_steps, dtype=counts.dtype)
     width = 0.9 if num_steps < 50 else 1
     my_cmap = plt.get_cmap("viridis")
-    for i in range(num_labels):
+    for i in range(num_values):
         count = counts[i]
-        ax.bar(x, count, label=labels[i], bottom=bottom, width=width, color=my_cmap(i / num_labels))
+        ax.bar(x, count, label=values[i], bottom=bottom, width=width, color=my_cmap(i / num_values))
         bottom += count
 
-    num_valid_labels = len(list(filter(lambda x: x is not None, labels)))
-    if num_valid_labels <= 10 and num_valid_labels > 0:
+    num_valid_values = len(list(filter(lambda x: x is not None, values)))
+    if num_valid_values <= 10 and num_valid_values > 0:
         ax.legend()
     ax.set_xticks(x, labels=steps)
     readable_xticklabels(ax, max_num_xticks=100)
@@ -118,32 +118,32 @@ def bar_discrete_temporal(
     ax.set_ylabel("density" if density else "number of occurrences")
 
 
-def _prepare_labels_bar_discrete_temporal(labels: Sequence | None, num_labels: int) -> list:
-    r"""Return the list of labels.
+def _prepare_values_bar_discrete_temporal(values: Sequence | None, num_values: int) -> list:
+    r"""Return the list of values.
 
     This function was designed to be used in ``bar_discrete_temporal``.
 
     Args:
-        labels: The sequence of labels.
-        num_labels: The expected number of labels.
+        values: The sequence of values.
+        num_values: The expected number of values.
 
     Returns:
-        The labels. If ``labels`` is ``None``, a list filled with
+        The values. If ``values`` is ``None``, a list filled with
             ``None`` is returned.
 
     Raises:
-        RuntimeError: if the length of ``labels`` does not match with
-            ``num_labels``.
+        RuntimeError: if the length of ``values`` does not match with
+            ``num_values``.
     """
-    if labels is None:
-        return [None] * num_labels
-    if len(labels) != num_labels:
+    if values is None:
+        return [None] * num_values
+    if len(values) != num_values:
         msg = (
-            f"labels length ({len(labels):,}) do not match with the count matrix "
-            f"first dimension ({num_labels:,})"
+            f"values length ({len(values):,}) do not match with the count matrix "
+            f"first dimension ({num_values:,})"
         )
         raise RuntimeError(msg)
-    return list(labels)
+    return list(values)
 
 
 def _prepare_steps_bar_discrete_temporal(steps: Sequence | None, num_steps: int) -> list:
