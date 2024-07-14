@@ -10,7 +10,7 @@ import io
 from matplotlib import pyplot as plt
 
 
-def figure2html(fig: plt.Figure, reactive: bool = True, close_fig: bool = False) -> str:
+def figure2html(fig: plt.Figure | None, reactive: bool = True, close_fig: bool = False) -> str:
     r"""Convert a matplotlib figure to a string that can be used in a
     HTML file.
 
@@ -35,6 +35,8 @@ def figure2html(fig: plt.Figure, reactive: bool = True, close_fig: bool = False)
 
     ```
     """
+    if fig is None:
+        return "<span>&#9888;</span> No figure is generated because of missing or incorrect data"
     fig.tight_layout()
     img = io.BytesIO()
     fig.savefig(img, format="png", bbox_inches="tight")
