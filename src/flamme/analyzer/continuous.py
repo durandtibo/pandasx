@@ -41,18 +41,18 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnContinuousAnalyzer
     >>> analyzer = ColumnContinuousAnalyzer(column="float")
     >>> analyzer
     ColumnContinuousAnalyzer(column=float, nbins=None, yscale=auto, xmin=q0, xmax=q1, figsize=None)
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
 
