@@ -122,7 +122,9 @@ def test_column_temporal_discrete_analyzer_analyze_missing_dt_column() -> None:
 
 
 def test_column_temporal_discrete_analyzer_analyze_same_column() -> None:
-    section = ColumnTemporalDiscreteAnalyzer(column="col", dt_column="col", period="M").analyze(
+    section = ColumnTemporalDiscreteAnalyzer(
+        column="datetime", dt_column="datetime", period="M"
+    ).analyze(
         pl.DataFrame(
             {
                 "datetime": [
