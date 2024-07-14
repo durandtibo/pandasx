@@ -10,8 +10,8 @@ from matplotlib import pyplot as plt
 from flamme.plot import bar_discrete
 from flamme.plot.discrete import (
     _prepare_counts_bar_discrete_temporal,
-    _prepare_labels_bar_discrete_temporal,
     _prepare_steps_bar_discrete_temporal,
+    _prepare_values_bar_discrete_temporal,
     bar_discrete_temporal,
 )
 
@@ -50,9 +50,9 @@ def test_bar_discrete_temporal() -> None:
     bar_discrete_temporal(ax, counts=np.ones((5, 20)))
 
 
-def test_bar_discrete_temporal_with_labels() -> None:
+def test_bar_discrete_temporal_with_values() -> None:
     fig, ax = plt.subplots()
-    bar_discrete_temporal(ax, counts=np.ones((5, 20)), labels=list(range(5)))
+    bar_discrete_temporal(ax, counts=np.ones((5, 20)), values=list(range(5)))
 
 
 def test_bar_discrete_temporal_with_steps() -> None:
@@ -60,16 +60,16 @@ def test_bar_discrete_temporal_with_steps() -> None:
     bar_discrete_temporal(ax, counts=np.ones((5, 20)), steps=list(range(20)))
 
 
-def test_bar_discrete_temporal_with_labels_and_steps() -> None:
+def test_bar_discrete_temporal_with_values_and_steps() -> None:
     fig, ax = plt.subplots()
-    bar_discrete_temporal(ax, counts=np.ones((5, 20)), labels=list(range(5)), steps=list(range(20)))
+    bar_discrete_temporal(ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20)))
 
 
 @pytest.mark.parametrize("density", [True, False])
 def test_bar_discrete_temporal_density_ones(density: bool) -> None:
     fig, ax = plt.subplots()
     bar_discrete_temporal(
-        ax, counts=np.ones((5, 20)), labels=list(range(5)), steps=list(range(20)), density=density
+        ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20)), density=density
     )
 
 
@@ -77,7 +77,7 @@ def test_bar_discrete_temporal_density_ones(density: bool) -> None:
 def test_bar_discrete_temporal_density_zeros(density: bool) -> None:
     fig, ax = plt.subplots()
     bar_discrete_temporal(
-        ax, counts=np.zeros((5, 20)), labels=list(range(5)), steps=list(range(20)), density=density
+        ax, counts=np.zeros((5, 20)), values=list(range(5)), steps=list(range(20)), density=density
     )
 
 
@@ -86,9 +86,9 @@ def test_bar_discrete_temporal_empty() -> None:
     bar_discrete_temporal(ax, counts=np.zeros((0, 0)))
 
 
-@pytest.mark.parametrize("labels", [("A", "B", "C", "D", "E"), ["A", "B", "C", "D", "E"]])
-def test_prepare_labels_bar_discrete_temporal_labels(labels: Sequence) -> None:
-    assert _prepare_labels_bar_discrete_temporal(labels=labels, num_labels=5) == [
+@pytest.mark.parametrize("values", [("A", "B", "C", "D", "E"), ["A", "B", "C", "D", "E"]])
+def test_prepare_values_bar_discrete_temporal_values(values: Sequence) -> None:
+    assert _prepare_values_bar_discrete_temporal(values=values, num_values=5) == [
         "A",
         "B",
         "C",
@@ -97,8 +97,8 @@ def test_prepare_labels_bar_discrete_temporal_labels(labels: Sequence) -> None:
     ]
 
 
-def test_prepare_labels_bar_discrete_temporal_labels_none() -> None:
-    assert _prepare_labels_bar_discrete_temporal(labels=None, num_labels=5) == [
+def test_prepare_values_bar_discrete_temporal_values_none() -> None:
+    assert _prepare_values_bar_discrete_temporal(values=None, num_values=5) == [
         None,
         None,
         None,
@@ -107,9 +107,9 @@ def test_prepare_labels_bar_discrete_temporal_labels_none() -> None:
     ]
 
 
-def test_prepare_labels_bar_discrete_temporal_labels_incorrect() -> None:
-    with pytest.raises(RuntimeError, match="labels length .* do not match with the count matrix"):
-        _prepare_labels_bar_discrete_temporal(labels=[1, 2, 3], num_labels=5)
+def test_prepare_values_bar_discrete_temporal_values_incorrect() -> None:
+    with pytest.raises(RuntimeError, match="values length .* do not match with the count matrix"):
+        _prepare_values_bar_discrete_temporal(values=[1, 2, 3], num_values=5)
 
 
 @pytest.mark.parametrize("steps", [("A", "B", "C", "D", "E"), ["A", "B", "C", "D", "E"]])
