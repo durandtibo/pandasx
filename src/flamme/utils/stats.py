@@ -3,6 +3,7 @@ r"""Contain statistics utility functions."""
 from __future__ import annotations
 
 __all__ = [
+    "compute_statistics_continuous",
     "compute_statistics_continuous_array",
     "compute_statistics_continuous_series",
     "quantile",
@@ -11,12 +12,41 @@ __all__ = [
 from typing import TYPE_CHECKING
 
 import numpy as np
+import polars as pl
 from scipy.stats import kurtosis, skew
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import polars as pl
+
+def compute_statistics_continuous(data: np.ndarray | pl.Series) -> dict[str, float]:
+    r"""Return several descriptive statistics for the data with
+    continuous values.
+
+    Args:
+        data: The data to analyze.
+
+    Returns:
+        The descriptive statistics for the input data.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import numpy as np
+    >>> from flamme.utils.stats import compute_statistics_continuous
+    >>> compute_statistics_continuous(np.arange(101))
+    {'count': 101, 'nunique': 101, 'num_non_nulls': 101, 'num_nulls': 0,
+     'mean': 50.0, 'std': 29.15...,
+     'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
+     'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
+     'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1}
+
+    ```
+    """
+    if isinstance(data, pl.Series):
+        return compute_statistics_continuous_series(data)
+    return compute_statistics_continuous_array(data)
 
 
 def compute_statistics_continuous_array(array: np.ndarray) -> dict[str, float]:
