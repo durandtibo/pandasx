@@ -8,13 +8,14 @@ __all__ = ["ColumnContinuousSection"]
 import logging
 from typing import TYPE_CHECKING
 
+import numpy as np
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
+from scipy.stats import kurtosis, skew
 
-from flamme.plot import hist_continuous
-from flamme.plot.utils import readable_xticklabels
+from flamme.plot import boxplot_continuous, hist_continuous
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -23,8 +24,8 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.array import nonnan
 from flamme.utils.figure import figure2html
-from flamme.utils.range import find_range
 from flamme.utils.stats import compute_statistics_continuous
 
 if TYPE_CHECKING:
@@ -171,7 +172,7 @@ class ColumnContinuousSection(BaseSection):
                 "unique_values": f"{stats['nunique']:,}",
                 "null_values": f"{stats['num_nulls']:,}",
                 "null_values_pct": null_values_pct,
-                "histogram_figure": self._create_histogram_figure(stats),
+                "histogram_figure": self._create_histogram_figure(),
                 "boxplot_figure": self._create_boxplot_figure(),
             }
         )
@@ -190,11 +191,10 @@ class ColumnContinuousSection(BaseSection):
         )
         return figure2html(fig, close_fig=True)
 
-    def _create_histogram_figure(self, stats: dict[str, float]) -> str:
+    def _create_histogram_figure(self) -> str:
         fig = create_histogram_figure(
             series=self._series,
             column=self._column,
-            stats=stats,
             nbins=self._nbins,
             yscale=self._yscale,
             xmin=self._xmin,
@@ -260,33 +260,30 @@ def create_boxplot_figure(
 
     Returns:
         The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.continuous import create_boxplot_figure
+    >>> fig = create_boxplot_figure(series=pl.Series([None, *list(range(101)), None]))
+
+    ```
     """
     array = series.drop_nulls().to_numpy()
     if array.size == 0:
         return None
-    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     if figsize is not None:
         figsize = (figsize[0], figsize[0] / 10)
     fig, ax = plt.subplots(figsize=figsize)
-    ax.boxplot(
-        array,
-        notch=True,
-        vert=False,
-        widths=0.7,
-        patch_artist=True,
-        boxprops={"facecolor": "lightblue"},
-    )
-    readable_xticklabels(ax, max_num_xticks=100)
-    if xmin < xmax:
-        ax.set_xlim(xmin, xmax)
-    ax.set_ylabel(" ")
+    boxplot_continuous(ax=ax, array=array, xmin=xmin, xmax=xmax)
     return fig
 
 
 def create_histogram_figure(
     series: pl.Series,
     column: str,
-    stats: dict,
     nbins: int | None = None,
     yscale: str = "linear",
     xmin: float | str | None = None,
@@ -298,7 +295,6 @@ def create_histogram_figure(
     Args:
         series: The series/column to analyze.
         column: The column name.
-        stats: Specifies a dictionary with the statistics.
         nbins: The number of bins in the histogram.
         yscale: The y-axis scale. If ``'auto'``, the
             ``'linear'`` or ``'log'`` scale is chosen based on the
@@ -314,6 +310,18 @@ def create_histogram_figure(
 
     Returns:
         The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.continuous import create_histogram_figure
+    >>> fig = create_histogram_figure(
+    ...     series=pl.Series([None, *list(range(101)), None]), column="col"
+    ... )
+
+    ```
     """
     array = series.drop_nulls().to_numpy()
     if array.size == 0:
@@ -321,12 +329,14 @@ def create_histogram_figure(
     fig, ax = plt.subplots(figsize=figsize)
     ax.set_title(f"data distribution for column {column}")
     hist_continuous(ax=ax, array=array, nbins=nbins, xmin=xmin, xmax=xmax, yscale=yscale)
+
+    array = nonnan(array)
     ax.legend(
         [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
         [
-            f'std={stats["std"]:.2f}',
-            f'skewness={stats["skewness"]:.2f}',
-            f'kurtosis={stats["kurtosis"]:.2f}',
+            f"std={np.std(array).item():.2f}",
+            f"skewness={skew(array).item():.2f}",
+            f"kurtosis={kurtosis(array).item():.2f}",
         ],
     )
     return fig
