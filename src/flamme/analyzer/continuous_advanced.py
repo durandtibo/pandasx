@@ -7,13 +7,11 @@ __all__ = ["ColumnContinuousAdvancedAnalyzer"]
 import logging
 from typing import TYPE_CHECKING
 
-import polars as pl
-
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -35,18 +33,18 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
     >>> analyzer = ColumnContinuousAdvancedAnalyzer(column="float")
     >>> analyzer
     ColumnContinuousAdvancedAnalyzer(column=float, nbins=None, yscale=auto, figsize=None)
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...     }
+    ...         "float": [1.2, 4.2, None, 2.2],
+    ...         "int": [None, 1, 0, 1],
+    ...         "str": ["A", "B", None, None],
+    ...     },
+    ...     schema={"float": pl.Float64, "int": pl.Int64, "str": pl.String},
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -71,9 +69,7 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnContinuousAdvancedSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnContinuousAdvancedSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in frame:
             logger.info(
@@ -81,8 +77,6 @@ class ColumnContinuousAdvancedAnalyzer(BaseAnalyzer):
                 f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
         return ColumnContinuousAdvancedSection(
             column=self._column,
             series=frame[self._column],
