@@ -3,6 +3,7 @@ r"""Contain utility functions to generate sections."""
 from __future__ import annotations
 
 __all__ = [
+    "GO_TO_TOP",
     "compute_statistics",
     "render_html_toc",
     "tags2id",
