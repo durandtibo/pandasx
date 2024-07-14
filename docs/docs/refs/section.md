@@ -1,1 +1,22 @@
 ::: flamme.section
+
+::: flamme.section.content
+::: flamme.section.continuous
+::: flamme.section.continuous_advanced
+::: flamme.section.continuous_drift
+::: flamme.section.continuous_temp
+::: flamme.section.count_rows
+::: flamme.section.discrete
+::: flamme.section.discrete_temp
+::: flamme.section.dtype
+::: flamme.section.duplicate
+::: flamme.section.empty
+::: flamme.section.frame_summary
+::: flamme.section.mapping
+::: flamme.section.markdown
+::: flamme.section.most_frequent
+::: flamme.section.null
+::: flamme.section.null_temp
+::: flamme.section.null_temp_col
+::: flamme.section.toc
+::: flamme.section.utils
