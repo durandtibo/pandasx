@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+import matplotlib.pyplot as plt
 import polars as pl
 import pytest
 from coola import objects_are_allclose
@@ -10,8 +11,10 @@ from polars.testing import assert_frame_equal
 
 from flamme.section import TemporalRowCountSection
 from flamme.section.count_rows import (
+    create_section_template,
     create_temporal_count_figure,
     create_temporal_count_table,
+    create_temporal_count_table_row,
 )
 
 
@@ -168,6 +171,51 @@ def test_column_temporal_row_count_section_render_html_toc_args(dataframe: pl.Da
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
+#################################################
+#    Tests for create_temporal_count_figure     #
+#################################################
+
+
+def test_create_temporal_count_figure(dataframe: pl.DataFrame) -> None:
+    assert isinstance(
+        create_temporal_count_figure(
+            frame=dataframe,
+            dt_column="datetime",
+            period="1mo",
+        ),
+        plt.Figure,
+    )
+
+
+def test_create_temporal_count_figure_empty() -> None:
+    assert (
+        create_temporal_count_figure(
+            frame=pl.DataFrame(
+                {"datetime": []}, schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")}
+            ),
+            dt_column="datetime",
+            period="1mo",
+        )
+        is None
+    )
+
+
+def test_create_temporal_count_figure_missing_column() -> None:
+    assert (
+        create_temporal_count_figure(frame=pl.DataFrame({}), dt_column="datetime", period="1mo")
+        is None
+    )
+
+
 ################################################
 #    Tests for create_temporal_count_table     #
 ################################################
@@ -198,26 +246,10 @@ def test_create_temporal_count_table_empty() -> None:
     )
 
 
-#################################################
-#    Tests for create_temporal_count_figure     #
-#################################################
+####################################################
+#    Tests for create_temporal_count_table_row     #
+####################################################
 
 
-def test_create_temporal_count_figure(dataframe: pl.DataFrame) -> None:
-    assert isinstance(
-        create_temporal_count_figure(
-            frame=dataframe,
-            dt_column="datetime",
-            period="1mo",
-        ),
-        str,
-    )
-
-
-def test_create_temporal_count_figure_empty() -> None:
-    assert isinstance(
-        create_temporal_count_figure(
-            frame=pl.DataFrame({"datetime": []}), dt_column="datetime", period="1mo"
-        ),
-        str,
-    )
+def test_create_temporal_count_table_row() -> None:
+    assert isinstance(create_temporal_count_table_row(label="meow", num_rows=42), str)
