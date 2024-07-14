@@ -193,7 +193,7 @@ def compute_temporal_value_counts(
         groups.agg(pl.col("value").value_counts())  # noqa: PD010
         .explode("value")
         .unnest("value")
-        .pivot(index="__datetime__", columns="value", values="count")
+        .pivot(on="value", index="__datetime__", values="count")
         .drop("__datetime__")
     )
     counts = counts.select(mixed_typed_sort(counts.columns))
