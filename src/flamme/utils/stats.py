@@ -110,6 +110,6 @@ def quantile(array: np.ndarray, q: Sequence[float]) -> dict[float, float]:
     ```
     """
     array = array.ravel()
-    if array.shape[0] == 0:
+    if array.size == 0:
         return {v: float("nan") for v in q}
     return dict(zip(q, np.quantile(array.astype(np.float64), q).tolist()))
