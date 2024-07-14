@@ -15,6 +15,8 @@ import numpy as np
 import polars as pl
 from scipy.stats import kurtosis, skew
 
+from flamme.utils.array import nonnan
+
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
@@ -75,14 +77,14 @@ def compute_statistics_continuous_array(array: np.ndarray) -> dict[str, float]:
     ```
     """
     array = array.ravel().astype(np.float64)
-    array_non_nan = array[~np.isnan(array)]
+    array_nonnan = nonnan(array)
     stats = {
         "count": int(array.size),
         "nunique": int(np.unique(array).size),
-        "num_non_nulls": int(array_non_nan.size),
+        "num_non_nulls": int(array_nonnan.size),
     }
     stats["num_nulls"] = stats["count"] - stats["num_non_nulls"]
-    if array_non_nan.size == 0:
+    if array_nonnan.size == 0:
         return stats | {
             "mean": float("nan"),
             "std": float("nan"),
@@ -106,26 +108,26 @@ def compute_statistics_continuous_array(array: np.ndarray) -> dict[str, float]:
             "=0": 0,
         }
     quantiles = quantile(
-        array_non_nan, q=[0.001, 0.01, 0.05, 0.1, 0.25, 0.75, 0.9, 0.95, 0.99, 0.999]
+        array_nonnan, q=[0.001, 0.01, 0.05, 0.1, 0.25, 0.75, 0.9, 0.95, 0.99, 0.999]
     )
     return stats | {
-        "mean": np.mean(array_non_nan).item(),
-        "std": np.std(array_non_nan).item(),
-        "skewness": skew(array_non_nan).item(),
-        "kurtosis": kurtosis(array_non_nan).item(),
-        "min": np.min(array_non_nan).item(),
+        "mean": np.mean(array_nonnan).item(),
+        "std": np.std(array_nonnan).item(),
+        "skewness": skew(array_nonnan).item(),
+        "kurtosis": kurtosis(array_nonnan).item(),
+        "min": np.min(array_nonnan).item(),
         "q001": quantiles[0.001],
         "q01": quantiles[0.01],
         "q05": quantiles[0.05],
         "q10": quantiles[0.1],
         "q25": quantiles[0.25],
-        "median": np.median(array_non_nan).item(),
+        "median": np.median(array_nonnan).item(),
         "q75": quantiles[0.75],
         "q90": quantiles[0.9],
         "q95": quantiles[0.95],
         "q99": quantiles[0.99],
         "q999": quantiles[0.999],
-        "max": np.max(array_non_nan).item(),
+        "max": np.max(array_nonnan).item(),
         ">0": (array > 0).sum().item(),
         "<0": (array < 0).sum().item(),
         "=0": (array == 0).sum().item(),
