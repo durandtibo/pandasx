@@ -14,7 +14,7 @@ from flamme.section import ColumnTemporalDiscreteSection, EmptySection
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {
-            "col": [1, 42, None, 22],
+            "col": [1, 42, None, 42],
             "datetime": [
                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),

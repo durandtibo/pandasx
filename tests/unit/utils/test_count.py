@@ -139,7 +139,7 @@ def test_compute_temporal_value_counts() -> None:
         period="1mo",
     )
     assert objects_are_equal(
-        counts, np.array([[1, 2, 0, 0, 1], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0]])
+        counts, np.array([[1, 0, 0, 0], [2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1], [1, 0, 0, 0]])
     )
     assert objects_are_equal(steps, ["2020-01", "2020-02", "2020-03", "2020-04"])
     assert objects_are_equal(values, ["0.0", "1.0", "4.2", "42.0", "null"])

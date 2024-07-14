@@ -168,10 +168,11 @@ def compute_temporal_value_counts(
     ...     period="1mo",
     ... )
     >>> counts
-    array([[1, 1, 0, 0, 1],
-           [0, 1, 0, 0, 0],
-           [0, 0, 1, 0, 0],
-           [0, 0, 0, 1, 0]])
+    array([[1, 0, 0, 0],
+           [1, 1, 0, 0],
+           [0, 0, 1, 0],
+           [0, 0, 0, 1],
+           [1, 0, 0, 0]])
     >>> steps
     ['2020-01', '2020-02', '2020-03', '2020-04']
     >>> values
@@ -189,12 +190,13 @@ def compute_temporal_value_counts(
     )
     format_dt = period_to_strftime_format(period)
     steps = [name[0].strftime(format_dt) for name, _ in groups]
-    counts = (
+    frame_counts = (
         groups.agg(pl.col("value").value_counts())  # noqa: PD010
         .explode("value")
         .unnest("value")
         .pivot(on="value", index="__datetime__", values="count")
         .drop("__datetime__")
     )
-    counts = counts.select(mixed_typed_sort(counts.columns))
-    return counts.fill_null(0.0).to_numpy().astype(np.int64), steps, list(counts.columns)
+    frame_counts = frame_counts.select(mixed_typed_sort(frame_counts.columns))
+    counts = frame_counts.fill_null(0.0).to_numpy().astype(np.int64).transpose()
+    return counts, steps, list(frame_counts.columns)

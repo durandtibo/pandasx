@@ -16,8 +16,8 @@ from flamme.section.discrete_temp import create_section_template, create_tempora
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {
-            "col": [1, 42, None, 22],
-            "col2": [1.2, 4.2, 3.2, 2.2],
+            "col": [1, 42, None, 42],
+            "col2": [1.2, 4.2, 4.2, 1.2],
             "datetime": [
                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),

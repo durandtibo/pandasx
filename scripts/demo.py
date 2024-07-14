@@ -136,7 +136,7 @@ def create_discrete_column_analyzer(column: str) -> fa.BaseAnalyzer:
         {
             "overall": fa.ColumnDiscreteAnalyzer(column=column, figsize=FIGSIZE),
             "monthly": fa.ColumnTemporalDiscreteAnalyzer(
-                column=column, dt_column="datetime", period="M", figsize=FIGSIZE
+                column=column, dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             # "weekly": ColumnTemporalDiscreteAnalyzer(
             #     column=column, dt_column="datetime", period="W", figsize=FIGSIZE
