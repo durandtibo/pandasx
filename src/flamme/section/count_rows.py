@@ -163,8 +163,6 @@ class TemporalRowCountSection(BaseSection):
         fig = create_temporal_count_figure(
             frame=self._frame, dt_column=self._dt_column, period=self._period, figsize=self._figsize
         )
-        if fig is None:
-            return "<span>&#9888;</span> No figure is generated because there is no data"
         return figure2html(fig, close_fig=True)
 
 

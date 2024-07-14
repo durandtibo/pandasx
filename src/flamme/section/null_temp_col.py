@@ -31,7 +31,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.figure import figure2html
+from flamme.utils.figure import MISSING_FIGURE_MESSAGE, figure2html
 from flamme.utils.null import compute_temporal_null_count
 
 if TYPE_CHECKING:
@@ -298,7 +298,7 @@ def create_temporal_null_figure(
     ```
     """
     if frame.shape[0] == 0:
-        return "<span>&#9888;</span> No figure is generated because the DataFrame is empty"
+        return MISSING_FIGURE_MESSAGE
     figures = create_temporal_null_figures(
         frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
     )

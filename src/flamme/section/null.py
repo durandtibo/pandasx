@@ -243,7 +243,7 @@ def create_bar_figure(
     columns: Sequence[str],
     null_count: Sequence[int],
     figsize: tuple[float, float] | None = None,
-) -> plt.Figure:
+) -> plt.Figure | None:
     r"""Return a bar figure with the distribution of null values per
     column.
 
@@ -269,10 +269,12 @@ def create_bar_figure(
     if len(columns) != len(null_count):
         msg = f"columns ({len(columns):,}) and null_count ({len(null_count):,}) do not match"
         raise RuntimeError(msg)
+    if len(columns) == 0:
+        return None
+
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x=columns, height=null_count, color="tab:blue")
-    if columns:
-        ax.set_xlim(-0.5, len(columns) - 0.5)
+    ax.set_xlim(-0.5, len(columns) - 0.5)
     readable_xticklabels(ax, max_num_xticks=100)
     ax.set_xlabel("column")
     ax.set_ylabel("number of null values")

@@ -214,14 +214,14 @@ def test_create_temporal_null_figure(dataframe: pl.DataFrame) -> None:
 
 
 def test_create_temporal_null_figure_empty(dataframe_empty: pl.DataFrame) -> None:
-    assert isinstance(
+    assert (
         create_temporal_null_figure(
             frame=dataframe_empty,
             columns=["col1", "col2"],
             dt_column="datetime",
             period="1mo",
-        ),
-        plt.Figure,
+        )
+        is None
     )
 
 
