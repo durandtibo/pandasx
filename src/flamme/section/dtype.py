@@ -46,11 +46,7 @@ class DataTypeSection(BaseSection):
     >>> import polars as pl
     >>> from flamme.section import DataTypeSection
     >>> section = DataTypeSection(
-    ...     dtypes={
-    ...         "float": pl.Float64(),
-    ...         "int": pl.Int64(),
-    ...         "str": pl.String(),
-    ...     },
+    ...     dtypes={"float": pl.Float64(), "int": pl.Int64(), "str": pl.String()},
     ...     types={"float": {float}, "int": {int}, "str": {str, type(None)}},
     ... )
     >>> section
@@ -155,11 +151,7 @@ def create_table(dtypes: dict[str, pl.DataType], types: dict[str, set]) -> str:
     >>> import polars as pl
     >>> from flamme.section.dtype import create_table_row
     >>> table = create_table(
-    ...     dtypes={
-    ...         "float": pl.Float64(),
-    ...         "int": pl.Int64(),
-    ...         "str": pl.String(),
-    ...     },
+    ...     dtypes={"float": pl.Float64(), "int": pl.Int64(), "str": pl.String()},
     ...     types={"float": {float}, "int": {int}, "str": {str, type(None)}},
     ... )
 

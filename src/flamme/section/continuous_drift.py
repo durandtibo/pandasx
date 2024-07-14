@@ -232,7 +232,7 @@ This section analyzes the temporal drift of continuous values for column <em>{{c
             figsize=self._figsize,
         )
         if fig is None:
-            return "<span>&#9888;</span> No figure is generated because the column is empty"
+            return f"<span>&#9888;</span> No figure is generated because the column {self._column} is empty"
         return figure2html(fig, close_fig=True)
 
 
