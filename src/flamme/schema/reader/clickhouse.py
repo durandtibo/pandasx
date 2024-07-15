@@ -34,7 +34,6 @@ class ClickHouseSchemaReader(BaseSchemaReader):
 
     ```pycon
 
-    >>> import pandas as pd
     >>> from flamme.schema.reader import ClickHouseSchemaReader
     >>> client = clickhouse_connect.get_client()  # doctest: +SKIP
     >>> reader = ClickHouseSchemaReader(query="", client=client)  # doctest: +SKIP

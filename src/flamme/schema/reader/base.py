@@ -25,14 +25,18 @@ class BaseSchemaReader(ABC, metaclass=AbstractFactory):
     ```pycon
 
     >>> import tempfile
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from pathlib import Path
     >>> from flamme.schema.reader import ParquetSchemaReader
     >>> with tempfile.TemporaryDirectory() as tmpdir:
     ...     path = Path(tmpdir).joinpath("data.parquet")
-    ...     pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"]}).to_parquet(
-    ...         path, index=False
-    ...     )
+    ...     pl.DataFrame(
+    ...         {
+    ...             "col1": [1, 2, 3, 4, 5],
+    ...             "col2": ["a", "b", "c", "d", "e"],
+    ...             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
+    ...         }
+    ...     ).write_parquet(path)
     ...     reader = ParquetSchemaReader(path)
     ...     reader
     ...     schema = reader.read()
@@ -40,8 +44,8 @@ class BaseSchemaReader(ABC, metaclass=AbstractFactory):
     ...
     ParquetSchemaReader(path=.../data.parquet)
     col1: int64
-    col2: string
-    ...
+    col2: large_string
+    col3: double
 
     ```
     """
@@ -57,21 +61,25 @@ class BaseSchemaReader(ABC, metaclass=AbstractFactory):
         ```pycon
 
         >>> import tempfile
-        >>> import pandas as pd
+        >>> import polars as pl
         >>> from pathlib import Path
         >>> from flamme.schema.reader import ParquetSchemaReader
         >>> with tempfile.TemporaryDirectory() as tmpdir:
         ...     path = Path(tmpdir).joinpath("data.parquet")
-        ...     pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"]}).to_parquet(
-        ...         path, index=False
-        ...     )
+        ...     pl.DataFrame(
+        ...         {
+        ...             "col1": [1, 2, 3, 4, 5],
+        ...             "col2": ["a", "b", "c", "d", "e"],
+        ...             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
+        ...         }
+        ...     ).write_parquet(path)
         ...     reader = ParquetSchemaReader(path)
         ...     schema = reader.read()
         ...     schema
         ...
         col1: int64
-        col2: string
-        ...
+        col2: large_string
+        col3: double
 
         ```
         """

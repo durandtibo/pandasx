@@ -6,12 +6,11 @@ __all__ = ["SchemaReader"]
 
 from typing import TYPE_CHECKING
 
-import pyarrow as pa
-
 from flamme.schema.reader.base import BaseSchemaReader
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
+    import pyarrow as pa
 
 
 class SchemaReader(BaseSchemaReader):
@@ -24,15 +23,16 @@ class SchemaReader(BaseSchemaReader):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.schema.reader import SchemaReader
     >>> reader = SchemaReader(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
     ...             "col1": [1, 2, 3, 4, 5],
     ...             "col2": [1.1, 2.2, 3.3, 4.4, 5.5],
     ...             "col4": ["a", "b", "c", "d", "e"],
-    ...         }
+    ...         },
+    ...         schema={"col1": pl.Int64, "col2": pl.Float64, "col4": pl.String},
     ...     )
     ... )
     >>> reader
@@ -41,17 +41,17 @@ class SchemaReader(BaseSchemaReader):
     >>> schema
     col1: int64
     col2: double
-    col4: string
+    col4: large_string
     ...
 
     ```
     """
 
-    def __init__(self, frame: pd.DataFrame) -> None:
-        self._frame = frame
+    def __init__(self, frame: pl.DataFrame) -> None:
+        self._frame = frame.to_arrow()
 
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}(shape={self._frame.shape})"
 
     def read(self) -> pa.Schema:
-        return pa.Schema.from_pandas(self._frame)
+        return self._frame.schema
