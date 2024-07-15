@@ -13,7 +13,6 @@ from flamme.section import DataTypeSection
 from flamme.utils.dtype2 import frame_types
 
 if TYPE_CHECKING:
-    import pandas as pd
     import polars as pl
 
 logger = logging.getLogger(__name__)
@@ -52,6 +51,6 @@ class DataTypeAnalyzer(BaseAnalyzer):
     def __repr__(self) -> str:
         return f"{self.__class__.__qualname__}()"
 
-    def analyze(self, frame: pl.DataFrame | pd.DataFrame) -> DataTypeSection:
+    def analyze(self, frame: pl.DataFrame) -> DataTypeSection:
         logger.info("Analyzing the data types...")
         return DataTypeSection(dtypes=dict(frame.schema), types=frame_types(frame))

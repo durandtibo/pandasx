@@ -16,7 +16,6 @@ from flamme.section import ColumnTemporalNullValueSection, EmptySection
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
     import polars as pl
 
 
@@ -115,9 +114,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
         )
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnTemporalNullValueSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnTemporalNullValueSection | EmptySection:
         logger.info(
             "Analyzing the temporal null value distribution of all columns | "
             f"datetime column: {self._dt_column} | period: {self._period}"
