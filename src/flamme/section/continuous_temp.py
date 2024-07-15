@@ -3,7 +3,13 @@ distribution of a column with continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnTemporalContinuousSection"]
+__all__ = [
+    "ColumnTemporalContinuousSection",
+    "create_section_template",
+    "create_temporal_figure",
+    "create_temporal_table",
+    "create_temporal_table_row",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -28,7 +34,7 @@ from flamme.utils.temporal import compute_temporal_stats
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -54,16 +60,26 @@ class ColumnTemporalContinuousSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import ColumnContinuousSection
     >>> section = ColumnTemporalContinuousSection(
-    ...     frame=pd.DataFrame(
+    ...     frame=pl.DataFrame(
     ...         {
-    ...             "col": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...             "datetime": pd.to_datetime(
-    ...                 ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...             ),
-    ...         }
+    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Float64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
     ...     ),
     ...     column="col",
     ...     dt_column="datetime",
@@ -85,7 +101,7 @@ class ColumnTemporalContinuousSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         column: str,
         dt_column: str,
         period: str,
@@ -145,7 +161,7 @@ class ColumnTemporalContinuousSection(BaseSection):
             f"Rendering the temporal continuous distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -155,14 +171,7 @@ class ColumnTemporalContinuousSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "period": self._period,
-                "figure": create_temporal_figure(
-                    frame=self._frame,
-                    column=self._column,
-                    dt_column=self._dt_column,
-                    period=self._period,
-                    yscale=self._yscale,
-                    figsize=self._figsize,
-                ),
+                "figure": self._create_temporal_figure(),
                 "table": create_temporal_table(
                     frame=self._frame,
                     column=self._column,
@@ -177,8 +186,34 @@ class ColumnTemporalContinuousSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+    def _create_temporal_figure(self) -> str:
+        fig = create_temporal_figure(
+            frame=self._frame,
+            column=self._column,
+            dt_column=self._dt_column,
+            period=self._period,
+            yscale=self._yscale,
+            figsize=self._figsize,
+        )
+        return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.continuous_temp import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -194,15 +229,14 @@ by using the column <em>{{dt_column}}</em>.
 
 
 def create_temporal_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     column: str,
     dt_column: str,
     period: str,
     yscale: str = "auto",
     figsize: tuple[float, float] | None = None,
-) -> str:
-    r"""Create a HTML representation of a figure with the temporal value
-    distribution.
+) -> plt.Figure | None:
+    r"""Create a figure with the temporal value distribution.
 
     Args:
         frame: The DataFrame to analyze.
@@ -217,10 +251,42 @@ def create_temporal_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The HTML representation of the figure.
+        The generated figure.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.continuous_temp import create_temporal_figure
+    >>> fig = create_temporal_figure(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Float64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     ),
+    ...     column="col",
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
-        return "<span>&#9888;</span> No figure is generated because the column is empty"
+        return None
     frame = frame[[column, dt_column]].copy()
     frame[dt_column] = (
         frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
@@ -236,10 +302,10 @@ def create_temporal_figure(
     steps = frame_group[dt_column].tolist()
     fig, ax = plt.subplots(figsize=figsize)
     boxplot_continuous_temporal(ax=ax, data=data, steps=steps, yscale=yscale)
-    return figure2html(fig, close_fig=True)
+    return fig
 
 
-def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, period: str) -> str:
+def create_temporal_table(frame: pl.DataFrame, column: str, dt_column: str, period: str) -> str:
     r"""Return a HTML representation of a table with some statistics
     about the temporal value distribution.
 
@@ -264,8 +330,7 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
     >>> table = create_temporal_table(
     ...     frame=pl.DataFrame(
     ...         {
-    ...             "col1": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
-    ...             "col2": [1, 2, 3, 4, 5, 6],
+    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
     ...             "datetime": [
     ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
     ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
@@ -276,12 +341,11 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
     ...             ],
     ...         },
     ...         schema={
-    ...             "col1": pl.Float64,
-    ...             "col2": pl.Int64,
+    ...             "col": pl.Float64,
     ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
     ...         },
     ...     ),
-    ...     column="col1",
+    ...     column="col",
     ...     dt_column="datetime",
     ...     period="1mo",
     ... )
