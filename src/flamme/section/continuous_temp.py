@@ -13,7 +13,7 @@ from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
 
-from flamme.plot.utils import auto_yscale_continuous, readable_xticklabels
+from flamme.plot import boxplot_continuous_temporal
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -23,7 +23,6 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
-from flamme.utils.mathnan import remove_nan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -178,8 +177,7 @@ class ColumnTemporalContinuousSection(BaseSection):
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
     def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+        return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
 
 {{go_to_top}}
 
@@ -222,7 +220,6 @@ def create_temporal_figure(
     """
     if frame.shape[0] == 0:
         return "<span>&#9888;</span> No figure is generated because the column is empty"
-    array = frame[column].to_numpy(dtype=float)
     frame = frame[[column, dt_column]].copy()
     frame[dt_column] = (
         frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
@@ -234,24 +231,10 @@ def create_temporal_figure(
         .sort_values(by=[dt_column])
     )
 
-    data = [remove_nan(x) for x in frame_group[column].tolist()]
-    labels = frame_group[dt_column].tolist()
+    data = [np.array(x) for x in frame_group[column].tolist()]
+    steps = frame_group[dt_column].tolist()
     fig, ax = plt.subplots(figsize=figsize)
-    ax.boxplot(
-        data,
-        notch=True,
-        vert=True,
-        widths=0.7,
-        patch_artist=True,
-        boxprops={"facecolor": "lightblue"},
-    )
-    ax.set_ylim(np.nanmin(array), np.nanmax(array))
-    ax.set_xticks(np.arange(len(labels)), labels=labels)
-    ax.set_title(f"Distribution of values for column {column}")
-    if yscale == "auto":
-        yscale = auto_yscale_continuous(array=array, nbins=100)
-    ax.set_yscale(yscale)
-    readable_xticklabels(ax)
+    boxplot_continuous_temporal(ax=ax, data=data, steps=steps, yscale=yscale)
     return figure2html(fig, close_fig=True)
 
 
@@ -300,8 +283,7 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
 
     rows = [create_temporal_table_row(row) for row in frame_stats.itertuples()]
     return Template(
-        """
-<details>
+        """<details>
     <summary>[show statistics per temporal period]</summary>
 
     <p>The following table shows some statistics for each period of column {{column}}.
