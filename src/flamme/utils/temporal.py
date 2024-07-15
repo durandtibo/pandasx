@@ -2,7 +2,7 @@ r"""Contain utility functions to do temporal transformations."""
 
 from __future__ import annotations
 
-__all__ = ["compute_temporal_stats", "to_temporal_frames"]
+__all__ = ["compute_temporal_stats", "to_temporal_frames", "to_step_names"]
 
 
 import polars as pl
@@ -184,7 +184,52 @@ def to_temporal_frames(
         return [], []
 
     groups = frame.sort(dt_column).group_by_dynamic(dt_column, every=period)
-    format_dt = period_to_strftime_format(period)
-    steps = [name[0].strftime(format_dt) for name, _ in groups]
+    steps = to_step_names(groups=groups, period=period)
     frames = [frame for _, frame in groups]
     return frames, steps
+
+
+def to_step_names(groups: pl.GroupBy, period: str) -> list[str]:
+    r"""Return the name of each step.
+
+    Args:
+        groups: The grouped DataFrame by step.
+        period: The temporal period e.g. monthly or daily.
+
+    Returns:
+        A list that contains the name of each step.
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.utils.temporal import to_step_names
+    >>> groups = (
+    ...     pl.DataFrame(
+    ...         {
+    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Float64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     )
+    ...     .sort("datetime")
+    ...     .group_by_dynamic("datetime", every="1mo")
+    ... )
+    >>> steps = to_step_names(groups=groups, period="1mo")
+    >>> steps
+    ['2020-01', '2020-02', '2020-03', '2020-04']
+
+    ```
+    """
+    format_dt = period_to_strftime_format(period)
+    return [name[0].strftime(format_dt) for name, _ in groups]
