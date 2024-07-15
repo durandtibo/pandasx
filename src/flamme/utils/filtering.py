@@ -11,13 +11,13 @@ __all__ = [
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from flamme.utils.dtype import frame_column_types
+from flamme.utils.dtype2 import frame_types
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 
-def find_columns_type(frame: pd.DataFrame, cls: type) -> tuple[str, ...]:
+def find_columns_type(frame: pl.DataFrame, cls: type) -> tuple[str, ...]:
     r"""Find the list of columns that contains a given type.
 
     Args:
@@ -31,26 +31,32 @@ def find_columns_type(frame: pd.DataFrame, cls: type) -> tuple[str, ...]:
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.utils.filtering import find_columns_type
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
     ...         "col3": ["1", "2", "3", "4", "5"],
     ...         "col4": ["a", "b", "c", "d", "e"],
-    ...     }
+    ...     },
+    ...     schema={
+    ...         "col1": pl.Int64,
+    ...         "col2": pl.String,
+    ...         "col3": pl.String,
+    ...         "col4": pl.String,
+    ...     },
     ... )
     >>> find_columns_type(frame, str)
     ('col2', 'col3', 'col4')
 
     ```
     """
-    types = frame_column_types(frame)
+    types = frame_types(frame)
     return tuple(col for col, tps in types.items() if cls in tps)
 
 
-def find_columns_decimal(frame: pd.DataFrame) -> tuple[str, ...]:
+def find_columns_decimal(frame: pl.DataFrame) -> tuple[str, ...]:
     r"""Find the list of columns that contains the type string.
 
     Args:
@@ -63,26 +69,32 @@ def find_columns_decimal(frame: pd.DataFrame) -> tuple[str, ...]:
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from decimal import Decimal
     >>> from flamme.utils.filtering import find_columns_decimal
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "col1": [1, 2, 3, 4, Decimal(5)],
-    ...         "col2": ["1", "2", "3", "4", "5"],
-    ...         "col3": ["1", "2", "3", "4", "5"],
+    ...         "col1": [1, 2, 3, 4, 5],
+    ...         "col2": [1.0, 2.0, 3.0, 4.0, 5.0],
+    ...         "col3": [1.0, 2.0, 3.0, 4.0, 5.0],
     ...         "col4": ["a", "b", "c", "d", "e"],
-    ...     }
+    ...     },
+    ...     schema={
+    ...         "col1": pl.Int64,
+    ...         "col2": pl.Float64,
+    ...         "col3": pl.Decimal,
+    ...         "col4": pl.String,
+    ...     },
     ... )
     >>> find_columns_decimal(frame)
-    ('col1',)
+    ('col3',)
 
     ```
     """
     return find_columns_type(frame, Decimal)
 
 
-def find_columns_str(frame: pd.DataFrame) -> tuple[str, ...]:
+def find_columns_str(frame: pl.DataFrame) -> tuple[str, ...]:
     r"""Find the list of columns that contains the type string.
 
     Args:
@@ -95,16 +107,21 @@ def find_columns_str(frame: pd.DataFrame) -> tuple[str, ...]:
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.utils.filtering import find_columns_str
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
     ...         "col1": [1, 2, 3, 4, 5],
     ...         "col2": ["1", "2", "3", "4", "5"],
     ...         "col3": ["1", "2", "3", "4", "5"],
     ...         "col4": ["a", "b", "c", "d", "e"],
-    ...     }
+    ...     },
+    ...     schema={
+    ...         "col1": pl.Int64,
+    ...         "col2": pl.String,
+    ...         "col3": pl.String,
+    ...         "col4": pl.String,
+    ...     },
     ... )
     >>> find_columns_str(frame)
     ('col2', 'col3', 'col4')
