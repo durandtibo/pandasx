@@ -90,9 +90,9 @@ The following is the corresponding `flamme` versions and their dependencies.
 
 Optional dependencies
 
-| `grizz` | `clickhouse-connect`<sup>*</sup> | `colorlog`<sup>*</sup> | `hya`<sup>*</sup> | `markdown`<sup>*</sup> | `tqdm`<sup>*</sup> |
-|---------|----------------------------------|------------------------|-------------------|------------------------|--------------------|
-| `main`  | `>=0.7,<1.0`                     | `>=6.7,<7.0`           | `>=0.2,<1.0`      | `>=3.4,<4.0`           | `>=4.65,<5.0`      |
+| `flamme` | `clickhouse-connect`<sup>*</sup> | `colorlog`<sup>*</sup> | `hya`<sup>*</sup> | `markdown`<sup>*</sup> | `tqdm`<sup>*</sup> |
+|----------|----------------------------------|------------------------|-------------------|------------------------|--------------------|
+| `main`   | `>=0.7,<1.0`                     | `>=6.7,<7.0`           | `>=0.2,<1.0`      | `>=3.4,<4.0`           | `>=4.65,<5.0`      |
 
 <details>
     <summary>older versions</summary>
