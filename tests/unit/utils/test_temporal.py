@@ -7,7 +7,11 @@ import pytest
 from coola import objects_are_equal
 from polars.testing import assert_frame_equal
 
-from flamme.utils.temporal import compute_temporal_stats, to_temporal_frames
+from flamme.utils.temporal import (
+    compute_temporal_stats,
+    to_step_names,
+    to_temporal_frames,
+)
 
 ############################################
 #     Tests for compute_temporal_stats     #
@@ -148,8 +152,7 @@ def test_compute_temporal_stats_empty() -> None:
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {
-            "col1": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
-            "col2": [1, 2, 3, 4, 5, 6],
+            "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
             "datetime": [
                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
@@ -160,8 +163,7 @@ def dataframe() -> pl.DataFrame:
             ],
         },
         schema={
-            "col1": pl.Float64,
-            "col2": pl.Int64,
+            "col": pl.Float64,
             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
         },
     )
@@ -174,8 +176,7 @@ def test_to_temporal_frames_monthly(dataframe: pl.DataFrame) -> None:
             [
                 pl.DataFrame(
                     {
-                        "col1": [1.0, 2.0, 3.0],
-                        "col2": [2, 3, 4],
+                        "col": [1.0, 2.0, 3.0],
                         "datetime": [
                             datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
                             datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
@@ -183,44 +184,37 @@ def test_to_temporal_frames_monthly(dataframe: pl.DataFrame) -> None:
                         ],
                     },
                     schema={
-                        "col1": pl.Float64,
-                        "col2": pl.Int64,
+                        "col": pl.Float64,
                         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
                     },
                 ),
                 pl.DataFrame(
                     {
-                        "col1": [4.0],
-                        "col2": [5],
+                        "col": [4.0],
                         "datetime": [datetime(year=2020, month=2, day=3, tzinfo=timezone.utc)],
                     },
                     schema={
-                        "col1": pl.Float64,
-                        "col2": pl.Int64,
+                        "col": pl.Float64,
                         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
                     },
                 ),
                 pl.DataFrame(
                     {
-                        "col1": [5.0],
-                        "col2": [6],
+                        "col": [5.0],
                         "datetime": [datetime(year=2020, month=3, day=3, tzinfo=timezone.utc)],
                     },
                     schema={
-                        "col1": pl.Float64,
-                        "col2": pl.Int64,
+                        "col": pl.Float64,
                         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
                     },
                 ),
                 pl.DataFrame(
                     {
-                        "col1": [0.0],
-                        "col2": [1],
+                        "col": [0.0],
                         "datetime": [datetime(year=2020, month=4, day=3, tzinfo=timezone.utc)],
                     },
                     schema={
-                        "col1": pl.Float64,
-                        "col2": pl.Int64,
+                        "col": pl.Float64,
                         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
                     },
                 ),
@@ -237,8 +231,7 @@ def test_to_temporal_frames_yearly(dataframe: pl.DataFrame) -> None:
             [
                 pl.DataFrame(
                     {
-                        "col1": [1.0, 2.0, 3.0, 4.0, 5.0, 0.0],
-                        "col2": [2, 3, 4, 5, 6, 1],
+                        "col": [1.0, 2.0, 3.0, 4.0, 5.0, 0.0],
                         "datetime": [
                             datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
                             datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
@@ -249,8 +242,7 @@ def test_to_temporal_frames_yearly(dataframe: pl.DataFrame) -> None:
                         ],
                     },
                     schema={
-                        "col1": pl.Float64,
-                        "col2": pl.Int64,
+                        "col": pl.Float64,
                         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
                     },
                 )
@@ -264,3 +256,35 @@ def test_to_temporal_frames_empty() -> None:
     assert objects_are_equal(
         to_temporal_frames(pl.DataFrame({}), dt_column="datetime", period="1mo"), ([], [])
     )
+
+
+###################################
+#     Tests for to_step_names     #
+###################################
+
+
+def test_to_step_names_monthly(dataframe: pl.DataFrame) -> None:
+    groups = dataframe.sort("datetime").group_by_dynamic("datetime", every="1mo")
+    assert objects_are_equal(
+        to_step_names(groups=groups, period="1mo"), ["2020-01", "2020-02", "2020-03", "2020-04"]
+    )
+
+
+def test_to_step_names_yearly(dataframe: pl.DataFrame) -> None:
+    groups = dataframe.sort("datetime").group_by_dynamic("datetime", every="1y")
+    assert objects_are_equal(to_step_names(groups=groups, period="1y"), ["2020"])
+
+
+def test_to_step_names_empty() -> None:
+    groups = (
+        pl.DataFrame(
+            {"col": [], "datetime": []},
+            schema={
+                "col": pl.Float64,
+                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+            },
+        )
+        .sort("datetime")
+        .group_by_dynamic("datetime", every="1mo")
+    )
+    assert objects_are_equal(to_step_names(groups=groups, period="1mo"), [])
