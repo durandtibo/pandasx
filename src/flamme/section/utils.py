@@ -4,7 +4,6 @@ from __future__ import annotations
 
 __all__ = [
     "GO_TO_TOP",
-    "compute_statistics",
     "render_html_toc",
     "tags2id",
     "tags2title",
@@ -12,10 +11,6 @@ __all__ = [
 ]
 
 from typing import TYPE_CHECKING
-
-import numpy as np
-import pandas as pd
-from scipy.stats import kurtosis, skew
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -78,86 +73,3 @@ def render_html_toc(
         return ""
     tag = tags[-1] if tags else ""
     return f'<li><a href="#{tags2id(tags)}">{number} {tag}</a></li>'
-
-
-def compute_statistics(data: pd.Series | np.ndarray) -> dict[str, float]:
-    r"""Return several descriptive statistics for the input data.
-
-    Args:
-        data: The data to analyze.
-
-    Returns:
-        The descriptive statistics for the input data.
-
-    Example usage:
-
-    ```pycon
-
-    >>> import numpy as np
-    >>> from flamme.section.utils import compute_statistics
-    >>> compute_statistics(np.arange(101))
-    {'count': 101, 'num_nulls': 0, 'nunique': 101, 'mean': 50.0, 'std': 29.30...,
-     'skewness': 0.0, 'kurtosis': -1.20..., 'min': 0.0, 'q001': 0.1, 'q01': 1.0,
-     'q05': 5.0, 'q10': 10.0, 'q25': 25.0, 'median': 50.0, 'q75': 75.0, 'q90': 90.0,
-     'q95': 95.0, 'q99': 99.0, 'q999': 99.9, 'max': 100.0, '>0': 100, '<0': 0, '=0': 1,
-     'num_non_nulls': 101}
-
-    ```
-    """
-    series = data if isinstance(data, pd.Series) else pd.Series(data)
-    stats = {
-        "count": int(series.shape[0]),
-        "num_nulls": int(series.isna().sum()),
-        "nunique": series.nunique(dropna=False),
-        "mean": float("nan"),
-        "std": float("nan"),
-        "skewness": float("nan"),
-        "kurtosis": float("nan"),
-        "min": float("nan"),
-        "q001": float("nan"),
-        "q01": float("nan"),
-        "q05": float("nan"),
-        "q10": float("nan"),
-        "q25": float("nan"),
-        "median": float("nan"),
-        "q75": float("nan"),
-        "q90": float("nan"),
-        "q95": float("nan"),
-        "q99": float("nan"),
-        "q999": float("nan"),
-        "max": float("nan"),
-        ">0": (series > 0).sum().item(),
-        "<0": (series < 0).sum().item(),
-        "=0": (series == 0).sum().item(),
-    }
-    stats["num_non_nulls"] = stats["count"] - stats["num_nulls"]
-    if stats["num_non_nulls"] > 0:
-        stats |= (
-            series.dropna()
-            .astype(float)
-            .agg(
-                {
-                    "mean": "mean",
-                    "median": "median",
-                    "min": "min",
-                    "max": "max",
-                    "std": "std",
-                    "q001": lambda x: x.quantile(0.001),
-                    "q01": lambda x: x.quantile(0.01),
-                    "q05": lambda x: x.quantile(0.05),
-                    "q10": lambda x: x.quantile(0.1),
-                    "q25": lambda x: x.quantile(0.25),
-                    "q75": lambda x: x.quantile(0.75),
-                    "q90": lambda x: x.quantile(0.9),
-                    "q95": lambda x: x.quantile(0.95),
-                    "q99": lambda x: x.quantile(0.99),
-                    "q999": lambda x: x.quantile(0.999),
-                }
-            )
-            .to_dict()
-        )
-        if stats["nunique"] > 1:
-            array = data if isinstance(data, np.ndarray) else data.to_numpy(dtype=float)
-            stats["skewness"] = float(skew(array, nan_policy="omit"))
-            stats["kurtosis"] = float(kurtosis(array, nan_policy="omit"))
-    return stats
