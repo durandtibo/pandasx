@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pandas as pd
 import polars as pl
 import pyarrow as pa
 import pytest
 
-from flamme.utils.dtype2 import compact_type_name, frame_types, series_types
+from flamme.utils.dtype import compact_type_name, frame_types, series_types
 
 
 @pytest.fixture()
@@ -100,7 +99,6 @@ def test_series_types_empty() -> None:
         (int, "int"),
         (str, "str"),
         (type(None), "NoneType"),
-        (pd.Timestamp, "pandas.Timestamp"),
         (np.ndarray, "numpy.ndarray"),
     ],
 )

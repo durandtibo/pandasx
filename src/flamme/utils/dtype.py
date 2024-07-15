@@ -31,7 +31,7 @@ def frame_types(frame: pl.DataFrame) -> dict[str, set[type]]:
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.utils.dtype2 import frame_types
+    >>> from flamme.utils.dtype import frame_types
     >>> frame = pl.DataFrame(
     ...     {
     ...         "int": [2, 1, 0, 1],
@@ -62,7 +62,7 @@ def series_types(series: pl.Series) -> set[type]:
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.utils.dtype2 import series_types
+    >>> from flamme.utils.dtype import series_types
     >>> coltypes = series_types(pl.Series([1.2, 4.2, float("nan"), 2.2]))
     >>> coltypes
     {<class 'float'>}
@@ -72,11 +72,7 @@ def series_types(series: pl.Series) -> set[type]:
     return {type(x) for x in series.to_list()}
 
 
-TYPE_NAMES = {
-    "pandas._libs.tslibs.timestamps.Timestamp": "pandas.Timestamp",
-    "pandas._libs.tslibs.nattype.NaTType": "pandas.NaTType",
-    "pandas._libs.missing.NAType": "pandas.NAType",
-}
+TYPE_NAMES = {}
 
 
 def compact_type_name(typ: type) -> str:
@@ -91,7 +87,7 @@ def compact_type_name(typ: type) -> str:
     ```pycon
 
     >>> import polars as pl
-    >>> from flamme.utils.dtype2 import compact_type_name
+    >>> from flamme.utils.dtype import compact_type_name
     >>> name = compact_type_name(int)
     >>> name
     int
