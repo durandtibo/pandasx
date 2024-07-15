@@ -12,6 +12,7 @@ from polars.testing import assert_frame_equal
 
 from flamme.section.continuous_drift import (
     ColumnContinuousTemporalDriftSection,
+    create_section_template,
     create_temporal_drift_figure,
 )
 
@@ -30,7 +31,7 @@ def dataframe() -> pl.DataFrame:
                 eager=True,
             ),
         },
-        schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+        schema={"col": pl.Float64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     )
 
 
@@ -207,7 +208,7 @@ def test_column_continuous_section_get_statistics_empty_row() -> None:
     section = ColumnContinuousTemporalDriftSection(
         frame=pl.DataFrame(
             {"col": [], "datetime": []},
-            schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+            schema={"col": pl.Float64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
         ),
         column="col",
         dt_column="datetime",
@@ -275,6 +276,15 @@ def test_column_continuous_section_render_html_toc_args(dataframe: pl.DataFrame)
     )
 
 
+#############################################
+#     Tests for create_section_template     #
+#############################################
+
+
+def test_create_section_template() -> None:
+    assert isinstance(create_section_template(), str)
+
+
 #################################################
 #    Tests for create_temporal_drift_figure     #
 #################################################
@@ -289,12 +299,63 @@ def test_create_temporal_drift_figure(dataframe: pl.DataFrame) -> None:
     )
 
 
+def test_create_temporal_drift_figure_with_nulls() -> None:
+    np.random.default_rng()
+    frame = pl.DataFrame(
+        {
+            "col": [None, *list(range(88)), None],
+            "datetime": pl.datetime_range(
+                start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+                end=datetime(year=2018, month=4, day=1, tzinfo=timezone.utc),
+                interval="1d",
+                closed="left",
+                eager=True,
+            ),
+        },
+        schema={
+            "col": pl.Float64,
+            "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+        },
+    )
+    assert isinstance(
+        create_temporal_drift_figure(frame=frame, column="col", dt_column="datetime", period="1mo"),
+        plt.Figure,
+    )
+
+
+def test_create_temporal_drift_figure_only_nulls(dataframe: pl.DataFrame) -> None:
+    assert (
+        create_temporal_drift_figure(
+            frame=dataframe.with_columns(pl.lit(None).alias("col")),
+            column="col",
+            dt_column="datetime",
+            period="1mo",
+        )
+        is None
+    )
+
+
+def test_create_temporal_drift_figure_only_nans(dataframe: pl.DataFrame) -> None:
+    assert (
+        create_temporal_drift_figure(
+            frame=dataframe.with_columns(pl.lit(float("nan")).alias("col")),
+            column="col",
+            dt_column="datetime",
+            period="1mo",
+        )
+        is None
+    )
+
+
 def test_create_temporal_drift_figure_empty() -> None:
     assert (
         create_temporal_drift_figure(
             frame=pl.DataFrame(
                 {"col": [], "datetime": []},
-                schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+                schema={
+                    "col": pl.Float64,
+                    "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+                },
             ),
             column="col",
             dt_column="datetime",
