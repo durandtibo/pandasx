@@ -189,7 +189,7 @@ def compute_temporal_value_counts(
     )
     steps = to_step_names(groups=groups, period="1mo")
     frame_counts = (
-        groups.agg(pl.col("value").value_counts())  # noqa: PD010
+        groups.agg(pl.col("value").value_counts())
         .explode("value")
         .unnest("value")
         .pivot(on="value", index="__datetime__", values="count")

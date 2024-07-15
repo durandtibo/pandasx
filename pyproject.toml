@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.0.17a0"
+version = "0.1.0a0"
 description = "A library to generate custom reports of polars DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -69,11 +69,6 @@ optional = true
 jupyterlab = "^4.0"
 seaborn = "^0.13"
 
-[tool.poetry.group.plotly]
-optional = true  # Plotly is used only as a comparison with matplotlib
-
-[tool.poetry.group.plotly.dependencies]
-plotly = ">=5.12,<6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=24.4"
@@ -159,7 +154,6 @@ lint.select = [
     "LOG", # logging
     "N", # naming
     "NPY", # NumPy-specific rules
-    "PD", # pandas-vet
     "PERF", # Perflint
     "PGH", # pygrep-hooks
     "PIE", # flake8-pie
@@ -222,7 +216,6 @@ lint.fixable = [
     "LOG", # logging
     "N", # naming
     "NPY", # NumPy-specific rules
-    "PD", # pandas-vet
     "PERF", # Perflint
     "PGH", # pygrep-hooks
     "PIE", # flake8-pie
