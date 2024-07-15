@@ -3,7 +3,13 @@ continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnContinuousSection"]
+__all__ = [
+    "ColumnContinuousSection",
+    "create_section_template",
+    "create_boxplot_figure",
+    "create_histogram_figure",
+    "create_stats_table",
+]
 
 import logging
 from typing import TYPE_CHECKING
