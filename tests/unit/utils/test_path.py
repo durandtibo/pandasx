@@ -4,7 +4,7 @@ import tarfile
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-import pandas as pd
+import polars as pl
 import pytest
 from iden.io import save_text
 
@@ -85,10 +85,10 @@ def parquet_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("tmp")
     save_text("text", path.joinpath("a.txt"))
     path.joinpath("subfolder", "sub").mkdir(parents=True, exist_ok=True)
-    pd.DataFrame({}).to_parquet(path.joinpath("data.parquet"))
-    pd.DataFrame({}).to_parquet(path.joinpath("data2.snappy.parquet"))
-    pd.DataFrame({}).to_parquet(path.joinpath("subfolder", "data.parquet"))
-    pd.DataFrame({}).to_parquet(path.joinpath("subfolder", "sub", "data.parquet"))
+    pl.DataFrame({}).write_parquet(path.joinpath("data.parquet"))
+    pl.DataFrame({}).write_parquet(path.joinpath("data2.snappy.parquet"))
+    pl.DataFrame({}).write_parquet(path.joinpath("subfolder", "data.parquet"))
+    pl.DataFrame({}).write_parquet(path.joinpath("subfolder", "sub", "data.parquet"))
     return path
 
 
