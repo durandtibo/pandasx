@@ -1,10 +1,20 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import pytest
 from matplotlib import pyplot as plt
 
-from flamme.plot import boxplot_continuous, hist_continuous, hist_continuous2
+from flamme.plot import (
+    boxplot_continuous,
+    boxplot_continuous_temporal,
+    hist_continuous,
+    hist_continuous2,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 #######################################
 #    Tests for boxplot_continuous     #
@@ -36,6 +46,64 @@ def test_boxplot_continuous_xmin_xmax() -> None:
 def test_boxplot_continuous_empty() -> None:
     fig, ax = plt.subplots()
     boxplot_continuous(ax=ax, array=np.array([]))
+
+
+################################################
+#    Tests for boxplot_continuous_temporal     #
+################################################
+
+
+@pytest.fixture()
+def data_temp() -> list[np.ndarray]:
+    rng = np.random.default_rng()
+    return [rng.standard_normal(100) for i in range(10)]
+
+
+def test_boxplot_continuous_temporal(data_temp: Sequence[np.ndarray]) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(ax=ax, data=data_temp, steps=list(range(len(data_temp))))
+
+
+@pytest.mark.parametrize("ymin", [1.0, "q0.1", None, "q1"])
+def test_boxplot_continuous_temporal_ymin(
+    data_temp: Sequence[np.ndarray], ymin: float | str | None
+) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(ax=ax, data=data_temp, steps=list(range(len(data_temp))), ymin=ymin)
+
+
+@pytest.mark.parametrize("ymax", [100.0, "q0.9", None, "q0"])
+def test_boxplot_continuous_temporal_ymax(
+    data_temp: Sequence[np.ndarray], ymax: float | str | None
+) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(ax=ax, data=data_temp, steps=list(range(len(data_temp))), ymax=ymax)
+
+
+def test_boxplot_continuous_temporal_ymin_ymax(data_temp: Sequence[np.ndarray]) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(
+        ax=ax, data=data_temp, steps=list(range(len(data_temp))), ymin="q0.1", ymax="q0.9"
+    )
+
+
+@pytest.mark.parametrize("yscale", ["linear", "log", "auto"])
+def test_boxplot_continuous_temporal_yscale(data_temp: Sequence[np.ndarray], yscale: str) -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(
+        ax=ax, data=data_temp, steps=list(range(len(data_temp))), yscale=yscale
+    )
+
+
+def test_boxplot_continuous_temporal_empty() -> None:
+    fig, ax = plt.subplots()
+    boxplot_continuous_temporal(ax=ax, data=[], steps=[])
+
+
+def test_boxplot_continuous_temporal_incorrect_lengths() -> None:
+    fig, ax = plt.subplots()
+    with pytest.raises(RuntimeError, match="data and steps have different lengths"):
+        boxplot_continuous_temporal(ax=ax, data=[np.ones(5), np.zeros(4)], steps=[1, 2, 3])
 
 
 ####################################
