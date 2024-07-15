@@ -59,7 +59,7 @@ def compute_temporal_stats(
     >>> stats
     shape: (4, 16)
     ┌─────────────────────────┬───────┬─────────┬──────┬───┬──────┬──────┬──────┬──────┐
-    │ datetime                ┆ count ┆ nunique ┆ mean ┆ … ┆ q90  ┆ q95  ┆ q99  ┆ max  │
+    │ step                    ┆ count ┆ nunique ┆ mean ┆ … ┆ q90  ┆ q95  ┆ q99  ┆ max  │
     │ ---                     ┆ ---   ┆ ---     ┆ ---  ┆   ┆ ---  ┆ ---  ┆ ---  ┆ ---  │
     │ datetime[μs, UTC]       ┆ i64   ┆ i64     ┆ f64  ┆   ┆ f64  ┆ f64  ┆ f64  ┆ f64  │
     ╞═════════════════════════╪═══════╪═════════╪══════╪═══╪══════╪══════╪══════╪══════╡
@@ -92,6 +92,7 @@ def compute_temporal_stats(
             pl.col(column).quantile(0.99).cast(pl.Float64).alias("q99"),
             pl.col(column).max().cast(pl.Float64).alias("max"),
         )
+        .rename({dt_column: "step"})
     )
 
 

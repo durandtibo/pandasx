@@ -39,7 +39,7 @@ def test_compute_temporal_stats() -> None:
         out,
         pl.DataFrame(
             {
-                "datetime": [
+                "step": [
                     datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
                     datetime(year=2020, month=2, day=1, tzinfo=timezone.utc),
                     datetime(year=2020, month=3, day=1, tzinfo=timezone.utc),
@@ -62,7 +62,7 @@ def test_compute_temporal_stats() -> None:
                 "max": [100.0, 101.0, 102.0, 103.0],
             },
             schema={
-                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+                "step": pl.Datetime(time_unit="us", time_zone="UTC"),
                 "count": pl.Int64,
                 "nunique": pl.Int64,
                 "mean": pl.Float64,
@@ -100,7 +100,7 @@ def test_compute_temporal_stats_empty() -> None:
         out,
         pl.DataFrame(
             {
-                "datetime": [],
+                "step": [],
                 "count": [],
                 "nunique": [],
                 "mean": [],
@@ -118,7 +118,7 @@ def test_compute_temporal_stats_empty() -> None:
                 "max": [],
             },
             schema={
-                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+                "step": pl.Datetime(time_unit="us", time_zone="UTC"),
                 "count": pl.Int64,
                 "nunique": pl.Int64,
                 "mean": pl.Float64,
