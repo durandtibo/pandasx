@@ -41,30 +41,36 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
     >>> import polars as pl
     >>> from flamme.analyzer import TemporalNullValueAnalyzer
     >>> analyzer = ColumnTemporalContinuousAnalyzer(
-    ...     column="float", dt_column="datetime", period="1mo"
+    ...     column="col", dt_column="datetime", period="1mo"
     ... )
     >>> analyzer
-    ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=1mo, yscale=auto, figsize=None)
-    >>> frame = (
-    ...     pl.DataFrame(
-    ...         {
-    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
-    ...             "datetime": [
-    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
-    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
-    ...             ],
-    ...         },
-    ...         schema={
-    ...             "col": pl.Float64,
-    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
-    ...         },
-    ...     ),
+    ColumnTemporalContinuousAnalyzer(column=col, dt_column=datetime, period=1mo, yscale=auto, figsize=None)
+    >>> frame = pl.DataFrame(
+    ...     {
+    ...         "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...         "datetime": [
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...         ],
+    ...     },
+    ...     schema={
+    ...         "col": pl.Float64,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
     ... )
     >>> section = analyzer.analyze(frame)
+    >>> section
+    ColumnTemporalContinuousSection(
+      (column): col
+      (dt_column): datetime
+      (period): 1mo
+      (yscale): auto
+      (figsize): None
+    )
 
     ```
     """
