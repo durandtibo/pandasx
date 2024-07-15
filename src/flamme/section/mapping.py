@@ -35,32 +35,32 @@ class SectionDict(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.section import SectionDict, ContentSection, TemporalRowCountSection
-    >>> frame = pd.DataFrame(
+    >>> frame = pl.DataFrame(
     ...     {
-    ...         "datetime": pd.to_datetime(
-    ...             [
-    ...                 "2020-01-03",
-    ...                 "2020-01-04",
-    ...                 "2020-01-05",
-    ...                 "2020-02-03",
-    ...                 "2020-03-03",
-    ...                 "2020-04-03",
-    ...             ]
-    ...         )
-    ...     }
+    ...         "datetime": [
+    ...             datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...         ]
+    ...     },
+    ...     schema={"datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = SectionDict(
     ...     {
     ...         "content": ContentSection("meow"),
-    ...         "rows": TemporalRowCountSection(frame, dt_column="datetime", period="M"),
+    ...         "rows": TemporalRowCountSection(frame, dt_column="datetime", period="1mo"),
     ...     }
     ... )
     >>> section
     SectionDict(
       (content): ContentSection()
-      (rows): TemporalRowCountSection(dt_column=datetime, period=M, figsize=None)
+      (rows): TemporalRowCountSection(dt_column=datetime, period=1mo, figsize=None)
     )
     >>> section.get_statistics()
     {'content': {}, 'rows': {}}
