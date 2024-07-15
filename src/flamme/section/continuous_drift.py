@@ -3,7 +3,11 @@ drift of a column with continuous values."""
 
 from __future__ import annotations
 
-__all__ = ["ColumnContinuousTemporalDriftSection", "create_temporal_drift_figure"]
+__all__ = [
+    "ColumnContinuousTemporalDriftSection",
+    "create_section_template",
+    "create_temporal_drift_figure",
+]
 
 import logging
 from typing import TYPE_CHECKING
@@ -82,7 +86,10 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
     ...             eager=True,
     ...         ),
     ...     },
-    ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
+    ...     schema={
+    ...         "col": pl.Float64,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
     ... )
     >>> section = ColumnContinuousTemporalDriftSection(
     ...     frame=data, column="col", dt_column="date", period="1mo"
@@ -196,7 +203,7 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
 
     def render_html_body(self, number: str = "", tags: Sequence[str] = (), depth: int = 0) -> str:
         logger.info(f"Rendering the temporal drift of {self._column}")
-        return Template(self._create_template()).render(
+        return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
                 "id": tags2id(tags),
@@ -214,19 +221,6 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_template(self) -> str:
-        return """
-<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
-
-{{go_to_top}}
-
-<p style="margin-top: 1rem;">
-This section analyzes the temporal drift of continuous values for column <em>{{column}}</em>.
-
-{{temporal_drift_figure}}
-<p style="margin-top: 1rem;">
-"""
-
     def _create_temporal_drift_figure(self) -> str:
         fig = create_temporal_drift_figure(
             frame=self._frame,
@@ -241,6 +235,33 @@ This section analyzes the temporal drift of continuous values for column <em>{{c
             figsize=self._figsize,
         )
         return figure2html(fig, close_fig=True)
+
+
+def create_section_template() -> str:
+    r"""Return the template of the section.
+
+    Returns:
+        The section template.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.continuous_drift import create_section_template
+    >>> template = create_section_template()
+
+    ```
+    """
+    return """<h{{depth}} id="{{id}}">{{section}} {{title}} </h{{depth}}>
+
+{{go_to_top}}
+
+<p style="margin-top: 1rem;">
+This section analyzes the temporal drift of continuous values for column <em>{{column}}</em>.
+
+{{temporal_drift_figure}}
+<p style="margin-top: 1rem;">
+"""
 
 
 def create_temporal_drift_figure(
@@ -282,13 +303,45 @@ def create_temporal_drift_figure(
 
     Returns:
         The generated figure or ``None`` if there is no valid data.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import numpy as np
+    >>> import polars as pl
+    >>> from flamme.section.continuous_drift import create_temporal_drift_figure
+    >>> rng = np.random.default_rng()
+    >>> data = pl.DataFrame(
+    ...     {
+    ...         "col": rng.standard_normal(59),
+    ...         "datetime": pl.datetime_range(
+    ...             start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+    ...             end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+    ...             interval="1d",
+    ...             closed="left",
+    ...             eager=True,
+    ...         ),
+    ...     },
+    ...     schema={
+    ...         "col": pl.Float64,
+    ...         "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...     },
+    ... )
+    >>> fig = create_temporal_drift_figure(
+    ...     frame=data, column="col", dt_column="date", period="1mo"
+    ... )
+
+    ```
     """
     if column not in frame or dt_column not in frame:
         return None
-    array = frame[column].drop_nulls().to_numpy()
+    array = frame[column].drop_nulls().drop_nans().to_numpy()
     if array.size == 0:
         return None
 
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     frames, steps = to_temporal_frames(
         frame=frame.select(column, dt_column), dt_column=dt_column, period=period
     )
@@ -300,8 +353,6 @@ def create_temporal_drift_figure(
         nrows = 1
     if len(steps) > 2:
         steps1, steps2 = [steps[0], *steps1], [steps[-1], *steps2]
-
-    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     if figsize is not None:
         figsize = (figsize[0], figsize[1] * nrows)
     fig, axes = plt.subplots(figsize=figsize, nrows=nrows)
