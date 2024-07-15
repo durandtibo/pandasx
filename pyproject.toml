@@ -78,7 +78,7 @@ plotly = ">=5.12,<6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=24.4"
-coverage = { extras = ["toml"], version = "^7.5" }
+coverage = { extras = ["toml"], version = "^7.6" }
 docformatter = { extras = ["tomli"], version = "^1.7" }
 feu = ">=0.0.6,<1.0"
 pre-commit = "^3.7"
