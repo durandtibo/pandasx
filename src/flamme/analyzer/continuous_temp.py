@@ -13,7 +13,7 @@ from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import ColumnTemporalContinuousSection, EmptySection
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -37,23 +37,32 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
 
     ```pycon
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
     >>> from flamme.analyzer import TemporalNullValueAnalyzer
     >>> analyzer = ColumnTemporalContinuousAnalyzer(
-    ...     column="float", dt_column="datetime", period="M"
+    ...     column="float", dt_column="datetime", period="1mo"
     ... )
     >>> analyzer
-    ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=M, yscale=auto, figsize=None)
-    >>> frame = pd.DataFrame(
-    ...     {
-    ...         "int": np.array([np.nan, 1, 0, 1]),
-    ...         "float": np.array([1.2, 4.2, np.nan, 2.2]),
-    ...         "str": np.array(["A", "B", None, np.nan]),
-    ...         "datetime": pd.to_datetime(
-    ...             ["2020-01-03", "2020-02-03", "2020-03-03", "2020-04-03"]
-    ...         ),
-    ...     }
+    ColumnTemporalContinuousAnalyzer(column=float, dt_column=datetime, period=1mo, yscale=auto, figsize=None)
+    >>> frame = (
+    ...     pl.DataFrame(
+    ...         {
+    ...             "col": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Float64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     ),
     ... )
     >>> section = analyzer.analyze(frame)
 
@@ -81,9 +90,7 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
             f"yscale={self._yscale}, figsize={self._figsize})"
         )
 
-    def analyze(
-        self, frame: pd.DataFrame | pl.DataFrame
-    ) -> ColumnTemporalContinuousSection | EmptySection:
+    def analyze(self, frame: pl.DataFrame) -> ColumnTemporalContinuousSection | EmptySection:
         logger.info(
             f"Analyzing the temporal continuous distribution of {self._column} | "
             f"datetime column: {self._dt_column} | period: {self._period}"
@@ -101,8 +108,6 @@ class ColumnTemporalContinuousAnalyzer(BaseAnalyzer):
                 f"({self._column}) is the column to analyze"
             )
             return EmptySection()
-        if isinstance(frame, pl.DataFrame):  # TODO (tibo): remove later # noqa: TD003
-            frame = frame.to_pandas()
         return ColumnTemporalContinuousSection(
             column=self._column,
             frame=frame,
