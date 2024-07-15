@@ -2,14 +2,97 @@ r"""Contain utility functions to do temporal transformations."""
 
 from __future__ import annotations
 
-__all__ = ["to_temporal_frames"]
+__all__ = ["compute_temporal_stats", "to_temporal_frames"]
 
-from typing import TYPE_CHECKING
 
+import polars as pl
 from grizz.utils.period import period_to_strftime_format
 
-if TYPE_CHECKING:
-    import polars as pl
+
+def compute_temporal_stats(
+    frame: pl.DataFrame,
+    column: str,
+    dt_column: str,
+    period: str,
+) -> pl.DataFrame:
+    r"""Return a DataFrame with stats for each temporal window.
+
+    Args:
+        frame: The DataFrame to analyze.
+        column: The column to analyze.
+        dt_column: The datetime column used to create the temporal
+            DataFrames.
+        period: The temporal period e.g. monthly or daily.
+
+    Returns:
+        A DataFrame with stats for each temporal window.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.utils.temporal import compute_temporal_stats
+    >>> stats = compute_temporal_stats(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "col": [1.2, 4.2, 0.0, 1.0, 4.2, 42.0],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col": pl.Float64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     ),
+    ...     column="col",
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+    >>> stats
+    shape: (4, 16)
+    ┌─────────────────────────┬───────┬─────────┬──────┬───┬──────┬──────┬──────┬──────┐
+    │ datetime                ┆ count ┆ nunique ┆ mean ┆ … ┆ q90  ┆ q95  ┆ q99  ┆ max  │
+    │ ---                     ┆ ---   ┆ ---     ┆ ---  ┆   ┆ ---  ┆ ---  ┆ ---  ┆ ---  │
+    │ datetime[μs, UTC]       ┆ i64   ┆ i64     ┆ f64  ┆   ┆ f64  ┆ f64  ┆ f64  ┆ f64  │
+    ╞═════════════════════════╪═══════╪═════════╪══════╪═══╪══════╪══════╪══════╪══════╡
+    │ 2020-01-01 00:00:00 UTC ┆ 3     ┆ 3       ┆ 1.8  ┆ … ┆ 4.2  ┆ 4.2  ┆ 4.2  ┆ 4.2  │
+    │ 2020-02-01 00:00:00 UTC ┆ 1     ┆ 1       ┆ 1.0  ┆ … ┆ 1.0  ┆ 1.0  ┆ 1.0  ┆ 1.0  │
+    │ 2020-03-01 00:00:00 UTC ┆ 1     ┆ 1       ┆ 4.2  ┆ … ┆ 4.2  ┆ 4.2  ┆ 4.2  ┆ 4.2  │
+    │ 2020-04-01 00:00:00 UTC ┆ 1     ┆ 1       ┆ 42.0 ┆ … ┆ 42.0 ┆ 42.0 ┆ 42.0 ┆ 42.0 │
+    └─────────────────────────┴───────┴─────────┴──────┴───┴──────┴──────┴──────┴──────┘
+
+    ```
+    """
+    return (
+        frame.select(column, dt_column)
+        .sort(dt_column)
+        .group_by_dynamic(dt_column, every=period)
+        .agg(
+            pl.col(column).len().cast(pl.Int64).alias("count"),
+            pl.col(column).n_unique().cast(pl.Int64).alias("nunique"),
+            pl.col(column).mean().cast(pl.Float64).alias("mean"),
+            pl.col(column).std().cast(pl.Float64).alias("std"),
+            pl.col(column).min().cast(pl.Float64).alias("min"),
+            pl.col(column).quantile(0.01).cast(pl.Float64).alias("q01"),
+            pl.col(column).quantile(0.05).cast(pl.Float64).alias("q05"),
+            pl.col(column).quantile(0.1).cast(pl.Float64).alias("q10"),
+            pl.col(column).quantile(0.25).cast(pl.Float64).alias("q25"),
+            pl.col(column).median().cast(pl.Float64).alias("median"),
+            pl.col(column).quantile(0.75).cast(pl.Float64).alias("q75"),
+            pl.col(column).quantile(0.9).cast(pl.Float64).alias("q90"),
+            pl.col(column).quantile(0.95).cast(pl.Float64).alias("q95"),
+            pl.col(column).quantile(0.99).cast(pl.Float64).alias("q99"),
+            pl.col(column).max().cast(pl.Float64).alias("max"),
+        )
+    )
 
 
 def to_temporal_frames(
