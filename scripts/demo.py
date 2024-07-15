@@ -3,8 +3,8 @@ r"""Contain a demo example to generate a report."""
 
 from __future__ import annotations
 
-import datetime
 import logging
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
@@ -91,9 +91,9 @@ def create_dataframe(nrows: int = 1000) -> pl.DataFrame:
 
     frame = frame.with_columns(
         pl.datetime_range(
-            start=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc),
-            end=datetime.datetime(year=2018, month=1, day=1, tzinfo=datetime.timezone.utc)
-            + datetime.timedelta(hours=nrows - 1),
+            start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+            end=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc)
+            + timedelta(hours=nrows - 1),
             interval="1h",
         ).alias("datetime"),
     )
@@ -191,21 +191,21 @@ def create_continuous_column_analyzer(
             "monthly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="M",
+                period="1mo",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
             "weekly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="W",
+                period="1w",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
             "daily": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="D",
+                period="1d",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
@@ -213,25 +213,25 @@ def create_continuous_column_analyzer(
                 column=column, yscale=yscale, nbins=100, figsize=FIGSIZE
             ),
             "most frequent": fa.MostFrequentValuesAnalyzer(column=column, top=10),
-            "temporal drift monthly": fa.ColumnContinuousTemporalDriftAnalyzer(
-                column=column,
-                dt_column="datetime",
-                period="M",
-                nbins=201,
-                figsize=FIGSIZE,
-                xmin="q0.01",
-                xmax="q0.99",
-            ),
-            "temporal drift monthly (density)": fa.ColumnContinuousTemporalDriftAnalyzer(
-                column=column,
-                dt_column="datetime",
-                period="M",
-                nbins=201,
-                figsize=FIGSIZE,
-                xmin="q0.01",
-                xmax="q0.99",
-                density=True,
-            ),
+            # "temporal drift monthly": fa.ColumnContinuousTemporalDriftAnalyzer(
+            #     column=column,
+            #     dt_column="datetime",
+            #     period="1m",
+            #     nbins=201,
+            #     figsize=FIGSIZE,
+            #     xmin="q0.01",
+            #     xmax="q0.99",
+            # ),
+            # "temporal drift monthly (density)": fa.ColumnContinuousTemporalDriftAnalyzer(
+            #     column=column,
+            #     dt_column="datetime",
+            #     period="1m",
+            #     nbins=201,
+            #     figsize=FIGSIZE,
+            #     xmin="q0.01",
+            #     xmax="q0.99",
+            #     density=True,
+            # ),
         },
         max_toc_depth=1,
     )
@@ -261,7 +261,12 @@ def create_analyzer() -> fa.BaseAnalyzer:
     # columns = fa.MappingAnalyzer({})
     return fa.MappingAnalyzer(
         {
-            "query": fa.ContentAnalyzer(content="blablabla..."),
+            "data": fa.ContentAnalyzer(
+                "Report was generated at "
+                f"{datetime.now(tz=timezone.utc)!s}<p>\n\n"
+                "<b>data pull query</b>\n\n"
+                f"<pre><code>blablabla...</code></pre>\n\n"
+            ),
             "summary": fa.DataFrameSummaryAnalyzer(),
             "monthly count": fa.TemporalRowCountAnalyzer(
                 dt_column="datetime",
@@ -287,10 +292,6 @@ def create_transformer() -> BaseTransformer:
     """
     return SequentialTransformer(
         [
-            # ColumnSelection(
-            #     columns=["str", "float", "int", "cauchy", "datetime", "datetime_str", "missing"],
-            #     ignore_missing=True,
-            # ),
             StripChars(columns=["str"]),
             Cast(columns=["float", "cauchy"], dtype=pl.Float64),
             Cast(columns=["int"], dtype=pl.Int64),

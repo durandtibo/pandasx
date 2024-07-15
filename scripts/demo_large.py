@@ -4,15 +4,17 @@ r"""Contain a demo example to generate a report."""
 from __future__ import annotations
 
 import logging
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from grizz.ingestor import Ingestor
 from grizz.transformer import BaseTransformer, SequentialTransformer
 
 from flamme import analyzer as fa
 from flamme.reporter import BaseReporter, Reporter
+from flamme.utils.array import rand_replace
 from flamme.utils.logging import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -20,7 +22,7 @@ logger = logging.getLogger(__name__)
 FIGSIZE = (14, 5)
 
 
-def create_dataframe(nrows: int = 1000, ncols: int = 100) -> pd.DataFrame:
+def create_dataframe(nrows: int = 1000, ncols: int = 100) -> pl.DataFrame:
     r"""Create a DataFrame.
 
     Args:
@@ -31,14 +33,24 @@ def create_dataframe(nrows: int = 1000, ncols: int = 100) -> pd.DataFrame:
         The generated DataFrame.
     """
     rng = np.random.default_rng(42)
-    frame = pd.DataFrame(
-        rng.normal(size=(nrows, ncols)), columns=[f"feature{i:04}" for i in range(ncols)]
+    frame = pl.DataFrame(
+        rand_replace(
+            rng.normal(size=(nrows, ncols)),
+            value=None,
+            prob=0.4,
+            rng=rng,
+        ).tolist(),
+        schema={f"feature{i:04}": pl.Float64 for i in range(ncols)},
+        orient="row",
     )
-    mask = rng.choice([True, False], size=frame.shape, p=[0.2, 0.8])
-    mask[mask.all(1), -1] = 0
-    frame = frame.mask(mask)
-    frame["datetime"] = pd.date_range("2018-01-01", periods=nrows, freq="H")
-    return frame
+    return frame.with_columns(
+        pl.datetime_range(
+            start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+            end=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc)
+            + timedelta(hours=nrows - 1),
+            interval="1h",
+        ).alias("datetime"),
+    )
 
 
 def create_null_value_analyzer() -> fa.BaseAnalyzer:
@@ -51,14 +63,14 @@ def create_null_value_analyzer() -> fa.BaseAnalyzer:
         {
             "overall": fa.NullValueAnalyzer(figsize=FIGSIZE),
             "temporal": fa.TemporalNullValueAnalyzer(
-                dt_column="datetime", period="M", figsize=FIGSIZE
+                dt_column="datetime", period="1mo", figsize=FIGSIZE
             ),
             "monthly": fa.ColumnTemporalNullValueAnalyzer(
-                dt_column="datetime", period="M", figsize=(7, 4)
+                dt_column="datetime", period="1mo", figsize=(7, 4)
             ),
-            "weekly": fa.ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="W"),
+            "weekly": fa.ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="1w"),
             "daily": fa.ColumnTemporalNullValueAnalyzer(
-                dt_column="datetime", period="D", ncols=1, figsize=FIGSIZE
+                dt_column="datetime", period="1d", ncols=1, figsize=FIGSIZE
             ),
         }
     )
@@ -97,21 +109,21 @@ def create_continuous_column_analyzer(
             "monthly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="M",
+                period="1mo",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
             "weekly": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="W",
+                period="1w",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
             "daily": fa.ColumnTemporalContinuousAnalyzer(
                 column=column,
                 dt_column="datetime",
-                period="D",
+                period="1d",
                 yscale=yscale,
                 figsize=FIGSIZE,
             ),
@@ -133,10 +145,16 @@ def create_analyzer() -> fa.BaseAnalyzer:
     columns = fa.MappingAnalyzer({})
     return fa.MappingAnalyzer(
         {
+            "data": fa.ContentAnalyzer(
+                "Report was generated at "
+                f"{datetime.now(tz=timezone.utc)!s}<p>\n\n"
+                "<b>data pull query</b>\n\n"
+                f"<pre><code>blablabla...</code></pre>\n\n"
+            ),
             "summary": fa.DataFrameSummaryAnalyzer(),
             "monthly count": fa.TemporalRowCountAnalyzer(
                 dt_column="datetime",
-                period="M",
+                period="1mo",
                 figsize=FIGSIZE,
             ),
             "duplicate": fa.DuplicatedRowAnalyzer(),

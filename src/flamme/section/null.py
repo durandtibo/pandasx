@@ -155,6 +155,7 @@ class NullValueSection(BaseSection):
                 "table_sort": self._create_table(frame=frame, sort_by="null"),
                 "bar_figure": self._create_bar_figure(frame),
                 "num_columns": f"{len(self._columns):,}",
+                "columns": ", ".join(self._columns),
             }
         )
 
@@ -203,8 +204,9 @@ def create_section_template() -> str:
 
 <p style="margin-top: 1rem;">
 This section analyzes the number and proportion of null values for the {{num_columns}}
-columns.
-In the following histogram, the columns are sorted by ascending order of null values.
+columns: <em>{{columns}}</em>.
+
+<p>The columns are sorted by ascending order of number of null values in the following histogram.
 
 {{bar_figure}}
 
