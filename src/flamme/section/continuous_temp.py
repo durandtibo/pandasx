@@ -15,6 +15,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
+import polars as pl
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
@@ -29,12 +30,10 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
-from flamme.utils.temporal import compute_temporal_stats
+from flamme.utils.temporal import compute_temporal_stats, to_step_names
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    import polars as pl
 
 
 logger = logging.getLogger(__name__)
@@ -83,13 +82,13 @@ class ColumnTemporalContinuousSection(BaseSection):
     ...     ),
     ...     column="col",
     ...     dt_column="datetime",
-    ...     period="M",
+    ...     period="1mo",
     ... )
     >>> section
     ColumnTemporalContinuousSection(
       (column): col
       (dt_column): datetime
-      (period): M
+      (period): 1mo
       (yscale): auto
       (figsize): None
     )
@@ -287,19 +286,13 @@ def create_temporal_figure(
     """
     if frame.shape[0] == 0:
         return None
-    frame = frame[[column, dt_column]].copy()
-    frame[dt_column] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    groups = (
+        frame.select(pl.col(dt_column).alias("datetime"), pl.col(column).alias("value"))
+        .sort("datetime")
+        .group_by_dynamic("datetime", every=period)
     )
-    frame_group = (
-        frame.groupby(dt_column)[column]
-        .apply(list)
-        .reset_index(name=column)
-        .sort_values(by=[dt_column])
-    )
-
-    data = [np.array(x) for x in frame_group[column].tolist()]
-    steps = frame_group[dt_column].tolist()
+    data = [np.sort(np.array(x["value"])) for _, x in groups]
+    steps = to_step_names(groups=groups, period=period)
     fig, ax = plt.subplots(figsize=figsize)
     boxplot_continuous_temporal(ax=ax, data=data, steps=steps, yscale=yscale)
     return fig
