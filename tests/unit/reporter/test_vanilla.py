@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import pandas as pd
+import polars as pl
 import pytest
 from grizz.ingestor import ParquetIngestor
 from grizz.transformer import Sequential
@@ -18,14 +18,14 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="module")
 def frame_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
     path = tmp_path_factory.mktemp("data").joinpath("frame.parquet")
-    frame = pd.DataFrame(
+    frame = pl.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
             "col3": [1.2, 2.2, 3.2, 4.2, 5.2],
         }
     )
-    frame.to_parquet(path)
+    frame.write_parquet(path)
     return path
 
 
