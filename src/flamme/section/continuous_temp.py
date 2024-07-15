@@ -23,6 +23,7 @@ from flamme.section.utils import (
     valid_h_tag,
 )
 from flamme.utils.figure import figure2html
+from flamme.utils.temporal import compute_temporal_stats
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -239,7 +240,7 @@ def create_temporal_figure(
 
 
 def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, period: str) -> str:
-    r"""Create a HTML representation of a table with some statistics
+    r"""Return a HTML representation of a table with some statistics
     about the temporal value distribution.
 
     Args:
@@ -252,36 +253,47 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
 
     Returns:
         The HTML representation of the table.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.continuous_temp import create_temporal_table
+    >>> table = create_temporal_table(
+    ...     frame=pl.DataFrame(
+    ...         {
+    ...             "col1": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    ...             "col2": [1, 2, 3, 4, 5, 6],
+    ...             "datetime": [
+    ...                 datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+    ...                 datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+    ...             ],
+    ...         },
+    ...         schema={
+    ...             "col1": pl.Float64,
+    ...             "col2": pl.Int64,
+    ...             "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+    ...         },
+    ...     ),
+    ...     column="col1",
+    ...     dt_column="datetime",
+    ...     period="1mo",
+    ... )
+
+    ```
     """
     if frame.shape[0] == 0:
         return "<span>&#9888;</span> No table is generated because the column is empty"
-    frame = frame[[column, dt_column]].copy()
-    dt_col = "__datetime__"
-    frame[dt_col] = frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period)
-    frame_stats = (
-        frame.groupby(dt_col)[column]
-        .agg(
-            [
-                "count",
-                "mean",
-                "median",
-                "min",
-                "max",
-                "std",
-                ("q01", lambda x: x.quantile(0.01)),
-                ("q05", lambda x: x.quantile(0.05)),
-                ("q10", lambda x: x.quantile(0.1)),
-                ("q25", lambda x: x.quantile(0.25)),
-                ("q75", lambda x: x.quantile(0.75)),
-                ("q90", lambda x: x.quantile(0.9)),
-                ("q95", lambda x: x.quantile(0.95)),
-                ("q99", lambda x: x.quantile(0.99)),
-            ]
-        )
-        .sort_index()
-    )
 
-    rows = [create_temporal_table_row(row) for row in frame_stats.itertuples()]
+    stats = compute_temporal_stats(frame=frame, column=column, dt_column=dt_column, period=period)
+
+    rows = [create_temporal_table_row(stat) for stat in stats.to_dicts()]
     return Template(
         """<details>
     <summary>[show statistics per temporal period]</summary>
@@ -291,7 +303,7 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
     <table class="table table-hover table-responsive w-auto" >
         <thead class="thead table-group-divider">
             <tr>
-                <th>column</th>
+                <th>step</th>
                 <th>count</th>
                 <th>mean</th>
                 <th>std</th>
@@ -318,18 +330,54 @@ def create_temporal_table(frame: pd.DataFrame, column: str, dt_column: str, peri
     ).render({"rows": "\n".join(rows), "column": column, "period": period})
 
 
-def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
-    r"""Create the HTML code of a new table row.
+def create_temporal_table_row(stats: dict) -> str:
+    r"""Return the HTML code of a new table row.
 
     Args:
-        row: Specifies a DataFrame row.
+        stats: The statistics for the row.
 
     Returns:
         The HTML code of a row.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from datetime import datetime, timezone
+    >>> import polars as pl
+    >>> from flamme.section.continuous_temp import create_temporal_table_row
+    >>> row = create_temporal_table_row(
+    ...     stats={
+    ...         "step": "2020-01-01",
+    ...         "count": 101,
+    ...         "nunique": 101,
+    ...         "mean": 50.0,
+    ...         "std": 29.300170647967224,
+    ...         "min": 0.0,
+    ...         "q01": 1.0,
+    ...         "q05": 5.0,
+    ...         "q10": 10.0,
+    ...         "q25": 25.0,
+    ...         "median": 50.0,
+    ...         "q75": 75.0,
+    ...         "q90": 90.0,
+    ...         "q95": 95.0,
+    ...         "q99": 99.0,
+    ...         "max": 100.0,
+    ...     }
+    ... )
+
+    ```
     """
+
+    def to_float(value: float | None) -> float:
+        if value is None:
+            return float("nan")
+        return value
+
     return Template(
         """<tr>
-    <th>{{datetime}}</th>
+    <th>{{step}}</th>
     <td {{num_style}}>{{count}}</td>
     <td {{num_style}}>{{mean}}</td>
     <td {{num_style}}>{{std}}</td>
@@ -348,20 +396,20 @@ def create_temporal_table_row(row: pd.core.frame.Pandas) -> str:
     ).render(
         {
             "num_style": 'style="text-align: right;"',
-            "datetime": row.Index,
-            "count": f"{row.count:,}",
-            "mean": f"{row.mean:,.4f}",
-            "median": f"{row.median:,.4f}",
-            "min": f"{row.min:,.4f}",
-            "max": f"{row.max:,.4f}",
-            "std": f"{row.std:,.4f}",
-            "q01": f"{row.q01:,.4f}",
-            "q05": f"{row.q05:,.4f}",
-            "q10": f"{row.q10:,.4f}",
-            "q25": f"{row.q25:,.4f}",
-            "q75": f"{row.q75:,.4f}",
-            "q90": f"{row.q90:,.4f}",
-            "q95": f"{row.q95:,.4f}",
-            "q99": f"{row.q99:,.4f}",
+            "step": stats["step"],
+            "count": f"{stats['count']:,}",
+            "mean": f"{to_float(stats['mean']):,.4f}",
+            "median": f"{to_float(stats['median']):,.4f}",
+            "min": f"{to_float(stats['min']):,.4f}",
+            "max": f"{to_float(stats['max']):,.4f}",
+            "std": f"{to_float(stats['std']):,.4f}",
+            "q01": f"{to_float(stats['q01']):,.4f}",
+            "q05": f"{to_float(stats['q05']):,.4f}",
+            "q10": f"{to_float(stats['q10']):,.4f}",
+            "q25": f"{to_float(stats['q25']):,.4f}",
+            "q75": f"{to_float(stats['q75']):,.4f}",
+            "q90": f"{to_float(stats['q90']):,.4f}",
+            "q95": f"{to_float(stats['q95']):,.4f}",
+            "q99": f"{to_float(stats['q99']):,.4f}",
         }
     )
