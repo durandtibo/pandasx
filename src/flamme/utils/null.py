@@ -9,7 +9,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import polars as pl
 import polars.selectors as cs
-from grizz.utils.period import period_to_strftime_format
+
+from flamme.utils.temporal import to_step_names
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -166,17 +167,14 @@ def compute_temporal_null_count(
     ```
     """
     frame_na = frame.select(cs.by_name(columns).is_null().cast(pl.Int64), pl.col(dt_column))
-    frame_group = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
-    format_dt = period_to_strftime_format(period)
-    labels = [name[0].strftime(format_dt) for name, _ in frame_group]
+    groups = frame_na.sort(dt_column).group_by_dynamic(dt_column, every=period)
+    steps = to_step_names(groups=groups, period=period)
 
-    nulls = np.zeros(len(labels), dtype=np.int64)
-    totals = np.zeros(len(labels), dtype=np.int64)
+    nulls = np.zeros(len(steps), dtype=np.int64)
+    totals = np.zeros(len(steps), dtype=np.int64)
     if columns:
-        nulls += (
-            frame_group.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal().to_numpy()
-        )
+        nulls += groups.agg(cs.by_name(columns).sum()).drop(dt_column).sum_horizontal().to_numpy()
         totals += (
-            frame_group.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal().to_numpy()
+            groups.agg(cs.by_name(columns).count()).drop(dt_column).sum_horizontal().to_numpy()
         )
-    return nulls, totals, labels
+    return nulls, totals, steps

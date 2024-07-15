@@ -222,3 +222,29 @@ def test_compute_temporal_null_count_empty(dataframe_empty: pl.DataFrame) -> Non
         ),
         (np.array([], dtype=np.int64), np.array([], dtype=np.int64), []),
     )
+
+
+def test_compute_temporal_null_count_monthly(dataframe: pl.DataFrame) -> None:
+    assert objects_are_equal(
+        compute_temporal_null_count(
+            frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="1mo"
+        ),
+        (
+            np.array([2, 0, 0, 1], dtype=np.int64),
+            np.array([2, 2, 2, 2], dtype=np.int64),
+            ["2020-01", "2020-02", "2020-03", "2020-04"],
+        ),
+    )
+
+
+def test_compute_temporal_null_count_biweekly(dataframe: pl.DataFrame) -> None:
+    assert objects_are_equal(
+        compute_temporal_null_count(
+            frame=dataframe, columns=["col1", "col2"], dt_column="datetime", period="2w"
+        ),
+        (
+            np.array([2, 0, 0, 1], dtype=np.int64),
+            np.array([2, 2, 2, 2], dtype=np.int64),
+            ["2019 52", "2020 04", "2020 08", "2020 12"],
+        ),
+    )
