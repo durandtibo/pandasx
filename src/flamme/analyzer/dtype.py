@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 from flamme.analyzer.base import BaseAnalyzer
 from flamme.section import DataTypeSection
-from flamme.utils.dtype2 import frame_types
+from flamme.utils.dtype import frame_types
 
 if TYPE_CHECKING:
     import polars as pl
