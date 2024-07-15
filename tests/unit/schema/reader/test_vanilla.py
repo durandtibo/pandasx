@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pandas as pd
+import polars as pl
 import pyarrow as pa
 import pytest
 from coola import objects_are_equal
@@ -9,8 +9,8 @@ from flamme.schema.reader import SchemaReader
 
 
 @pytest.fixture(scope="module")
-def frame() -> pd.DataFrame:
-    return pd.DataFrame(
+def frame() -> pl.DataFrame:
+    return pl.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": ["a", "b", "c", "d", "e"],
@@ -24,18 +24,18 @@ def frame() -> pd.DataFrame:
 ##################################
 
 
-def test_schema_reader_str(frame: pd.DataFrame) -> None:
+def test_schema_reader_str(frame: pl.DataFrame) -> None:
     assert str(SchemaReader(frame)).startswith("SchemaReader(")
 
 
-def test_schema_reader_read(frame: pd.DataFrame) -> None:
+def test_schema_reader_read(frame: pl.DataFrame) -> None:
     schema = SchemaReader(frame).read()
     assert objects_are_equal(
         schema,
         pa.schema(
             [
                 ("col1", pa.int64()),
-                ("col2", pa.string()),
+                ("col2", pa.large_string()),
                 ("col3", pa.float64()),
             ]
         ),
