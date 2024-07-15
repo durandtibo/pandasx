@@ -22,8 +22,6 @@ class EmptySection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
-    >>> import numpy as np
     >>> from flamme.section import EmptySection
     >>> section = EmptySection()
     >>> section

@@ -27,7 +27,6 @@ class TableOfContentSection(BaseSection):
 
     ```pycon
 
-    >>> import pandas as pd
     >>> import polars as pl
     >>> import numpy as np
     >>> from flamme.section import TableOfContentSection, DuplicatedRowSection
