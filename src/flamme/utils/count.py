@@ -6,9 +6,9 @@ __all__ = ["compute_nunique", "compute_temporal_count", "compute_temporal_value_
 
 import numpy as np
 import polars as pl
-from grizz.utils.period import period_to_strftime_format
 
 from flamme.utils.sorting import mixed_typed_sort
+from flamme.utils.temporal import to_step_names
 
 
 def compute_nunique(frame: pl.DataFrame) -> np.ndarray:
@@ -107,8 +107,7 @@ def compute_temporal_count(
         .sort("datetime")
         .group_by_dynamic("datetime", every=period)
     )
-    format_dt = period_to_strftime_format(period)
-    steps = [name[0].strftime(format_dt) for name, _ in groups]
+    steps = to_step_names(groups=groups, period=period)
     counts = groups.agg(pl.col("count").sum())["count"].to_numpy().astype(np.int64)
     return counts, steps
 
@@ -188,8 +187,7 @@ def compute_temporal_value_counts(
         .sort(["__datetime__", "value"])
         .group_by_dynamic("__datetime__", every=period)
     )
-    format_dt = period_to_strftime_format(period)
-    steps = [name[0].strftime(format_dt) for name, _ in groups]
+    steps = to_step_names(groups=groups, period="1mo")
     frame_counts = (
         groups.agg(pl.col("value").value_counts())  # noqa: PD010
         .explode("value")
