@@ -25,11 +25,12 @@ from flamme.section.utils import (
 from flamme.utils.figure import figure2html
 from flamme.utils.mapping import sort_by_keys
 from flamme.utils.range import find_range
+from flamme.utils.temporal import to_temporal_frames
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
+    import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -65,24 +66,32 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
 
     ```pycon
 
+    >>> from datetime import datetime, timezone
     >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from flamme.section import ColumnContinuousTemporalDriftSection
     >>> rng = np.random.default_rng()
-    >>> data = pd.DataFrame(
+    >>> data = pl.DataFrame(
     ...     {
-    ...         "col": rng.standard_normal(10),
-    ...         "date": pd.date_range(start="2017-01-01", periods=10, freq="1D"),
-    ...     }
+    ...         "col": rng.standard_normal(59),
+    ...         "datetime": pl.datetime_range(
+    ...             start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+    ...             end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+    ...             interval="1d",
+    ...             closed="left",
+    ...             eager=True,
+    ...         ),
+    ...     },
+    ...     schema={"col": pl.Int64, "datetime": pl.Datetime(time_unit="us", time_zone="UTC")},
     ... )
     >>> section = ColumnContinuousTemporalDriftSection(
-    ...     frame=data, column="col", dt_column="date", period="M"
+    ...     frame=data, column="col", dt_column="date", period="1mo"
     ... )
     >>> section
     ColumnContinuousTemporalDriftSection(
       (column): col
       (dt_column): date
-      (period): M
+      (period): 1mo
       (nbins): None
       (density): False
       (yscale): auto
@@ -98,7 +107,7 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
 
     def __init__(
         self,
-        frame: pd.DataFrame,
+        frame: pl.DataFrame,
         column: str,
         dt_column: str,
         period: str,
@@ -139,7 +148,7 @@ class ColumnContinuousTemporalDriftSection(BaseSection):
         return f"{self.__class__.__qualname__}(\n  {args}\n)"
 
     @property
-    def frame(self) -> pd.DataFrame:
+    def frame(self) -> pl.DataFrame:
         return self._frame
 
     @property
@@ -231,13 +240,11 @@ This section analyzes the temporal drift of continuous values for column <em>{{c
             xmax=self._xmax,
             figsize=self._figsize,
         )
-        if fig is None:
-            return f"<span>&#9888;</span> No figure is generated because the column {self._column} is empty"
         return figure2html(fig, close_fig=True)
 
 
 def create_temporal_drift_figure(
-    frame: pd.DataFrame,
+    frame: pl.DataFrame,
     column: str,
     dt_column: str,
     period: str,
@@ -274,48 +281,45 @@ def create_temporal_drift_figure(
             dimension is the width and the second is the height.
 
     Returns:
-        The figure or ``None`` if there is no valid data.
+        The generated figure or ``None`` if there is no valid data.
     """
     if column not in frame or dt_column not in frame:
         return None
-    array = frame[column].dropna().to_numpy()
+    array = frame[column].drop_nulls().to_numpy()
     if array.size == 0:
         return None
 
-    frame = frame[[column, dt_column]].copy()
-    frame[dt_column] = (
-        frame[dt_column].apply(lambda x: x.replace(tzinfo=None)).dt.to_period(period).astype(str)
+    frames, steps = to_temporal_frames(
+        frame=frame.select(column, dt_column), dt_column=dt_column, period=period
     )
-    groups = sort_by_keys(frame.groupby(dt_column).groups)
-    groups = {key: frame.loc[index, column].to_numpy() for key, index in groups.items()}
+    groups = sort_by_keys(dict(zip(steps, [fr[column].to_numpy() for fr in frames])))
 
-    keys = list(groups.keys())
-    nrows = len(keys)
-    keys1, keys2 = keys[:-1], keys[1:]
-    if len(keys) == 2:
+    nrows = len(steps)
+    steps1, steps2 = steps[:-1], steps[1:]
+    if len(steps) == 2:
         nrows = 1
-    if len(keys) > 2:
-        keys1, keys2 = [keys[0], *keys1], [keys[-1], *keys2]
+    if len(steps) > 2:
+        steps1, steps2 = [steps[0], *steps1], [steps[-1], *steps2]
 
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     if figsize is not None:
         figsize = (figsize[0], figsize[1] * nrows)
     fig, axes = plt.subplots(figsize=figsize, nrows=nrows)
 
-    for i, (key1, key2) in enumerate(zip(keys1, keys2)):
+    for i, (step1, step2) in enumerate(zip(steps1, steps2)):
         ax = axes[i] if nrows > 1 else axes
         hist_continuous2(
             ax=ax,
-            array1=groups[key1],
-            array2=groups[key2],
-            label1=key1,
-            label2=key2,
+            array1=groups[step1],
+            array2=groups[step2],
+            label1=step1,
+            label2=step2,
             xmin=xmin,
             xmax=xmax,
             nbins=nbins,
             density=density,
             yscale=yscale,
         )
-        ax.set_title(f"{key1} vs {key2}")
+        ax.set_title(f"{step1} vs {step2}")
         readable_xticklabels(ax, max_num_xticks=100)
     return fig
