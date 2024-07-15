@@ -15,7 +15,7 @@ from flamme.utils.temporal import compute_temporal_stats, to_temporal_frames
 
 
 def test_compute_temporal_stats() -> None:
-    out = compute_temporal_stats(
+    stats = compute_temporal_stats(
         pl.DataFrame(
             {
                 "col": list(range(104)),
@@ -36,7 +36,7 @@ def test_compute_temporal_stats() -> None:
         period="1mo",
     )
     assert_frame_equal(
-        out,
+        stats,
         pl.DataFrame(
             {
                 "step": [

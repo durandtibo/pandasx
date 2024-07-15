@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 import numpy as np
 import pandas as pd
+import polars as pl
 import pytest
 from coola import objects_are_equal
 from jinja2 import Template
 
 from flamme.section import ColumnTemporalContinuousSection
-from flamme.section.continuous_temp import create_temporal_figure
+from flamme.section.continuous_temp import (
+    create_temporal_figure,
+    create_temporal_table,
+    create_temporal_table_row,
+)
 
 
 @pytest.fixture()
@@ -256,6 +263,117 @@ def test_create_temporal_figure_figsize(
             dt_column="datetime",
             period="M",
             figsize=figsize,
+        ),
+        str,
+    )
+
+
+##########################################
+#    Tests for create_temporal_table     #
+##########################################
+
+
+def test_create_temporal_table() -> None:
+    assert isinstance(
+        create_temporal_table(
+            frame=pl.DataFrame(
+                {
+                    "col1": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+                    "col2": [1, 2, 3, 4, 5, 6],
+                    "datetime": [
+                        datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+                        datetime(year=2020, month=1, day=1, tzinfo=timezone.utc),
+                        datetime(year=2020, month=1, day=2, tzinfo=timezone.utc),
+                        datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                        datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                        datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                    ],
+                },
+                schema={
+                    "col1": pl.Float64,
+                    "col2": pl.Int64,
+                    "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+                },
+            ),
+            column="col1",
+            dt_column="datetime",
+            period="1mo",
+        ),
+        str,
+    )
+
+
+def test_create_temporal_table_empty() -> None:
+    assert isinstance(
+        create_temporal_table(
+            frame=pl.DataFrame(
+                {"col1": [], "col2": [], "datetime": []},
+                schema={
+                    "col1": pl.Float64,
+                    "col2": pl.Int64,
+                    "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+                },
+            ),
+            column="col1",
+            dt_column="datetime",
+            period="1mo",
+        ),
+        str,
+    )
+
+
+##############################################
+#    Tests for create_temporal_table_row     #
+##############################################
+
+
+def test_create_temporal_table_row() -> None:
+    assert isinstance(
+        create_temporal_table_row(
+            {
+                "step": "2020-01-01",
+                "count": 101,
+                "nunique": 101,
+                "mean": 50.0,
+                "std": 29.3,
+                "min": 0.0,
+                "q01": 1.0,
+                "q05": 5.0,
+                "q10": 10.0,
+                "q25": 25.0,
+                "median": 50.0,
+                "q75": 75.0,
+                "q90": 90.0,
+                "q95": 95.0,
+                "q99": 99.0,
+                "max": 100.0,
+            }
+        ),
+        str,
+    )
+
+
+def test_create_temporal_table_row_none() -> None:
+    assert isinstance(
+        create_temporal_table_row(
+            {
+                "step": "2020-01-01",
+                "count": 0,
+                "nunique": 0,
+                "mean": None,
+                "std": None,
+                "min": None,
+                "q01": None,
+                "q05": None,
+                "q10": None,
+                "q25": None,
+                "median": None,
+                "q75": None,
+                "q90": None,
+                "q95": None,
+                "q99": None,
+                "max": None,
+            }
         ),
         str,
     )
