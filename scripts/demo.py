@@ -4,7 +4,7 @@ r"""Contain a demo example to generate a report."""
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -17,6 +17,7 @@ from grizz.transformer import (
     StripChars,
     ToDatetime,
 )
+from grizz.utils.datetime import find_end_datetime
 
 from flamme import analyzer as fa
 from flamme.reporter import BaseReporter, Reporter
@@ -92,8 +93,11 @@ def create_dataframe(nrows: int = 1000) -> pl.DataFrame:
     frame = frame.with_columns(
         pl.datetime_range(
             start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-            end=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc)
-            + timedelta(hours=nrows - 1),
+            end=find_end_datetime(
+                datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
+                periods=nrows - 1,
+                interval="1h",
+            ),
             interval="1h",
         ).alias("datetime"),
         pl.lit(1.0).alias("one"),

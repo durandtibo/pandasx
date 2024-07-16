@@ -91,7 +91,10 @@ def test_compute_temporal_count_biweekly(dataframe: pl.DataFrame) -> None:
             dt_column="datetime",
             period="2w",
         ),
-        (np.array([3, 1, 1, 1], dtype=np.int64), ["2019 52", "2020 04", "2020 08", "2020 12"]),
+        (
+            np.array([3, 1, 1, 1], dtype=np.int64),
+            ["2019 week 52", "2020 week 04", "2020 week 08", "2020 week 12"],
+        ),
     )
 
 
