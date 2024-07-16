@@ -10,6 +10,7 @@ __all__ = [
     "ColumnDiscreteSection",
     "ColumnTemporalContinuousSection",
     "ColumnTemporalDiscreteSection",
+    "ColumnTemporalDriftDiscreteSection",
     "ColumnTemporalNullValueSection",
     "ContentSection",
     "DataFrameSummarySection",
@@ -33,6 +34,7 @@ from flamme.section.continuous_drift import ColumnContinuousTemporalDriftSection
 from flamme.section.continuous_temp import ColumnTemporalContinuousSection
 from flamme.section.count_rows import TemporalRowCountSection
 from flamme.section.discrete import ColumnDiscreteSection
+from flamme.section.discrete_drift import ColumnTemporalDriftDiscreteSection
 from flamme.section.discrete_temp import ColumnTemporalDiscreteSection
 from flamme.section.dtype import DataTypeSection
 from flamme.section.duplicate import DuplicatedRowSection
