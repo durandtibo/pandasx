@@ -208,6 +208,7 @@ by using the column <em>{{dt_column}}</em>.
 {{figure}}
 
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 

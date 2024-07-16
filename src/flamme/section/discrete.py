@@ -196,6 +196,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 
 {{figure}}
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 
