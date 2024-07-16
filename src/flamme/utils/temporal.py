@@ -6,7 +6,7 @@ __all__ = ["compute_temporal_stats", "to_temporal_frames", "to_step_names"]
 
 
 import polars as pl
-from grizz.utils.period import period_to_strftime_format
+from grizz.utils.interval import interval_to_strftime_format
 
 
 def compute_temporal_stats(
@@ -231,5 +231,5 @@ def to_step_names(groups: pl.GroupBy, period: str) -> list[str]:
 
     ```
     """
-    format_dt = period_to_strftime_format(period)
+    format_dt = interval_to_strftime_format(period)
     return [name[0].strftime(format_dt) for name, _ in groups]

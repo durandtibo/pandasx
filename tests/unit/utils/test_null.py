@@ -245,6 +245,6 @@ def test_compute_temporal_null_count_biweekly(dataframe: pl.DataFrame) -> None:
         (
             np.array([2, 0, 0, 1], dtype=np.int64),
             np.array([2, 2, 2, 2], dtype=np.int64),
-            ["2019 52", "2020 04", "2020 08", "2020 12"],
+            ["2019 week 52", "2020 week 04", "2020 week 08", "2020 week 12"],
         ),
     )

@@ -213,8 +213,8 @@ def create_temporal_drift_figure(
     frame: pl.DataFrame,
     column: str,
     dt_column: str,
-    period: str,
-    proportion: bool = False,
+    period: str,  # noqa: ARG001
+    proportion: bool = False,  # noqa: ARG001
     figsize: tuple[float, float] | None = None,
 ) -> plt.Figure | None:
     r"""Create a figure with the temporal value distribution.
