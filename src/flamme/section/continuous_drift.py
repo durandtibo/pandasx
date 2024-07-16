@@ -260,6 +260,7 @@ def create_section_template() -> str:
 This section analyzes the temporal drift of continuous values for column <em>{{column}}</em>.
 
 {{temporal_drift_figure}}
+
 <p style="margin-top: 1rem;">
 """
 

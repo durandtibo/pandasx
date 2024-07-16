@@ -236,12 +236,14 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 {{full_histogram}}
 {{full_boxplot}}
 {{table}}
+
 <p style="margin-top: 1rem;">
 
 <p style="margin-top: 1rem;">
 <b> Analysis of distribution in the inter-quartile range (IQR) </b>
 
 {{iqr_histogram}}
+
 <p style="margin-top: 1rem;">
 """
 

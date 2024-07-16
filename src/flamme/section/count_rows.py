@@ -192,6 +192,7 @@ The column <em>{{dt_column}}</em> is used as the temporal column.
 {{figure}}
 
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 

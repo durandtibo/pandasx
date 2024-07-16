@@ -179,6 +179,7 @@ This section shows a short summary of each column.
 </ul>
 
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 

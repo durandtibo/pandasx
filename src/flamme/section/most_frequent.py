@@ -137,6 +137,7 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 </ul>
 
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 

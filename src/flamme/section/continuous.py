@@ -241,6 +241,7 @@ This section analyzes the distribution of continuous values for column <em>{{col
 {{histogram_figure}}
 {{boxplot_figure}}
 {{table}}
+
 <p style="margin-top: 1rem;">
 """
 

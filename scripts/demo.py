@@ -96,6 +96,7 @@ def create_dataframe(nrows: int = 1000) -> pl.DataFrame:
             + timedelta(hours=nrows - 1),
             interval="1h",
         ).alias("datetime"),
+        pl.lit(1.0).alias("one"),
     )
     return frame.with_columns(pl.col("datetime").cast(dtype=pl.String).alias("datetime_str"))
 
@@ -256,6 +257,7 @@ def create_analyzer() -> fa.BaseAnalyzer:
             "half cauchy": create_continuous_column_analyzer(
                 column="half cauchy", yscale="log", xmax="q0.99"
             ),
+            "one": create_continuous_column_analyzer(column="one"),
         }
     )
     # columns = fa.MappingAnalyzer({})
