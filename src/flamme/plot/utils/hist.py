@@ -9,7 +9,7 @@ import math
 import numpy as np
 
 
-def adjust_nbins(nbins: int, array: np.ndarray) -> int:
+def adjust_nbins(nbins: int | None, array: np.ndarray) -> int | None:
     r"""Return the adjusted number of bins.
 
     Args:
@@ -30,6 +30,8 @@ def adjust_nbins(nbins: int, array: np.ndarray) -> int:
 
     ```
     """
+    if array.size == 0 or nbins is None:
+        return nbins
     if np.issubdtype(array.dtype, np.integer):
         return min(nbins, (np.max(array) - np.min(array) + 1).item())
     return nbins

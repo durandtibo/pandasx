@@ -28,6 +28,15 @@ def test_adjust_nbins_1() -> None:
     assert adjust_nbins(nbins=100, array=np.array([1, 1])) == 1
 
 
+def test_adjust_nbins_empty() -> None:
+    assert adjust_nbins(nbins=100, array=np.array([], dtype=np.int64)) == 100
+
+
+@pytest.mark.parametrize("dtype", [np.int64, np.float64])
+def test_adjust_nbins_none(dtype: np.dtype) -> None:
+    assert adjust_nbins(nbins=None, array=np.array([1, 4, 5, 6], dtype=dtype)) is None
+
+
 ################################
 #     Tests for find_nbins     #
 ################################
