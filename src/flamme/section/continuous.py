@@ -22,6 +22,7 @@ from matplotlib.lines import Line2D
 from scipy.stats import kurtosis, skew
 
 from flamme.plot import boxplot_continuous, hist_continuous
+from flamme.plot.utils.hist import adjust_nbins
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -30,8 +31,9 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
-from flamme.utils.array import nonnan
+from flamme.utils.array import filter_range, nonnan
 from flamme.utils.figure import figure2html
+from flamme.utils.range import find_range
 from flamme.utils.stats import compute_statistics_continuous
 
 if TYPE_CHECKING:
@@ -330,11 +332,13 @@ def create_histogram_figure(
 
     ```
     """
-    array = series.drop_nulls().to_numpy()
+    array = series.drop_nulls().to_numpy().ravel()
     if array.size == 0:
         return None
     fig, ax = plt.subplots(figsize=figsize)
     ax.set_title(f"data distribution for column {column}")
+    xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    nbins = adjust_nbins(nbins=nbins, array=filter_range(array, xmin=xmin, xmax=xmax))
     hist_continuous(
         ax=ax,
         array=array,
