@@ -19,7 +19,8 @@ from flamme.plot.utils import (
     axvline_quantile,
     readable_xticklabels,
 )
-from flamme.utils.array import nonnan
+from flamme.plot.utils.hist import adjust_nbins
+from flamme.utils.array import filter_range, nonnan
 from flamme.utils.range import find_range
 
 if TYPE_CHECKING:
@@ -192,6 +193,7 @@ def hist_continuous(
     if array.size == 0:
         return
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    nbins = adjust_nbins(nbins=nbins, array=filter_range(array, xmin=xmin, xmax=xmax))
     ax.hist(array, bins=nbins, range=(xmin, xmax), color="tab:blue", alpha=0.9, density=density)
     readable_xticklabels(ax, max_num_xticks=100)
     if xmin < xmax:
