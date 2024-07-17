@@ -256,7 +256,7 @@ def create_analyzer() -> fa.BaseAnalyzer:
             "missing": fa.ColumnDiscreteAnalyzer(column="missing"),
             "float": create_continuous_column_analyzer(column="float"),
             "cauchy": create_continuous_column_analyzer(
-                column="cauchy", yscale="auto", xmin="g0.001", xmax="g0.999"
+                column="cauchy", yscale="linear", xmin="q0.01", xmax="q0.99"
             ),
             "half cauchy": create_continuous_column_analyzer(
                 column="half cauchy", yscale="log", xmax="q0.99"

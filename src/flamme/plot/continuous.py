@@ -134,7 +134,8 @@ def boxplot_continuous_temporal(
     )
     array = np.concatenate(data)
     ymin, ymax = find_range(array, xmin=ymin, xmax=ymax)
-    ax.set_ylim(ymin, ymax)
+    if ymin < ymax:
+        ax.set_ylim(ymin, ymax)
     ax.set_xticks(np.arange(len(steps)), labels=steps)
     if yscale == "auto":
         yscale = auto_yscale_continuous(array=array, nbins=100)
