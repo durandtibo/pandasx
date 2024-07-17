@@ -10,6 +10,10 @@ from flamme.utils.range import find_range
 ################################
 
 
+def test_find_range_empty() -> None:
+    assert objects_are_equal(find_range(np.array([])), (float("nan"), float("nan")), equal_nan=True)
+
+
 def test_find_range_xmin_none_xmax_none() -> None:
     assert objects_are_equal(find_range(np.arange(101)), (0, 100))
 
