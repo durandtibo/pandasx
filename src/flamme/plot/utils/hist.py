@@ -2,9 +2,37 @@ r"""Contain utility functions to generate histograms."""
 
 from __future__ import annotations
 
-__all__ = ["find_nbins"]
+__all__ = ["adjust_nbins", "find_nbins"]
 
 import math
+
+import numpy as np
+
+
+def adjust_nbins(nbins: int, array: np.ndarray) -> int:
+    r"""Return the adjusted number of bins.
+
+    Args:
+        nbins: The initial number of bins.
+        array: The array with the value to plot in the histogram.
+
+    Returns:
+        The adjusted number of bins.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.plot.utils.hist import adjust_nbins
+    >>> nbins = adjust_nbins(nbins=100, array=np.array([1, 4, 5, 6]))
+    >>> nbins
+    6
+
+    ```
+    """
+    if np.issubdtype(array.dtype, np.integer):
+        return min(nbins, (np.max(array) - np.min(array) + 1).item())
+    return nbins
 
 
 def find_nbins(bin_size: float, min: float, max: float) -> int:  # noqa: A002
@@ -27,7 +55,7 @@ def find_nbins(bin_size: float, min: float, max: float) -> int:  # noqa: A002
 
     ```pycon
 
-    >>> from flamme.plot.utils import find_nbins
+    >>> from flamme.plot.utils.hist import find_nbins
     >>> nbins = find_nbins(bin_size=1, min=0, max=10)
     >>> nbins
     11

@@ -1,8 +1,32 @@
 from __future__ import annotations
 
+import numpy as np
 import pytest
 
-from flamme.plot.utils import find_nbins
+from flamme.plot.utils.hist import adjust_nbins, find_nbins
+
+##################################
+#     Tests for adjust_nbins     #
+##################################
+
+
+@pytest.mark.parametrize("dtype", [np.int32, np.int64])
+def test_adjust_nbins_int(dtype: np.dtype) -> None:
+    assert adjust_nbins(nbins=100, array=np.array([1, 4, 5, 6], dtype=dtype)) == 6
+
+
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_adjust_nbins_float(dtype: np.dtype) -> None:
+    assert adjust_nbins(nbins=100, array=np.array([1, 4, 5, 6], dtype=dtype)) == 100
+
+
+def test_adjust_nbins_initial() -> None:
+    assert adjust_nbins(nbins=100, array=np.array([100, 0])) == 100
+
+
+def test_adjust_nbins_1() -> None:
+    assert adjust_nbins(nbins=100, array=np.array([1, 1])) == 1
+
 
 ################################
 #     Tests for find_nbins     #
