@@ -22,7 +22,6 @@ from matplotlib.lines import Line2D
 from scipy.stats import kurtosis, skew
 
 from flamme.plot import boxplot_continuous, hist_continuous
-from flamme.plot.utils.hist import adjust_nbins
 from flamme.section.base import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -339,7 +338,7 @@ def create_histogram_figure(
     hist_continuous(
         ax=ax,
         array=array,
-        nbins=adjust_nbins(nbins=nbins, array=array),
+        nbins=nbins,
         xmin=xmin,
         xmax=xmax,
         yscale=yscale,
