@@ -9,6 +9,7 @@ __all__ = [
     "create_boxplot_figure",
     "create_histogram_figure",
     "create_stats_table",
+    "to_array",
 ]
 
 import logging
@@ -280,7 +281,7 @@ def create_boxplot_figure(
 
     ```
     """
-    array = series.drop_nulls().to_numpy()
+    array = to_array(series)
     if array.size == 0:
         return None
     if figsize is not None:
@@ -332,7 +333,7 @@ def create_histogram_figure(
 
     ```
     """
-    array = series.drop_nulls().to_numpy().ravel()
+    array = to_array(series)
     if array.size == 0:
         return None
     fig, ax = plt.subplots(figsize=figsize)
@@ -471,3 +472,27 @@ def create_stats_table(stats: dict, column: str) -> str:
             "num_zeros": f"{stats['=0']:,}",
         }
     )
+
+
+def to_array(series: pl.Series) -> np.ndarray:
+    r"""Convert a series to a numpy array.
+
+    Args:
+        series: The series to convert.
+
+    Returns:
+        The converted array.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.continuous import to_array
+    >>> array = to_array(series=pl.Series([None, *list(range(5)), None]))
+    >>> array
+    array([0, 1, 2, 3, 4])
+
+    ```
+    """
+    return series.drop_nulls().to_numpy().ravel()
