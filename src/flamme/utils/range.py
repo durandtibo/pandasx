@@ -25,6 +25,7 @@ def find_range(
 
     Returns:
         The range of values in the format ``(min, max)``.
+            It returns ``(nan, nan)`` if the input array is empty.
 
     Example usage:
 
@@ -42,6 +43,8 @@ def find_range(
 
     ```
     """
+    if values.size == 0:
+        return float("nan"), float("nan")
     if xmin is None:
         xmin = np.nanmin(values).item()
     if xmax is None:
