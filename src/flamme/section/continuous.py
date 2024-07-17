@@ -15,12 +15,9 @@ __all__ = [
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
 from coola.utils import repr_indent, repr_mapping
 from jinja2 import Template
 from matplotlib import pyplot as plt
-from matplotlib.lines import Line2D
-from scipy.stats import kurtosis, skew
 
 from flamme.plot import boxplot_continuous, hist_continuous
 from flamme.plot.utils.hist import adjust_nbins
@@ -40,6 +37,7 @@ from flamme.utils.stats import compute_statistics_continuous
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import numpy as np
     import polars as pl
 
 
@@ -343,7 +341,7 @@ def create_histogram_figure(
 
     ```
     """
-    array = to_array(series)
+    array = nonnan(to_array(series))
     if array.size == 0:
         return None
     fig, ax = plt.subplots(figsize=figsize)
@@ -358,16 +356,6 @@ def create_histogram_figure(
         yscale=yscale,
     )
     ax.set_title(f"data distribution for column {column}")
-
-    array = nonnan(array)
-    ax.legend(
-        [Line2D([0], [0], linestyle="none", mfc="black", mec="none", marker="")] * 3,
-        [
-            f"std={np.std(array).item():.2f}",
-            f"skewness={skew(array).item():.2f}",
-            f"kurtosis={kurtosis(array).item():.2f}",
-        ],
-    )
     return fig
 
 
