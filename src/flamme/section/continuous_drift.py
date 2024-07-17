@@ -18,6 +18,7 @@ from matplotlib import pyplot as plt
 
 from flamme.plot import hist_continuous2
 from flamme.plot.utils import readable_xticklabels
+from flamme.plot.utils.hist import adjust_nbins
 from flamme.section import BaseSection
 from flamme.section.utils import (
     GO_TO_TOP,
@@ -26,6 +27,7 @@ from flamme.section.utils import (
     tags2title,
     valid_h_tag,
 )
+from flamme.utils.array import filter_range
 from flamme.utils.figure import figure2html
 from flamme.utils.mapping import sort_by_keys
 from flamme.utils.range import find_range
@@ -343,6 +345,7 @@ def create_temporal_drift_figure(
         return None
 
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
+    nbins = adjust_nbins(nbins=nbins, array=filter_range(array, xmin=xmin, xmax=xmax))
     frames, steps = to_temporal_frames(
         frame=frame.select(column, dt_column), dt_column=dt_column, period=period
     )
