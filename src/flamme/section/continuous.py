@@ -9,6 +9,7 @@ __all__ = [
     "create_boxplot_figure",
     "create_histogram_figure",
     "create_stats_table",
+    "to_array",
 ]
 
 import logging
@@ -167,6 +168,7 @@ class ColumnContinuousSection(BaseSection):
         null_values_pct = (
             f"{100 * stats['num_nulls'] / stats['count']:.2f}" if stats["count"] > 0 else "N/A"
         )
+        xmin, xmax = find_range(to_array(self._series), xmin=self._xmin, xmax=self._xmax)
         return Template(create_section_template()).render(
             {
                 "go_to_top": GO_TO_TOP,
@@ -182,6 +184,10 @@ class ColumnContinuousSection(BaseSection):
                 "null_values_pct": null_values_pct,
                 "histogram_figure": self._create_histogram_figure(),
                 "boxplot_figure": self._create_boxplot_figure(),
+                "min_value": f"{stats['min']:.4f}",
+                "max_value": f"{stats['max']:.4f}",
+                "xmin": f"{xmin:.4f}",
+                "xmax": f"{xmax:.4f}",
             }
         )
 
@@ -238,7 +244,10 @@ This section analyzes the distribution of continuous values for column <em>{{col
   <li> total values: {{total_values}} </li>
   <li> number of unique values: {{unique_values}} </li>
   <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
+  <li> range of values: [{{min_value}}, {{max_value}}] </li>
 </ul>
+
+The histogram shows the distribution of values in the range [{{xmin}}, {{xmax}}].
 
 {{histogram_figure}}
 {{boxplot_figure}}
@@ -280,7 +289,7 @@ def create_boxplot_figure(
 
     ```
     """
-    array = series.drop_nulls().to_numpy()
+    array = to_array(series)
     if array.size == 0:
         return None
     if figsize is not None:
@@ -332,11 +341,10 @@ def create_histogram_figure(
 
     ```
     """
-    array = series.drop_nulls().to_numpy().ravel()
+    array = to_array(series)
     if array.size == 0:
         return None
     fig, ax = plt.subplots(figsize=figsize)
-    ax.set_title(f"data distribution for column {column}")
     xmin, xmax = find_range(array, xmin=xmin, xmax=xmax)
     nbins = adjust_nbins(nbins=nbins, array=filter_range(array, xmin=xmin, xmax=xmax))
     hist_continuous(
@@ -347,6 +355,7 @@ def create_histogram_figure(
         xmax=xmax,
         yscale=yscale,
     )
+    ax.set_title(f"data distribution for column {column}")
 
     array = nonnan(array)
     ax.legend(
@@ -471,3 +480,27 @@ def create_stats_table(stats: dict, column: str) -> str:
             "num_zeros": f"{stats['=0']:,}",
         }
     )
+
+
+def to_array(series: pl.Series) -> np.ndarray:
+    r"""Convert a series to a numpy array.
+
+    Args:
+        series: The series to convert.
+
+    Returns:
+        The converted array.
+
+    Example usage:
+
+    ```pycon
+
+    >>> import polars as pl
+    >>> from flamme.section.continuous import to_array
+    >>> array = to_array(series=pl.Series([None, *list(range(5)), None]))
+    >>> array
+    array([0, 1, 2, 3, 4])
+
+    ```
+    """
+    return series.drop_nulls().to_numpy().ravel()

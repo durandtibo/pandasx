@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
 import pytest
-from coola import objects_are_allclose
+from coola import objects_are_allclose, objects_are_equal
 from jinja2 import Template
 from polars.testing import assert_series_equal
 
@@ -14,6 +14,7 @@ from flamme.section.continuous import (
     create_histogram_figure,
     create_section_template,
     create_stats_table,
+    to_array,
 )
 
 
@@ -344,3 +345,20 @@ def test_create_histogram_figure_empty() -> None:
 
 def test_create_stats_table(stats: dict[str, float]) -> None:
     assert isinstance(create_stats_table(stats=stats, column="col"), str)
+
+
+##############################
+#     Tests for to_array     #
+##############################
+
+
+def test_to_array() -> None:
+    assert objects_are_equal(
+        to_array(series=pl.Series([None, *list(range(101)), None])), np.arange(101)
+    )
+
+
+def test_to_array_empty() -> None:
+    assert objects_are_equal(
+        to_array(series=pl.Series([], dtype=pl.Int64)), np.array([], dtype=np.int64)
+    )
