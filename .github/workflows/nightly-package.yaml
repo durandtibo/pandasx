@@ -129,7 +129,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        coola-version: [ 0.7.2, 0.6.2, 0.5.1, 0.4.0, 0.3.1, 0.2.2 ]
+        coola-version: [ 0.7.2 ]
 
     steps:
       - name: Checkout
@@ -143,6 +143,64 @@ jobs:
       - name: Install flamme
         run: |
           pip install flamme coola==${{ matrix.coola-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  grizz:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        grizz-version: [ 0.0.5a0 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme grizz==${{ matrix.grizz-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  iden:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        iden-version: [ 0.0.4 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme iden==${{ matrix.iden-version }}
 
       - name: Run some checks
         run: |
@@ -172,35 +230,6 @@ jobs:
       - name: Install flamme
         run: |
           pip install flamme jinja2==${{ matrix.jinja2-version }}
-
-      - name: Run some checks
-        run: |
-          python -m scripts.demo
-
-
-  markdown:
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    strategy:
-      max-parallel: 8
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest ]
-        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        markdown-version: [ 3.6.0, 3.5.1, 3.4.3 ]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install flamme
-        run: |
-          pip install flamme markdown==${{ matrix.markdown-version }}
 
       - name: Run some checks
         run: |
@@ -272,6 +301,7 @@ jobs:
         run: |
           python -m scripts.demo
 
+
   objectory:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -301,7 +331,7 @@ jobs:
           python -m scripts.demo
 
 
-  pandas:
+  polars:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
@@ -310,16 +340,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        pandas-version: [ 2.2.2, 2.1.4, 2.0.3, 1.5.3, 1.4.4 ]
-        exclude:
-          - pandas-version: 1.4.4
-            python-version: '3.11'
-          - pandas-version: 1.4.4
-            python-version: '3.12'
-          - pandas-version: 1.5.3
-            python-version: '3.12'
-          - pandas-version: 2.0.3
-            python-version: '3.12'
+        polars-version: [ 1.2.0, 1.0.0 ]
 
     steps:
       - name: Checkout
@@ -332,8 +353,7 @@ jobs:
 
       - name: Install flamme
         run: |
-          pip install flamme feu
-          python -c "from feu import install_package; install_package('pandas', '${{ matrix.pandas-version }}')"
+          pip install flamme polars==${{ matrix.polars-version }}
 
       - name: Run some checks
         run: |
@@ -407,6 +427,127 @@ jobs:
       - name: Install flamme
         run: |
           pip install flamme scipy==${{ matrix.scipy-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  #################################
+  #     Optional dependencies     #
+  #################################
+
+
+  clickhouse-connect:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        clickhouse-connect-version: [ 0.7.16, 0.7.0 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme clickhouse-connect==${{ matrix.clickhouse-connect-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  colorlog:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        colorlog-version: [ '6.8', '6.7' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme colorlog==${{ matrix.colorlog-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  hya:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        hya-version: [ 0.2.3 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme hya==${{ matrix.hya-version }}
+
+      - name: Run some checks
+        run: |
+          python -m scripts.demo
+
+
+  markdown:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      max-parallel: 8
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.12', '3.11', '3.10', '3.9' ]
+        markdown-version: [ 3.6.0, 3.5.1, 3.4.3 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install flamme
+        run: |
+          pip install flamme markdown==${{ matrix.markdown-version }}
 
       - name: Run some checks
         run: |
