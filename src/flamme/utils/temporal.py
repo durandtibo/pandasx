@@ -180,7 +180,7 @@ def to_temporal_frames(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return [], []
 
     groups = frame.sort(dt_column).group_by_dynamic(dt_column, every=period)

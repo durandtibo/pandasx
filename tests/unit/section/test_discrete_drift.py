@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 import matplotlib.pyplot as plt
 import polars as pl
@@ -13,6 +13,7 @@ from flamme.section.discrete_drift import (
     create_section_template,
     create_temporal_drift_figure,
 )
+from flamme.utils.data import datetime_range
 
 
 @pytest.fixture()
@@ -256,10 +257,9 @@ def test_create_temporal_drift_figure_20_values() -> None:
             frame=pl.DataFrame(
                 {
                     "col": list(range(20)),
-                    "datetime": pl.datetime_range(
+                    "datetime": datetime_range(
                         start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                        end=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc)
-                        + timedelta(hours=19),
+                        periods=20,
                         interval=period,
                         eager=True,
                     ),

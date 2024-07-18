@@ -268,7 +268,7 @@ def create_temporal_figure(
 
     ```
     """
-    if frame.shape[0] == 0 or column not in frame or dt_column not in frame:
+    if frame.is_empty() or column not in frame or dt_column not in frame:
         return None
 
     counts, steps, values = compute_temporal_value_counts(

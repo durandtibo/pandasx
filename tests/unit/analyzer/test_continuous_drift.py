@@ -9,6 +9,7 @@ from coola import objects_are_equal
 
 from flamme.analyzer import ColumnContinuousTemporalDriftAnalyzer
 from flamme.section import ColumnContinuousTemporalDriftSection, EmptySection
+from flamme.utils.data import datetime_range
 
 ###########################################################
 #     Tests for ColumnContinuousTemporalDriftAnalyzer     #
@@ -20,12 +21,11 @@ def dataframe() -> pl.DataFrame:
     rng = np.random.default_rng()
     return pl.DataFrame(
         {
-            "col": rng.standard_normal(59),
-            "datetime": pl.datetime_range(
+            "col": rng.standard_normal(100),
+            "datetime": datetime_range(
                 start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+                periods=100,
                 interval="1d",
-                closed="left",
                 eager=True,
             ),
         },
@@ -232,11 +232,10 @@ def test_column_continuous_temporal_drift_analyzer_analyze_same_column() -> None
     ).analyze(
         pl.DataFrame(
             {
-                "col": pl.datetime_range(
+                "col": datetime_range(
                     start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                    end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+                    periods=100,
                     interval="1d",
-                    closed="left",
                     eager=True,
                 ),
             },

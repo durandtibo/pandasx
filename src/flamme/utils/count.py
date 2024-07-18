@@ -99,7 +99,7 @@ def compute_temporal_count(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return np.array([], dtype=np.int64), []
 
     groups = (
@@ -179,7 +179,7 @@ def compute_temporal_value_counts(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return np.zeros((0, 0), dtype=np.int64), [], []
 
     groups = (

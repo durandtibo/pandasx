@@ -15,6 +15,7 @@ from flamme.section.continuous_drift import (
     create_section_template,
     create_temporal_drift_figure,
 )
+from flamme.utils.data import datetime_range
 
 
 @pytest.fixture()
@@ -22,12 +23,11 @@ def dataframe() -> pl.DataFrame:
     rng = np.random.default_rng()
     return pl.DataFrame(
         {
-            "col": rng.standard_normal(90),
-            "datetime": pl.datetime_range(
+            "col": rng.standard_normal(100),
+            "datetime": datetime_range(
                 start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                end=datetime(year=2018, month=4, day=1, tzinfo=timezone.utc),
+                periods=100,
                 interval="1d",
-                closed="left",
                 eager=True,
             ),
         },
@@ -303,12 +303,11 @@ def test_create_temporal_drift_figure_with_nulls() -> None:
     np.random.default_rng()
     frame = pl.DataFrame(
         {
-            "col": [None, *list(range(88)), None],
-            "datetime": pl.datetime_range(
+            "col": [None, *list(range(98)), None],
+            "datetime": datetime_range(
                 start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                end=datetime(year=2018, month=4, day=1, tzinfo=timezone.utc),
+                periods=100,
                 interval="1d",
-                closed="left",
                 eager=True,
             ),
         },

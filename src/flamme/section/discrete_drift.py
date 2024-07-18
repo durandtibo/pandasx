@@ -264,7 +264,7 @@ def create_temporal_drift_figure(
 
     ```
     """
-    if frame.shape[0] == 0 or column not in frame or dt_column not in frame:
+    if frame.is_empty() or column not in frame or dt_column not in frame:
         return None
 
     fig, ax = plt.subplots(figsize=figsize)
