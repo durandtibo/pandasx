@@ -280,7 +280,7 @@ def create_temporal_null_figure(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return None
     nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=columns, dt_column=dt_column, period=period
@@ -337,7 +337,7 @@ def create_temporal_null_table(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return ""
     nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=columns, dt_column=dt_column, period=period

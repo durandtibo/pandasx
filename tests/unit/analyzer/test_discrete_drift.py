@@ -9,6 +9,7 @@ from coola import objects_are_equal
 
 from flamme.analyzer import ColumnTemporalDriftDiscreteAnalyzer
 from flamme.section import ColumnTemporalDriftDiscreteSection, EmptySection
+from flamme.utils.data import datetime_range
 
 
 @pytest.fixture()
@@ -16,12 +17,11 @@ def dataframe() -> pl.DataFrame:
     rng = np.random.default_rng()
     return pl.DataFrame(
         {
-            "col": rng.integers(low=0, high=11, size=(59,)),
-            "datetime": pl.datetime_range(
+            "col": rng.integers(low=0, high=11, size=(100,)),
+            "datetime": datetime_range(
                 start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                end=datetime(year=2018, month=3, day=1, tzinfo=timezone.utc),
+                periods=100,
                 interval="1d",
-                closed="left",
                 eager=True,
             ),
         },

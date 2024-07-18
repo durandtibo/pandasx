@@ -297,7 +297,7 @@ def create_temporal_null_figure(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return MISSING_FIGURE_MESSAGE
     figures = create_temporal_null_figures(
         frame=frame, columns=columns, dt_column=dt_column, period=period, figsize=figsize
@@ -368,7 +368,7 @@ def create_temporal_null_figures(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return []
 
     figures = []
@@ -496,7 +496,7 @@ def create_table_section(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return ""
     tables = []
     for column in columns:
@@ -566,7 +566,7 @@ def create_temporal_null_table(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return ""
     nulls, totals, labels = compute_temporal_null_count(
         frame=frame, columns=[column], dt_column=dt_column, period=period

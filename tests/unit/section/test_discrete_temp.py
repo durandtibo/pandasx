@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 import matplotlib.pyplot as plt
 import polars as pl
@@ -10,6 +10,7 @@ from jinja2 import Template
 
 from flamme.section import ColumnTemporalDiscreteSection
 from flamme.section.discrete_temp import create_section_template, create_temporal_figure
+from flamme.utils.data import datetime_range
 
 
 @pytest.fixture()
@@ -253,11 +254,10 @@ def test_create_temporal_figure_20_values() -> None:
             frame=pl.DataFrame(
                 {
                     "col": list(range(20)),
-                    "datetime": pl.datetime_range(
+                    "datetime": datetime_range(
                         start=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc),
-                        end=datetime(year=2018, month=1, day=1, tzinfo=timezone.utc)
-                        + timedelta(hours=19),
-                        interval=period,
+                        periods=20,
+                        interval="1h",
                         eager=True,
                     ),
                 },

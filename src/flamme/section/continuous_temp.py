@@ -285,7 +285,7 @@ def create_temporal_figure(
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return None
     groups = (
         frame.select(pl.col(dt_column).alias("datetime"), pl.col(column).alias("value"))
@@ -346,7 +346,7 @@ def create_temporal_table(frame: pl.DataFrame, column: str, dt_column: str, peri
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return "<span>&#9888;</span> No table is generated because the column is empty"
 
     stats = compute_temporal_stats(frame=frame, column=column, dt_column=dt_column, period=period)

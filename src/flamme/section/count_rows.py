@@ -243,7 +243,7 @@ def create_temporal_count_figure(
 
     ```
     """
-    if frame.shape[0] == 0 or dt_column not in frame:
+    if frame.is_empty() or dt_column not in frame:
         return None
 
     counts, labels = compute_temporal_count(frame=frame, dt_column=dt_column, period=period)
@@ -295,7 +295,7 @@ def create_temporal_count_table(frame: pl.DataFrame, dt_column: str, period: str
 
     ```
     """
-    if frame.shape[0] == 0:
+    if frame.is_empty():
         return ""
     counts, labels = compute_temporal_count(frame=frame, dt_column=dt_column, period=period)
     rows = [
