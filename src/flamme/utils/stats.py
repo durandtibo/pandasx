@@ -113,8 +113,8 @@ def compute_statistics_continuous_array(array: np.ndarray) -> dict[str, float]:
     return stats | {
         "mean": np.mean(array_nonnan).item(),
         "std": np.std(array_nonnan).item(),
-        "skewness": skew(array_nonnan).item(),
-        "kurtosis": kurtosis(array_nonnan).item(),
+        "skewness": float(skew(array_nonnan)),
+        "kurtosis": float(kurtosis(array_nonnan)),
         "min": np.min(array_nonnan).item(),
         "q001": quantiles[0.001],
         "q01": quantiles[0.01],
