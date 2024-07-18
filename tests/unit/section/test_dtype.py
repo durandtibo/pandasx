@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import polars as pl
 import pytest
-from coola import objects_are_allclose
+from coola import objects_are_equal
 from jinja2 import Template
 
 from flamme.section import DataTypeSection
@@ -52,7 +52,7 @@ def test_data_type_section_get_statistics() -> None:
         dtypes={"float": pl.Float64(), "int": pl.Int64(), "str": pl.String()},
         types={"float": {float}, "int": {int}, "str": {str, type(None)}},
     )
-    assert objects_are_allclose(
+    assert objects_are_equal(
         section.get_statistics(),
         {"float": {float}, "int": {int}, "str": {str, type(None)}},
     )
@@ -60,7 +60,7 @@ def test_data_type_section_get_statistics() -> None:
 
 def test_data_type_section_get_statistics_empty() -> None:
     section = DataTypeSection(dtypes={}, types={})
-    assert objects_are_allclose(section.get_statistics(), {})
+    assert objects_are_equal(section.get_statistics(), {})
 
 
 def test_data_type_section_render_html_body() -> None:
