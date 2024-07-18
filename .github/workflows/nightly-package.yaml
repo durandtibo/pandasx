@@ -31,7 +31,11 @@ jobs:
         run: |
           pip install "flamme[all]"
 
-      - name: Tests
+      - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -59,7 +63,11 @@ jobs:
         run: |
           pip install flamme
 
-      - name: Tests
+      - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -87,7 +95,11 @@ jobs:
         run: |
           pip install --pre "flamme[all]"
 
-      - name: Tests
+      - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -115,7 +127,11 @@ jobs:
         run: |
           pip install --pre flamme
 
-      - name: Tests
+      - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -146,6 +162,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -174,6 +194,10 @@ jobs:
           pip install flamme grizz==${{ matrix.grizz-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -204,6 +228,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -232,6 +260,10 @@ jobs:
           pip install flamme jinja2==${{ matrix.jinja2-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -262,6 +294,10 @@ jobs:
           python -c "from feu import install_package; install_package('matplotlib', '${{ matrix.matplotlib-version }}')"
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -299,6 +335,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -328,6 +368,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -356,6 +400,10 @@ jobs:
           pip install flamme polars==${{ matrix.polars-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -396,6 +444,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -429,6 +481,10 @@ jobs:
           pip install flamme scipy==${{ matrix.scipy-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -464,6 +520,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -492,6 +552,10 @@ jobs:
           pip install flamme colorlog==${{ matrix.colorlog-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo
 
@@ -522,6 +586,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -551,6 +619,10 @@ jobs:
 
       - name: Run some checks
         run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
+        run: |
           python -m scripts.demo
 
 
@@ -579,5 +651,9 @@ jobs:
           pip install flamme tqdm==${{ matrix.tqdm-version }}
 
       - name: Run some checks
+        run: |
+          python tests/package_checks.py
+
+      - name: Run demo script
         run: |
           python -m scripts.demo

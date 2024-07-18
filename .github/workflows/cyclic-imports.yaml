@@ -53,3 +53,6 @@ jobs:
       - name: check flamme.utils
         run: |
           poetry run python -c "from flamme import utils"
+      - name: check flamme.utils.data
+        run: |
+          poetry run python -c "from flamme.utils import data"
