@@ -145,7 +145,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        coola-version: [ 0.7.2 ]
+        coola-version: [ 0.7.3 ]
 
     steps:
       - name: Checkout
@@ -178,7 +178,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        grizz-version: [ 0.0.5a0 ]
+        grizz-version: [ 0.0.5 ]
 
     steps:
       - name: Checkout
@@ -384,7 +384,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        polars-version: [ 1.2.0, 1.0.0 ]
+        polars-version: [ 1.2.1, 1.0.0 ]
 
     steps:
       - name: Checkout
