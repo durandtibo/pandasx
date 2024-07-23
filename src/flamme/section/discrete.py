@@ -34,6 +34,8 @@ if TYPE_CHECKING:
     from collections import Counter
     from collections.abc import Sequence
 
+    import polars as pl
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,6 +47,7 @@ class ColumnDiscreteSection(BaseSection):
         counter: The counter that represents the discrete
             distribution.
         null_values: The number of null values.
+        dtype: The column data type.
         column: The column name.
         max_rows: The maximum number of rows to show in the
             table.
@@ -79,6 +82,7 @@ class ColumnDiscreteSection(BaseSection):
         self,
         counter: Counter,
         null_values: int = 0,
+        dtype: pl.DataType | None = None,
         column: str = "N/A",
         max_rows: int = 20,
         yscale: str = "auto",
@@ -90,6 +94,7 @@ class ColumnDiscreteSection(BaseSection):
         self._max_rows = int(max_rows)
         self._yscale = yscale
         self._figsize = figsize
+        self._dtype = dtype
 
         self._total = sum(self._counter.values())
 
@@ -157,6 +162,7 @@ class ColumnDiscreteSection(BaseSection):
                     counter=self._counter,
                     max_rows=self._max_rows,
                 ),
+                "dtype": str(self._dtype),
             }
         )
 
@@ -192,6 +198,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 <li> total values: {{total_values}} </li>
 <li> number of unique values: {{unique_values}} </li>
 <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
+<li> data type: {{dtype}} </li>
 </ul>
 
 {{figure}}

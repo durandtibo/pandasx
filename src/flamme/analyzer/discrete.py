@@ -96,6 +96,7 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
         return ColumnDiscreteSection(
             counter=Counter(series.to_list()),
             null_values=series.null_count(),
+            dtype=series.dtype,
             column=self._column,
             max_rows=self._max_rows,
             yscale=self._yscale,
