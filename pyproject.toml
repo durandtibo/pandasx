@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flamme"
-version = "0.1.0a5"
+version = "0.1.0a6"
 description = "A library to generate custom reports of polars DataFrames"
 readme = "README.md"
 authors = ["Thibaut Durand <durand.tibo+gh@gmail.com>"]
@@ -77,7 +77,7 @@ docformatter = { extras = ["tomli"], version = "^1.7" }
 feu = ">=0.0.6,<1.0"
 pre-commit = "^3.7"
 pygments = "^2.18"
-pytest = "^8.2"
+pytest = "^8.3"
 pytest-cov = "^5.0"
 pytest-timeout = "^2.3"
 ruff = ">=0.5,<1.0"
