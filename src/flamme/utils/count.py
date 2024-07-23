@@ -117,6 +117,7 @@ def compute_temporal_value_counts(
     column: str,
     dt_column: str,
     period: str,
+    drop_nulls: bool = False,
 ) -> tuple[np.ndarray, list[str], list[str]]:
     r"""Compute the value counts for temporal windows of a given column.
 
@@ -126,6 +127,7 @@ def compute_temporal_value_counts(
         dt_column: The datetime column used to analyze
             the temporal distribution.
         period: The temporal period e.g. monthly or daily.
+        drop_nulls: If ``True``, the null values are ignored.
 
     Returns:
         A tuple with 3 items. The first item is a 2-d array that
@@ -182,11 +184,11 @@ def compute_temporal_value_counts(
     if frame.is_empty():
         return np.zeros((0, 0), dtype=np.int64), [], []
 
-    groups = (
-        frame.select(pl.col(dt_column).alias("__datetime__"), pl.col(column).alias("value"))
-        .sort(["__datetime__", "value"])
-        .group_by_dynamic("__datetime__", every=period)
-    )
+    frame = frame.select(pl.col(dt_column).alias("__datetime__"), pl.col(column).alias("value"))
+    if drop_nulls:
+        frame = frame.drop_nulls()
+
+    groups = frame.sort(["__datetime__", "value"]).group_by_dynamic("__datetime__", every=period)
     steps = to_step_names(groups=groups, period="1mo")
     frame_counts = (
         groups.agg(pl.col("value").value_counts())

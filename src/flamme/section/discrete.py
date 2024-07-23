@@ -236,7 +236,9 @@ def create_histogram_section(
     """
     if sum(counter.values()) == 0:
         return MISSING_FIGURE_MESSAGE
-    most_common = [(value, count) for value, count in counter.most_common() if count > 0]
+    most_common = [
+        (value, count) for value, count in counter.most_common() if count > 0 and value is not None
+    ]
     fig = create_histogram(
         column=column,
         names=[str(value) for value, _ in most_common],

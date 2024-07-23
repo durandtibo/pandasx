@@ -276,6 +276,7 @@ def create_temporal_figure(
         column=column,
         dt_column=dt_column,
         period=period,
+        drop_nulls=True,
     )
 
     fig, ax = plt.subplots(figsize=figsize)

@@ -148,6 +148,38 @@ def test_compute_temporal_value_counts() -> None:
     assert objects_are_equal(values, ["0.0", "1.0", "4.2", "42.0", "null"])
 
 
+def test_compute_temporal_value_counts_drop_nulls() -> None:
+    counts, steps, values = compute_temporal_value_counts(
+        pl.DataFrame(
+            {
+                "col": [None, 1.0, 0.0, 1.0, 1.0, 4.2, 42.0],
+                "datetime": [
+                    datetime(year=2020, month=1, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=4, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=5, tzinfo=timezone.utc),
+                    datetime(year=2020, month=1, day=6, tzinfo=timezone.utc),
+                    datetime(year=2020, month=2, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=3, day=3, tzinfo=timezone.utc),
+                    datetime(year=2020, month=4, day=3, tzinfo=timezone.utc),
+                ],
+            },
+            schema={
+                "col": pl.Float64,
+                "datetime": pl.Datetime(time_unit="us", time_zone="UTC"),
+            },
+        ),
+        column="col",
+        dt_column="datetime",
+        period="1mo",
+        drop_nulls=True,
+    )
+    assert objects_are_equal(
+        counts, np.array([[1, 0, 0, 0], [2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+    )
+    assert objects_are_equal(steps, ["2020-01", "2020-02", "2020-03", "2020-04"])
+    assert objects_are_equal(values, ["0.0", "1.0", "4.2", "42.0"])
+
+
 def test_compute_temporal_value_counts_empty() -> None:
     counts, steps, values = compute_temporal_value_counts(
         pl.DataFrame(
