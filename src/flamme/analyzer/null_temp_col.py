@@ -96,7 +96,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     ) -> None:
         self._dt_column = dt_column
         self._period = period
-        self._columns = columns
+        self._columns = tuple(columns or [])
         self._ncols = ncols
         self._figsize = figsize
 
@@ -125,7 +125,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
                 f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
             )
             return EmptySection()
-        columns = sorted(frame.columns) if self._columns is None else self._columns
+        columns = self._columns if self._columns else sorted(frame.columns)
         if self._dt_column in columns:
             # Exclude the datetime column because it does not make sense to analyze it because
             # we cannot know the date/time if the value is null.
