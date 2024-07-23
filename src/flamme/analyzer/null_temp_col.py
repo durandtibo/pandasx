@@ -48,7 +48,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
     >>> analyzer = ColumnTemporalNullValueAnalyzer("datetime", period="M")
     >>> analyzer
     ColumnTemporalNullValueAnalyzer(
-      (columns): None
+      (columns): ()
       (dt_column): datetime
       (period): M
       (ncols): 2
