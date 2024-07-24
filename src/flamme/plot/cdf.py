@@ -61,7 +61,5 @@ def plot_cdf(
     x = [(left + right) * 0.5 for left, right in zip(edges[:-1], edges[1:])]
     ax.tick_params(axis="y", labelcolor=labelcolor)
     ax.plot(x, cdf, color=color, label="CDF")
-    ymin, ymax = max(0.0, cdf[0]), min(1.0, cdf[-1])
-    if ymin < ymax:
-        ax.set_ylim(ymin, ymax)
+    ax.set_ylim(0.0, 1.0)
     ax.set_ylabel("cumulative distribution function (CDF)", color=labelcolor)
