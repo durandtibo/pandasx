@@ -13,7 +13,6 @@ from flamme.section.discrete import (
     create_histogram_section,
     create_section_template,
     create_table,
-    create_table_row,
 )
 
 ###########################################
@@ -195,15 +194,3 @@ def test_create_table() -> None:
 
 def test_create_table_empty() -> None:
     assert isinstance(create_table(counter=Counter({}), column="col"), str)
-
-
-######################################
-#     Tests for create_table_row     #
-######################################
-
-
-def test_create_table_row() -> None:
-    assert (
-        create_table_row(column="col", count=5)
-        == '<tr><th>col</th><td style="text-align: right;">5</td></tr>'
-    )

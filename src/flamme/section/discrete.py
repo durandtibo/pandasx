@@ -9,7 +9,6 @@ __all__ = [
     "create_histogram_section",
     "create_section_template",
     "create_table",
-    "create_table_row",
 ]
 
 import logging
@@ -21,6 +20,7 @@ from matplotlib import pyplot as plt
 
 from flamme.plot import bar_discrete
 from flamme.section.base import BaseSection
+from flamme.section.most_frequent import create_frequent_values_table
 from flamme.section.utils import (
     GO_TO_TOP,
     render_html_toc,
@@ -327,7 +327,7 @@ def create_table(
     ```pycon
 
     >>> from collections import Counter
-    >>> from flamme.section.discrete import create_table_row
+    >>> from flamme.section.discrete import create_table
     >>> table = create_table(counter=Counter({"a": 4, "b": 2, "c": 6}), column="col")
 
     ```
@@ -335,10 +335,6 @@ def create_table(
     if sum(counter.values()) == 0:
         return "<span>&#9888;</span> No table is generated because the column is empty"
 
-    most_common = counter.most_common(max_rows)
-    rows_head = "\n".join([create_table_row(column=col, count=count) for col, count in most_common])
-    lest_common = counter.most_common()[-max_rows:][::-1]
-    rows_tail = "\n".join([create_table_row(column=col, count=count) for col, count in lest_common])
     return Template(
         """<details>
     <summary>[show head and tail values]</summary>
@@ -347,65 +343,21 @@ def create_table(
       <div class="col">
         <p style="margin-top: 1rem;">
         <b>Head: {{max_values}} most common values in column <em>{{column}}</em></b>
-        <table class="table table-hover table-responsive w-auto" >
-            <thead class="thead table-group-divider">
-                <tr>
-                    <th>column</th>
-                    <th>count</th>
-                </tr>
-            </thead>
-            <tbody class="tbody table-group-divider">
-                {{rows_head}}
-                <tr class="table-group-divider"></tr>
-            </tbody>
-        </table>
+        {{table_head}}
       </div>
       <div class="col">
         <p style="margin-top: 1rem;">
         <b>Tail: {{max_values}} least common values in column <em>{{column}}</em></b>
-        <table class="table table-hover table-responsive w-auto" >
-            <thead class="thead table-group-divider">
-                <tr>
-                    <th>column</th>
-                    <th>count</th>
-                </tr>
-            </thead>
-            <tbody class="tbody table-group-divider">
-                {{rows_tail}}
-                <tr class="table-group-divider"></tr>
-            </tbody>
-        </table>
+        {{table_tail}}
       </div>
     </div>
 </details>
 """
     ).render(
         {
-            "max_values": len(most_common),
-            "rows_head": rows_head,
-            "rows_tail": rows_tail,
+            "max_values": len(counter.most_common(max_rows)),
+            "table_head": create_frequent_values_table(counter=counter, top=max_rows),
+            "table_tail": create_frequent_values_table(counter=counter, top=max_rows, reverse=True),
             "column": column,
         }
     )
-
-
-def create_table_row(column: str, count: int) -> str:
-    r"""Create the HTML code of a new table row.
-
-    Args:
-        column: The column name.
-        count (int): The count for the column.
-
-    Returns:
-        The HTML code of a row.
-
-    Example usage:
-
-    ```pycon
-
-    >>> from flamme.section.discrete import create_table_row
-    >>> row = create_table_row(column="col", count=5)
-
-    ```
-    """
-    return f'<tr><th>{column}</th><td style="text-align: right;">{count:,}</td></tr>'
