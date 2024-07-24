@@ -240,11 +240,11 @@ def create_section_template() -> str:
 This section analyzes the distribution of continuous values for column <em>{{column}}</em>.
 
 <ul>
-  <li> total values: {{total_values}} </li>
-  <li> number of unique values: {{unique_values}} </li>
-  <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
-  <li> range of values: [{{min_value}}, {{max_value}}] </li>
-  <li> data type: <em>{{dtype}}</em> </li>
+  <li> <b>total values:</b> {{total_values}} </li>
+  <li> <b>number of unique values:</b> {{unique_values}} </li>
+  <li> <b>number of null values:</b> {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
+  <li> <b>range of values:</b> [{{min_value}}, {{max_value}}] </li>
+  <li> <b>data type:</b> <em>{{dtype}}</em> </li>
 </ul>
 
 The histogram shows the distribution of values in the range [{{xmin}}, {{xmax}}].
