@@ -26,8 +26,6 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             the temporal distribution.
         period: The temporal period e.g. monthly or
             daily.
-        proportion: If ``True``, it plots the normalized number of
-            occurrences for each step.
         figsize: The figure size in inches. The first dimension
             is the width and the second is the height.
 
@@ -42,7 +40,7 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
     ...     column="col", dt_column="datetime", period="1mo"
     ... )
     >>> analyzer
-    ColumnTemporalDiscreteAnalyzer(column=col, dt_column=datetime, period=1mo, proportion=False, figsize=None)
+    ColumnTemporalDiscreteAnalyzer(column=col, dt_column=datetime, period=1mo, figsize=None)
     >>> frame = pl.DataFrame(
     ...     {
     ...         "col": [1, 42, None, 42],
@@ -61,7 +59,6 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
       (column): col
       (dt_column): datetime
       (period): 1mo
-      (proportion): False
       (figsize): None
     )
 
@@ -73,20 +70,18 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
         column: str,
         dt_column: str,
         period: str,
-        proportion: bool = False,
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._column = column
         self._dt_column = dt_column
         self._period = period
-        self._proportion = proportion
         self._figsize = figsize
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__qualname__}(column={self._column}, "
             f"dt_column={self._dt_column}, period={self._period}, "
-            f"proportion={self._proportion}, figsize={self._figsize})"
+            f"figsize={self._figsize})"
         )
 
     def analyze(self, frame: pl.DataFrame) -> ColumnTemporalDiscreteSection | EmptySection:
@@ -112,6 +107,5 @@ class ColumnTemporalDiscreteAnalyzer(BaseAnalyzer):
             frame=frame,
             dt_column=self._dt_column,
             period=self._period,
-            proportion=self._proportion,
             figsize=self._figsize,
         )
