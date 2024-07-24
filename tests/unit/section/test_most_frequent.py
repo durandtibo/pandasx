@@ -7,8 +7,8 @@ from jinja2 import Template
 
 from flamme.section import MostFrequentValuesSection
 from flamme.section.most_frequent import (
+    create_frequent_values_table,
     create_section_template,
-    create_table,
     create_table_row,
 )
 
@@ -81,17 +81,23 @@ def test_create_section_template() -> None:
     assert isinstance(create_section_template(), str)
 
 
-##################################
-#     Tests for create_table     #
-##################################
+##################################################
+#     Tests for create_frequent_values_table     #
+##################################################
 
 
-def test_create_table() -> None:
-    assert isinstance(create_table(Counter({"a": 4, "b": 2, "c": 6})), str)
+def test_create_frequent_values_table() -> None:
+    assert isinstance(create_frequent_values_table(Counter({"a": 4, "b": 2, "c": 6})), str)
 
 
-def test_create_table_empty() -> None:
-    assert isinstance(create_table(Counter({})), str)
+def test_create_frequent_values_table_reverse_true() -> None:
+    assert isinstance(
+        create_frequent_values_table(Counter({"a": 4, "b": 2, "c": 6}), reverse=True), str
+    )
+
+
+def test_create_frequent_values_table_empty() -> None:
+    assert isinstance(create_frequent_values_table(Counter({})), str)
 
 
 ######################################
