@@ -182,10 +182,10 @@ class ColumnContinuousSection(BaseSection):
                 "null_values_pct": null_values_pct,
                 "histogram_figure": self._create_histogram_figure(),
                 "boxplot_figure": self._create_boxplot_figure(),
-                "min_value": f"{stats['min']:,.4f}",
-                "max_value": f"{stats['max']:,.4f}",
-                "xmin": f"{xmin:,.4f}",
-                "xmax": f"{xmax:,.4f}",
+                "min_value": f"{stats['min']:,}",
+                "max_value": f"{stats['max']:,}",
+                "xmin": f"{xmin:,}",
+                "xmax": f"{xmax:,}",
                 "dtype": str(self._series.dtype),
             }
         )

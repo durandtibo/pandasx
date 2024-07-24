@@ -6,7 +6,7 @@ from __future__ import annotations
 __all__ = [
     "MostFrequentValuesSection",
     "create_section_template",
-    "create_table",
+    "create_frequent_values_table",
     "create_table_row",
 ]
 
@@ -96,7 +96,7 @@ class MostFrequentValuesSection(BaseSection):
                 "depth": valid_h_tag(depth + 1),
                 "title": tags2title(tags),
                 "section": number,
-                "table": create_table(counter=self._counter, top=self._top),
+                "table": create_frequent_values_table(counter=self._counter, top=self._top),
                 "column": self._column,
                 "top": f"{self._top:,}",
             }
@@ -142,14 +142,17 @@ This section analyzes the {{top}} most frequent values in <em>{{column}}</em>.
 """
 
 
-def create_table(counter: Counter, top: int = 100) -> str:
-    r"""Create a HTML representation of a table with the temporal
-    distribution of null values.
+def create_frequent_values_table(counter: Counter, top: int = 100, reverse: bool = False) -> str:
+    r"""Return a HTML representation of a table with the most (or least)
+    frequent values.
 
     Args:
         counter: The counter with the number of occurrences
             for all values.
         top: The maximum number of values to show.
+        reverse: If ``True``, it returns a table with the least
+            frequent values (a.k.a. tail), otherwise it returns a
+            table with the most frequent values (a.k.a. head).
 
     Returns:
         The HTML representation of the table.
@@ -159,13 +162,13 @@ def create_table(counter: Counter, top: int = 100) -> str:
     ```pycon
 
     >>> from collections import Counter
-    >>> from flamme.section.most_frequent import create_table
-    >>> table = create_table(Counter({"a": 4, "b": 2, "c": 6}))
+    >>> from flamme.section.most_frequent import create_frequent_values_table
+    >>> table = create_frequent_values_table(Counter({"a": 4, "b": 2, "c": 6}))
 
     ```
     """
     total = sum(counter.values())
-    most_common = list(counter.most_common(top))
+    most_common = counter.most_common()[-top:][::-1] if reverse else counter.most_common(top)
     rows = []
     cumcount = 0
     for value, count in most_common:

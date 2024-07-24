@@ -104,18 +104,6 @@ def test_column_temporal_discrete_section_figsize(
     )
 
 
-@pytest.mark.parametrize("proportion", [True, False])
-def test_column_temporal_discrete_section_proportion(
-    dataframe: pl.DataFrame, proportion: bool
-) -> None:
-    assert (
-        ColumnTemporalDiscreteSection(
-            frame=dataframe, column="col", dt_column="datetime", period="1mo", proportion=proportion
-        ).proportion
-        == proportion
-    )
-
-
 def test_column_temporal_discrete_section_get_statistics(dataframe: pl.DataFrame) -> None:
     section = ColumnTemporalDiscreteSection(
         frame=dataframe,

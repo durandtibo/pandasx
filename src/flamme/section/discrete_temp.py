@@ -43,8 +43,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
             the temporal distribution.
         period: The temporal period e.g. monthly or
             daily.
-        proportion: If ``True``, it plots the normalized number of
-            occurrences for each step.
         figsize: The figure size in inches. The first
             dimension is the width and the second is the height.
 
@@ -80,7 +78,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
       (column): col
       (dt_column): datetime
       (period): 1mo
-      (proportion): False
       (figsize): None
     )
     >>> section.get_statistics()
@@ -95,14 +92,12 @@ class ColumnTemporalDiscreteSection(BaseSection):
         column: str,
         dt_column: str,
         period: str,
-        proportion: bool = False,
         figsize: tuple[float, float] | None = None,
     ) -> None:
         self._frame = frame
         self._column = column
         self._dt_column = dt_column
         self._period = period
-        self._proportion = proportion
         self._figsize = figsize
 
     def __repr__(self) -> str:
@@ -112,7 +107,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
                     "column": self._column,
                     "dt_column": self._dt_column,
                     "period": self._period,
-                    "proportion": self._proportion,
                     "figsize": self._figsize,
                 }
             )
@@ -130,10 +124,6 @@ class ColumnTemporalDiscreteSection(BaseSection):
     @property
     def period(self) -> str:
         return self._period
-
-    @property
-    def proportion(self) -> bool:
-        return self._proportion
 
     @property
     def figsize(self) -> tuple[float, float] | None:
@@ -161,7 +151,8 @@ class ColumnTemporalDiscreteSection(BaseSection):
                 "column": self._column,
                 "dt_column": self._dt_column,
                 "period": self._period,
-                "figure": self._create_temporal_figure(),
+                "figure_occurrence": self._create_temporal_figure(proportion=False),
+                "figure_proportion": self._create_temporal_figure(proportion=True),
             }
         )
 
@@ -170,13 +161,13 @@ class ColumnTemporalDiscreteSection(BaseSection):
     ) -> str:
         return render_html_toc(number=number, tags=tags, depth=depth, max_depth=max_depth)
 
-    def _create_temporal_figure(self) -> str:
+    def _create_temporal_figure(self, proportion: bool) -> str:
         fig = create_temporal_figure(
             frame=self._frame,
             column=self._column,
             dt_column=self._dt_column,
             period=self._period,
-            proportion=self._proportion,
+            proportion=proportion,
             figsize=self._figsize,
         )
         return figure2html(fig, close_fig=True)
@@ -204,8 +195,11 @@ def create_section_template() -> str:
 <p style="margin-top: 1rem;">
 This section analyzes the temporal distribution of column <em>{{column}}</em>
 by using the column <em>{{dt_column}}</em>.
+The first figure shows the number of occurrences for each value in each temporal window,
+and the second figure shows the proportion for each value in each temporal window.
 
-{{figure}}
+{{figure_occurrence}}
+{{figure_proportion}}
 
 {{table}}
 
