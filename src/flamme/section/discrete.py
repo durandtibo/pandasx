@@ -195,10 +195,10 @@ def create_section_template() -> str:
 This section analyzes the discrete distribution of values for column <em>{{column}}</em>.
 
 <ul>
-<li> total values: {{total_values}} </li>
-<li> number of unique values: {{unique_values}} </li>
-<li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
-<li> data type: <em>{{dtype}}</em> </li>
+<li> <b>total values:</b> {{total_values}} </li>
+<li> <b>number of unique values:</b> {{unique_values}} </li>
+<li> <b>number of null values:</b> {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
+<li> <b>data type:</b> <em>{{dtype}}</em> </li>
 </ul>
 
 {{figure}}
@@ -338,6 +338,12 @@ def create_table(
     return Template(
         """<details>
     <summary>[show head and tail values]</summary>
+
+    <ul>
+      <li> <b>count</b>: is the number of occurrences of the value </li>
+      <li> <b>percentage</b>: is the number of occurrences the value divided by the total number of occurrences </li>
+      <li> <b>cumulative percentage</b>: is the sum of the percentage of occurrence for the value plus all the previous values in the table. </li>
+    </ul>
 
     <div class="row">
       <div class="col">
