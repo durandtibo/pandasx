@@ -198,7 +198,7 @@ This section analyzes the discrete distribution of values for column <em>{{colum
 <li> total values: {{total_values}} </li>
 <li> number of unique values: {{unique_values}} </li>
 <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
-<li> data type: {{dtype}} </li>
+<li> data type: <em>{{dtype}}</em> </li>
 </ul>
 
 {{figure}}

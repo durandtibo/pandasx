@@ -244,7 +244,7 @@ This section analyzes the distribution of continuous values for column <em>{{col
   <li> number of unique values: {{unique_values}} </li>
   <li> number of null values: {{null_values}} / {{total_values}} ({{null_values_pct}}%) </li>
   <li> range of values: [{{min_value}}, {{max_value}}] </li>
-  <li> data type: {{dtype}} </li>
+  <li> data type: <em>{{dtype}}</em> </li>
 </ul>
 
 The histogram shows the distribution of values in the range [{{xmin}}, {{xmax}}].
