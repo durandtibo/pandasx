@@ -338,7 +338,7 @@ def create_table(
     return Template(
         """<details>
     <summary>[show head and tail values]</summary>
-    
+
     <ul>
       <li> <b>count</b>: is the number of occurrences of the value </li>
       <li> <b>percentage</b>: is the number of occurrences the value divided by the total number of occurrences </li>
