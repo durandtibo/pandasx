@@ -5,8 +5,6 @@ on:
 
 jobs:
 
-
-
   coola:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -16,7 +14,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        coola-version: [ 0.7.3 ]
+        coola-version: [ 0.8.2, 0.7.4, 0.7.2 ]
 
     steps:
       - name: Checkout
@@ -226,7 +224,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        numpy-version: [ 2.0.0, 1.26.4, 1.25.2, 1.24.3, 1.23.5 ]
+        numpy-version: [ 2.0.1, 1.26.4, 1.25.2, 1.24.3, 1.23.5 ]
         exclude:
           - numpy-version: 1.23.5
             python-version: '3.12'
@@ -275,7 +273,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        objectory-version: [ 0.1.2 ]
+        objectory-version: [ 0.1.2, 0.1.0 ]
 
     steps:
       - name: Checkout
@@ -317,7 +315,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        polars-version: [ 1.2.1, 1.0.0 ]
+        polars-version: [ 1.4.1, 1.0.0 ]
 
     steps:
       - name: Checkout
@@ -550,7 +548,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        hya-version: [ 0.2.3 ]
+        hya-version: [ 0.2.3, 0.2.0 ]
 
     steps:
       - name: Checkout
@@ -634,7 +632,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         python-version: [ '3.12', '3.11', '3.10', '3.9' ]
-        tqdm-version: [ 4.66.4, 4.65.2 ]
+        tqdm-version: [ 4.66.5, 4.65.2 ]
 
     steps:
       - name: Checkout
