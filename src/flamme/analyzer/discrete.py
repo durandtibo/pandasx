@@ -85,9 +85,9 @@ class ColumnDiscreteAnalyzer(BaseAnalyzer):
     def analyze(self, frame: pl.DataFrame) -> ColumnDiscreteSection | EmptySection:
         logger.info(f"Analyzing the discrete distribution of {self._column}")
         if self._column not in frame:
-            logger.info(
+            logger.warning(
                 f"Skipping discrete distribution analysis of column {self._column} "
-                f"because it is not in the DataFrame: {sorted(frame.columns)}"
+                f"because it is not in the DataFrame"
             )
             return EmptySection()
         series = frame[self._column]

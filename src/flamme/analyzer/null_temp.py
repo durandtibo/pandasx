@@ -104,7 +104,7 @@ class TemporalNullValueAnalyzer(BaseAnalyzer):
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
         if self._dt_column not in frame:
-            logger.info(
+            logger.warning(
                 "Skipping temporal null value analysis because the datetime column "
                 f"({self._dt_column}) is not in the DataFrame"
             )
