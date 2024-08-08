@@ -64,7 +64,7 @@ class MostFrequentValuesAnalyzer(BaseAnalyzer):
     def analyze(self, frame: pl.DataFrame) -> MostFrequentValuesSection | EmptySection:
         logger.info(f"Analyzing the most frequent values of {self._column}")
         if self._column not in frame:
-            logger.info(
+            logger.warning(
                 f"Skipping most frequent values analysis of column {self._column} "
                 f"because the column is missing"
             )

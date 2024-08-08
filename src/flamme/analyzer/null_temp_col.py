@@ -120,9 +120,9 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             f"datetime column: {self._dt_column} | period: {self._period}"
         )
         if self._dt_column not in frame:
-            logger.info(
+            logger.warning(
                 "Skipping monthly null value analysis because the datetime column "
-                f"({self._dt_column}) is not in the DataFrame: {sorted(frame.columns)}"
+                f"({self._dt_column}) is not in the DataFrame"
             )
             return EmptySection()
         columns = list(self._columns) if self._columns else sorted(frame.columns)
@@ -132,7 +132,7 @@ class ColumnTemporalNullValueAnalyzer(BaseAnalyzer):
             # we cannot know the date/time if the value is null.
             columns.remove(self._dt_column)
         if not columns:
-            logger.info(
+            logger.warning(
                 "Skipping monthly null value analysis because there is no valid columns to analyze"
             )
             return EmptySection()

@@ -82,9 +82,9 @@ class ColumnContinuousAnalyzer(BaseAnalyzer):
     def analyze(self, frame: pl.DataFrame) -> ColumnContinuousSection | EmptySection:
         logger.info(f"Analyzing the continuous distribution of {self._column}")
         if self._column not in frame:
-            logger.info(
+            logger.warning(
                 "Skipping temporal continuous distribution analysis because the column "
-                f"({self._column}) is not in the DataFrame: {sorted(frame.columns)}"
+                f"({self._column}) is not in the DataFrame"
             )
             return EmptySection()
         return ColumnContinuousSection(
