@@ -50,7 +50,7 @@ def check_analyzer() -> None:
 def check_plot() -> None:
     logger.info("Checking flamme.plot package...")
 
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     boxplot_continuous(ax=ax, array=np.arange(101))
 
 

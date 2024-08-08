@@ -3,7 +3,7 @@ values."""
 
 from __future__ import annotations
 
-__all__ = ["DuplicatedRowSection", "create_section_template", "create_duplicate_table"]
+__all__ = ["DuplicatedRowSection", "create_duplicate_table", "create_section_template"]
 
 import logging
 from typing import TYPE_CHECKING
