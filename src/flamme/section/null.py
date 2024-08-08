@@ -5,10 +5,10 @@ from __future__ import annotations
 
 __all__ = [
     "NullValueSection",
+    "create_bar_figure",
     "create_section_template",
     "create_table",
     "create_table_row",
-    "create_bar_figure",
 ]
 
 import logging

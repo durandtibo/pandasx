@@ -2,7 +2,7 @@ r"""Contain utility functions to draw lines."""
 
 from __future__ import annotations
 
-__all__ = ["axvline_quantile", "axvline_median"]
+__all__ = ["axvline_median", "axvline_quantile"]
 
 from typing import TYPE_CHECKING
 

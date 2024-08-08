@@ -267,5 +267,5 @@ def create_temporal_drift_figure(
     if frame.is_empty() or column not in frame or dt_column not in frame:
         return None
 
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, _ax = plt.subplots(figsize=figsize)
     return fig

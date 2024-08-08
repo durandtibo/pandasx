@@ -25,18 +25,18 @@ if TYPE_CHECKING:
 
 
 def test_bar_discrete() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete(ax=ax, names=["a", "b", "c", "d"], counts=[5, 100, 42, 27])
 
 
 @pytest.mark.parametrize("yscale", ["linear", "log", "auto"])
 def test_bar_discrete_yscale(yscale: str) -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete(ax=ax, names=["a", "b", "c", "d"], counts=[5, 100, 42, 27], yscale=yscale)
 
 
 def test_bar_discrete_empty() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete(ax=ax, names=[], counts=[])
 
 
@@ -46,28 +46,28 @@ def test_bar_discrete_empty() -> None:
 
 
 def test_bar_discrete_temporal() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(ax, counts=np.ones((5, 20)))
 
 
 def test_bar_discrete_temporal_with_values() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(ax, counts=np.ones((5, 20)), values=list(range(5)))
 
 
 def test_bar_discrete_temporal_with_steps() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(ax, counts=np.ones((5, 20)), steps=list(range(20)))
 
 
 def test_bar_discrete_temporal_with_values_and_steps() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(ax, counts=np.ones((5, 20)), values=list(range(5)), steps=list(range(20)))
 
 
 @pytest.mark.parametrize("proportion", [True, False])
 def test_bar_discrete_temporal_proportion_ones(proportion: bool) -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(
         ax,
         counts=np.ones((5, 20)),
@@ -79,7 +79,7 @@ def test_bar_discrete_temporal_proportion_ones(proportion: bool) -> None:
 
 @pytest.mark.parametrize("proportion", [True, False])
 def test_bar_discrete_temporal_proportion_zeros(proportion: bool) -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(
         ax,
         counts=np.zeros((5, 20)),
@@ -90,7 +90,7 @@ def test_bar_discrete_temporal_proportion_zeros(proportion: bool) -> None:
 
 
 def test_bar_discrete_temporal_empty() -> None:
-    fig, ax = plt.subplots()
+    _fig, ax = plt.subplots()
     bar_discrete_temporal(ax, counts=np.zeros((0, 0)))
 
 

@@ -5,8 +5,8 @@ from __future__ import annotations
 
 __all__ = [
     "ColumnContinuousAdvancedSection",
-    "create_section_template",
     "create_histogram_range_figure",
+    "create_section_template",
 ]
 
 import logging

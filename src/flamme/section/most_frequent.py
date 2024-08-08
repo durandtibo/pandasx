@@ -5,8 +5,8 @@ from __future__ import annotations
 
 __all__ = [
     "MostFrequentValuesSection",
-    "create_section_template",
     "create_frequent_values_table",
+    "create_section_template",
     "create_table_row",
 ]
 

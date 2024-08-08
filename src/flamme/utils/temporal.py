@@ -2,7 +2,7 @@ r"""Contain utility functions to do temporal transformations."""
 
 from __future__ import annotations
 
-__all__ = ["compute_temporal_stats", "to_temporal_frames", "to_step_names"]
+__all__ = ["compute_temporal_stats", "to_step_names", "to_temporal_frames"]
 
 
 import polars as pl

@@ -5,9 +5,9 @@ from __future__ import annotations
 
 __all__ = [
     "ColumnContinuousSection",
-    "create_section_template",
     "create_boxplot_figure",
     "create_histogram_figure",
+    "create_section_template",
     "create_stats_table",
     "to_array",
 ]

@@ -2,7 +2,7 @@ r"""Contain utility functions to analyze data with null values."""
 
 from __future__ import annotations
 
-__all__ = ["compute_null_count", "compute_null", "compute_temporal_null_count"]
+__all__ = ["compute_null", "compute_null_count", "compute_temporal_null_count"]
 
 from typing import TYPE_CHECKING
 
