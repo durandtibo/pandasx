@@ -134,3 +134,21 @@ def test_column_temporal_null_value_analyzer_get_statistics_missing_empty_column
     )
     assert isinstance(section, EmptySection)
     assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_column_temporal_null_value_analyzer_get_statistics_no_valid_columns() -> None:
+    section = ColumnTemporalNullValueAnalyzer(dt_column="datetime", period="M").analyze(
+        pl.DataFrame({"datetime": []})
+    )
+    assert isinstance(section, EmptySection)
+    assert objects_are_equal(section.get_statistics(), {})
+
+
+def test_column_temporal_null_value_analyzer_get_statistics_ignore_missing_columns(
+    dataframe: pl.DataFrame,
+) -> None:
+    section = ColumnTemporalNullValueAnalyzer(
+        columns=["float", "int", "str", "missing"], dt_column="datetime", period="M"
+    ).analyze(dataframe)
+    assert isinstance(section, ColumnTemporalNullValueSection)
+    assert objects_are_equal(section.get_statistics(), {})
