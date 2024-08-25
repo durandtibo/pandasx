@@ -27,6 +27,17 @@ def tags2id(tags: Sequence[str]) -> str:
 
     Returns:
         The generated ID from the tags.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.utils import tags2id
+    >>> out = tags2id(["super", "meow"])
+    >>> out
+    super-meow
+
+    ```
     """
     return "-".join(tags).replace(" ", "-").lower()
 
@@ -39,6 +50,17 @@ def tags2title(tags: Sequence[str]) -> str:
 
     Returns:
         The generated title from the tags.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.utils import tags2title
+    >>> out = tags2title(["super", "meow"])
+    >>> out
+    meow | super
+
+    ```
     """
     return " | ".join(tags[::-1])
 
@@ -51,6 +73,17 @@ def valid_h_tag(index: int) -> int:
 
     Returns:
         A valid value.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.utils import valid_h_tag
+    >>> out = valid_h_tag(4)
+    >>> out
+    4
+
+    ```
     """
     return max(1, min(6, index))
 
@@ -68,6 +101,17 @@ def render_html_toc(
 
     Returns:
         The HTML table of content associated to the section.
+
+    Example usage:
+
+    ```pycon
+
+    >>> from flamme.section.utils import render_html_toc
+    >>> out = render_html_toc(number="2.0", tags=["super", "meow"])
+    >>> out
+    <li><a href="#super-meow">2.0 meow</a></li>
+
+    ```
     """
     if depth >= max_depth:
         return ""
