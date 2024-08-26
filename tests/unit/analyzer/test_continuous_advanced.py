@@ -9,7 +9,7 @@ from flamme.analyzer import ColumnContinuousAdvancedAnalyzer
 from flamme.section import ColumnContinuousAdvancedSection, EmptySection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame({"col": [None, *list(range(101)), None]}, schema={"col": pl.Int64})
 

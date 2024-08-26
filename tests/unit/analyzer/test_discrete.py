@@ -8,7 +8,7 @@ from flamme.analyzer import ColumnDiscreteAnalyzer
 from flamme.section import ColumnDiscreteSection, EmptySection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame({"col": [1, 42, None, 22]}, schema={"col": pl.Int64})
 

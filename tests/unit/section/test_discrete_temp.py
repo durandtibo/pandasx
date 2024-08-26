@@ -13,7 +13,7 @@ from flamme.section.discrete_temp import create_section_template, create_tempora
 from flamme.utils.data import datetime_range
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

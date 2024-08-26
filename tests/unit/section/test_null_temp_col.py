@@ -21,7 +21,7 @@ from flamme.section.null_temp_col import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {
@@ -44,7 +44,7 @@ def dataframe() -> pl.DataFrame:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe_empty() -> pl.DataFrame:
     return pl.DataFrame(
         {

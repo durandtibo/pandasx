@@ -53,7 +53,7 @@ def test_boxplot_continuous_empty() -> None:
 ################################################
 
 
-@pytest.fixture()
+@pytest.fixture
 def data_temp() -> list[np.ndarray]:
     rng = np.random.default_rng()
     return [rng.standard_normal(100) for i in range(10)]

@@ -9,7 +9,7 @@ from flamme.analyzer import DuplicatedRowAnalyzer
 from flamme.section import DuplicatedRowSection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

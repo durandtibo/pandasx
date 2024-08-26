@@ -10,7 +10,7 @@ from flamme.analyzer import ColumnTemporalDiscreteAnalyzer
 from flamme.section import ColumnTemporalDiscreteSection, EmptySection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

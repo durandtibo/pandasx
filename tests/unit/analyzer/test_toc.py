@@ -8,7 +8,7 @@ from flamme.analyzer import DuplicatedRowAnalyzer, TableOfContentAnalyzer
 from flamme.section import TableOfContentSection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

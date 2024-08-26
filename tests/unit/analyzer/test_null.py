@@ -9,7 +9,7 @@ from flamme.analyzer import NullValueAnalyzer
 from flamme.section import NullValueSection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

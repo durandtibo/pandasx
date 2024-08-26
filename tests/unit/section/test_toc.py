@@ -8,7 +8,7 @@ from jinja2 import Template
 from flamme.section import DuplicatedRowSection, TableOfContentSection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

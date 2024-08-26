@@ -148,7 +148,7 @@ def test_compute_temporal_stats_empty() -> None:
 ########################################
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

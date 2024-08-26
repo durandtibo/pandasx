@@ -9,7 +9,7 @@ from flamme.section import DataFrameSummarySection
 from flamme.section.frame_summary import create_table, create_table_row
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {
