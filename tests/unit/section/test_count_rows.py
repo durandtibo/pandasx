@@ -18,7 +18,7 @@ from flamme.section.count_rows import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

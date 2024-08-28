@@ -53,7 +53,7 @@ def test_compute_nunique_empty() -> None:
 ###########################################
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

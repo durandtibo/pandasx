@@ -16,7 +16,7 @@ from flamme.utils.data import datetime_range
 ###########################################################
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     rng = np.random.default_rng()
     return pl.DataFrame(

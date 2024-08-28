@@ -10,7 +10,7 @@ from flamme.utils.filtering import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

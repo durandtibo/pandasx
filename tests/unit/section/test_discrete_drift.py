@@ -16,7 +16,7 @@ from flamme.section.discrete_drift import (
 from flamme.utils.data import datetime_range
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

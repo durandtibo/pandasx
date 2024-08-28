@@ -9,7 +9,7 @@ from jinja2 import Template
 from flamme.section import BaseSection, SectionDict
 
 
-@pytest.fixture()
+@pytest.fixture
 def sections() -> dict:
     return {
         "metric1": Mock(

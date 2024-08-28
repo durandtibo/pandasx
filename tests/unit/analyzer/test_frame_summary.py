@@ -8,7 +8,7 @@ from flamme.analyzer import DataFrameSummaryAnalyzer
 from flamme.section import DataFrameSummarySection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

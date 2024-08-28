@@ -8,7 +8,7 @@ import pytest
 from flamme.utils.dtype import compact_type_name, frame_types, series_types
 
 
-@pytest.fixture()
+@pytest.fixture
 def dtypes() -> dict[str, pa.DataType]:
     return {
         "col_bool": pa.bool_(),

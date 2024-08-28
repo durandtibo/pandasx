@@ -10,7 +10,7 @@ from flamme.section import DuplicatedRowSection
 from flamme.section.duplicate import create_duplicate_table, create_section_template
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

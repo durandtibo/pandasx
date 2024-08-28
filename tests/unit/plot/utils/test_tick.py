@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from matplotlib.axes import Axes
 
 
-@pytest.fixture()
+@pytest.fixture
 def axes() -> Axes:
     _fig, ax = plt.subplots()
     ax.hist(np.arange(10), bins=10)

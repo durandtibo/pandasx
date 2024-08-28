@@ -13,7 +13,7 @@ if is_clickhouse_connect_available():  # pragma: no cover
     from clickhouse_connect.driver import Client
 
 
-@pytest.fixture()
+@pytest.fixture
 def table() -> pa.Table:
     return pa.Table.from_pydict(
         {

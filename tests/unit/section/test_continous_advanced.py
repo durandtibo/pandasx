@@ -14,12 +14,12 @@ from flamme.section.continuous_advanced import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def series() -> pl.Series:
     return pl.Series([None, *list(range(101)), None], dtype=pl.Int64)
 
 
-@pytest.fixture()
+@pytest.fixture
 def stats() -> dict:
     return {
         "count": 103,

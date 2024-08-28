@@ -11,7 +11,7 @@ from flamme.analyzer import ColumnTemporalNullValueAnalyzer
 from flamme.section import ColumnTemporalNullValueSection, EmptySection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {

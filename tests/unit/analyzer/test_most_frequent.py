@@ -8,7 +8,7 @@ from flamme.analyzer import MostFrequentValuesAnalyzer
 from flamme.section import EmptySection, MostFrequentValuesSection
 
 
-@pytest.fixture()
+@pytest.fixture
 def dataframe() -> pl.DataFrame:
     return pl.DataFrame(
         {"col": [1.0, 42.0, None, 22.0, 1.0, 2.0, 1.0, None]}, schema={"col": pl.Float64}
