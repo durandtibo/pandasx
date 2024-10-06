@@ -28,13 +28,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'coola'
           package-version: ${{ matrix.coola-version }}
@@ -73,13 +77,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'grizz'
           package-version: ${{ matrix.grizz-version }}
@@ -118,13 +126,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'iden'
           package-version: ${{ matrix.iden-version }}
@@ -163,13 +175,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'jinja2'
           package-version: ${{ matrix.jinja2-version }}
@@ -208,13 +224,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'matplotlib'
           package-version: ${{ matrix.matplotlib-version }}
@@ -253,13 +273,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'numpy'
           package-version: ${{ matrix.numpy-version }}
@@ -298,13 +322,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'objectory'
           package-version: ${{ matrix.objectory-version }}
@@ -343,13 +371,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'polars'
           package-version: ${{ matrix.polars-version }}
@@ -388,13 +420,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'pyarrow'
           package-version: ${{ matrix.pyarrow-version }}
@@ -433,13 +469,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'scipy'
           package-version: ${{ matrix.scipy-version }}
@@ -483,13 +523,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'clickhouse-connect'
           package-version: ${{ matrix.clickhouse-connect-version }}
@@ -528,13 +572,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'colorlog'
           package-version: ${{ matrix.colorlog-version }}
@@ -573,13 +621,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'hya'
           package-version: ${{ matrix.hya-version }}
@@ -618,13 +670,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'markdown'
           package-version: ${{ matrix.markdown-version }}
@@ -663,13 +719,17 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
+      - name: Set environment variable
+        run: |
+          echo $(poetry run poetry env info --path)/bin >> $GITHUB_PATH
+
       - name: Install packages
         run: |
           poetry run make config-poetry
           poetry run make install
 
       - name: Install valid package version
-        uses: durandtibo/pip-install-package-action@v0.2.2
+        uses: durandtibo/pip-install-package-action@v0.2.3
         with:
           package-name: 'tqdm'
           package-version: ${{ matrix.tqdm-version }}
