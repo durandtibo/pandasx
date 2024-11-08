@@ -66,7 +66,7 @@ mkdocstrings = { extras = ["python"], version = "^0.26" }
 optional = true
 
 [tool.poetry.group.nb.dependencies]
-jupyterlab = "^4.0"
+jupyterlab = "^4.3"
 seaborn = "^0.13"
 
 
