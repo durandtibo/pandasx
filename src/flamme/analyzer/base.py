@@ -2,7 +2,7 @@ r"""Contain the base class to implement an analyzer."""
 
 from __future__ import annotations
 
-__all__ = ["BaseAnalyzer", "setup_analyzer", "is_analyzer_config"]
+__all__ = ["BaseAnalyzer", "is_analyzer_config", "setup_analyzer"]
 
 import logging
 from abc import ABC
