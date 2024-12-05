@@ -84,9 +84,9 @@ Please check the [get started page](https://durandtibo.github.io/flamme/get_star
 install only some specific dependencies or other alternatives to install the library.
 The following is the corresponding `flamme` versions and their dependencies.
 
-| `flamme` | `coola`        | `grizz`        | `iden`         | `jinja2`     | `matplotlib` | `numpy`       | `objectory`  | `polars`     | `pyarrow`      | `scipy`       | `python`      |
-|----------|----------------|----------------|----------------|--------------|--------------|---------------|--------------|--------------|----------------|---------------|---------------|
-| `main`   | `>=0.7.2,<1.0` | `>=0.0.5,<1.0` | `>=0.0.4,<1.0` | `>=3.0,<4.0` | `>=3.6,<4.0` | `>=1.23,<3.0` | `>=0.1,<1.0` | `>=1.0,<2.0` | `>=10.0,<17.0` | `>=1.10,<2.0` | `>=3.9,<3.13` |
+| `flamme` | `coola`        | `grizz`      | `iden`       | `jinja2`     | `matplotlib` | `numpy`       | `objectory`  | `polars`     | `pyarrow`      | `scipy`       | `python`      |
+|----------|----------------|--------------|--------------|--------------|--------------|---------------|--------------|--------------|----------------|---------------|---------------|
+| `main`   | `>=0.7.2,<1.0` | `>=0.1,<1.0` | `>=0.1,<1.0` | `>=3.0,<4.0` | `>=3.6,<4.0` | `>=1.23,<3.0` | `>=0.1,<1.0` | `>=1.0,<2.0` | `>=10.0,<19.0` | `>=1.10,<2.0` | `>=3.9,<3.13` |
 
 Optional dependencies
 
