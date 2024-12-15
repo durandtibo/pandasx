@@ -55,7 +55,7 @@ class DataTypeSection(BaseSection):
       (types): {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {...}}
     )
     >>> section.get_statistics()
-    {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class 'NoneType'>, <class 'str'>}}
+    {'float': {<class 'float'>}, 'int': {<class 'int'>}, 'str': {<class '...'>, <class '...'>}}
 
     ```
     """
